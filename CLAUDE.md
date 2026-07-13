@@ -4,6 +4,14 @@ You are a Claude Code instance building Windtunnel. You are almost certainly **n
 
 Windtunnel takes a public servant's loose idea for an AI solution, sharpens it through a co-design **Brainstorm** phase, then stress-tests it through a multi-agent **Governance** phase built on the DTA *AI impact assessment tool*, producing a draft impact assessment as a notebook and an HTML report. Read `PROJECT_BRIEF.md` §1 for the full framing.
 
+> **Repo state — the first instance has run.** The single-repo scaffold
+> (TECH_SPEC §2) now exists: every directory is present with a `README.md` or
+> `.gitkeep`, `outline.md` has moved to its home at `templates/outline.md`, the
+> committed non-secret config lives under `config/`, and `README.md` +
+> `STATUS.md` exist. **No executable code has been written yet.** Read
+> `STATUS.md` next for exactly what's done, what's blocked on Tom, and the
+> suggested next steps toward the Stage 0 exit test.
+
 ---
 
 ## 1. Read these first, in this order
