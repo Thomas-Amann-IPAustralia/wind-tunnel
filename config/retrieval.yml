@@ -3,20 +3,28 @@
 # Governs: TECH_SPEC.md §8 (KB + ingestion), read by pipeline/retrieval/.
 # Committed, non-secret (CLAUDE.md §6).
 #
-# SCAFFOLD values — tune against the Stage 0 exit test (a retrieval query
-# returns page-cited chunks from a real corpus doc). Confirm the embedding
-# model with Tom; ingestion and query MUST use the identical one (CLAUDE.md §8).
+# Retrieval weights/counts are SCAFFOLD values — tune against the Stage 0 exit
+# test (a retrieval query returns page-cited chunks from a real corpus doc).
+# The two MODEL ids below are PINNED (Tom, 2026-07-13) and are not scaffold.
 
-# Embedding model — same for ingestion and query, no exceptions.
-embedding_model: BAAI/bge-small-en-v1.5   # recommended; confirm with Tom
+# Embedding model — same for ingestion and query, no exceptions. Asserted equal
+# between the KB manifest and the runtime at run start (TECH_SPEC §8.3); a
+# mismatch silently degrades retrieval. PINNED.
+embedding_model: BAAI/bge-small-en-v1.5   # 384-dim; runs on CPU in Actions
 
-# Hybrid retrieval: BM25 (lexical) + cosine (dense), fused.
-top_k: 8              # candidates returned per query (scaffold)
+# Hybrid retrieval: BM25 (lexical) + dense cosine, fused by reciprocal-rank
+# fusion, then re-ranked by the cross-encoder below.
+top_k: 8              # fused candidates handed to the reranker (scaffold — tune)
 fusion:
   bm25_weight: 0.5    # scaffold — tune
   cosine_weight: 0.5  # scaffold — tune
 
+# Cross-encoder rerank. PINNED to a lightweight CPU-friendly English reranker so
+# it runs inside Actions runners alongside embedding (TECH_SPEC §8, §8.3). Loaded
+# via sentence-transformers `CrossEncoder`. Upgrade path if quality testing
+# warrants and the runner can afford it: `BAAI/bge-reranker-base` (same family as
+# the embedder, ~1.1GB) — a one-line swap here.
 rerank:
-  enabled: false      # optional cross-encoder rerank; off until a model is chosen
-  model: null         # TODO: reranker id if enabled
+  enabled: true
+  model: cross-encoder/ms-marco-MiniLM-L-6-v2   # ~80MB, MS MARCO passage ranking
   top_k: 4            # results kept after rerank

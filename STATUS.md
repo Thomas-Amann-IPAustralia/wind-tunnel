@@ -100,6 +100,11 @@ Resolved since the last update (no longer blocking):
 - ~~The DTA Table 2 matrix + descriptors are missing.~~ **Present and complete**
   in that doc (Table 1 + full 5×5 Table 2 + per-section consequence descriptors).
   The rating engine can be trusted against these values.
+- ~~Embedding model choice is open.~~ **Pinned by Tom (2026-07-13):**
+  `BAAI/bge-small-en-v1.5` (384-dim) in `config/retrieval.yml`. The **cross-encoder
+  reranker** is also now pinned — `cross-encoder/ms-marco-MiniLM-L-6-v2` (rerank
+  enabled), with `BAAI/bge-reranker-base` recorded as the one-line accuracy
+  upgrade path. Both chosen to run CPU-side inside Actions runners (TECH_SPEC §8).
 
 Still blocked on Tom (CLAUDE.md §8, TECH_SPEC §16):
 
@@ -107,10 +112,6 @@ Still blocked on Tom (CLAUDE.md §8, TECH_SPEC §16):
   with its sidecar `<doc>.meta.yml` — required for the **Stage 0 exit test**, and
   now the *single* external gate on it. `corpus/` currently holds only its
   README. See "What a corpus doc must be" below.
-- **Embedding model choice** (recommended `BAAI/bge-small-en-v1.5`, 384-dim) —
-  ingestion and query must use the **same** one; asserted equal at run start
-  (TECH_SPEC §8.3). Pin it in `config/retrieval.yml`. Gates ingestion, and so
-  the Stage 0 exit test, alongside the corpus doc.
 - **Exact Gemini model identifiers** in `config/models.yml` — blocks the first
   real *LLM* call (Stage 1+), not the LLM-free Stage 0 critical-path work.
 
