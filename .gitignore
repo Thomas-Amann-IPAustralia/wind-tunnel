@@ -1,0 +1,40 @@
+# Windtunnel — the repo is PUBLIC and world-readable. No secrets, ever
+# (CLAUDE.md §4, §6). This file keeps env files and build cruft out; it is a
+# backstop, not the control — secrets live only in Render env vars / Actions
+# secrets, never in a committed file or a run directory.
+
+# Secrets / env
+.env
+.env.*
+*.pem
+*.key
+!config/*.yml
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.uv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Node / frontend
+node_modules/
+frontend/dist/
+frontend/.vite/
+*.local
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Notes:
+# - runs/ IS committed (it is the durable store, TECH_SPEC §4). Do not ignore it.
+# - kb/*.sqlite ARE committed unless too large (then release-asset pointers,
+#   TECH_SPEC §2). Do not add a blanket *.sqlite ignore here.

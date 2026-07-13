@@ -1,0 +1,34 @@
+# config/budgets.yml — per-stage call budgets + expected_range hints
+#
+# Governs: TECH_SPEC.md §6 (status.json expected_range) and §13 (budgets).
+# Committed, non-secret (CLAUDE.md §6).
+#
+# Budgets are asserted at run time so a runaway loop trips a guard rather than
+# silently burning tokens (§13). expected_range_seconds feeds the transparency
+# animation's per-phase timing hints in status.json (§6.1).
+#
+# SCAFFOLD counts derived from the tech-spec worked example (§13):
+#   2 generalists + 1 reconciler; 6 specialists x (1 draft + 1 revise);
+#   1 architect; reviewer x <=2 cycles x affected specialists; plus
+#   retrieval-driven query embeddings. Tune with real run actuals.
+
+stages:
+  threshold_drafting:
+    max_calls: 2            # two generalists, parallel + independent
+    expected_range_seconds: [30, 120]
+  threshold_reconciling:
+    max_calls: 1            # reconciler
+    expected_range_seconds: [20, 90]
+  full_drafting:
+    max_calls: 6            # six specialists, one draft each
+    expected_range_seconds: [90, 300]
+  architect:
+    max_calls: 1
+    expected_range_seconds: [20, 90]
+  reviewer:
+    max_cycles: 2           # internal loop cap (brief §7, §11)
+    max_calls_per_cycle: 6  # <= affected specialists per cycle
+    expected_range_seconds: [60, 240]
+
+# Global guard: hard ceiling across a whole run (scaffold — raise if legitimate).
+run_max_calls: 60

@@ -1,0 +1,21 @@
+# prompts/manifest.yml — role -> current prompt file -> model role
+#
+# Governs: TECH_SPEC.md §9. Committed, non-secret.
+#
+# Maps each agent role to its current versioned prompt file (prompts/<role>.v<N>.md)
+# and to a model role in config/models.yml. No prompt files exist yet — this is
+# the registry the next instance fills in as it authors each prompt.
+#
+# Shape (populate as prompts are written):
+#
+# prompts:
+#   interviewer:
+#     file: interviewer.v1.md
+#     model_role: interviewer        # resolves via config/models.yml
+#
+# Roles to author (from config/models.yml): interviewer, sufficiency,
+# feasibility_gate, outline_synth, poc_gen, map_gen, threshold_generalist,
+# specialist (per-specialist owned DTA sections — §9.3), threshold_reconciler,
+# architect, reviewer.
+
+prompts: {}

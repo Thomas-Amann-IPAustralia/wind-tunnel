@@ -1,0 +1,22 @@
+# config/retrieval.yml — KB retrieval settings
+#
+# Governs: TECH_SPEC.md §8 (KB + ingestion), read by pipeline/retrieval/.
+# Committed, non-secret (CLAUDE.md §6).
+#
+# SCAFFOLD values — tune against the Stage 0 exit test (a retrieval query
+# returns page-cited chunks from a real corpus doc). Confirm the embedding
+# model with Tom; ingestion and query MUST use the identical one (CLAUDE.md §8).
+
+# Embedding model — same for ingestion and query, no exceptions.
+embedding_model: BAAI/bge-small-en-v1.5   # recommended; confirm with Tom
+
+# Hybrid retrieval: BM25 (lexical) + cosine (dense), fused.
+top_k: 8              # candidates returned per query (scaffold)
+fusion:
+  bm25_weight: 0.5    # scaffold — tune
+  cosine_weight: 0.5  # scaffold — tune
+
+rerank:
+  enabled: false      # optional cross-encoder rerank; off until a model is chosen
+  model: null         # TODO: reranker id if enabled
+  top_k: 4            # results kept after rerank
