@@ -1,0 +1,132 @@
+General Practice Note
+
+1. Introduction
+1.1 The Court embraces the beneficial use of technology in proceedings and in its wider operations.[1]
+
+1.2 Generative Artificial Intelligence (Generative AI or Gen AI) refers to systems that ‘create content as text, images, music, audio and videos based on a user’s “prompts”.[2] Tools that enable the use of Generative AI include OpenAI’s ChatGPT, Claude, Harvey, Google Gemini and Microsoft Copilot.
+
+1.3 The Court recognises that Generative AI has the potential to facilitate the just resolution of disputes by increasing efficiency in the conduct of litigation, reducing legal costs, enhancing access to justice and the quality of the administration of justice.
+
+1.4 It is fundamental to the administration of justice that Generative AI must be used appropriately, responsibly and with due care. Otherwise, Generative AI poses risks to the proper administration of justice and public confidence in the legal system.
+
+1.5 This Practice Note provides guidance on:
+
+(a) the Court’s expectations of all persons involved in proceedings in the Court, specifically as they concern Generative AI; and
+
+(b) the considerations the Court may take into account in pronouncing any orders about the use of Generative AI in a particular proceeding.
+
+2. Court’s expectations
+2.1 The Court’s expectations concerning the use of Generative AI in connection with proceedings are as follows.
+
+(a) Any person who uses Generative AI will have a basic understanding of its capabilities, and its limitations and risks.
+
+(b) Any use of Generative AI must not adversely affect the administration of justice. This requires users of Generative AI to be guided by, and act in accordance with, their existing legal and professional responsibilities.[3] It follows that there will be circumstances where it is inappropriate to use Generative AI at all or where users ought to be transparent about its use.
+
+(c) If the Court requires it, a person must disclose to the Court if (and how) Generative AI has been used in a proceeding.
+
+2.2 The circumstances where a person must disclose the use of Generative AI are set out in this Practice Note. However, the Court may additionally require a person to disclose the use of Generative AI in other circumstances where it considers it appropriate to require such disclosure. The Court has general powers under the Federal Court of Australia Act 1976 (Cth) to make orders and directions about any matter of practice and procedure before the Court.
+
+2.3 Where disclosure is required, it must be made as set out in this Practice Note or subject to any direction or order made by the Court. All persons are expected to be in a position to inform the Court as to what Generative AI was used, how it was used and for what purpose.
+
+3. Application of this Practice Note
+3.1 This Practice Note applies to all persons who appear before or file documents with the Court. That includes litigants, whether they have legal representation or not. It also includes witnesses and other third parties including those who are required under subpoena or other orders to produce documents to the Court.
+
+4. Specific instances where caution is necessary
+4.1 To assist all persons to understand the Court’s expectations, this section of the Practice Note identifies areas where particular caution should be exercised before, or when, using Generative AI.
+
+4.2 The section focuses on instances where Generative AI presents more significant risks to the proper administration of justice. It is not an exhaustive statement of how legal and professional responsibilities ought to guide the use of Generative AI, or AI more generally.
+
+Pleadings, written submissions, lists of documents and other documents or information lodged with or sent to the Court
+4.3 Users of Generative AI should know that the technology may create results that are not accurate, entirely fictitious or plainly wrong. For example, it may give users:
+
+(a) fictitious cases, citations or quotes, or references to legal sources that do not exist by reason of hallucinations or for any other reason;
+
+(b) incorrect or misleading information on the law or how it might apply;
+
+(c) factual errors; and
+
+(d) confirmation that information is accurate if asked, even when it is not.
+
+4.4 The presentation of false or inaccurate information to the Court is unacceptable. It is inconsistent with the responsibility on all persons to not mislead the Court or other parties.[4] It is also likely to frustrate the just resolution of proceedings according to law and as quickly, inexpensively and efficiently as possible.[5]
+
+4.5 Some documents filed in a proceeding must contain the name of the person or lawyer responsible for preparing the document.[6] If Generative AI tools have been used in the preparation of documents, the Court expects that the responsible person will have confirmed that:
+
+(a) facts stated in pleadings are based on what the party reasonably considers can be proved and claims for relief are based on proper legal principles;
+
+(b) legal authorities cited in submissions exist and support the proposition stated;
+
+(c) evidence cited in submissions exists, is or will be in the materials before the Court and is reasonably likely to be admissible;
+
+(d) statements about what the evidence proves are findings reasonably open for the Court to make;
+
+(e) chronologies are accurate; and
+
+(f) lists of documents conform with the Federal Court Rules 2011 (Cth): rr 20.17 (form of list), 20.14 (standard discovery) or 20.15 (non-standard discovery).
+
+4.6 The above is not an exhaustive list and every person should take care to ensure their obligations have been met.
+
+Affidavits, expert reports and other evidentiary materials
+
+4.7 Witnesses, parties and their lawyers must be conscious of their obligations when employing any form of Generative AI to assist in preparing documents intended to represent evidence or opinion evidence.
+
+4.8 Any use of Generative AI must be consistent with the requirements that when a person makes an affidavit or witness statement, they are representing that the document reflects their own recollection, knowledge and/or experience. The imperative to preserve the integrity of evidence is underscored by criminal laws which prohibit falsifying, or interfering with, evidence.
+
+4.9 When an expert provides a report for use as evidence, they have an overriding duty to assist the Court impartially on matters relevant to their area of expertise. An expert report should contain that expert’s own opinion and process of reasoning. Experts have specific disclosure obligations under the Expert Evidence Practice Note (GPN-EXPT).
+
+4.10 The use of Generative AI must be disclosed where Generative AI tools were used:
+
+(a) to summarise or analyse information upon which a witness relies to make a statement of fact or express an opinion;
+
+(b) to create images, video recordings, sound recordings or other multimedia that are presented to the Court, which should be clearly identified as having been produced using Generative AI in the highly special circumstances where the creation of such materials using Generative AI has been considered necessary for some purpose relevant to the proceedings before the Court; or
+
+(c) in any other manner that might reasonably be expected to affect the admissibility of that evidence, or what use is made of it by the Court.
+
+4.11 Disclosure should occur in the body of the document at the start of the document. It should say as concisely as possible where in the document Generative AI has been used, and how it has been used.
+
+4.12 Disclosure helps avoid other parties and the Court being misled about how evidence was prepared. Disclosure will enable the Court to gather information about the use of Generative AI in its proceedings and assist the Court to obtain information to use in reviews of this Practice Note.
+
+Dealing with confidential, suppressed or private information
+4.13 If information is provided to a generally accessible Generative AI tool (such as a standard Generative AI tool), it may become available to other people. Users may not know where that information is stored, how it is used, or who will have access to it.[7]
+
+4.14 The law sometimes prohibits the disclosure of information, or limits how it can be used by parties and their lawyers. Examples include information that is:
+
+(a) the subject of Court orders as to confidentiality, suppression or non-publication;
+
+(b) privileged;
+
+(c) subject to an implied obligation not to use the information for a purpose other than the purpose of the proceedings in which the information was obtained from another party or third person; or
+
+(d) otherwise confidential or private, without the consent of the person to whom it is confidential or private.
+
+4.15 Users should carefully consider whether these restrictions apply to information before they input information into a Generative AI tool. The entry or use of such information in a way that does not accord with the obligations that apply to the use of that information must not occur. Users should also be conscious that entering information into a ringfenced or confidential Generative AI tool may breach obligations (including the implied obligation) if outputs from the tool are later used for different purposes. There may be serious consequences for entering information into Generative AI tools, even if sharing that information was not intended.
+
+5. Consequences
+5.1 Where Generative AI is used in way that is inconsistent with this Practice Note or the Court’s orders or directions, all persons should expect that there could be consequences including adverse costs orders and issues as to compliance with legal and professional obligations.
+
+6. General
+6.1 This practice note should be read together with the Central Practice Note (CPN-1), which sets out the fundamental principles concerning the National Court Framework of the Federal Court and the key principles of case management procedure.
+
+6.2 Given the dynamic and constantly evolving nature of Generative AI, it is not practical to set out and update all relevant information in this practice note. Rather, the Court has identified various resources for lawyers and non-lawyers (“Generative AI Resources”) to assist any person using Generative AI in connection with proceedings.
+
+7. Further Information and Resources
+7.1 Further information about access to documents and transcript requests is available on the Court's website. Otherwise, general queries concerning the matters noted in this practice note should be raised with your local registry. Contact details for your local registry are available on the Court's website.
+
+7.2 Further information to assist litigants, including a range of helpful guides, is also available on the Court's website. This information may be particularly helpful for litigants who are representing themselves.
+
+D S Mortimer
+Chief Justice
+16 April 2026
+
+[1] See Technology and the Court Practice Note (GPN-TECH) at [1.2], [2.1], [2.3].
+
+[2] See Fan Yang, Jake Goldenfein and Kathy Nickels, GenAI Concepts: Technical, Operational and Regulatory Terms and Concepts for Generative Artificial Intelligence (ADM+S and OVIC, 2024) at 2.
+
+[3] If you do not have a lawyer, information about your responsibilities can be found in the Litigants in Person Practice Note (GPN-LIP). For lawyers, guidance is identified on the Court’s “Generative AI Resources” page.
+
+[4] See Vernon v Bosley (No 2) [1999] QB 18 at 33, 37 (Stuart-Smith LJ), 63 (Thorpe LJ). See also Burragubba v Queensland (2016) 151 ALD 471; [2016] FCA 984 at [228] (Reeves J); Burragubba v Queensland (2017) 254 FCR 175; [2017] FCAFC 133 at [48] (Dowsett, McKerracher and Robertson JJ); May v Costaras [2025] NSWCA 178 at [15] (Bell CJ), [49] (Payne JA agreeing), [95] (McHugh JA agreeing).
+
+[5] See Federal Court of Australia Act 1976 (Cth) s 37M(1).
+
+[6] Federal Court Rules 2011 (Cth) r 2.16(1)(b). Rule 2.15(1) of the Federal Court Rules further requires that ‘[a] document (other than an affidavit, annexure or exhibit attached to another document) filed by a party … must be dated and signed by: (a) the party’s lawyer; or (b) the party, if the party does not have a lawyer.’
+
+[7] This guidance is directed particularly at ‘open’ or ‘public’ forms of Generative AI tools. The risks of inadvertent disclosure may be lower for tools that operate in ‘closed’ or ‘controlled’ environments: see Victorian Law Reform Commission, Artificial Intelligence in Victoria’s Courts and Tribunals (Report, October 2025) at 56–62. The Court expects that parties and lawyers who use ‘closed AI’ tools will preserve with rigour the integrity and confidentiality of information obtained by compulsory processes in proceedings. The Court recognises that taking these steps and being in a position to be certain about effective limitations on the use of documents and information, may be inconvenient or even quite difficult. However, that is a key consideration before any person starts to use AI tools in litigation and may influence the decision to use such tools in the first place.
