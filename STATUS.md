@@ -105,24 +105,27 @@ in dependency order:
 4. **Rating engine** (`pipeline/rating/`) — against the **real** Table 2 now in
    the repo (TECH_SPEC §10); the scaffold-matrix contingency is obsolete.
 
-Sidecar fields that are **best-effort and worth a glance from Tom** (metadata is
-accurate where confidently verified; these few were inferred):
+Provenance corrections from Tom (July 2026) — the three documents whose sidecars
+were originally inferred (they had no embedded title metadata) are now fixed to
+Tom's sources:
 
-- `ethics/TRS-GUIDANCE-AI-150925.pdf` — **not externally identifiable** (no web
-  presence, no title metadata, macOS-printed 15 Sep 2025). Inferred to be an
-  **internal IP Australia** document from the repo owner and filename; sidecar
-  says so (`publisher: IP Australia`, `source_url: Internal (IP Australia)`,
-  `licence: Internal – Commonwealth (IP Australia)`). Tom to confirm the real
-  title / short_name / provenance.
-- `data_governance/Data-quality-checklist.pdf` and
-  `ethics/Guidance-for-AI-adoption-implementation-guidance_0_0.pdf` — attributed
-  to the **DTA** (both are 2026-05-05 macOS-Quartz exports with no title
-  metadata; the checklist's fields are generic data-quality dimensions). Publisher
-  and exact title are best-effort.
-- A handful of `version`/`source_url` values are landing-page-level rather than
-  the exact document permalink (e.g. OAIC guideline consolidation date, PSPF/OT
-  ASD publication URLs). Good enough for the citation manifest; refine if a
-  reader needs the deep link.
+- `ethics/TRS-GUIDANCE-AI-150925.pdf` — **The Research Society**, *AI Guidelines*
+  (`https://www.researchsociety.com.au/member-resources/ai-guidelines/`). "TRS" =
+  The Research Society. (Originally mis-inferred as internal IP Australia — the
+  wrong guess is corrected in place.)
+- `data_governance/Data-quality-checklist.pdf` — **National AI Centre**,
+  *Strengthen data quality: data quality checklist*
+  (`https://www.ai.gov.au/planning-ai/strengthen-data-quality`).
+- `ethics/Guidance-for-AI-adoption-implementation-guidance_0_0.pdf` — **National
+  AI Centre** (`https://www.ai.gov.au/staying-safe-and-responsible/essential-ai-practices/guidance-ai-adoption-implementation-guidance`).
+  (Both had been attributed to the DTA; ai.gov.au is the National AI Centre site.)
+
+Residual soft fields (not blocking, not inferred provenance): a few
+`version`/`source_url` values are landing-page-level rather than the exact
+document permalink (e.g. OAIC guideline consolidation date, some ASD publication
+URLs), and `licence` strings assume the standard imprint (CC-BY-4.0 for
+Commonwealth material) rather than a per-document imprint-page check. Tom's
+attestation covers redistributability regardless.
 
 Corpus observations for whoever builds ingestion (from the July 2026 review):
 
@@ -200,9 +203,9 @@ source and Table 1/Table 2 landed July 2026 (see Done) and are no longer here:
   are authored with `redistributable: true` and accurate `licence` strings (see
   Done). What remains from this item is a *config* decision, not a Tom blocker:
   the ingestion licence allow-list must accommodate the non-CC licences the
-  sidecars record (In progress step 1). Two provenance confirmations would still
-  help (not blocking): the identity of `TRS-GUIDANCE-AI-150925.pdf` and the
-  publisher/title of the two DTA-attributed checklists (see handoff notes).
+  sidecars record (In progress step 1). Tom's attestation is sufficient to
+  progress; the three originally-inferred sidecars have been corrected to his
+  sources (The Research Society; National AI Centre ×2 — see handoff notes).
 - **Exact Gemini model identifiers** in `config/models.yml` — blocks the first
   real LLM call.
 
