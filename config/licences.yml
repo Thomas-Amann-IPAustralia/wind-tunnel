@@ -1,0 +1,43 @@
+# config/licences.yml — ingestion licence allow-list (the hard gate)
+#
+# Governs: TECH_SPEC.md §8.6 step 1 (licence hard gate), read by
+# pipeline/retrieval/ ingestion. Committed, non-secret (CLAUDE.md §6).
+#
+# The gate (TECH_SPEC §8.6) admits a corpus document only when BOTH hold:
+#   1. its sidecar `redistributable: true`, AND
+#   2. its sidecar `licence` string is an EXACT member of `allow_list` below.
+# Fail loudly, naming the offending file, otherwise. The repo is public and
+# every ingested chunk republishes source text, so this is a gate, not a
+# router (PROJECT_BRIEF §3, §10). Nothing downstream runs without passing it.
+#
+# DECISION (STATUS.md "In progress" step 1, resolved): the gate keeps the
+# `licence ∈ allow_list` clause rather than treating `redistributable: true`
+# as sufficient on its own. Tom attested every corpus document is cleared, so
+# `redistributable` is uniformly true; the allow-list is the defence-in-depth
+# the spec calls for — a NEW document arriving with an unlisted licence string
+# fails the build and forces a human licence decision instead of being waved
+# through by an inherited `true`. The list below enumerates exactly the licence
+# strings the 106 cleared sidecars carry (audited from corpus/*/*.meta.yml).
+#
+# Matching is exact-string against the sidecar `licence` field. Adding a
+# document under a new licence is a deliberate one-line edit here.
+
+allow_list:
+  # Open content licences — Commonwealth and third-party CC / OGL / OECD / arXiv.
+  - CC-BY-4.0                                   # Commonwealth default imprint (92 docs)
+  - CC-BY-SA-4.0                                # OWASP ×2, CSIRO/NAIC RAI-tools report
+  - UK Open Government Licence v3.0             # NCSC secure-AI-development guidelines
+  - OECD Terms and Conditions                   # OECD, "The state of AI in public audit"
+  - arXiv.org perpetual non-exclusive license   # QB4AIRA; Diversity & Inclusion in AI
+
+  # Public-domain government works (no copyright to clear).
+  - Public Domain (U.S. Government work)        # NIST SP 800-61r3; NSA/CISA AI guidance ×2
+
+  # Per-document permission grants. These are NOT reusable licence classes —
+  # each is a specific clearance Tom attested for that one document, listed
+  # verbatim so the gate recognises the exact sidecar string. A different
+  # document may not rely on another's grant.
+  - © American Bar Association (used with permission)          # ABA Year-2 report
+  - © Bar Standards Board (used with permission)               # UK BSB AI guidance
+  - © University of Technology Sydney (Human Technology Institute)  # HTI report
+  - © The Research Society (member resource)                   # TRS AI Guidelines

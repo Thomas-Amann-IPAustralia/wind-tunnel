@@ -302,7 +302,7 @@ Node state ∈ `pending | active | waiting_user | complete | failed` (the `statu
 | `threshold.rating_engine` | Rating engine | 3.1–3.9 (computed) | — (deterministic, §10) |
 | `full.specialist.it_security` | IT Security specialist | 6.7, 7.3 | `specialist` |
 | `full.specialist.privacy` | Privacy specialist | 7.1, 7.2 | `specialist` |
-| `full.specialist.ethics` | Ethics & Fairness specialist | 5.1, 5.2, 8.1, 8.2, 8.4, 10.1 | `specialist` |
+| `full.specialist.ethics` | Ethics & Fairness specialist | 5.1, 5.2, 8.1, 8.2, 8.4, 8.5, 10.1 | `specialist` |
 | `full.specialist.legal` | Legal & Administrative Law specialist | 9.1, 9.2, 10.2, 11.1, 12.1, 12.2 | `specialist` |
 | `full.specialist.data_governance` | Data Governance specialist | 6.1, 6.2, 8.3 | `specialist` |
 | `full.specialist.solution_architect` | Solution Architect (sections) | 6.3–6.6, 6.8 | `specialist` |

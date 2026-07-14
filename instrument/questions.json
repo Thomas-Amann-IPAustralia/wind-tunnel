@@ -1,0 +1,175 @@
+{
+  "_source": "AI impact assessment tool v1.0 — question inventory. Question prompts for §3.1–3.8 (risk) and §5–12 (full assessment) are transcribed verbatim from the bold prompts in instrument/guidance/AI_impact_assessment_tool.md. Sections 1, 2 and 4 are the generalist-owned threshold context sections; they are listed at subsection granularity (id + title) so the coverage checklist (TECH_SPEC §11.1) is complete, while their full prose is supplied to generalists from the guidance markdown directly (TECH_SPEC §9.3) rather than duplicated here.",
+  "_usage": "TECH_SPEC §11.1: the reviewer's coverage checklist is generated mechanically from this inventory — every question_id must be substantively addressed in the assembled draft OR present in gaps.json with a reason. Ownership is carried per subsection and must agree with instrument/sections.json (asserted by pipeline/rating/tests).",
+  "response_types": {
+    "risk": "§3 impact areas: select one consequence tier + one likelihood tier + rationale. The RATING is computed by the engine (TECH_SPEC §10), never asserted by an agent.",
+    "yes_no_na": "select one of Yes / No / Not applicable, plus an explanation.",
+    "free_text": "free-text record/answer, no fixed options.",
+    "context": "threshold context field (sections 1–2), completed by the generalists; not a yes/no or risk question.",
+    "residual_table": "§12.3 residual risk summary table (owned by the reviewer).",
+    "residual_rating": "§12.4 overall residual rating: Low/Medium/High, computed by the engine highest-wins over §12.3 residuals.",
+    "human_action": "flagged as a human action into the gap register; never drafted by an agent."
+  },
+  "sections": [
+    {
+      "id": "1", "title": "Basic information", "phase": "threshold", "owner": "threshold",
+      "subsections": [
+        {"id": "1.1", "title": "AI use case profile", "response_type": "context"},
+        {"id": "1.2", "title": "Establishing impact assessment responsibilities", "response_type": "context"},
+        {"id": "1.3", "title": "Additional roles and responsibilities", "response_type": "context"},
+        {"id": "1.4", "title": "AI use case description", "response_type": "context"},
+        {"id": "1.5", "title": "In-scope use case", "response_type": "context"},
+        {"id": "1.6", "title": "Type of AI technology", "response_type": "context"},
+        {"id": "1.7", "title": "Usage pattern", "response_type": "context"},
+        {"id": "1.8", "title": "Administrative decisions", "response_type": "context"},
+        {"id": "1.9", "title": "Domain", "response_type": "context"},
+        {"id": "1.10", "title": "Expert contributions", "response_type": "context"},
+        {"id": "1.11", "title": "Impact assessment review log", "response_type": "context"}
+      ]
+    },
+    {
+      "id": "2", "title": "Purpose and expected benefits", "phase": "threshold", "owner": "threshold",
+      "subsections": [
+        {"id": "2.1", "title": "Problem definition", "response_type": "context"},
+        {"id": "2.2", "title": "AI use case purpose", "response_type": "context"},
+        {"id": "2.3", "title": "Non-AI alternatives", "response_type": "context"},
+        {"id": "2.4", "title": "Identifying stakeholders", "response_type": "context"},
+        {"id": "2.5", "title": "Expected benefits", "response_type": "context"}
+      ]
+    },
+    {
+      "id": "3", "title": "Inherent risk assessment", "phase": "threshold", "owner": "threshold",
+      "_note": "§3.1–3.8 each select a consequence + likelihood; the rating and the §3.9 overall are computed by the deterministic engine (TECH_SPEC §10). Per-section consequence descriptors live in instrument/consequence_table.json; likelihood tiers in instrument/likelihood_table.json.",
+      "subsections": [
+        {"id": "3.1", "title": "Risk of reducing service accessibility and inclusion", "response_type": "risk",
+         "prompt": "What is the risk of your AI use making government services less accessible or inclusive for the public?"},
+        {"id": "3.2", "title": "Risk of unfair discrimination", "response_type": "risk",
+         "prompt": "What is the risk of your AI use unfairly discriminating against individuals, communities or groups?"},
+        {"id": "3.3", "title": "Risk of perpetuating stereotyping or demeaning representations", "response_type": "risk",
+         "prompt": "What is the risk of your AI use perpetuating stereotyping or demeaning representations of individuals, communities or groups?"},
+        {"id": "3.4", "title": "Risk of harm", "response_type": "risk",
+         "prompt": "What is the risk of your AI use harming individuals, communities, groups, organisations or the environment?"},
+        {"id": "3.5", "title": "Risk of AI use raising privacy concerns", "response_type": "risk",
+         "prompt": "What is the risk of your AI use raising privacy concerns?"},
+        {"id": "3.6", "title": "Risk raising security concerns – data aspects", "response_type": "risk",
+         "prompt": "What is the risk of your AI use raising security concerns due to the sensitivity or security classification of the data or information the AI system uses?"},
+        {"id": "3.7", "title": "Risk of raising security concerns – system aspects", "response_type": "risk",
+         "prompt": "What is the risk of your AI use raising security concerns due to the implementation, sourcing or characteristics of the AI system?"},
+        {"id": "3.8", "title": "Risk to reputation or public confidence", "response_type": "risk",
+         "prompt": "What is the risk of your AI use posing a reputational risk or undermining public confidence in the government?"},
+        {"id": "3.9", "title": "Overall inherent risk rating", "response_type": "residual_rating",
+         "_note": "Computed highest-wins over §3.1–3.8 by the engine (TECH_SPEC §10.2 overall_rating); not agent-authored."}
+      ]
+    },
+    {
+      "id": "4", "title": "Threshold assessment outcome", "phase": "threshold", "owner": "threshold",
+      "subsections": [
+        {"id": "4.1", "title": "Assessing officer recommendation", "response_type": "context"},
+        {"id": "4.2", "title": "Approving officer review", "response_type": "context"}
+      ]
+    },
+    {
+      "id": "5", "title": "Fairness", "phase": "full",
+      "subsections": [
+        {"id": "5.1", "title": "Defining fairness", "owner": "ethics", "response_type": "yes_no_na",
+         "prompt": "Do you have a clear definition of what constitutes a fair process and/or outcome in the context of your use of AI?"},
+        {"id": "5.2", "title": "Measuring fairness", "owner": "ethics", "response_type": "yes_no_na",
+         "prompt": "Do you have a way of measuring the fairness of system outcomes quantitatively or qualitatively?"}
+      ]
+    },
+    {
+      "id": "6", "title": "Reliability and safety", "phase": "full",
+      "subsections": [
+        {"id": "6.1", "title": "Data suitability", "owner": "data_governance", "response_type": "yes_no_na",
+         "prompt": "If your AI system requires the input of data to operate, or you are training or evaluating an AI model, can you explain why the chosen data is suitable for your use case?"},
+        {"id": "6.2", "title": "Indigenous data", "owner": "data_governance", "response_type": "yes_no_na",
+         "prompt": "If your AI system uses Indigenous data, including where any outputs relate to Indigenous people, have you ensured that your AI use case is consistent with the Framework for Governance of Indigenous Data?"},
+        {"id": "6.3", "title": "Suitability of procured AI system", "owner": "solution_architect", "response_type": "yes_no_na",
+         "prompt": "If you are procuring an AI model, can you explain its suitability for your use case?"},
+        {"id": "6.4", "title": "Testing", "owner": "solution_architect", "response_type": "yes_no_na",
+         "prompt": "Has the AI system been tested sufficiently and are you satisfied with its reliability and safety for the context of your use case?"},
+        {"id": "6.5", "title": "Pilot", "owner": "solution_architect", "response_type": "yes_no_na",
+         "prompt": "Have you conducted, or will you conduct, a pilot of your use case before deploying?"},
+        {"id": "6.6", "title": "Monitoring", "owner": "solution_architect", "response_type": "yes_no_na",
+         "prompt": "Have you established a plan to monitor and evaluate the performance of your AI system?"},
+        {"id": "6.7", "title": "Preparedness to intervene or disengage", "owner": "it_security", "response_type": "yes_no_na",
+         "prompt": "Have you established clear processes for human intervention or safely disengaging the AI system where necessary? For example, if stakeholders raise valid concerns with insights or decisions or an unresolvable issue is identified."},
+        {"id": "6.8", "title": "Training of AI system operators", "owner": "solution_architect", "response_type": "yes_no_na",
+         "prompt": "Is there a process in place to ensure operators of the AI system are sufficiently skilled and trained?"}
+      ]
+    },
+    {
+      "id": "7", "title": "Privacy protection and security", "phase": "full",
+      "subsections": [
+        {"id": "7.1", "title": "Minimise and protect personal information", "owner": "privacy", "response_type": "yes_no_na",
+         "prompt": "Are you satisfied that any collection, use or disclosure of personal information complies with the APPs?"},
+        {"id": "7.2", "title": "Privacy threshold and/or impact assessment", "owner": "privacy", "response_type": "free_text",
+         "prompt": "Record where you have stored your privacy threshold assessment and, if applicable, your privacy impact assessment are stored. For example, the document management system, case file, or other repository."},
+        {"id": "7.3", "title": "Security risks", "owner": "it_security", "response_type": "yes_no_na",
+         "prompt": "What measures are in place to address security risks arising from the operation of the AI?"}
+      ]
+    },
+    {
+      "id": "8", "title": "Transparency and explainability", "phase": "full",
+      "subsections": [
+        {"id": "8.1", "title": "Consultation", "owner": "ethics", "response_type": "yes_no_na",
+         "prompt": "Have you consulted stakeholders identified in section 2.4?"},
+        {"id": "8.2", "title": "Public visibility", "owner": "ethics", "response_type": "yes_no_na",
+         "prompt": "Will appropriate information be made publicly available, such as the scope and goals related to the use of AI?"},
+        {"id": "8.3", "title": "Maintain appropriate documentation and records", "owner": "data_governance", "response_type": "yes_no_na",
+         "prompt": "Have you put in place processes to maintain appropriate documentation and records throughout the lifecycle of the AI use case?"},
+        {"id": "8.4", "title": "Disclosing AI interactions and outputs", "owner": "ethics", "response_type": "yes_no_na",
+         "questions": [
+           {"question_id": "8.4.1", "prompt": "Will people be informed when they interact with the AI system or receive outputs generated by AI?"},
+           {"question_id": "8.4.2", "prompt": "Will members of the public interacting with the system be provided with the ability to request a non-AI alternative?"}
+         ]},
+        {"id": "8.5", "title": "Offer appropriate explanations", "owner": "ethics", "response_type": "yes_no_na",
+         "_owner_note": "Owner assigned by decision (instrument/sections.json _decisions.8.5); TECH_SPEC §6.2 was silent.",
+         "prompt": "Will your AI system allow for appropriate explanation of the factors leading to AI‑generated decisions, recommendations or insights?"}
+      ]
+    },
+    {
+      "id": "9", "title": "Contestability", "phase": "full",
+      "subsections": [
+        {"id": "9.1", "title": "Notification of AI affecting rights", "owner": "legal", "response_type": "yes_no_na",
+         "prompt": "Will individuals, groups, organisations or communities be notified if an administrative action with a legal or significant effect on them was materially influenced by the AI system?"},
+        {"id": "9.2", "title": "Challenging administrative actions influenced by AI", "owner": "legal", "response_type": "yes_no_na",
+         "prompt": "Is there a timely and accessible process to challenge the administrative actions discussed at section 9.1?"}
+      ]
+    },
+    {
+      "id": "10", "title": "Human-centred values", "phase": "full",
+      "subsections": [
+        {"id": "10.1", "title": "Incorporating diversity", "owner": "ethics", "response_type": "yes_no_na",
+         "prompt": "Are you satisfied that you have incorporated diversity and people with appropriately diverse skills, experiences and backgrounds throughout the lifecycle of your AI use case?"},
+        {"id": "10.2", "title": "Human rights obligations", "owner": "legal", "response_type": "yes_no_na",
+         "prompt": "Have you consulted an appropriate source of advice or otherwise ensured that your AI use case and the use of data align with human rights obligations?"}
+      ]
+    },
+    {
+      "id": "11", "title": "Accountability", "phase": "full",
+      "subsections": [
+        {"id": "11.1", "title": "Ensuring accountability during the lifecycle of the AI system", "owner": "legal", "response_type": "yes_no_na",
+         "prompt": "Are there mechanisms in place to ensure responsibility and accountability by the agency and relevant individuals for AI systems and their outcomes?"}
+      ]
+    },
+    {
+      "id": "12", "title": "Use case review and next steps", "phase": "full",
+      "subsections": [
+        {"id": "12.1", "title": "Alignment with relevant legal frameworks", "owner": "legal", "response_type": "yes_no_na",
+         "prompt": "Have you identified and documented all agency specific legislation, or regulatory instruments that are relevant to the AI use case?"},
+        {"id": "12.2", "title": "Legal advice", "owner": "legal", "response_type": "yes_no_na",
+         "questions": [
+           {"question_id": "12.2.1", "prompt": "Have you identified the need for legal advice at any stage during the assessment process?"},
+           {"question_id": "12.2.2", "prompt": "If yes, where is the legal advice stored? For example, note the document management system, case file or other repository:", "response_type": "free_text"}
+         ]},
+        {"id": "12.3", "title": "Risk summary table", "owner": "reviewer", "response_type": "residual_table",
+         "prompt": "List any inherent risks rated as medium or high in section 3 of the threshold assessment; explain the mitigations or controls applied and how they influence the residual risk rating."},
+        {"id": "12.4", "title": "Overall residual risk rating", "owner": "reviewer", "response_type": "residual_rating",
+         "prompt": "Based on the assessment of residual risk in section 12.3, choose an overall residual risk rating for the AI use case."},
+        {"id": "12.5", "title": "Internal governance body review", "owner": "human_action", "response_type": "human_action",
+         "prompt": "If inherent risk is rated high at section 3, submit the use case to an appropriate internal governance body for review and record the outcome."}
+      ]
+    }
+  ]
+}

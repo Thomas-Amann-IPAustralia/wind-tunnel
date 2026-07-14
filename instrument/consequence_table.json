@@ -1,0 +1,88 @@
+{
+  "_source": "AI impact assessment tool v1.0 — the 5-tier consequence scale used across §3.1–3.8. Tier LABELS are the universal consequence axis of Table 2; the per-section DESCRIPTORS are transcribed verbatim from each impact area's 'Consequence (select one)' list in instrument/guidance/AI_impact_assessment_tool.md. The guidance appendix (Guidance_AI_impact_assessment_tool.md) holds the fuller risk-consequence assessment these summarise.",
+  "_note": "The rating engine (TECH_SPEC §10) validates consequence labels against tiers_ordered. The per-section descriptors are supplied to the threshold generalists/reconciler so the tool's own language is in context when they select a tier (TECH_SPEC §9.3). tiers_ordered is ascending (least to most severe).",
+  "tiers_ordered": ["Insignificant", "Minor", "Moderate", "Major", "Severe"],
+  "sections": {
+    "3.1": {
+      "title": "Risk of reducing service accessibility and inclusion",
+      "descriptors": {
+        "Insignificant": "Minor glitch; no real barrier. Instantly resolved.",
+        "Minor": "Short-term, reversible barrier. Few users affected.",
+        "Moderate": "Noticeable access issues. Some groups impacted. Resolution requires effort.",
+        "Major": "Major service disruption. Widespread impact. Legal/public concern likely.",
+        "Severe": "Critical failure. Essential services inaccessible. Broad harm, urgent response."
+      }
+    },
+    "3.2": {
+      "title": "Risk of unfair discrimination",
+      "descriptors": {
+        "Insignificant": "Negligible discrimination; no harm. Issues caught and fixed early.",
+        "Minor": "Limited unfair treatment. Few individuals affected; quickly corrected.",
+        "Moderate": "Noticeable harm to some individuals/groups. Bias concerns raised; intervention needed.",
+        "Major": "Widespread harm to multiple communities. Significant impact; trust must be rebuilt.",
+        "Severe": "Systemic harm, especially to vulnerable groups. Public outrage; urgent reform required."
+      }
+    },
+    "3.3": {
+      "title": "Risk of perpetuating stereotyping or demeaning representations",
+      "descriptors": {
+        "Insignificant": "Mild stereotyping, quickly fixed. No lasting harm.",
+        "Minor": "Isolated incidents. Few affected. Promptly resolved.",
+        "Moderate": "Noticeable public concern. Some groups harmed. Needs intervention.",
+        "Major": "Widespread harmful stereotypes. Public outcry. Trust damaged.",
+        "Severe": "Systemic harm across communities. Legal risk. Urgent reforms needed."
+      }
+    },
+    "3.4": {
+      "title": "Risk of harm",
+      "descriptors": {
+        "Insignificant": "Minor glitch. No real harm. Easily managed.",
+        "Minor": "Isolated public/business/environmental impact. Low cost. Resolved quickly.",
+        "Moderate": "Noticeable harm to people, businesses, or ecosystems. Public concern raised.",
+        "Major": "Widespread harm. Financial losses, distress, or ecosystem damage.",
+        "Severe": "Critical, irreversible harm. Economic and environmental crisis. Urgent action needed."
+      }
+    },
+    "3.5": {
+      "title": "Risk of AI use raising privacy concerns",
+      "descriptors": {
+        "Insignificant": "Minor data mishandling. No sensitive info exposed. Trust intact.",
+        "Minor": "Small data breach. Few affected. Resolved quickly.",
+        "Moderate": "Noticeable breach of sensitive data. Some distress caused.",
+        "Major": "Large-scale misuse of private data. Public trust damaged.",
+        "Severe": "Widespread sensitive data exposure. Severe harm and lasting loss of trust."
+      }
+    },
+    "3.6": {
+      "title": "Risk raising security concerns – data aspects",
+      "descriptors": {
+        "Insignificant": "Minor lapse. No data misuse. Promptly fixed.",
+        "Minor": "Small breach. Few records accessed. Quickly secured.",
+        "Moderate": "Moderate data compromise. Privacy concerns raised. Needs investigation.",
+        "Major": "Major breach of sensitive data. Public trust shaken. Urgent response needed.",
+        "Severe": "Massive breach. National security and privacy at risk. Emergency overhaul required."
+      }
+    },
+    "3.7": {
+      "title": "Risk of raising security concerns – system aspects",
+      "_transcription_note": "The source tool prints IDENTICAL text for the Moderate and Major tiers of this section ('System feature causes data leak or access issue. Contained but serious.'). This is an apparent error in the DTA tool v1.0; both are transcribed verbatim to preserve fidelity (TECH_SPEC §10.1 — transcribe, never correct). Flag to Tom for an upstream fix; do not silently diverge from the instrument.",
+      "descriptors": {
+        "Insignificant": "Minor flaw (e.g. bug). No real security impact. Quickly fixed.",
+        "Minor": "Small vulnerability exploited. Limited breach. Resolved with updates.",
+        "Moderate": "System feature causes data leak or access issue. Contained but serious.",
+        "Major": "System feature causes data leak or access issue. Contained but serious.",
+        "Severe": "Critical vulnerability causes widespread breach. National/public safety at risk. Emergency response needed."
+      }
+    },
+    "3.8": {
+      "title": "Risk to reputation or public confidence",
+      "descriptors": {
+        "Insignificant": "Minor, isolated issue; negligible impact on public trust; quickly addressed.",
+        "Minor": "Brief concern or media attention; small reputational dent; resolved with prompt action.",
+        "Moderate": "Public questions oversight; moderate trust impact; requires remedial response.",
+        "Major": "Widespread criticism; major reputational damage; trust rebuilding needed.",
+        "Severe": "Profound loss of public trust; seen as governance failure; long-term recovery and reform required."
+      }
+    }
+  }
+}

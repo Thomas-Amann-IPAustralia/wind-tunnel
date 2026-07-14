@@ -1,0 +1,14 @@
+{
+  "_source": "AI impact assessment tool v1.0 — Table 2 (Risk matrix). Transcribed verbatim from instrument/guidance/AI_impact_assessment_tool.md (§3, Table 2).",
+  "_note": "This is the SINGLE source of truth for the deterministic rating engine (TECH_SPEC §10.1). matrix[consequence][likelihood] -> rating. FIDELITY WARNING: the real DTA Table 2 differs from the conventional 5x5 scaffold once shown in TECH_SPEC §10.1 — the rating set tops out at 'High' (there is NO 'Very high' tier), and several cells differ. Every cell below is read directly from the source table (oriented likelihood-rows x consequence-columns) and re-keyed consequence-first. A single wrong cell is a fidelity failure (TECH_SPEC §10.1 transcription note).",
+  "consequence_tiers": ["Insignificant", "Minor", "Moderate", "Major", "Severe"],
+  "likelihood_tiers": ["Rare", "Unlikely", "Possible", "Likely", "Almost certain"],
+  "ratings_ordered": ["Low", "Medium", "High"],
+  "matrix": {
+    "Insignificant": { "Rare": "Low",    "Unlikely": "Low",    "Possible": "Low",    "Likely": "Medium", "Almost certain": "Medium" },
+    "Minor":         { "Rare": "Low",    "Unlikely": "Low",    "Possible": "Medium", "Likely": "Medium", "Almost certain": "Medium" },
+    "Moderate":      { "Rare": "Low",    "Unlikely": "Medium", "Possible": "Medium", "Likely": "Medium", "Almost certain": "High" },
+    "Major":         { "Rare": "Medium", "Unlikely": "Medium", "Possible": "High",   "Likely": "High",   "Almost certain": "High" },
+    "Severe":        { "Rare": "Medium", "Unlikely": "High",   "Possible": "High",   "Likely": "High",   "Almost certain": "High" }
+  }
+}
