@@ -15,10 +15,10 @@ doc. **Met.** All six specialist KBs build from the real corpus
 examples: `[ISM, p.17]` (true PDF page), `[Archives Act 1983, s 30A]` (legislative
 provision), `[NAA AI Records Guidance, §Disposal of generative AI assistant
 prompts and inputs]` (heading path), and `fetch("ISM-2002")` returns the exact
-control by key. **Not yet built** (the Stage-0 line items that were about run
-identity/state — carried into Stage 1): run-code creation, `run.json`/`status.json`
-(TECH_SPEC §3–§6). The retrieval half of Stage 0 is complete; the run-state half
-is the natural next pickup.
+control by key. The run-identity/state line items (run-code creation,
+`run.json`/`status.json`, TECH_SPEC §3–§6) that were carried into Stage 1 are now
+**built and tested** (see Done → *Run-state core*) — pure data/projection layer,
+with the commit/dispatch plumbing around it the next pickup (handoff step 1).
 
 **Boundary note:** the rating engine + instrument encoding (a Stage 2 target) were
 built now because they were unblocked, self-contained and testable — do not read
@@ -28,6 +28,30 @@ reconciler and the wiring that feed it do not exist yet.
 
 ## Done
 
+- **Run-state core (`pipeline/runcode.py`, `statefile.py`, `status.py`) — the
+  resume model (TECH_SPEC §3–§6).** LLM-free, 36 tests (`tests/test_runstate.py`),
+  exercised end-to-end (a run drives a threshold slice → real `run.json`/`status.json`).
+  - `runcode.py` (§3): the 29-symbol alphabet, `WT-XXXX-XX` format, CSPRNG
+    `generate()`, `normalize`/`is_valid`/`validate`, and an I/O-free
+    `generate_unique(exists)` (the backend plugs its Contents-API existence check
+    in). The single **Python** owner of the run-code fact (CLAUDE.md §6); the
+    frontend keeps the one unavoidable TS copy.
+  - `statefile.py` (§4, §5): `RunState` = the authoritative `run.json`. The §5.1
+    `Stage`/`StageStatus`/`Phase` enums, phase derived from stage, atomic
+    save/load, checkpoints + idempotent `has_checkpoint` (§5.3), loud `from_dict`
+    validation, `fail()` (§5.6), and the **caps** as hard invariants
+    (`record_revision` ≤2/artefact, `record_review_cycle` ≤2 — raise at the cap,
+    CLAUDE.md §3).
+  - `status.py` (§6): the fixed 14-node graph (§6.2) with specialist nodes +
+    owned sections **derived from `instrument/sections.json`** (one owner, no
+    re-statement); the controlled 9-type event vocabulary (§6.3); `StatusModel`
+    that enforces the three invariants structurally — whole-graph `nodes` every
+    write, append-only monotonic `evt_NNNNNN` ids, and node↔event coupling
+    (`active`/`complete`/`failed` are only reachable via methods that append the
+    matching `stage_started`/`stage_complete`/`error`). Questions (§6.4) + failure
+    (§6.5) payloads; `expected_ranges` aggregated from `config/budgets.yml`; and
+    `rebuild(run, log)` — the concrete "always safe to recompute from run.json +
+    event log" projection guarantee, asserted against live-built models.
 - **Deterministic rating engine (`pipeline/rating/`) — the integrity core**
   (TECH_SPEC §10). LLM-free `rating(consequence, likelihood)` and
   `overall_rating(ratings)` load the instrument tables, validate inputs, and raise
@@ -126,12 +150,23 @@ reconciler and the wiring that feed it do not exist yet.
 
 The four dependency-ordered steps that stood between the scaffold and the Stage-0
 exit test (licence config → instrument encoding → ingestion → rating engine) are
-**all done** (see Done). Next concrete steps, in rough dependency order:
+**all done** (see Done). The **run-state core** (former step 1) is now also done:
+`runcode.py` + `statefile.py` + `status.py` give a tested, LLM-free `run.json`
+authority and `status.json` projection. Next concrete steps, in rough dependency
+order:
 
-1. **Run identity + state (`backend/`, `runs/`, TECH_SPEC §3–§6)** — the other
-   half of Stage 0/1: run-code creation, `run.json` (authoritative) and the
-   derived `status.json` projection with the fixed node graph (§6.2) and the
-   controlled event vocabulary (§6.3). Nothing here is blocked.
+1. **Commit/dispatch plumbing around the run-state core (TECH_SPEC §5.3, §7, §14).**
+   The core is pure (no git/API I/O by design). What's still needed to make it a
+   live pipeline: `pipeline/run.py` (the entrypoint — load `run.json`, route to the
+   current `Stage`, run the handler, commit, advance; §5.3); a checkpoint-commit
+   helper (Actions-side `GITHUB_TOKEN` commit, §14); and the backend's
+   `POST /api/runs` path that calls `runcode.generate_unique` (existence check via
+   Contents API) + `RunState.new().save()` + `StatusModel.initial().save()` and
+   commits the skeleton (§7). Note (decision): backend and pipeline don't share a
+   runtime filesystem, only the repo; the run-state modules are placed in
+   `pipeline/` per the §2 layout, so the backend consuming them is a packaging
+   question to settle when `backend/app.py` lands (vendor the three modules, or a
+   thin shared import).
 2. **Prompts (`prompts/*.md` + `manifest.yml`, TECH_SPEC §9)** — author the
    versioned role prompts. The instrument JSON now gives each generalist/specialist
    its owned question text, guidance, and (for §3) consequence/likelihood tables.
@@ -209,6 +244,38 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **Failure keeps `run.json.stage` pointing at the failing stage** (not a distinct
+  `FAILED` stage value); `stage_status="failed"` + `last_error` is the failure
+  marker. §5.1 lists FAILED as a state and §5.6 says "writes `stage_status=failed`",
+  but §5.3 resumes by reading `stage`+`stage_status` and restarting the current
+  stage from its last checkpoint — overwriting `stage` with FAILED would lose that
+  resume target. `Stage.FAILED` stays in the enum for completeness/validation but
+  is not written by `fail()`. (`statefile.RunState.fail`.)
+- **`status.json` `nodes` is `node_id → state` strings only** (matching the §6.1
+  shape), not node objects. The static topology (friendly name, model role, owned
+  sections) lives in `status.py` and is mirrored in the frontend, since §6.2 says
+  the node ids are "shared verbatim between pipeline and animation" — i.e. the
+  frontend already holds the rest. Exposed via `node_specs()`/`friendly_name()`
+  for pipeline + tests.
+- **`waiting_user` is not narrated by its own event type.** §6.3's coupling rule
+  enumerates only `active`/`complete`/`failed` (→ `stage_started`/`stage_complete`/
+  `error`); there is no "pause" event type. So `wait_node` sets the node +
+  `overall_state=paused` without a coupled event — the pause is narrated by the
+  `question_raised` lines already emitted (checkpoint) or by `overall_state` alone
+  (threshold review). `rebuild()` therefore derives `waiting_user` from `run.json`
+  (stage + `awaiting_user`), not from the log.
+- **`expected_ranges` is aggregated from `config/budgets.yml`, not hardcoded.**
+  §6.1's example values ([120,300]/[600,1800]) are illustrative; the real
+  projection sums the per-stage `expected_range_seconds` into per-phase ranges
+  (threshold = drafting+reconciling = [50,210]; full = drafting+architect+reviewer
+  = [170,630]) so tuning budgets flows straight into the animation hints. One owner
+  (budgets.yml). (`status.load_expected_ranges`.)
+- **The run-state core is placed in `pipeline/` and is git/API-I/O-free.** The §2
+  layout puts `statefile.py`/`status.py` there; `runcode.py` joins them as the
+  Python owner of §3. Committing `run.json`/`status.json` is left to the caller
+  (backend `github_io.py` / an Actions commit helper, §14) so the modules stay
+  pure and unit-testable. The backend↔pipeline packaging (they share only the repo
+  at runtime) is deferred to when `backend/` lands — see handoff step 1.
 - **Directory-preservation convention:** structural directories get a
   `README.md` (which doubles as orientation); pure code-leaf directories that
   are otherwise empty get a `.gitkeep`. Chosen so git tracks the empty scaffold

@@ -16,6 +16,8 @@ __pycache__/
 .venv/
 venv/
 .uv/
+# deps are pinned in each pyproject.toml (CLAUDE.md §4); no lockfile committed
+uv.lock
 .pytest_cache/
 .ruff_cache/
 *.egg-info/
