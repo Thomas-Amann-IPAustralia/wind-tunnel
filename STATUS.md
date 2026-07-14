@@ -7,8 +7,9 @@
 Scope: single-repo scaffold (TECH_SPEC §2), run-state model + run codes,
 ingestion pipeline, one populated specialist KB end-to-end.
 
-**Exit test:** a retrieval query returns page-cited chunks from a real corpus
-doc. *Not yet met* — no corpus, KB, or retrieval code exists yet.
+**Exit test:** a fetch/search returns pinpoint-cited chunks from a real corpus
+doc. *Not yet met* — the corpus has landed, but the sidecars and the
+ingestion/retrieval code don't exist yet.
 
 ## Done
 
@@ -21,8 +22,9 @@ doc. *Not yet met* — no corpus, KB, or retrieval code exists yet.
 - **Committed non-secret config** (CLAUDE.md §6, TECH_SPEC §13):
   - `config/models.yml` — tier→role mapping transcribed from TECH_SPEC §13
     (decided); exact Gemini ids left as `TODO(Tom)` placeholders.
-  - `config/retrieval.yml` — scaffold: embedding model, top-k, BM25/cosine
-    fusion weights, rerank off.
+  - `config/retrieval.yml` — rewritten July 2026 for the index+fetch model:
+    chunking targets, index token budget, fetch caps, search top-k. No
+    embedding model, fusion weights, or reranker (see Decisions).
   - `config/budgets.yml` — per-stage call budgets + `expected_range_seconds`
     from the §13 worked example.
 - **`prompts/manifest.yml`** — empty registry (`prompts: {}`) with the role list
@@ -33,31 +35,67 @@ doc. *Not yet met* — no corpus, KB, or retrieval code exists yet.
   ignore `runs/` (durable store) or `kb/*.sqlite`.
 - **`README.md`** — public-facing: what Windtunnel is, the usage warning,
   architecture, repo map, and orientation pointers.
-- **`STATUS.md`** — this ledger (created; CLAUDE.md §7).
-- **`CLAUDE.md`** updated with a "Repo state (first instance)" note so the next
-  instance knows the scaffold exists.
+- **Instrument source landed (Tom, July 2026)** —
+  `instrument/guidance/AI_impact_assessment_tool.md` (the tool itself:
+  questions, Table 1 likelihood scale, the real Table 2 risk matrix,
+  per-section consequence tiers) and `Guidance_AI_impact_assessment_tool.md`
+  (the guidance, including the risk-consequence appendix table). Encoding
+  `instrument/*.json` is unblocked, and the rating engine can be built against
+  the real Table 2 from the start — no scaffold matrix needed.
+- **Corpus landed (Tom, July 2026)** — 106 documents across the six specialist
+  folders, ~1.8M extractable tokens: it_security ~507K, ethics ~432K,
+  privacy ~402K, legal ~220K, solution_architect ~163K (56 files, mostly the
+  RAI pattern catalogue), data_governance ~73K. Formats: 58 docx / 37 pdf /
+  12 md / 4 xlsx / 1 txt / 1 rtf. No `.meta.yml` sidecars yet.
+- **Retrieval reevaluated against the real corpus; TECH_SPEC §8 rewritten**
+  (this branch). The inherited embedding/hybrid design is replaced by an
+  LLM-navigated structural index + `fetch`/`search` (FTS5 BM25) tool loop, and
+  citations generalize from pages to typed locators. Documents updated
+  together so none contradict (CLAUDE.md §2): TECH_SPEC (§2 layout, §6.3 event
+  ref, §8 rewritten, §9.4, §13, §15, §16), PROJECT_BRIEF (framing, specialist
+  contract, architecture table, Stage-0 exit test, citation-integrity risk),
+  DESIGN_BRIEF (event table ref, report citation apparatus),
+  `config/retrieval.yml`, `config/budgets.yml`, `corpus/README.md` (now carries
+  the sidecar template), `kb/README.md`, CLAUDE.md §8.
 
 ## In progress / handoff notes
 
-Nothing left mid-flight. The scaffold is directories + placeholders only — **no
-executable code has been written yet.** Suggested next concrete steps toward the
-Stage 0 exit test, in dependency order:
+Nothing mid-flight. Next concrete steps toward the Stage 0 exit test, in
+dependency order:
 
-1. **Instrument encoding** (`instrument/*.json`) — deterministic transcription
-   from `AI_IMPACT_ASSESSMENT.md` (**blocked on Tom**, see below). Assert at
-   build time that every section maps to exactly one specialist owner
-   (TECH_SPEC §6.2). A legitimate early task once the source doc lands.
-2. **Rating engine** (`pipeline/rating/`) — LLM-free, unit-tested, built against
-   a clearly-marked scaffold Table 2 until real values arrive (TECH_SPEC §10, §16).
-3. **KB schema + ingestion** (`pipeline/retrieval/`, `.github/workflows/ingestion.yml`)
-   with the licence hard-gate (TECH_SPEC §8) — needs at least one cleared corpus
-   doc to exercise the exit test.
-4. **Run identity + run-state** (`backend/`, `pipeline/statefile.py`) — run codes
-   (TECH_SPEC §3), `run.json` / `status.json` (§4, §6).
+1. **Tom: `.meta.yml` sidecars** per the template in `corpus/README.md`,
+   including licence verification (see Blocked on Tom).
+2. **Instrument encoding** (`instrument/*.json`) — now unblocked: deterministic
+   transcription from `instrument/guidance/*.md`, asserting at build time that
+   every section maps to exactly one specialist owner (TECH_SPEC §6.2).
+3. **Ingestion build** (`pipeline/retrieval/`, `.github/workflows/ingestion.yml`)
+   to the revised TECH_SPEC §8: licence gate → structure-aware extraction
+   (PyMuPDF for PDFs; docx style trees; xlsx normalization per §8.7) →
+   structural chunking → index build → sqlite/index/manifest write. No
+   embedding stack: deps stay small (pymupdf, openpyxl, pyyaml, stdlib sqlite3).
+   The code can be written now; the licence gate needs sidecars to pass.
+4. **Rating engine** (`pipeline/rating/`) — against the **real** Table 2 now in
+   the repo (TECH_SPEC §10); the scaffold-matrix contingency is obsolete.
 
-Ordering rationale: 2 and the rating tests can proceed against scaffold data
-while Tom supplies the instrument and corpus; 3 is what the Stage 0 exit test
-actually measures, so it needs the corpus doc to truly pass.
+Corpus observations for whoever builds ingestion (from the July 2026 review):
+
+- All 37 PDFs have a real text layer — no OCR needed. The ISM PDF renders its
+  controls as `Control: ISM-XXXX; …` lines (regexable into `record` chunks);
+  the Privacy Act and Archives Act compilations are docx with full legislative
+  styles (`ActHead*`, `subsection`) — provision anchors come from the style tree.
+- Spreadsheet headers are one or two rows with merged group headers (cloud
+  controls matrix `Principles` sheet; the pattern-mapping workbook) —
+  normalization per §8.7 must detect header depth and fill down groupings.
+- The ADM Better Practice Guide appears twice: `legal/…March-2025.pdf` and
+  `ethics/apo-nid306481.pdf` (an earlier edition of the same guide).
+  Per-specialist KBs are independent so this works, but Tom may want to drop
+  the stale copy or give them distinct `short_name`s + versions.
+- `legal/Artificial-Intelligence-Guidance-May-2026.pdf` is the **UK Bar
+  Standards Board's** guidance — Tom to confirm it's wanted alongside the AU
+  material, or swap for an AU equivalent.
+- `The-new-machinery-of-government…pdf.pdf` has a doubled extension; harmless
+  (doc_id slugging normalizes it). `placeholder.md` files can be deleted as
+  sidecars land.
 
 ## Decisions made (that the documents were silent on)
 
@@ -73,23 +111,39 @@ actually measures, so it needs the corpus doc to truly pass.
   non-secret and CLAUDE.md §6 names them as committed, so encoding the decided
   parts (tier→role, budget structure) and marking only the genuinely-open values
   `TODO(Tom)` gives the next instance a concrete starting point.
+- **Retrieval = LLM-navigated index + fetch/search; no embeddings** (July 2026,
+  after reviewing the landed corpus; full record TECH_SPEC §8.8). The corpora
+  are small (≤~507K tokens/specialist) and registry-shaped; an in-context index
+  gives specialists corpus awareness (better synthesis than top-k snippets),
+  visible rather than silent recall failures, and zero ML infra in the runners.
+  Reversible by construction: a dense channel can be added additively if
+  Stage-3 quality testing shows recall gaps.
+- **Citations anchor to typed locators, not only pages** (TECH_SPEC §8.2) —
+  two-thirds of the corpus (docx/xlsx/md) has no true pages. PDFs keep the
+  true-page guarantee; legislation cites provisions; sheets cite row ranges or
+  record keys. The brief's citation-integrity intent is unchanged.
+- **Spreadsheets ingest as normalized sheets classified by shape** (TECH_SPEC
+  §8.7): instructions → prose; registries → row-group markdown chunks with
+  `record_key`s; boolean matrices → per-row records naming only meaningful cells.
 
 ## Blocked on Tom
 
-These block the *next* tasks, not this scaffold (CLAUDE.md §8, TECH_SPEC §16):
+These block the *next* tasks (CLAUDE.md §8, TECH_SPEC §16). The instrument
+source and Table 1/Table 2 landed July 2026 (see Done) and are no longer here:
 
-- **`AI_IMPACT_ASSESSMENT.md` is not in the repo.** CLAUDE.md §1 names it as a
-  read; it is absent. Needed to encode `instrument/*.json`. Confirm the real
-  filename and add it.
-- **The DTA Table 2 matrix + consequence/likelihood descriptors** — blocking for
-  Stage 2 rating correctness. Engine + tests can be built against a scaffold
-  matrix but cannot be trusted until the real values land.
-- **At least one licence-cleared corpus document** in `corpus/<specialist>/`
-  with its `.meta.yml` — required for the **Stage 0 exit test**.
+- **`.meta.yml` sidecars with verified licences** — template in
+  `corpus/README.md`; at least one cleared doc unlocks the Stage 0 exit test.
+  Commonwealth material (DTA, OAIC, ASD/ACSC, NAA, eSafety, the DDG strategy)
+  is usually CC BY 4.0 — confirm each imprint page. **Verify before flagging
+  redistributable:** the OECD paper (OECD terms, not CC), the two arXiv papers
+  (author-chosen licences), the two AHRC reports, the two HTI/UTS reports, the
+  CSIRO/Data61 report + the 50 pattern-catalogue extracts, the Creative
+  Australia paper, the three court items (SC PN Gen 23, the GenAI practice-note
+  txt, the Perry J speech rtf), the Indigenous data governance framework, and
+  the UK BSB guidance. US NIST/CISA/NSA publications are public domain; OWASP
+  is already on the allow-list.
 - **Exact Gemini model identifiers** in `config/models.yml` — blocks the first
   real LLM call.
-- **Embedding model choice** (recommended `BAAI/bge-small-en-v1.5`) — ingestion
-  and query must use the same one.
 
 ## Deploy-layer reminders (pinned in CLAUDE.md §9, not yet actioned)
 

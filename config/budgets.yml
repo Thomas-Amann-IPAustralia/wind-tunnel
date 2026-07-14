@@ -9,8 +9,9 @@
 #
 # SCAFFOLD counts derived from the tech-spec worked example (§13):
 #   2 generalists + 1 reconciler; 6 specialists x (1 draft + 1 revise);
-#   1 architect; reviewer x <=2 cycles x affected specialists; plus
-#   retrieval-driven query embeddings. Tune with real run actuals.
+#   1 architect; reviewer x <=2 cycles x affected specialists. Each specialist
+#   call is internally bounded to fetch.max_rounds tool rounds (retrieval.yml,
+#   TECH_SPEC §8.1). Tune with real run actuals.
 
 stages:
   threshold_drafting:

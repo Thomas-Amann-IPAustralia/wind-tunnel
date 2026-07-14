@@ -1,22 +1,27 @@
-# config/retrieval.yml — KB retrieval settings
+# config/retrieval.yml — KB build + retrieval settings
 #
-# Governs: TECH_SPEC.md §8 (KB + ingestion), read by pipeline/retrieval/.
-# Committed, non-secret (CLAUDE.md §6).
+# Governs: TECH_SPEC.md §8 (KB, index, ingestion, retrieval), read by
+# pipeline/retrieval/. Committed, non-secret (CLAUDE.md §6).
 #
-# SCAFFOLD values — tune against the Stage 0 exit test (a retrieval query
-# returns page-cited chunks from a real corpus doc). Confirm the embedding
-# model with Tom; ingestion and query MUST use the identical one (CLAUDE.md §8).
+# Revised July 2026 with the index+fetch retrieval model (TECH_SPEC §8.8):
+# no embedding model, no fusion weights, no reranker. The knobs below are
+# structural caps, not quality dials — the defaults are expected to hold.
 
-# Embedding model — same for ingestion and query, no exceptions.
-embedding_model: BAAI/bge-small-en-v1.5   # recommended; confirm with Tom
+chunking:
+  target_tokens_min: 400    # pack small structural siblings up to this
+  target_tokens_max: 900    # split larger sections at paragraph boundaries
+  # Chunks never cross a structural boundary (section / provision / control /
+  # sheet row-group) — TECH_SPEC §8.6. No sliding-window overlap.
 
-# Hybrid retrieval: BM25 (lexical) + cosine (dense), fused.
-top_k: 8              # candidates returned per query (scaffold)
-fusion:
-  bm25_weight: 0.5    # scaffold — tune
-  cosine_weight: 0.5  # scaffold — tune
+index:
+  max_tokens: 25000         # per-specialist index budget; the builder rolls the
+                            # deepest levels up into their parents until under it
 
-rerank:
-  enabled: false      # optional cross-encoder rerank; off until a model is chosen
-  model: null         # TODO: reranker id if enabled
-  top_k: 4            # results kept after rerank
+fetch:                      # the specialist tool loop (TECH_SPEC §8.1)
+  max_rounds: 4             # fetch/search tool rounds per specialist call
+  max_tokens_per_round: 16000
+  max_total_tokens: 48000   # hard cap on fetched corpus text per call
+
+search:                     # FTS5 BM25 tool + seed context
+  top_k: 8                  # results per search() call
+  seed_top_k: 6             # pre-fetched from DTA question text + outline keywords
