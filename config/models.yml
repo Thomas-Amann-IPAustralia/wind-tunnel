@@ -2,24 +2,26 @@
 #
 # Governs: TECH_SPEC.md §13. Committed, non-secret (CLAUDE.md §6).
 #
-# The tier -> role mapping below is DECIDED (tech spec §13). The values are
-# tier placeholders. FOR TOM: pin the exact Gemini model *identifiers*
-# (which version for each tier) against current Gemini availability — that is
-# the only open part of this file. Blocks the first real LLM call, nothing
-# before it (CLAUDE.md §8).
+# The tier -> role mapping below is DECIDED (tech spec §13). The exact Gemini
+# model identifiers were pinned by Tom (July 2026), one per tier:
+#   lite  -> gemini-3.1-flash-lite
+#   flash -> gemini-3.5-flash
+#   pro   -> gemini-3.1-pro-preview
+# This was the last hard blocker (CLAUDE.md §8); the first real LLM call is now
+# unblocked.
 #
 # If quality testing shows specialists need Pro, it is a one-line flip
 # (threshold_generalist / specialist -> the pro id); budget for that.
 
 roles:
-  interviewer:            gemini-flash-lite   # TODO(Tom): pin exact id
-  sufficiency:            gemini-flash-lite   # TODO(Tom): pin exact id
-  feasibility_gate:       gemini-flash-lite   # TODO(Tom): pin exact id
-  outline_synth:          gemini-flash        # TODO(Tom): pin exact id
-  poc_gen:                gemini-flash        # TODO(Tom): pin exact id
-  map_gen:                gemini-flash        # TODO(Tom): pin exact id
-  threshold_generalist:   gemini-flash        # TODO(Tom): pin exact id
-  specialist:             gemini-flash        # TODO(Tom): pin exact id
-  threshold_reconciler:   gemini-pro          # TODO(Tom): pin exact id
-  architect:              gemini-pro          # TODO(Tom): pin exact id
-  reviewer:               gemini-pro          # TODO(Tom): pin exact id
+  interviewer:            gemini-3.1-flash-lite    # lite tier
+  sufficiency:            gemini-3.1-flash-lite    # lite tier
+  feasibility_gate:       gemini-3.1-flash-lite    # lite tier
+  outline_synth:          gemini-3.5-flash         # flash tier
+  poc_gen:                gemini-3.5-flash         # flash tier
+  map_gen:                gemini-3.5-flash         # flash tier
+  threshold_generalist:   gemini-3.5-flash         # flash tier
+  specialist:             gemini-3.5-flash         # flash tier
+  threshold_reconciler:   gemini-3.1-pro-preview   # pro tier
+  architect:              gemini-3.1-pro-preview   # pro tier
+  reviewer:               gemini-3.1-pro-preview   # pro tier
