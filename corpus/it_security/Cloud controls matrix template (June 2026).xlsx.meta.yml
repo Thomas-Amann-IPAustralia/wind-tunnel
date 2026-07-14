@@ -1,0 +1,7 @@
+short_name: "CSCM"
+title: "Cloud Security Controls Matrix"
+version: "June 2026"
+publisher: "Australian Signals Directorate"
+source_url: "https://www.cyber.gov.au/resources-business-and-government/maintaining-devices-and-systems/cloud-security-guidance"
+licence: "CC-BY-4.0"
+redistributable: true

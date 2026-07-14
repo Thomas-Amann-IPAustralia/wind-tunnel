@@ -1,0 +1,7 @@
+short_name: "QB4AIRA"
+title: "QB4AIRA: A Question Bank for AI Risk Assessment"
+version: "v2 (2023)"
+publisher: "CSIRO Data61"
+source_url: "https://arxiv.org/abs/2305.09300"
+licence: "arXiv.org perpetual non-exclusive license"
+redistributable: true
