@@ -2,17 +2,66 @@
 
 ## Current stage
 
-**Stage 0 — Foundations** (PROJECT_BRIEF.md §9).
+**Stage 0 — Foundations** (PROJECT_BRIEF.md §9) — **exit test MET.**
 
 Scope: single-repo scaffold (TECH_SPEC §2), run-state model + run codes,
 ingestion pipeline, one populated specialist KB end-to-end.
 
 **Exit test:** a fetch/search returns pinpoint-cited chunks from a real corpus
-doc. *Not yet met* — the corpus has landed, but the sidecars and the
-ingestion/retrieval code don't exist yet.
+doc. **Met.** All six specialist KBs build from the real corpus
+(`python -m retrieval.ingest`), and `KB.search`/`KB.fetch` return chunks carrying
+`(short_name, locator)` citations — verified end-to-end against real documents in
+`retrieval/tests/test_retrieval.py::test_stage0_exit_real_corpus_md`. Live
+examples: `[ISM, p.17]` (true PDF page), `[Archives Act 1983, s 30A]` (legislative
+provision), `[NAA AI Records Guidance, §Disposal of generative AI assistant
+prompts and inputs]` (heading path), and `fetch("ISM-2002")` returns the exact
+control by key. **Not yet built** (the Stage-0 line items that were about run
+identity/state — carried into Stage 1): run-code creation, `run.json`/`status.json`
+(TECH_SPEC §3–§6). The retrieval half of Stage 0 is complete; the run-state half
+is the natural next pickup.
+
+**Boundary note:** the rating engine + instrument encoding (a Stage 2 target) were
+built now because they were unblocked, self-contained and testable — do not read
+their presence as Stage 2 being underway. Stage 2's exit test (ratings match a
+hand-worked assessment) is met *for the engine in isolation*; the generalists,
+reconciler and the wiring that feed it do not exist yet.
 
 ## Done
 
+- **Deterministic rating engine (`pipeline/rating/`) — the integrity core**
+  (TECH_SPEC §10). LLM-free `rating(consequence, likelihood)` and
+  `overall_rating(ratings)` load the instrument tables, validate inputs, and raise
+  `RatingError` on any off-vocabulary label (loud failure, never silent). 12
+  engine tests hand-worked from the **real** Table 2. **Key fidelity finding: the
+  real Table 2 tops out at "High" — there is NO "Very high" tier**, and several
+  cells differ from the conventional scaffold once shown in TECH_SPEC §10.1.
+- **Instrument encoding (`instrument/*.json`)** — transcribed verbatim from
+  `instrument/guidance/*.md` (TECH_SPEC §9.3, §10.1):
+  - `likelihood_table.json` (Table 1), `risk_matrix.json` (Table 2, real cells),
+    `consequence_table.json` (5-tier scale + per-section §3.1–3.8 descriptors).
+  - `questions.json` — question inventory for the coverage checklist (§11.1) and
+    specialist prompts (§9.3): verbatim prompts for §3 and §5–12.
+  - `sections.json` — the ownership contract encoding §6.2; **asserts each
+    full-assessment section maps to exactly one owner** (the 1:1 build-time check,
+    CLAUDE.md §8), via `pipeline/tests/test_instrument.py`.
+- **Ingestion + retrieval (`pipeline/retrieval/`) — Stage-0 exit path**
+  (TECH_SPEC §8). Licence hard gate → structure-aware extraction (pdf/docx/xlsx/
+  md/txt/rtf) → structural chunking (never crosses a boundary; no overlap) →
+  sqlite (§8.3 schema + FTS5) + index (§8.4, budget-bounded coarsening ladder) +
+  manifest (§8.5). Two-tool `fetch`/`search` interface (§8.1). No embeddings
+  (§8.8) — stdlib `sqlite3`/FTS5 + one chunker. Format highlights: PDFs keep true
+  pages; legislation cites provisions (`s 30A`) from the `ActHead`/`SubsectionHead`
+  style tree; ISM controls are detected inline and made fetchable by key
+  (`fetch("ISM-1612")`); spreadsheets emit keyed records. 42 retrieval tests pass.
+- **`.github/workflows/ingestion.yml`** (TECH_SPEC §8.6) — `workflow_dispatch` +
+  push-to-`corpus/**`; runs tests, ingests via `uv`, commits KBs back with the
+  built-in `GITHUB_TOKEN`. Path-filtered.
+- **Built KBs committed** (`kb/*.sqlite` + `.index.json` + `.manifest.json`, ~17 MB
+  total) — the durable Stage-0 output (§8.5 "commit directly at this size"). Regen
+  is idempotent from source.
+- **`config/licences.yml`** — the ingestion licence allow-list (STATUS step 1,
+  resolved): the gate keeps `licence ∈ allow_list` as defence-in-depth and
+  enumerates the exact strings the 106 cleared sidecars carry.
 - **Corpus `.meta.yml` sidecars authored — all 106 documents** (TECH_SPEC §8.6
   step 1, `corpus/README.md` template). One sidecar per document, seven fields
   each (`short_name`, `title`, `version`, `publisher`, `source_url`, `licence`,
@@ -75,35 +124,41 @@ ingestion/retrieval code don't exist yet.
 
 ## In progress / handoff notes
 
-Sidecars are done (see Done). Next concrete steps toward the Stage 0 exit test,
-in dependency order:
+The four dependency-ordered steps that stood between the scaffold and the Stage-0
+exit test (licence config → instrument encoding → ingestion → rating engine) are
+**all done** (see Done). Next concrete steps, in rough dependency order:
 
-1. **Licence allow-list config** — the ingestion licence gate (§8.6 step 1)
-   checks `redistributable: true` **and** `licence` ∈ allow-list. Sidecars now
-   carry accurate licence strings, and while most are `CC-BY-4.0`, several are
-   **not CC and must be added to the allow-list** for the gate to pass on Tom's
-   attestation: `CC-BY-SA-4.0` (OWASP ×2, the CSIRO/NAIC RAI-tools report),
-   `Public Domain (U.S. Government work)` (NIST SP 800-61r3, the NSA/CISA AI
-   data-security & secure-deployment guidance), `UK Open Government Licence v3.0`
-   (NCSC secure-AI-development guidelines), `OECD Terms and Conditions` (the OECD
-   public-audit paper), `arXiv.org perpetual non-exclusive license` (QB4AIRA,
-   Diversity & Inclusion in AI), `© American Bar Association …` (ABA Year-2
-   report), `© University of Technology Sydney …` (HTI report), `© Bar Standards
-   Board …` (UK BSB guidance), and `Internal – Commonwealth (IP Australia)` (the
-   TRS guidance). Decide whether the allow-list enumerates these or the gate
-   treats `redistributable: true` as sufficient given the owner's attestation.
-2. **Instrument encoding** (`instrument/*.json`) — now unblocked: deterministic
-   transcription from `instrument/guidance/*.md`, asserting at build time that
-   every section maps to exactly one specialist owner (TECH_SPEC §6.2).
-3. **Ingestion build** (`pipeline/retrieval/`, `.github/workflows/ingestion.yml`)
-   to the revised TECH_SPEC §8: licence gate → structure-aware extraction
-   (PyMuPDF for PDFs; docx style trees; xlsx normalization per §8.7) →
-   structural chunking → index build → sqlite/index/manifest write. No
-   embedding stack: deps stay small (pymupdf, openpyxl, pyyaml, stdlib sqlite3).
-   The code can be written now; the licence gate now has its sidecar inputs
-   (pending the allow-list decision in step 1).
-4. **Rating engine** (`pipeline/rating/`) — against the **real** Table 2 now in
-   the repo (TECH_SPEC §10); the scaffold-matrix contingency is obsolete.
+1. **Run identity + state (`backend/`, `runs/`, TECH_SPEC §3–§6)** — the other
+   half of Stage 0/1: run-code creation, `run.json` (authoritative) and the
+   derived `status.json` projection with the fixed node graph (§6.2) and the
+   controlled event vocabulary (§6.3). Nothing here is blocked.
+2. **Prompts (`prompts/*.md` + `manifest.yml`, TECH_SPEC §9)** — author the
+   versioned role prompts. The instrument JSON now gives each generalist/specialist
+   its owned question text, guidance, and (for §3) consequence/likelihood tables.
+   Wrap all user text in the untrusted delimiter (§9.2). Prompt *content* is
+   authorable now; the first real **call** is blocked on the Gemini ids.
+3. **Threshold stage (`pipeline/stages/`, `pipeline/agents/`)** — two generalists
+   → reconciler → feed the rating engine (already built) → `divergence.json`.
+   This is the first place the rating engine is wired in (§5.1, §10.3).
+4. **Specialist retrieval loop wiring (`pipeline/agents/`)** — give each specialist
+   its `kb/<specialist>.index.json` in-context + the `KB.fetch`/`KB.search` tools
+   (`retrieval.KB`, already built), enforcing `config/retrieval.yml` caps and
+   emitting `retrieval` events (§6.3). Retrieval mechanics are done; this is the
+   agent-loop harness around them.
+
+**Deferred within retrieval (not blocking):** the optional Flash-written one-line
+descriptions for uninformative index headings (§8.4) are not generated — the index
+uses extractive descriptions only. It is additive (a per-section string) and
+gated on a Gemini id; the index structure won't change when it lands. The xlsx
+shape classifier (§8.7) is a solid first pass (registry-vs-prose by key-column
+heuristic; single-row headers), not the full two-row grouped-header/matrix
+treatment — refine if Stage-3 quality testing shows spreadsheet recall gaps.
+
+**Flag to Tom (instrument fidelity):** the DTA tool prints **identical text for the
+Moderate and Major consequence tiers of §3.7** ("System feature causes data leak or
+access issue. Contained but serious."). Transcribed verbatim
+(`consequence_table.json` `3.7._transcription_note`) to preserve fidelity — this is
+an apparent upstream error worth correcting in the tool, not in our encoding.
 
 Provenance corrections from Tom (July 2026) — the three documents whose sidecars
 were originally inferred (they had no embedded title metadata) are now fixed to
@@ -190,24 +245,51 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
   attestation**, not a per-document licence audit. The `licence` field still
   records the *actual* licence (CC-BY-4.0 for most Commonwealth material, plus
   CC-BY-SA / US public-domain / UK OGL / OECD / arXiv / ABA / UTS / BSB /
-  IP-Australia-internal for the rest). The ingestion gate's allow-list must
-  reconcile with these — see In progress step 1.
+  IP-Australia-internal for the rest). The ingestion gate's allow-list
+  reconciles with these — **resolved** in `config/licences.yml` (next bullet).
+- **Licence gate keeps `licence ∈ allow_list`** rather than treating
+  `redistributable: true` as sufficient (STATUS "In progress" step 1, resolved).
+  Defence-in-depth: a new document with an unlisted licence fails the build and
+  forces a human decision, instead of an inherited `true` waving it through.
+  `config/licences.yml` enumerates the exact 10 licence strings the cleared
+  sidecars carry; a test asserts the gate passes on the current corpus and that
+  no allow-list entry is unused.
+- **§8.5 "Offer appropriate explanations" → Ethics specialist.** TECH_SPEC §6.2
+  was silent (listed ethics owning 8.1/8.2/8.4, omitted 8.5, no other claimant).
+  Assigned to ethics — §8.5 sits in section 8's transparency/explainability
+  cluster ethics already owns. TECH_SPEC §6.2 ethics row updated in the same
+  commit (fix the losing doc, CLAUDE.md §2). Recorded in `sections.json`
+  `_decisions.8.5` and asserted by a test.
+- **Token estimation is a dependency-free word+punct count** (`retrieval/tokens.py`),
+  not a model tokenizer. The 400–900 targets are structural caps, not quality
+  dials (§8.8); consistency matters more than absolute accuracy, and it keeps the
+  runners tokenizer-free.
+- **Index budget enforced via a coarsening ladder** (§8.4): full section paths →
+  top-level sections → lean nodes → one-line-per-doc summary; the builder picks
+  the least-coarse rung under `index.max_tokens` (25K). it_security lands at the
+  summary rung (~7.3K); records stay fetchable by key regardless of coarseness.
+- **ISM controls detected inline in the PDF** (`Control: ISM-####`) and emitted as
+  `record` chunks keyed by control id, so `fetch("ISM-1612")` returns the exact
+  control at its true page. Legislative provision locators (`s 30A`) derive from
+  `ActHead`/`SubsectionHead` styles; `toc`/header styles are skipped.
+- **Built KBs are committed** (`kb/*.sqlite` + index + manifest, ~17 MB) per §8.5's
+  "commit directly at this size". `ingested_at`/`generated_at` timestamps mean a
+  re-ingest always diffs — accepted as the documented provenance tradeoff; the
+  release-asset overflow valve (§14) remains for when a KB gets oversized.
 
 ## Blocked on Tom
 
 These block the *next* tasks (CLAUDE.md §8, TECH_SPEC §16). The instrument
 source and Table 1/Table 2 landed July 2026 (see Done) and are no longer here:
 
-- **~~`.meta.yml` sidecars with verified licences~~ — DONE (July 2026).** Tom
-  attested in-session that every document is cleared for use, so all 106 sidecars
-  are authored with `redistributable: true` and accurate `licence` strings (see
-  Done). What remains from this item is a *config* decision, not a Tom blocker:
-  the ingestion licence allow-list must accommodate the non-CC licences the
-  sidecars record (In progress step 1). Tom's attestation is sufficient to
-  progress; the three originally-inferred sidecars have been corrected to his
-  sources (The Research Society; National AI Centre ×2 — see handoff notes).
-- **Exact Gemini model identifiers** in `config/models.yml` — blocks the first
-  real LLM call.
+- **~~`.meta.yml` sidecars with verified licences~~ — DONE (July 2026), and the
+  follow-on allow-list config is now RESOLVED** (`config/licences.yml`). Nothing
+  from this item blocks anymore.
+- **Exact Gemini model identifiers** in `config/models.yml` — the one remaining
+  hard blocker. Blocks the first real LLM call (interviewer, generalists,
+  specialists, reconciler, architect, reviewer). Everything built so far is
+  LLM-free and unblocked: the rating engine, the instrument encoding, and the
+  whole ingestion/retrieval path run and are tested without any model call.
 
 ## Deploy-layer reminders (pinned in CLAUDE.md §9, not yet actioned)
 
