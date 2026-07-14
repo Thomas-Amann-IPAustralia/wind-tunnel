@@ -1,0 +1,2070 @@
+{
+  "specialist": "ethics",
+  "generated_at": "2026-07-14T22:42:45Z",
+  "document_count": 15,
+  "retrieval": "Navigate this index, then fetch(refs) or search(query, k) (TECH_SPEC §8.1).",
+  "documents": [
+    {
+      "doc_id": "23-00122-data61-report-naic-responsibleaitools-web-230620",
+      "short_name": "NAIC RAI Tools",
+      "title": "Implementing Australia's AI Ethics Principles: A selection of Responsible AI practices and resources",
+      "version": "2023",
+      "publisher": "CSIRO National AI Centre (prepared by Gradient Institute)",
+      "source_url": "https://www.csiro.au/-/media/D61/NAIC/Gradient-Report/23-00122_DATA61_REPORT_NAIC-ResponsibleAITools_WEB_230620.pdf",
+      "format": "pdf",
+      "page_count": 60,
+      "what_it_is": "Implementing Australia's AI Ethics Principles: A selection of Responsible AI practices and resources",
+      "chunk_count": 140,
+      "structure": [
+        {
+          "section": "Citation",
+          "chunk_count": 1,
+          "token_count": 36
+        },
+        {
+          "section": "Copyright and licence",
+          "chunk_count": 1,
+          "token_count": 219
+        },
+        {
+          "section": "Authors",
+          "chunk_count": 1,
+          "token_count": 16
+        },
+        {
+          "section": "Disclaimer",
+          "chunk_count": 1,
+          "token_count": 168
+        },
+        {
+          "section": "Acknowledgements",
+          "chunk_count": 1,
+          "token_count": 258
+        },
+        {
+          "section": "Contact",
+          "chunk_count": 1,
+          "token_count": 31
+        },
+        {
+          "section": "Contents",
+          "chunk_count": 1,
+          "token_count": 652
+        },
+        {
+          "section": "2 Human, societal and environmental wellbeing......................................................................5",
+          "chunk_count": 6,
+          "token_count": 4643
+        },
+        {
+          "section": "Executive summary",
+          "chunk_count": 1,
+          "token_count": 431
+        },
+        {
+          "section": "1 Introduction",
+          "chunk_count": 1,
+          "token_count": 470
+        },
+        {
+          "section": "1.1 \nThe need for Responsible \nAI in business",
+          "chunk_count": 1,
+          "token_count": 291
+        },
+        {
+          "section": "1.2 \nOrganisational \napproach to RAI",
+          "chunk_count": 2,
+          "token_count": 451
+        },
+        {
+          "section": "1.3 \nModels, systems and \naccountable parties",
+          "chunk_count": 2,
+          "token_count": 470
+        },
+        {
+          "section": "Account for the needs \nof all stakeholders while \npromoting inclusivity \nand equity.",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "Assess impacts",
+          "chunk_count": 1,
+          "token_count": 32
+        },
+        {
+          "section": "Ensure that AI systems \nare explicitly designed to \noperate ethically (as well \nas meeting their business \nobjectives).",
+          "chunk_count": 1,
+          "token_count": 26
+        },
+        {
+          "section": "Throughout their lifecycle, AI systems should benefit individuals, society and \nthe environment.",
+          "chunk_count": 1,
+          "token_count": 140
+        },
+        {
+          "section": "2.1 \nElicit potential impacts",
+          "chunk_count": 1,
+          "token_count": 311
+        },
+        {
+          "section": "Resources for eliciting impacts",
+          "chunk_count": 1,
+          "token_count": 375
+        },
+        {
+          "section": "2.2 Assess impacts",
+          "chunk_count": 1,
+          "token_count": 361
+        },
+        {
+          "section": "Considerations:",
+          "chunk_count": 1,
+          "token_count": 451
+        },
+        {
+          "section": "2.3 Set ethical objectives",
+          "chunk_count": 1,
+          "token_count": 252
+        },
+        {
+          "section": "Resources to identify design trade-offs",
+          "chunk_count": 1,
+          "token_count": 173
+        },
+        {
+          "section": "Approaches and challenges for trade-offs",
+          "chunk_count": 3,
+          "token_count": 457
+        },
+        {
+          "section": "Respect and preserve \nhuman agency and \ndecision-making \ncapabilities.",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Justify the means by \nwhich outcomes are \nachieved.",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Incorporate diversity",
+          "chunk_count": 1,
+          "token_count": 49
+        },
+        {
+          "section": "Throughout their lifecycle, AI systems should respect human rights, diversity, \nand the autonomy of individuals.",
+          "chunk_count": 1,
+          "token_count": 64
+        },
+        {
+          "section": "3.1 \nDesign for human autonomy",
+          "chunk_count": 1,
+          "token_count": 158
+        },
+        {
+          "section": "Individual control over an algorithm",
+          "chunk_count": 1,
+          "token_count": 155
+        },
+        {
+          "section": "Establishing user consent",
+          "chunk_count": 1,
+          "token_count": 229
+        },
+        {
+          "section": "3.2 Achieve outcomes ethically",
+          "chunk_count": 1,
+          "token_count": 566
+        },
+        {
+          "section": "3.3 Incorporate diversity",
+          "chunk_count": 1,
+          "token_count": 200
+        },
+        {
+          "section": "Resources for diversity and inclusion in AI",
+          "chunk_count": 2,
+          "token_count": 307
+        },
+        {
+          "section": "Fairness",
+          "chunk_count": 2,
+          "token_count": 63
+        },
+        {
+          "section": "Consider what is fair \nin the context of the \nsystem’s impacts and \nwho is affected.",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "Quantify fairness \nconcerns to promote \neffective oversight and \nmitigation.",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "Reduce the risk of the \nsystem introducing, \nperpetuating or \namplifying societal \ninequalities.",
+          "chunk_count": 1,
+          "token_count": 26
+        },
+        {
+          "section": "4 Fairness",
+          "chunk_count": 1,
+          "token_count": 207
+        },
+        {
+          "section": "4.1 \nContextualise fairness",
+          "chunk_count": 1,
+          "token_count": 109
+        },
+        {
+          "section": "Resources for contextualising fairness",
+          "chunk_count": 1,
+          "token_count": 172
+        },
+        {
+          "section": "4.2 Measure fairness",
+          "chunk_count": 1,
+          "token_count": 194
+        },
+        {
+          "section": "Resources for choosing fairness metrics",
+          "chunk_count": 1,
+          "token_count": 442
+        },
+        {
+          "section": "Resources for evaluating fairness metrics",
+          "chunk_count": 2,
+          "token_count": 824
+        },
+        {
+          "section": "4.3 Mitigate unfair impacts",
+          "chunk_count": 1,
+          "token_count": 161
+        },
+        {
+          "section": "Resources for improving system fairness",
+          "chunk_count": 3,
+          "token_count": 712
+        },
+        {
+          "section": "Privacy protection and security",
+          "chunk_count": 2,
+          "token_count": 164
+        },
+        {
+          "section": "Ensure \nestablished legal \nand technical \npractices are \napplied.",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "Ensure that \nmalicious \nactors cannot \nmanipulate or \ncompromise \nthe system or \nits data.",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Only use the \nmost relevant \ndata records \nand attributes \nto reduce risk of \nprivacy exposure.",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "Use algorithms \nthat minimise \nprivacy exposure \nby design.",
+          "chunk_count": 1,
+          "token_count": 23
+        },
+        {
+          "section": "5 Privacy protection \nand security",
+          "chunk_count": 1,
+          "token_count": 352
+        },
+        {
+          "section": "5.1 \nConsult privacy \nand security experts",
+          "chunk_count": 1,
+          "token_count": 180
+        },
+        {
+          "section": "5.2 Guard against attacks",
+          "chunk_count": 1,
+          "token_count": 701
+        },
+        {
+          "section": "5.3 Minimise the collection \nof personal information",
+          "chunk_count": 1,
+          "token_count": 353
+        },
+        {
+          "section": "5.4 Consider using privacy \npreserving models",
+          "chunk_count": 2,
+          "token_count": 375
+        },
+        {
+          "section": "Ensure high quality data \nto promote high quality \nmodel outputs.",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "Test the assumptions of \nthe system at a limited \nscale to reduce exposure \nto unforeseen impacts.",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "Oversee performance \nagainst both business \nand ethical objectives \nto ensure the system is \noperating as intended.",
+          "chunk_count": 1,
+          "token_count": 26
+        },
+        {
+          "section": "Throughout their lifecycle, AI systems should reliably operate in accordance with \ntheir intended purpose.",
+          "chunk_count": 1,
+          "token_count": 201
+        },
+        {
+          "section": "6.1 \nCurate datasets",
+          "chunk_count": 1,
+          "token_count": 539
+        },
+        {
+          "section": "6.2 Conduct pilot studies",
+          "chunk_count": 1,
+          "token_count": 337
+        },
+        {
+          "section": "6.3 Monitor and evaluate \ncontinuously",
+          "chunk_count": 3,
+          "token_count": 883
+        },
+        {
+          "section": "Transparency and explainability",
+          "chunk_count": 2,
+          "token_count": 75
+        },
+        {
+          "section": "Inform users of an AI’s \noperation to build trust \nand empower them to \nmake effective decisions.",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Promote deliberate \nreflection within the \ndevelopment team \nand incentivise rigour \nthrough external scrutiny.",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "Help stakeholders \nunderstand the system’s \ndecision process to \nbuild trust and uncover \nproblems.",
+          "chunk_count": 1,
+          "token_count": 23
+        },
+        {
+          "section": "7 Transparency and explainability",
+          "chunk_count": 1,
+          "token_count": 648
+        },
+        {
+          "section": "7.1 \nMake appropriate disclosures",
+          "chunk_count": 1,
+          "token_count": 541
+        },
+        {
+          "section": "7.2 Enable external scrutiny",
+          "chunk_count": 2,
+          "token_count": 425
+        },
+        {
+          "section": "7.3 Offer appropriate explanations",
+          "chunk_count": 1,
+          "token_count": 260
+        },
+        {
+          "section": "Criteria for explainability",
+          "chunk_count": 1,
+          "token_count": 248
+        },
+        {
+          "section": "Tools for explainability",
+          "chunk_count": 1,
+          "token_count": 671
+        },
+        {
+          "section": "7.4 Resource gaps and \nconsiderations",
+          "chunk_count": 3,
+          "token_count": 498
+        },
+        {
+          "section": "Contestability",
+          "chunk_count": 2,
+          "token_count": 82
+        },
+        {
+          "section": "Determine proportionate \nmeans for affected \nstakeholders to voice \ntheir objections.",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "Allow human decision \nmakers to provide \ncontext and compassion \nthat the system may lack.",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Provide the means for \nan impacted individual \nto mount a successful \ncontest.",
+          "chunk_count": 1,
+          "token_count": 29
+        },
+        {
+          "section": "8 Contestability",
+          "chunk_count": 1,
+          "token_count": 151
+        },
+        {
+          "section": "8.1 \nUnderstand \ncontestability obligations",
+          "chunk_count": 1,
+          "token_count": 162
+        },
+        {
+          "section": "8.2 Establish human review \nof contested decisions",
+          "chunk_count": 1,
+          "token_count": 164
+        },
+        {
+          "section": "8.3 Support impacted individuals",
+          "chunk_count": 1,
+          "token_count": 110
+        },
+        {
+          "section": "Recourse and redress mechanisms",
+          "chunk_count": 1,
+          "token_count": 206
+        },
+        {
+          "section": "Preemptive contestability",
+          "chunk_count": 2,
+          "token_count": 72
+        },
+        {
+          "section": "Accountability",
+          "chunk_count": 2,
+          "token_count": 135
+        },
+        {
+          "section": "Ensure that \nindividuals are \nequipped to \nmake ethical \ndecisions when \ndesigning and \ndeploying AI \nsystems.",
+          "chunk_count": 1,
+          "token_count": 12
+        },
+        {
+          "section": "Be clear \nabout who is \naccountable for \ndifferent aspects \nof the AI system’s \noperation and \nimpacts.",
+          "chunk_count": 1,
+          "token_count": 12
+        },
+        {
+          "section": "Conduct \n\nindependent \n\nexternal audits",
+          "chunk_count": 1,
+          "token_count": 33
+        },
+        {
+          "section": "Drive and \nreinforce \nresponsible \nAI practices \nby explicitly \nmotivating \nethical behaviour.",
+          "chunk_count": 1,
+          "token_count": 23
+        },
+        {
+          "section": "9 Accountability",
+          "chunk_count": 1,
+          "token_count": 534
+        },
+        {
+          "section": "9.1 \nRaise awareness and \nknowledge of Responsible AI",
+          "chunk_count": 1,
+          "token_count": 528
+        },
+        {
+          "section": "9.2 Establish roles and \nresponsibilities",
+          "chunk_count": 1,
+          "token_count": 696
+        },
+        {
+          "section": "9.3 Conduct independent \nexternal audits",
+          "chunk_count": 1,
+          "token_count": 497
+        },
+        {
+          "section": "9.4 Create positive incentives",
+          "chunk_count": 2,
+          "token_count": 183
+        },
+        {
+          "section": "10 Conclusion",
+          "chunk_count": 1,
+          "token_count": 317
+        },
+        {
+          "section": "Human, societal and \nenvironmental wellbeing",
+          "chunk_count": 1,
+          "token_count": 23
+        },
+        {
+          "section": "Human-centred values",
+          "chunk_count": 1,
+          "token_count": 28
+        },
+        {
+          "section": "Reliability and safety",
+          "chunk_count": 1,
+          "token_count": 25
+        },
+        {
+          "section": "References",
+          "chunk_count": 15,
+          "token_count": 8880
+        },
+        {
+          "section": "The National AI Centre is \nbuilding Australia’s responsible \nand inclusive AI future.",
+          "chunk_count": 1,
+          "token_count": 44
+        }
+      ]
+    },
+    {
+      "doc_id": "2305-12728v1",
+      "short_name": "Diversity & Inclusion in AI",
+      "title": "Diversity and Inclusion in Artificial Intelligence",
+      "version": "v1 (2023)",
+      "publisher": "Didar Zowghi and Francesca da Rimini (CSIRO Data61)",
+      "source_url": "https://arxiv.org/abs/2305.12728",
+      "format": "pdf",
+      "page_count": 27,
+      "what_it_is": "Diversity and Inclusion in Artificial Intelligence",
+      "chunk_count": 36,
+      "structure": [
+        {
+          "section": "Diversity and Inclusion in \nArtificial Intelligence",
+          "chunk_count": 3,
+          "token_count": 957
+        },
+        {
+          "section": "Importance of Diversity and Inclusion in AI",
+          "chunk_count": 2,
+          "token_count": 539
+        },
+        {
+          "section": "Definition of Diversity and Inclusion in Artificial \nIntelligence",
+          "chunk_count": 4,
+          "token_count": 1188
+        },
+        {
+          "section": "Guidelines for Diversity and Inclusion in Artificial \nIntelligence",
+          "chunk_count": 2,
+          "token_count": 260
+        },
+        {
+          "section": "Humans",
+          "chunk_count": 4,
+          "token_count": 1513
+        },
+        {
+          "section": "Data",
+          "chunk_count": 4,
+          "token_count": 1319
+        },
+        {
+          "section": "Process",
+          "chunk_count": 6,
+          "token_count": 1941
+        },
+        {
+          "section": "System",
+          "chunk_count": 2,
+          "token_count": 657
+        },
+        {
+          "section": "Governance",
+          "chunk_count": 3,
+          "token_count": 866
+        },
+        {
+          "section": "Conclusion",
+          "chunk_count": 3,
+          "token_count": 1054
+        },
+        {
+          "section": "References",
+          "chunk_count": 3,
+          "token_count": 1613
+        }
+      ]
+    },
+    {
+      "doc_id": "ahrc-rightstech-2021-final-report-3",
+      "short_name": "AHRC HRT Report",
+      "title": "Human Rights and Technology Final Report",
+      "version": "2021",
+      "publisher": "Australian Human Rights Commission",
+      "source_url": "https://humanrights.gov.au/our-work/rights-and-freedoms/publications/human-rights-and-technology-final-report-2021",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Human Rights and Technology Final Report",
+      "chunk_count": 256,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 714
+        },
+        {
+          "section": "Human Rights Commissioner’s Foreword",
+          "chunk_count": 1,
+          "token_count": 821
+        },
+        {
+          "section": "Executive summary",
+          "chunk_count": 17,
+          "token_count": 4161
+        },
+        {
+          "section": "National strategy on new and emerging technologies",
+          "chunk_count": 13,
+          "token_count": 5691
+        },
+        {
+          "section": "Using artificial intelligence to make decisions",
+          "chunk_count": 26,
+          "token_count": 7942
+        },
+        {
+          "section": "Legal accountability for government use of AI",
+          "chunk_count": 27,
+          "token_count": 10553
+        },
+        {
+          "section": "Legal accountability for private sector use of AI",
+          "chunk_count": 17,
+          "token_count": 5739
+        },
+        {
+          "section": "Encouraging better AI-informed decision making",
+          "chunk_count": 31,
+          "token_count": 9744
+        },
+        {
+          "section": "AI, equality and non-discrimination",
+          "chunk_count": 5,
+          "token_count": 2324
+        },
+        {
+          "section": "Biometric surveillance, facial recognition and privacy",
+          "chunk_count": 18,
+          "token_count": 6504
+        },
+        {
+          "section": "Supporting effective regulation",
+          "chunk_count": 16,
+          "token_count": 4502
+        },
+        {
+          "section": "The right to access technology",
+          "chunk_count": 13,
+          "token_count": 2247
+        },
+        {
+          "section": "Functional accessibility",
+          "chunk_count": 20,
+          "token_count": 6408
+        },
+        {
+          "section": "Broadcasting and audio-visual services",
+          "chunk_count": 14,
+          "token_count": 4829
+        },
+        {
+          "section": "Availability of new technology",
+          "chunk_count": 7,
+          "token_count": 3493
+        },
+        {
+          "section": "Design, education and capacity building",
+          "chunk_count": 18,
+          "token_count": 5255
+        },
+        {
+          "section": "Appendices",
+          "chunk_count": 12,
+          "token_count": 5815
+        }
+      ]
+    },
+    {
+      "doc_id": "ai-guidance-resource-december-2022",
+      "short_name": "AHRC AI Guidance",
+      "title": "Artificial Intelligence: guidance resource",
+      "version": "December 2022",
+      "publisher": "Australian Human Rights Commission",
+      "source_url": "https://humanrights.gov.au/our-work/technology-and-human-rights",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Artificial Intelligence: guidance resource",
+      "chunk_count": 87,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 390
+        },
+        {
+          "section": "Australian Human Rights Commission",
+          "chunk_count": 1,
+          "token_count": 353
+        },
+        {
+          "section": "Actuaries Institute of Australia",
+          "chunk_count": 1,
+          "token_count": 81
+        },
+        {
+          "section": "The time is right",
+          "chunk_count": 1,
+          "token_count": 60
+        },
+        {
+          "section": "Emerging megatrends make guidance critical",
+          "chunk_count": 1,
+          "token_count": 102
+        },
+        {
+          "section": "What this Guidance Resource means for you",
+          "chunk_count": 1,
+          "token_count": 81
+        },
+        {
+          "section": "Introduction",
+          "chunk_count": 2,
+          "token_count": 480
+        },
+        {
+          "section": "About the Guidance Resource",
+          "chunk_count": 2,
+          "token_count": 498
+        },
+        {
+          "section": "What does the law say?",
+          "chunk_count": 18,
+          "token_count": 3404
+        },
+        {
+          "section": "Artificial Intelligence and discrimination",
+          "chunk_count": 11,
+          "token_count": 2665
+        },
+        {
+          "section": "Case Studies: Challenges for insurers",
+          "chunk_count": 26,
+          "token_count": 5035
+        },
+        {
+          "section": "Practical tips to avoid unlawful discrimination when using AI",
+          "chunk_count": 1,
+          "token_count": 534
+        },
+        {
+          "section": "Further Resources",
+          "chunk_count": 5,
+          "token_count": 567
+        },
+        {
+          "section": "Appendix 1: Key sections under the Discrimination Acts",
+          "chunk_count": 16,
+          "token_count": 4072
+        }
+      ]
+    },
+    {
+      "doc_id": "australia-s-ai-ethics-principles",
+      "short_name": "AI Ethics Principles",
+      "title": "Australia's AI Ethics Principles",
+      "version": "2019",
+      "publisher": "Department of Industry, Science and Resources",
+      "source_url": "https://www.industry.gov.au/publications/australias-artificial-intelligence-ethics-principles",
+      "format": "md",
+      "page_count": null,
+      "what_it_is": "Australia's AI Ethics Principles",
+      "chunk_count": 10,
+      "structure": [
+        {
+          "section": "Australia’s AI Ethics Principles",
+          "chunk_count": 10,
+          "token_count": 1795
+        }
+      ]
+    },
+    {
+      "doc_id": "creative-australia-generative-ai-and-creative-work-paper",
+      "short_name": "Creative Australia GenAI",
+      "title": "Generative AI and creative work – Creative Australia Principles",
+      "version": "2024",
+      "publisher": "Creative Australia",
+      "source_url": "https://creative.gov.au/advocacy-and-research/generative-ai-and-creative-work/",
+      "format": "pdf",
+      "page_count": 3,
+      "what_it_is": "Generative AI and creative work – Creative Australia Principles",
+      "chunk_count": 6,
+      "structure": [
+        {
+          "section": "Context",
+          "chunk_count": 1,
+          "token_count": 231
+        },
+        {
+          "section": "IP protection for artists",
+          "chunk_count": 1,
+          "token_count": 168
+        },
+        {
+          "section": "Ownership of generative AI",
+          "chunk_count": 1,
+          "token_count": 295
+        },
+        {
+          "section": "AI within creative practice",
+          "chunk_count": 1,
+          "token_count": 125
+        },
+        {
+          "section": "Regulation",
+          "chunk_count": 1,
+          "token_count": 227
+        },
+        {
+          "section": "Principles guiding the use of \n\ngenerative AI for creative output",
+          "chunk_count": 1,
+          "token_count": 296
+        }
+      ]
+    },
+    {
+      "doc_id": "generative-ai-position-statement-august-2023",
+      "short_name": "eSafety GenAI Position Statement",
+      "title": "Generative AI – Position Statement",
+      "version": "August 2023",
+      "publisher": "eSafety Commissioner",
+      "source_url": "https://www.esafety.gov.au/industry/tech-trends-and-challenges/generative-ai",
+      "format": "pdf",
+      "page_count": 40,
+      "what_it_is": "Generative AI – Position Statement",
+      "chunk_count": 55,
+      "structure": [
+        {
+          "section": "eSafety.gov.au",
+          "chunk_count": 1,
+          "token_count": 1
+        },
+        {
+          "section": "Tech Trends Position Statement – \nGenerative AI",
+          "chunk_count": 1,
+          "token_count": 46
+        },
+        {
+          "section": "Executive summary",
+          "chunk_count": 2,
+          "token_count": 170
+        },
+        {
+          "section": "Overview of eSafety’s approach to tech trends",
+          "chunk_count": 1,
+          "token_count": 309
+        },
+        {
+          "section": "Definitions and examples",
+          "chunk_count": 2,
+          "token_count": 352
+        },
+        {
+          "section": "Background",
+          "chunk_count": 3,
+          "token_count": 780
+        },
+        {
+          "section": "Generative AI lifecycle",
+          "chunk_count": 5,
+          "token_count": 1823
+        },
+        {
+          "section": "Risks, harms, and opportunities",
+          "chunk_count": 13,
+          "token_count": 5199
+        },
+        {
+          "section": "Regulatory challenges and approaches",
+          "chunk_count": 4,
+          "token_count": 1273
+        },
+        {
+          "section": "eSafety’s approach",
+          "chunk_count": 3,
+          "token_count": 1054
+        },
+        {
+          "section": "Emerging good practice and Safety by Design measures",
+          "chunk_count": 6,
+          "token_count": 1882
+        },
+        {
+          "section": "Advice for users",
+          "chunk_count": 3,
+          "token_count": 464
+        },
+        {
+          "section": "Acknowledgements",
+          "chunk_count": 11,
+          "token_count": 4837
+        }
+      ]
+    },
+    {
+      "doc_id": "guidance-for-ai-adoption-implementation-guidance-0-0",
+      "short_name": "Guidance for AI Adoption",
+      "title": "Guidance for AI adoption: implementation guidance",
+      "version": "2025",
+      "publisher": "National AI Centre",
+      "source_url": "https://www.ai.gov.au/staying-safe-and-responsible/essential-ai-practices/guidance-ai-adoption-implementation-guidance",
+      "format": "pdf",
+      "page_count": 50,
+      "what_it_is": "Guidance for AI adoption: implementation guidance",
+      "chunk_count": 88,
+      "structure": [
+        {
+          "section": "Introduction",
+          "chunk_count": 1,
+          "token_count": 203
+        },
+        {
+          "section": "How to use this guidance",
+          "chunk_count": 1,
+          "token_count": 49
+        },
+        {
+          "section": "Six practices for responsible AI adoption",
+          "chunk_count": 1,
+          "token_count": 82
+        },
+        {
+          "section": "Why implement this guidance?",
+          "chunk_count": 1,
+          "token_count": 148
+        },
+        {
+          "section": "Human-centered",
+          "chunk_count": 1,
+          "token_count": 387
+        },
+        {
+          "section": "Bias",
+          "chunk_count": 1,
+          "token_count": 49
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n6",
+          "chunk_count": 2,
+          "token_count": 276
+        },
+        {
+          "section": "Internationally consistent",
+          "chunk_count": 1,
+          "token_count": 144
+        },
+        {
+          "section": "AI systems have specific characteristics that \namplify risks",
+          "chunk_count": 1,
+          "token_count": 486
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n8",
+          "chunk_count": 1,
+          "token_count": 224
+        },
+        {
+          "section": "A proportionate approach to AI harm prevention \nand mitigation",
+          "chunk_count": 1,
+          "token_count": 236
+        },
+        {
+          "section": "A human-centred perspective on the harms of AI \nsystems",
+          "chunk_count": 1,
+          "token_count": 13
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n9",
+          "chunk_count": 2,
+          "token_count": 253
+        },
+        {
+          "section": "Organisational risks of AI",
+          "chunk_count": 1,
+          "token_count": 208
+        },
+        {
+          "section": "AI system attributes and their levels of risk",
+          "chunk_count": 1,
+          "token_count": 33
+        },
+        {
+          "section": "AI system technical architecture",
+          "chunk_count": 1,
+          "token_count": 82
+        },
+        {
+          "section": "Guiding questions (answering ‘yes’ indicates a higher level of risk)",
+          "chunk_count": 6,
+          "token_count": 222
+        },
+        {
+          "section": "Example",
+          "chunk_count": 5,
+          "token_count": 66
+        },
+        {
+          "section": "Purpose",
+          "chunk_count": 1,
+          "token_count": 57
+        },
+        {
+          "section": "Context",
+          "chunk_count": 1,
+          "token_count": 71
+        },
+        {
+          "section": "Data",
+          "chunk_count": 1,
+          "token_count": 66
+        },
+        {
+          "section": "Level of autonomy",
+          "chunk_count": 1,
+          "token_count": 64
+        },
+        {
+          "section": "System design",
+          "chunk_count": 1,
+          "token_count": 35
+        },
+        {
+          "section": "AI risks or harms and general laws that may apply",
+          "chunk_count": 1,
+          "token_count": 474
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n2",
+          "chunk_count": 1,
+          "token_count": 492
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n3",
+          "chunk_count": 1,
+          "token_count": 73
+        },
+        {
+          "section": "October 2025",
+          "chunk_count": 1,
+          "token_count": 320
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n4",
+          "chunk_count": 1,
+          "token_count": 159
+        },
+        {
+          "section": "1. Decide who is accountable",
+          "chunk_count": 1,
+          "token_count": 54
+        },
+        {
+          "section": "1.1. \nAccountable people",
+          "chunk_count": 1,
+          "token_count": 188
+        },
+        {
+          "section": "1.2 \nSupply chain accountabilities",
+          "chunk_count": 1,
+          "token_count": 34
+        },
+        {
+          "section": "1.3 \nAI literacy and training",
+          "chunk_count": 1,
+          "token_count": 171
+        },
+        {
+          "section": "1.4 \nAI governance framework",
+          "chunk_count": 1,
+          "token_count": 59
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n7",
+          "chunk_count": 1,
+          "token_count": 263
+        },
+        {
+          "section": "2. Understand impacts and plan accordingly",
+          "chunk_count": 1,
+          "token_count": 136
+        },
+        {
+          "section": "2.1 \nIdentify and engage stakeholders",
+          "chunk_count": 1,
+          "token_count": 265
+        },
+        {
+          "section": "2.2 \nEstablish feedback and redress processes",
+          "chunk_count": 1,
+          "token_count": 270
+        },
+        {
+          "section": "2.3 \nMonitor for systemic issues",
+          "chunk_count": 1,
+          "token_count": 81
+        },
+        {
+          "section": "3. Measure and manage risks: implement AI-\nspecific risk management",
+          "chunk_count": 1,
+          "token_count": 123
+        },
+        {
+          "section": "3.1 \nEstablish a fit-for-purpose risk management framework",
+          "chunk_count": 1,
+          "token_count": 276
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n11",
+          "chunk_count": 1,
+          "token_count": 326
+        },
+        {
+          "section": "3.3 \nImplement controls for AI system risks",
+          "chunk_count": 1,
+          "token_count": 141
+        },
+        {
+          "section": "3.4 \nMonitor and report incidents",
+          "chunk_count": 1,
+          "token_count": 260
+        },
+        {
+          "section": "4. Share essential information",
+          "chunk_count": 1,
+          "token_count": 65
+        },
+        {
+          "section": "4.1 \nMaintain an AI register",
+          "chunk_count": 1,
+          "token_count": 162
+        },
+        {
+          "section": "4.2 \nAI system transparency and explainability",
+          "chunk_count": 1,
+          "token_count": 96
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n14",
+          "chunk_count": 1,
+          "token_count": 304
+        },
+        {
+          "section": "4.3 \nSupply chain transparency",
+          "chunk_count": 1,
+          "token_count": 124
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n15",
+          "chunk_count": 1,
+          "token_count": 266
+        },
+        {
+          "section": "4.4 \nAI-generated content transparency",
+          "chunk_count": 1,
+          "token_count": 55
+        },
+        {
+          "section": "5. Test and monitor",
+          "chunk_count": 1,
+          "token_count": 59
+        },
+        {
+          "section": "5.1 \nPre-deployment testing",
+          "chunk_count": 1,
+          "token_count": 165
+        },
+        {
+          "section": "5.2 \nMonitor system performance",
+          "chunk_count": 1,
+          "token_count": 122
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n17",
+          "chunk_count": 1,
+          "token_count": 30
+        },
+        {
+          "section": "5.3 \nConduct additional testing proportionate to risk",
+          "chunk_count": 1,
+          "token_count": 173
+        },
+        {
+          "section": "5.4 \nImplement robust data and cybersecurity measures",
+          "chunk_count": 1,
+          "token_count": 195
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n18",
+          "chunk_count": 1,
+          "token_count": 175
+        },
+        {
+          "section": "6. Maintain human control",
+          "chunk_count": 1,
+          "token_count": 109
+        },
+        {
+          "section": "6.1 \nMaintain human oversight and control",
+          "chunk_count": 1,
+          "token_count": 154
+        },
+        {
+          "section": "6.2 \nDecommission when appropriate",
+          "chunk_count": 1,
+          "token_count": 131
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n20",
+          "chunk_count": 1,
+          "token_count": 154
+        },
+        {
+          "section": "Appendix 1 – Terms and definitions",
+          "chunk_count": 1,
+          "token_count": 358
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n22",
+          "chunk_count": 1,
+          "token_count": 377
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n23",
+          "chunk_count": 1,
+          "token_count": 429
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n24",
+          "chunk_count": 1,
+          "token_count": 403
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n25",
+          "chunk_count": 1,
+          "token_count": 431
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n26",
+          "chunk_count": 1,
+          "token_count": 399
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n27",
+          "chunk_count": 1,
+          "token_count": 446
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n28",
+          "chunk_count": 1,
+          "token_count": 373
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n29",
+          "chunk_count": 1,
+          "token_count": 35
+        },
+        {
+          "section": "Appendix 2 – Crosswalk VAISS x \nGuidance for AI adoption: \nImplementation practices",
+          "chunk_count": 1,
+          "token_count": 173
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n31",
+          "chunk_count": 1,
+          "token_count": 231
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n32",
+          "chunk_count": 1,
+          "token_count": 218
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n33",
+          "chunk_count": 1,
+          "token_count": 239
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n34",
+          "chunk_count": 1,
+          "token_count": 240
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n35",
+          "chunk_count": 1,
+          "token_count": 213
+        },
+        {
+          "section": "ai.gov.au Guidance for AI adoption: implementation guidance \nOctober 2025 \n36",
+          "chunk_count": 1,
+          "token_count": 89
+        }
+      ]
+    },
+    {
+      "doc_id": "sbd-principles",
+      "short_name": "Safety by Design Principles",
+      "title": "Safety by Design – Principles",
+      "version": "May 2019",
+      "publisher": "eSafety Commissioner",
+      "source_url": "https://www.esafety.gov.au/sites/default/files/2019-10/SBD%20-%20%20Principles.pdf",
+      "format": "pdf",
+      "page_count": 3,
+      "what_it_is": "Safety by Design – Principles",
+      "chunk_count": 4,
+      "structure": [
+        {
+          "section": "Placing user safety at the forefront \nof online service design",
+          "chunk_count": 1,
+          "token_count": 156
+        },
+        {
+          "section": "esafety.gov.au",
+          "chunk_count": 2,
+          "token_count": 515
+        },
+        {
+          "section": "SbD Principle 2: User empowerment and autonomy",
+          "chunk_count": 1,
+          "token_count": 307
+        }
+      ]
+    },
+    {
+      "doc_id": "trs-guidance-ai-150925",
+      "short_name": "TRS AI Guidelines",
+      "title": "AI Guidelines",
+      "version": "15 September 2025",
+      "publisher": "The Research Society",
+      "source_url": "https://www.researchsociety.com.au/member-resources/ai-guidelines/",
+      "format": "pdf",
+      "page_count": 15,
+      "what_it_is": "AI Guidelines",
+      "chunk_count": 37,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 2,
+          "token_count": 12
+        },
+        {
+          "section": "Contents",
+          "chunk_count": 1,
+          "token_count": 227
+        },
+        {
+          "section": "Appendices",
+          "chunk_count": 2,
+          "token_count": 35
+        },
+        {
+          "section": "Introduction to the Guidelines",
+          "chunk_count": 2,
+          "token_count": 496
+        },
+        {
+          "section": "1. Ethical Considerations and \nParticipant Well-Being",
+          "chunk_count": 2,
+          "token_count": 551
+        },
+        {
+          "section": "2. AI in Sampling, \nData Collection and \nResearch Design",
+          "chunk_count": 2,
+          "token_count": 508
+        },
+        {
+          "section": "GUIDANCE",
+          "chunk_count": 10,
+          "token_count": 2702
+        },
+        {
+          "section": "3. AI in Research Analysis \nand Reporting",
+          "chunk_count": 2,
+          "token_count": 343
+        },
+        {
+          "section": "4. Bias and Fairness in AI use",
+          "chunk_count": 2,
+          "token_count": 266
+        },
+        {
+          "section": "5.Data Privacy and Security",
+          "chunk_count": 2,
+          "token_count": 208
+        },
+        {
+          "section": "6. Transparency and \nDisclosure in AI Use",
+          "chunk_count": 1,
+          "token_count": 142
+        },
+        {
+          "section": "Transparent use of AI during \nResearch Design and Planning \nstage",
+          "chunk_count": 2,
+          "token_count": 233
+        },
+        {
+          "section": "7. Intellectual Property and \nOwnership",
+          "chunk_count": 2,
+          "token_count": 265
+        },
+        {
+          "section": "APPENDIX A: \nGlossary of Definitions",
+          "chunk_count": 1,
+          "token_count": 668
+        },
+        {
+          "section": "APPENDIX B: \nEthical References and \nRelated Frameworks",
+          "chunk_count": 2,
+          "token_count": 66
+        },
+        {
+          "section": "APPENDIX C: \nContact points",
+          "chunk_count": 1,
+          "token_count": 78
+        },
+        {
+          "section": "APPENDIX E: \nVersion Control",
+          "chunk_count": 1,
+          "token_count": 197
+        }
+      ]
+    },
+    {
+      "doc_id": "voluntary-ai-safety-standard",
+      "short_name": "VAISS",
+      "title": "Voluntary AI Safety Standard",
+      "version": "2024",
+      "publisher": "Department of Industry, Science and Resources",
+      "source_url": "https://www.industry.gov.au/publications/voluntary-ai-safety-standard",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Voluntary AI Safety Standard",
+      "chunk_count": 20,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 14
+        },
+        {
+          "section": "The 10 guardrails at a glance",
+          "chunk_count": 19,
+          "token_count": 8918
+        }
+      ]
+    },
+    {
+      "doc_id": "apo-nid306481",
+      "short_name": "ADM Guide (earlier ed.)",
+      "title": "Automated decision-making: better practice guide",
+      "version": "earlier edition",
+      "publisher": "Commonwealth Ombudsman",
+      "source_url": "https://apo.org.au/node/306481",
+      "format": "pdf",
+      "page_count": 36,
+      "what_it_is": "Automated decision-making: better practice guide",
+      "chunk_count": 68,
+      "structure": [
+        {
+          "section": "Automated \nDecision-making\nBetter Practice Guide",
+          "chunk_count": 1,
+          "token_count": 378
+        },
+        {
+          "section": "Introduction",
+          "chunk_count": 2,
+          "token_count": 189
+        },
+        {
+          "section": "Acknowledgements",
+          "chunk_count": 4,
+          "token_count": 1864
+        },
+        {
+          "section": "Contents",
+          "chunk_count": 2,
+          "token_count": 282
+        },
+        {
+          "section": "What is an automated system?",
+          "chunk_count": 2,
+          "token_count": 511
+        },
+        {
+          "section": "Guiding principles for automated systems",
+          "chunk_count": 2,
+          "token_count": 487
+        },
+        {
+          "section": "Is an automated system \nsuitable?",
+          "chunk_count": 1,
+          "token_count": 481
+        },
+        {
+          "section": "Legislative authority for \nautomated decisions",
+          "chunk_count": 1,
+          "token_count": 79
+        },
+        {
+          "section": "Discretion and automated \nsystems",
+          "chunk_count": 1,
+          "token_count": 256
+        },
+        {
+          "section": "What is discretion?",
+          "chunk_count": 1,
+          "token_count": 165
+        },
+        {
+          "section": "Administrative law and automated systems",
+          "chunk_count": 2,
+          "token_count": 114
+        },
+        {
+          "section": "Supporting discretionary \ndecision-makers",
+          "chunk_count": 1,
+          "token_count": 93
+        },
+        {
+          "section": "Managing risks associated \nwith discretions",
+          "chunk_count": 2,
+          "token_count": 844
+        },
+        {
+          "section": "The Privacy Act 1988 (Cth)",
+          "chunk_count": 1,
+          "token_count": 240
+        },
+        {
+          "section": "Privacy",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "What is personal information?",
+          "chunk_count": 1,
+          "token_count": 213
+        },
+        {
+          "section": "automated decision-making",
+          "chunk_count": 1,
+          "token_count": 54
+        },
+        {
+          "section": "Be open and transparent (APP 1)",
+          "chunk_count": 2,
+          "token_count": 402
+        },
+        {
+          "section": "Collect only what is reasonably \nnecessary (APP 3)",
+          "chunk_count": 1,
+          "token_count": 318
+        },
+        {
+          "section": "it (APP 5)",
+          "chunk_count": 2,
+          "token_count": 281
+        },
+        {
+          "section": "Use or disclosure for an \nauthorised purpose (APP 6)",
+          "chunk_count": 1,
+          "token_count": 520
+        },
+        {
+          "section": "Information used for \ndecision-making must be \naccurate, up-to-date and \ncomplete (APP 10)",
+          "chunk_count": 1,
+          "token_count": 679
+        },
+        {
+          "section": "Secure handling of personal \ninformation (APP 11)",
+          "chunk_count": 2,
+          "token_count": 547
+        },
+        {
+          "section": "Authorised decision-making",
+          "chunk_count": 1,
+          "token_count": 208
+        },
+        {
+          "section": "Governance and design",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "multidisciplinary teams",
+          "chunk_count": 1,
+          "token_count": 296
+        },
+        {
+          "section": "Service Standard",
+          "chunk_count": 3,
+          "token_count": 882
+        },
+        {
+          "section": "Modelling and approval \nof business rules",
+          "chunk_count": 2,
+          "token_count": 845
+        },
+        {
+          "section": "Implications for maintenance",
+          "chunk_count": 1,
+          "token_count": 163
+        },
+        {
+          "section": "Versioning",
+          "chunk_count": 1,
+          "token_count": 191
+        },
+        {
+          "section": "Quality assurance",
+          "chunk_count": 4,
+          "token_count": 1187
+        },
+        {
+          "section": "Publicly available information",
+          "chunk_count": 1,
+          "token_count": 284
+        },
+        {
+          "section": "Rules to be verified",
+          "chunk_count": 1,
+          "token_count": 63
+        },
+        {
+          "section": "be understandable",
+          "chunk_count": 1,
+          "token_count": 110
+        },
+        {
+          "section": "Transparency and accountability",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "Audit",
+          "chunk_count": 1,
+          "token_count": 129
+        },
+        {
+          "section": "Statement of reasons",
+          "chunk_count": 1,
+          "token_count": 391
+        },
+        {
+          "section": "Review of decisions",
+          "chunk_count": 2,
+          "token_count": 372
+        },
+        {
+          "section": "Monitoring and evaluation",
+          "chunk_count": 1,
+          "token_count": 9
+        },
+        {
+          "section": "Appendix A: \nBetter practice checklist",
+          "chunk_count": 2,
+          "token_count": 624
+        },
+        {
+          "section": "Detailed checklist",
+          "chunk_count": 6,
+          "token_count": 2109
+        },
+        {
+          "section": "Appendix B: \nFurther reading and use cases",
+          "chunk_count": 2,
+          "token_count": 618
+        }
+      ]
+    },
+    {
+      "doc_id": "co-design-lessons-learned-report",
+      "short_name": "Co-Design Lessons Learned",
+      "title": "Co-Design Lessons Learned Report",
+      "version": "June 2023",
+      "publisher": "National Indigenous Australians Agency",
+      "source_url": "https://www.niaa.gov.au/sites/default/files/documents/2024-05/co-design-lessons-learned-report.pdf",
+      "format": "pdf",
+      "page_count": 69,
+      "what_it_is": "Co-Design Lessons Learned Report",
+      "chunk_count": 91,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 2
+        },
+        {
+          "section": "National Indigenous Australians\n\nAgency (NIAA)",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Disclaimer",
+          "chunk_count": 1,
+          "token_count": 141
+        },
+        {
+          "section": "Acknowledgement",
+          "chunk_count": 1,
+          "token_count": 94
+        },
+        {
+          "section": "A Note on Terminology",
+          "chunk_count": 2,
+          "token_count": 158
+        },
+        {
+          "section": "Contents",
+          "chunk_count": 1,
+          "token_count": 152
+        },
+        {
+          "section": "Executive Summary",
+          "chunk_count": 1,
+          "token_count": 77
+        },
+        {
+          "section": "Project Background and Context",
+          "chunk_count": 3,
+          "token_count": 593
+        },
+        {
+          "section": "Co-Design Lessons Learned",
+          "chunk_count": 2,
+          "token_count": 239
+        },
+        {
+          "section": "Lesson #1\nEmbed Cultural Safety",
+          "chunk_count": 6,
+          "token_count": 1324
+        },
+        {
+          "section": "Lesson #2\nShare Power",
+          "chunk_count": 6,
+          "token_count": 1562
+        },
+        {
+          "section": "Lesson #3\n\nTailor the Co-design Approach",
+          "chunk_count": 6,
+          "token_count": 1682
+        },
+        {
+          "section": "Lesson #2\nTailor the Co-design Approach",
+          "chunk_count": 5,
+          "token_count": 1318
+        },
+        {
+          "section": "1\nIntroduction",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Introduction",
+          "chunk_count": 2,
+          "token_count": 560
+        },
+        {
+          "section": "Project Methodology\nThe Lessons Learned Project sought to answer three main research questions:",
+          "chunk_count": 2,
+          "token_count": 89
+        },
+        {
+          "section": "Project Methodology\nThere were two data collection points in the project:",
+          "chunk_count": 2,
+          "token_count": 379
+        },
+        {
+          "section": "Findings and Data Analysis",
+          "chunk_count": 2,
+          "token_count": 430
+        },
+        {
+          "section": "“",
+          "chunk_count": 3,
+          "token_count": 760
+        },
+        {
+          "section": "Spectrum of Participation",
+          "chunk_count": 3,
+          "token_count": 866
+        },
+        {
+          "section": "2\nKey Findings – Lessons \nLearned",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Key Findings – Lessons Learned",
+          "chunk_count": 2,
+          "token_count": 463
+        },
+        {
+          "section": "Lesson #1\n\nEmbed Cultural Safety",
+          "chunk_count": 5,
+          "token_count": 1553
+        },
+        {
+          "section": "Lesson #2\n\nShare Power",
+          "chunk_count": 4,
+          "token_count": 1002
+        },
+        {
+          "section": "Appendix A: Rapid Feedback \nReport",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Co-Design Lessons Learned Project",
+          "chunk_count": 2,
+          "token_count": 353
+        },
+        {
+          "section": "Key findings – Section 1. Setting up Co-design",
+          "chunk_count": 2,
+          "token_count": 346
+        },
+        {
+          "section": "Key findings – Section 2. Implementing Co-design",
+          "chunk_count": 5,
+          "token_count": 1705
+        },
+        {
+          "section": "Key findings – Section 3. Outcomes of Co-design",
+          "chunk_count": 3,
+          "token_count": 853
+        },
+        {
+          "section": "Key findings – Section 4. Reflections of the Co-design process",
+          "chunk_count": 2,
+          "token_count": 1041
+        },
+        {
+          "section": "Appendix B: Participation \nSpectrum (sample)",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Appendix B – Participation Spectrum \n(sample)",
+          "chunk_count": 1,
+          "token_count": 684
+        },
+        {
+          "section": "Appendix C: Co-design Principles \n(sample)",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Appendix C – Co-design Principles \n(sample)",
+          "chunk_count": 1,
+          "token_count": 497
+        },
+        {
+          "section": "Appendix D: Interview findings \nper key line of enquiry",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Appendix D – Interview Findings \n(per key line of enquiry)",
+          "chunk_count": 3,
+          "token_count": 1677
+        },
+        {
+          "section": "Appendix E: References",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Appendix E – References",
+          "chunk_count": 1,
+          "token_count": 295
+        },
+        {
+          "section": "Appendix F – NIAA Co-design \nProcess: Key Actions",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Appendix F – NIAA Co-design Process: \nKey Actions",
+          "chunk_count": 2,
+          "token_count": 546
+        }
+      ]
+    },
+    {
+      "doc_id": "framework-governance-indigenous-data",
+      "short_name": "Indigenous Data Governance Framework",
+      "title": "Framework for Governance of Indigenous Data: Practical guidance for the Australian Public Service",
+      "version": "2024",
+      "publisher": "National Indigenous Australians Agency",
+      "source_url": "https://www.niaa.gov.au/resource-centre/framework-governance-indigenous-data",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Framework for Governance of Indigenous Data: Practical guidance for the Australian Public Service",
+      "chunk_count": 72,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 13
+        },
+        {
+          "section": "Acknowledgement of Country",
+          "chunk_count": 4,
+          "token_count": 230
+        },
+        {
+          "section": "Foreword",
+          "chunk_count": 1,
+          "token_count": 756
+        },
+        {
+          "section": "Summary of Framework Guidelines",
+          "chunk_count": 5,
+          "token_count": 134
+        },
+        {
+          "section": "Introduction",
+          "chunk_count": 6,
+          "token_count": 1513
+        },
+        {
+          "section": "Monitoring and accountability",
+          "chunk_count": 4,
+          "token_count": 475
+        },
+        {
+          "section": "Guidelines for Australian Government Agencies",
+          "chunk_count": 22,
+          "token_count": 3940
+        },
+        {
+          "section": "Appendices",
+          "chunk_count": 25,
+          "token_count": 3578
+        },
+        {
+          "section": "Key concepts",
+          "chunk_count": 1,
+          "token_count": 319
+        },
+        {
+          "section": "Key Terms",
+          "chunk_count": 2,
+          "token_count": 1279
+        },
+        {
+          "section": "Resources",
+          "chunk_count": 1,
+          "token_count": 231
+        }
+      ]
+    },
+    {
+      "doc_id": "ltib-report-how-might-ai-affect-trust-ps-delivery",
+      "short_name": "LTIB AI & Trust",
+      "title": "How might artificial intelligence affect the trustworthiness of public service delivery?",
+      "version": "2023",
+      "publisher": "Department of the Prime Minister and Cabinet",
+      "source_url": "https://www.pmc.gov.au/publications/long-term-insights-briefing",
+      "format": "pdf",
+      "page_count": 43,
+      "what_it_is": "How might artificial intelligence affect the trustworthiness of public service delivery?",
+      "chunk_count": 59,
+      "structure": [
+        {
+          "section": "How might artificial intelligence \naffect the trustworthiness of \npublic service delivery?",
+          "chunk_count": 1,
+          "token_count": 17
+        },
+        {
+          "section": "Contents",
+          "chunk_count": 4,
+          "token_count": 1812
+        },
+        {
+          "section": "Summary",
+          "chunk_count": 1,
+          "token_count": 214
+        },
+        {
+          "section": "Artificial intelligence offers significant opportunities to improve \npublic service delivery",
+          "chunk_count": 2,
+          "token_count": 702
+        },
+        {
+          "section": "Stewardship of artificial intelligence in public service delivery",
+          "chunk_count": 2,
+          "token_count": 281
+        },
+        {
+          "section": "Framework for trustworthy use of AI in public service delivery",
+          "chunk_count": 4,
+          "token_count": 742
+        },
+        {
+          "section": "The Long-term Insights Briefings",
+          "chunk_count": 1,
+          "token_count": 244
+        },
+        {
+          "section": "The first Long-term Insights Briefing",
+          "chunk_count": 4,
+          "token_count": 941
+        },
+        {
+          "section": "Artificial intelligence",
+          "chunk_count": 4,
+          "token_count": 1098
+        },
+        {
+          "section": "Public Service Delivery",
+          "chunk_count": 4,
+          "token_count": 1174
+        },
+        {
+          "section": "The state of trust in the public service’s use of AI",
+          "chunk_count": 7,
+          "token_count": 1422
+        },
+        {
+          "section": "Artificial intelligence and the trustworthiness of \npublic service delivery",
+          "chunk_count": 1,
+          "token_count": 198
+        },
+        {
+          "section": "Insight 1: Artificial Intelligence must be designed and \nimplemented with integrity",
+          "chunk_count": 8,
+          "token_count": 3382
+        },
+        {
+          "section": "Insight 2: Using artificial intelligence shouldn’t come at the \nexpense of empathy",
+          "chunk_count": 5,
+          "token_count": 1905
+        },
+        {
+          "section": "Insight 3: Artificial intelligence should improve the performance \nof public services",
+          "chunk_count": 3,
+          "token_count": 1030
+        },
+        {
+          "section": "Insight 4: Successful service delivery depends on supporting \npeople to engage with AI-enabled services in the long term",
+          "chunk_count": 8,
+          "token_count": 4189
+        }
+      ]
+    }
+  ],
+  "_coarsened": "collapse_to_top=True, detail=lean to fit index.max_tokens=25000; records remain fetchable by key.",
+  "index_tokens_estimate": 12745
+}

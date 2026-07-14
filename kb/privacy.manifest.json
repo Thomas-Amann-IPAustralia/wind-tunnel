@@ -1,0 +1,135 @@
+{
+  "specialist": "privacy",
+  "generated_at": "2026-07-14T22:42:31Z",
+  "git_sha": "a28182364c2fd65985904298e0de955f5f3e9600",
+  "chunker": {
+    "target_tokens_min": 400,
+    "target_tokens_max": 900,
+    "overlap": "none (structural)",
+    "token_estimator": "word+punct count (retrieval/tokens.py)"
+  },
+  "retrieval_model": "index + fetch/search (FTS5 BM25); no embeddings (TECH_SPEC §8.8)",
+  "sqlite": {
+    "path": "privacy.sqlite",
+    "sha256": "cd3c46d3d0cd949dfd3257e2beba622d31393af9cf9b53fea2d3860606d7040a"
+  },
+  "index": {
+    "path": "privacy.index.json",
+    "sha256": "d850b3e8e82f87185fbcf4e41ca16cbac3f6141115a1168bfcec76f823f79595"
+  },
+  "document_count": 8,
+  "documents": [
+    {
+      "doc_id": "12-may-consolidated-app-guidelines-updated-chapter-3",
+      "short_name": "APP Guidelines",
+      "title": "Australian Privacy Principles Guidelines (consolidated; Chapter 3 updated)",
+      "version": "consolidated",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "7756860a0ec74fd597511c1ee0516182e0bfaa90e347bce92d04069b96d29d48",
+      "page_count": 227,
+      "chunk_count": 578
+    },
+    {
+      "doc_id": "app-quick-reference-tool",
+      "short_name": "APP Quick Reference",
+      "title": "Australian Privacy Principles quick reference tool",
+      "version": "n.d.",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-quick-reference",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "f12f4b660d5eb039d3547ee18561992e9e13a6563c318972986563da5fb7b8b3",
+      "page_count": 1,
+      "chunk_count": 1
+    },
+    {
+      "doc_id": "c2026c00227",
+      "short_name": "Privacy Act 1988",
+      "title": "Privacy Act 1988",
+      "version": "Compilation No. 104 (4 June 2026)",
+      "publisher": "Federal Register of Legislation (Office of Parliamentary Counsel)",
+      "source_url": "https://www.legislation.gov.au/C2004A03712/latest",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "docx",
+      "sha256": "877b0f717e01d69b071ac3a93a48019bf8a9073322b751fb9b8553f1583bdf7d",
+      "page_count": null,
+      "chunk_count": 700
+    },
+    {
+      "doc_id": "checklist-privacy-consideration-training-ai-model-029596",
+      "short_name": "OAIC AI Training Checklist",
+      "title": "Privacy considerations checklist: training a generative AI model",
+      "version": "2024",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "7d644269aaa9f19b60e57a545724332430a945f618809cd4a931a80c8363cc97",
+      "page_count": 2,
+      "chunk_count": 5
+    },
+    {
+      "doc_id": "checklist-privacy-considerations-when-selecting-an-ai-product",
+      "short_name": "OAIC AI Selection Checklist",
+      "title": "Privacy considerations checklist: selecting an AI product",
+      "version": "2024",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-the-use-of-commercially-available-ai-products",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "ae71958fb63f289c6a9a64a2597e5daf50349e0eca0707f9dfec382595a6417d",
+      "page_count": 2,
+      "chunk_count": 5
+    },
+    {
+      "doc_id": "top5-takeaways-privacy-consideration-training-ai-model-029596",
+      "short_name": "OAIC AI Training Top 5",
+      "title": "Top 5 takeaways: privacy considerations when training a generative AI model",
+      "version": "2024",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "c7bb709668da93a5d95ae10752adc2f4b4498bd27b53f60992c5d0a45a0019c1",
+      "page_count": 1,
+      "chunk_count": 1
+    },
+    {
+      "doc_id": "guide-to-undertaking-privacy-impact-assessments",
+      "short_name": "OAIC PIA Guide",
+      "title": "Guide to undertaking privacy impact assessments",
+      "version": "2020",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/privacy-impact-assessments",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "e3b58618832c121d5a4de811c9c7edd14447e3084c564684baac4c05d23e41ee",
+      "page_count": 40,
+      "chunk_count": 92
+    },
+    {
+      "doc_id": "pia-tool",
+      "short_name": "OAIC PIA Tool",
+      "title": "Privacy Impact Assessment Tool",
+      "version": "May 2020",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/privacy-impact-assessments",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "docx",
+      "sha256": "40e9ef79949cf513150efc4ee7dc3bf1e923028608d606227f7eae6610a38739",
+      "page_count": null,
+      "chunk_count": 89
+    }
+  ]
+}

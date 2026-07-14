@@ -1,0 +1,79 @@
+{
+  "specialist": "data_governance",
+  "generated_at": "2026-07-14T22:43:00Z",
+  "git_sha": "a28182364c2fd65985904298e0de955f5f3e9600",
+  "chunker": {
+    "target_tokens_min": 400,
+    "target_tokens_max": 900,
+    "overlap": "none (structural)",
+    "token_estimator": "word+punct count (retrieval/tokens.py)"
+  },
+  "retrieval_model": "index + fetch/search (FTS5 BM25); no embeddings (TECH_SPEC §8.8)",
+  "sqlite": {
+    "path": "data_governance.sqlite",
+    "sha256": "29dd4104e4c1289f1b0d20f1b70e89fbe416544008542a00215f08519d07703c"
+  },
+  "index": {
+    "path": "data_governance.index.json",
+    "sha256": "dbc1e893b42d1a4079ad8278bc2e354d8f0f235a8e6c52ddaf35418e6b6a041d"
+  },
+  "document_count": 4,
+  "documents": [
+    {
+      "doc_id": "c2026c00223",
+      "short_name": "Archives Act 1983",
+      "title": "Archives Act 1983",
+      "version": "Compilation No. 51 (1 June 2026)",
+      "publisher": "Federal Register of Legislation (Office of Parliamentary Counsel)",
+      "source_url": "https://www.legislation.gov.au/C2004A02796/latest",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "docx",
+      "sha256": "cbf3d3e0057a7bda3c863b4db02cd4e0d09e3df8689b7be4a8f71d36c7c96c93",
+      "page_count": null,
+      "chunk_count": 106
+    },
+    {
+      "doc_id": "data-and-digital-government-strategy-v1-0-0",
+      "short_name": "DDGS",
+      "title": "Data and Digital Government Strategy",
+      "version": "v1.0 (December 2023)",
+      "publisher": "Digital Transformation Agency and Department of Finance",
+      "source_url": "https://www.dataanddigital.gov.au/strategy",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "e4c39c629ca116f5f4373f470072cc563c0cf1b9527588f8451a120f8f95c5bb",
+      "page_count": 34,
+      "chunk_count": 75
+    },
+    {
+      "doc_id": "data-quality-checklist",
+      "short_name": "Data Quality Checklist",
+      "title": "Strengthen data quality: data quality checklist",
+      "version": "2026",
+      "publisher": "National AI Centre",
+      "source_url": "https://www.ai.gov.au/planning-ai/strengthen-data-quality",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "da743688ee2d14f2f9cfeb10f5b0c2de1a0819ceae8574d744e36055427e8e30",
+      "page_count": 3,
+      "chunk_count": 12
+    },
+    {
+      "doc_id": "information-management-for-records-created-using-artificial-intelligence",
+      "short_name": "NAA AI Records Guidance",
+      "title": "Information management for records created using Artificial Intelligence (AI) technologies",
+      "version": "January 2025",
+      "publisher": "National Archives of Australia",
+      "source_url": "https://www.naa.gov.au/information-management/information-management-basics/artificial-intelligence",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "md",
+      "sha256": "6c52616e7da0d484477c81052924a3ba8caa0f399f8aff5f8b6f8f0f1c89407f",
+      "page_count": null,
+      "chunk_count": 18
+    }
+  ]
+}

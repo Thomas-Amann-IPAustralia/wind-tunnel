@@ -1,0 +1,2107 @@
+{
+  "specialist": "privacy",
+  "generated_at": "2026-07-14T22:42:31Z",
+  "document_count": 8,
+  "retrieval": "Navigate this index, then fetch(refs) or search(query, k) (TECH_SPEC §8.1).",
+  "documents": [
+    {
+      "doc_id": "12-may-consolidated-app-guidelines-updated-chapter-3",
+      "short_name": "APP Guidelines",
+      "title": "Australian Privacy Principles Guidelines (consolidated; Chapter 3 updated)",
+      "version": "consolidated",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines",
+      "format": "pdf",
+      "page_count": 227,
+      "what_it_is": "Australian Privacy Principles Guidelines (consolidated; Chapter 3 updated)",
+      "chunk_count": 578,
+      "structure": [
+        {
+          "section": "Privacy Act 1988",
+          "chunk_count": 3,
+          "token_count": 239
+        },
+        {
+          "section": "Preface",
+          "chunk_count": 2,
+          "token_count": 291
+        },
+        {
+          "section": "Contents",
+          "chunk_count": 36,
+          "token_count": 3185
+        },
+        {
+          "section": "General matters",
+          "chunk_count": 1,
+          "token_count": 22
+        },
+        {
+          "section": "Part 1 — Consideration of personal information privacy",
+          "chunk_count": 1,
+          "token_count": 22
+        },
+        {
+          "section": "Part 2 — Collection of personal information",
+          "chunk_count": 1,
+          "token_count": 35
+        },
+        {
+          "section": "Part 3 — Dealing with personal information",
+          "chunk_count": 1,
+          "token_count": 48
+        },
+        {
+          "section": "Part 4 — Integrity of personal information",
+          "chunk_count": 1,
+          "token_count": 20
+        },
+        {
+          "section": "Part 5 — Access to, and correction of, personal information",
+          "chunk_count": 1,
+          "token_count": 20
+        },
+        {
+          "section": "Introductory matters",
+          "chunk_count": 2,
+          "token_count": 30
+        },
+        {
+          "section": "Purpose",
+          "chunk_count": 2,
+          "token_count": 440
+        },
+        {
+          "section": "Australian Privacy Principles (APPs)",
+          "chunk_count": 3,
+          "token_count": 932
+        },
+        {
+          "section": "Who is covered by the APPs?",
+          "chunk_count": 1,
+          "token_count": 222
+        },
+        {
+          "section": "Do the APPs apply to a contracted service provider under a \nCommonwealth contract?",
+          "chunk_count": 1,
+          "token_count": 379
+        },
+        {
+          "section": "Do the APPs apply to a credit reporting participant?",
+          "chunk_count": 2,
+          "token_count": 120
+        },
+        {
+          "section": "Do the APPs apply to an APP entity bound by a registered APP \nCode?",
+          "chunk_count": 1,
+          "token_count": 105
+        },
+        {
+          "section": "Are APP entities responsible for acts and \npractices of, and disclosures to, staff?",
+          "chunk_count": 1,
+          "token_count": 160
+        },
+        {
+          "section": "What happens if an APP entity breaches an \nAPP?",
+          "chunk_count": 2,
+          "token_count": 167
+        },
+        {
+          "section": "References in the APP guidelines",
+          "chunk_count": 1,
+          "token_count": 86
+        },
+        {
+          "section": "Where do I get more information?",
+          "chunk_count": 1,
+          "token_count": 60
+        },
+        {
+          "section": "APP guidelines and Australian Capital Territory \npublic sector agencies",
+          "chunk_count": 1,
+          "token_count": 299
+        },
+        {
+          "section": "Key concepts",
+          "chunk_count": 2,
+          "token_count": 30
+        },
+        {
+          "section": "APP entity",
+          "chunk_count": 3,
+          "token_count": 1152
+        },
+        {
+          "section": "Australian Link",
+          "chunk_count": 1,
+          "token_count": 176
+        },
+        {
+          "section": "Carries on business in Australia",
+          "chunk_count": 1,
+          "token_count": 140
+        },
+        {
+          "section": "Carry on business",
+          "chunk_count": 2,
+          "token_count": 370
+        },
+        {
+          "section": "In Australia",
+          "chunk_count": 2,
+          "token_count": 597
+        },
+        {
+          "section": "‘Australian link’ prior to 13 December 2022",
+          "chunk_count": 1,
+          "token_count": 272
+        },
+        {
+          "section": "Collects",
+          "chunk_count": 2,
+          "token_count": 398
+        },
+        {
+          "section": "Commonwealth record",
+          "chunk_count": 2,
+          "token_count": 583
+        },
+        {
+          "section": "Consent",
+          "chunk_count": 4,
+          "token_count": 503
+        },
+        {
+          "section": "Express or implied consent",
+          "chunk_count": 2,
+          "token_count": 540
+        },
+        {
+          "section": "Voluntary",
+          "chunk_count": 1,
+          "token_count": 97
+        },
+        {
+          "section": "Bundled consent",
+          "chunk_count": 1,
+          "token_count": 181
+        },
+        {
+          "section": "Informed",
+          "chunk_count": 2,
+          "token_count": 123
+        },
+        {
+          "section": "Current and specific",
+          "chunk_count": 1,
+          "token_count": 286
+        },
+        {
+          "section": "Capacity",
+          "chunk_count": 2,
+          "token_count": 432
+        },
+        {
+          "section": "Children and young people",
+          "chunk_count": 1,
+          "token_count": 196
+        },
+        {
+          "section": "De-identification",
+          "chunk_count": 2,
+          "token_count": 307
+        },
+        {
+          "section": "Disclosure",
+          "chunk_count": 2,
+          "token_count": 926
+        },
+        {
+          "section": "Enforcement body",
+          "chunk_count": 2,
+          "token_count": 320
+        },
+        {
+          "section": "Enforcement related activities",
+          "chunk_count": 2,
+          "token_count": 332
+        },
+        {
+          "section": "Health information",
+          "chunk_count": 3,
+          "token_count": 492
+        },
+        {
+          "section": "Health Service",
+          "chunk_count": 1,
+          "token_count": 192
+        },
+        {
+          "section": "Holds",
+          "chunk_count": 2,
+          "token_count": 433
+        },
+        {
+          "section": "Immigration Department",
+          "chunk_count": 1,
+          "token_count": 152
+        },
+        {
+          "section": "Personal information",
+          "chunk_count": 2,
+          "token_count": 403
+        },
+        {
+          "section": "Meaning of 'reasonably identifiable’",
+          "chunk_count": 2,
+          "token_count": 609
+        },
+        {
+          "section": "Deceased persons",
+          "chunk_count": 1,
+          "token_count": 153
+        },
+        {
+          "section": "Primary purpose and secondary purpose",
+          "chunk_count": 2,
+          "token_count": 400
+        },
+        {
+          "section": "Describing the primary purpose",
+          "chunk_count": 1,
+          "token_count": 240
+        },
+        {
+          "section": "Reasonable, Reasonably",
+          "chunk_count": 2,
+          "token_count": 351
+        },
+        {
+          "section": "Reasonable steps",
+          "chunk_count": 1,
+          "token_count": 223
+        },
+        {
+          "section": "Reasonably believes",
+          "chunk_count": 2,
+          "token_count": 314
+        },
+        {
+          "section": "Reasonably necessary and necessary",
+          "chunk_count": 1,
+          "token_count": 567
+        },
+        {
+          "section": "Recognised external dispute resolution scheme",
+          "chunk_count": 2,
+          "token_count": 211
+        },
+        {
+          "section": "Registered APP code",
+          "chunk_count": 1,
+          "token_count": 347
+        },
+        {
+          "section": "Related body corporate",
+          "chunk_count": 2,
+          "token_count": 200
+        },
+        {
+          "section": "Required or authorised by or under an \nAustralian law or a court/tribunal order",
+          "chunk_count": 1,
+          "token_count": 155
+        },
+        {
+          "section": "Meaning of ‘required’",
+          "chunk_count": 1,
+          "token_count": 73
+        },
+        {
+          "section": "Meaning of ‘authorised’",
+          "chunk_count": 1,
+          "token_count": 275
+        },
+        {
+          "section": "Meaning of ‘Australian law’",
+          "chunk_count": 2,
+          "token_count": 152
+        },
+        {
+          "section": "Meaning of ‘court/tribunal order’",
+          "chunk_count": 1,
+          "token_count": 194
+        },
+        {
+          "section": "Sensitive information",
+          "chunk_count": 2,
+          "token_count": 417
+        },
+        {
+          "section": "Use",
+          "chunk_count": 2,
+          "token_count": 511
+        },
+        {
+          "section": "Permitted general situations",
+          "chunk_count": 2,
+          "token_count": 31
+        },
+        {
+          "section": "What are permitted general situations?",
+          "chunk_count": 1,
+          "token_count": 388
+        },
+        {
+          "section": "Lessening or preventing a serious threat to life, \nhealth or safety",
+          "chunk_count": 1,
+          "token_count": 95
+        },
+        {
+          "section": "Unreasonable or impracticable to obtain consent",
+          "chunk_count": 2,
+          "token_count": 494
+        },
+        {
+          "section": "Reasonably believes collection, use or disclosure is necessary",
+          "chunk_count": 1,
+          "token_count": 118
+        },
+        {
+          "section": "Lessen or prevent a serious threat",
+          "chunk_count": 2,
+          "token_count": 395
+        },
+        {
+          "section": "Taking appropriate action in relation to \nsuspected unlawful activity or serious \nmisconduct",
+          "chunk_count": 2,
+          "token_count": 672
+        },
+        {
+          "section": "Locating a person reported as missing",
+          "chunk_count": 5,
+          "token_count": 727
+        },
+        {
+          "section": "Reasonably necessary for establishing, \nexercising or defending a legal or equitable \nclaim",
+          "chunk_count": 1,
+          "token_count": 343
+        },
+        {
+          "section": "Reasonably necessary for a confidential \nalternative dispute resolution process",
+          "chunk_count": 2,
+          "token_count": 392
+        },
+        {
+          "section": "Necessary for a diplomatic or consular function \nor activity",
+          "chunk_count": 2,
+          "token_count": 400
+        },
+        {
+          "section": "Necessary for certain Defence Force activities \noutside Australia",
+          "chunk_count": 1,
+          "token_count": 246
+        },
+        {
+          "section": "Permitted health situations",
+          "chunk_count": 2,
+          "token_count": 31
+        },
+        {
+          "section": "What are permitted health situations?",
+          "chunk_count": 1,
+          "token_count": 331
+        },
+        {
+          "section": "Collection — providing a health service",
+          "chunk_count": 2,
+          "token_count": 622
+        },
+        {
+          "section": "Public health or public safety",
+          "chunk_count": 1,
+          "token_count": 59
+        },
+        {
+          "section": "Management, funding or monitoring of a health service",
+          "chunk_count": 2,
+          "token_count": 114
+        },
+        {
+          "section": "De-identified information",
+          "chunk_count": 1,
+          "token_count": 47
+        },
+        {
+          "section": "Impracticable to obtain consent",
+          "chunk_count": 3,
+          "token_count": 462
+        },
+        {
+          "section": "Guidelines approved under s 95A",
+          "chunk_count": 1,
+          "token_count": 39
+        },
+        {
+          "section": "Disclosure of personal information collected under this \npermitted health situation",
+          "chunk_count": 2,
+          "token_count": 106
+        },
+        {
+          "section": "Use or disclosure — conducting research; \ncompiling or analysing statistics",
+          "chunk_count": 1,
+          "token_count": 321
+        },
+        {
+          "section": "Use or disclosure — necessary to prevent a \nserious threat to the life, health or safety of a \ngenetic relative",
+          "chunk_count": 2,
+          "token_count": 500
+        },
+        {
+          "section": "Disclosure — responsible person for an \nindividual",
+          "chunk_count": 2,
+          "token_count": 343
+        },
+        {
+          "section": "Incapacity to give consent",
+          "chunk_count": 1,
+          "token_count": 138
+        },
+        {
+          "section": "Cannot communicate consent",
+          "chunk_count": 1,
+          "token_count": 56
+        },
+        {
+          "section": "Carer",
+          "chunk_count": 2,
+          "token_count": 214
+        },
+        {
+          "section": "Wishes of the individual",
+          "chunk_count": 2,
+          "token_count": 214
+        },
+        {
+          "section": "Open and transparent management of \npersonal information",
+          "chunk_count": 2,
+          "token_count": 22
+        },
+        {
+          "section": "Key points",
+          "chunk_count": 13,
+          "token_count": 2479
+        },
+        {
+          "section": "What does APP 1 say?",
+          "chunk_count": 2,
+          "token_count": 420
+        },
+        {
+          "section": "Implementing practices, procedures and \nsystems to ensure APP compliance",
+          "chunk_count": 2,
+          "token_count": 933
+        },
+        {
+          "section": "Developing an APP Privacy Policy",
+          "chunk_count": 2,
+          "token_count": 678
+        },
+        {
+          "section": "Information that must be included in an APP Privacy Policy",
+          "chunk_count": 2,
+          "token_count": 321
+        },
+        {
+          "section": "Kinds of personal information collected and held",
+          "chunk_count": 1,
+          "token_count": 166
+        },
+        {
+          "section": "How personal information is collected and held",
+          "chunk_count": 1,
+          "token_count": 141
+        },
+        {
+          "section": "Purposes for which the entity collects, holds, uses and discloses \npersonal information",
+          "chunk_count": 2,
+          "token_count": 173
+        },
+        {
+          "section": "Accessing and seeking correction of personal information",
+          "chunk_count": 1,
+          "token_count": 371
+        },
+        {
+          "section": "Complaints about a breach of the APPs or a binding registered APP \ncode",
+          "chunk_count": 2,
+          "token_count": 516
+        },
+        {
+          "section": "Likely overseas disclosures",
+          "chunk_count": 2,
+          "token_count": 630
+        },
+        {
+          "section": "Other matters for inclusion in an APP Privacy Policy",
+          "chunk_count": 1,
+          "token_count": 236
+        },
+        {
+          "section": "Making an APP Privacy Policy available free of charge and in \nan appropriate form",
+          "chunk_count": 2,
+          "token_count": 357
+        },
+        {
+          "section": "Making an APP Privacy Policy available in a requested form",
+          "chunk_count": 2,
+          "token_count": 527
+        },
+        {
+          "section": "New obligations about automated decisions from \nDecember 2026",
+          "chunk_count": 2,
+          "token_count": 459
+        },
+        {
+          "section": "Anonymity and pseudonymity",
+          "chunk_count": 2,
+          "token_count": 36
+        },
+        {
+          "section": "What does APP 2 say?",
+          "chunk_count": 1,
+          "token_count": 233
+        },
+        {
+          "section": "Anonymity",
+          "chunk_count": 2,
+          "token_count": 108
+        },
+        {
+          "section": "Pseudonymity",
+          "chunk_count": 1,
+          "token_count": 291
+        },
+        {
+          "section": "Why anonymity and pseudonymity are \nimportant",
+          "chunk_count": 2,
+          "token_count": 289
+        },
+        {
+          "section": "Providing anonymous and pseudonymous \noptions",
+          "chunk_count": 1,
+          "token_count": 354
+        },
+        {
+          "section": "Requiring identification — required or \nauthorised by law",
+          "chunk_count": 2,
+          "token_count": 546
+        },
+        {
+          "section": "Requiring identification — impracticability",
+          "chunk_count": 2,
+          "token_count": 430
+        },
+        {
+          "section": "Collection of solicited personal information",
+          "chunk_count": 2,
+          "token_count": 38
+        },
+        {
+          "section": "What does APP 3 say?",
+          "chunk_count": 4,
+          "token_count": 513
+        },
+        {
+          "section": "‘Solicit’ and ‘collect’",
+          "chunk_count": 3,
+          "token_count": 1322
+        },
+        {
+          "section": "Collecting for an APP entity’s ‘functions or \nactivities’",
+          "chunk_count": 1,
+          "token_count": 206
+        },
+        {
+          "section": "Identifying the functions or activities of an agency",
+          "chunk_count": 2,
+          "token_count": 517
+        },
+        {
+          "section": "Identifying the functions or activities of an organisation",
+          "chunk_count": 1,
+          "token_count": 295
+        },
+        {
+          "section": "Collecting personal information that is ‘directly related to’ an \nagency’s functions or activities",
+          "chunk_count": 2,
+          "token_count": 182
+        },
+        {
+          "section": "Collecting personal information that is ‘reasonably necessary’ \nfor an APP entity’s functions or activities",
+          "chunk_count": 3,
+          "token_count": 1730
+        },
+        {
+          "section": "Collecting sensitive information",
+          "chunk_count": 2,
+          "token_count": 571
+        },
+        {
+          "section": "Collecting sensitive information as required or authorised by \nlaw",
+          "chunk_count": 2,
+          "token_count": 444
+        },
+        {
+          "section": "Collecting sensitive information where a permitted general \nsituation exists",
+          "chunk_count": 1,
+          "token_count": 81
+        },
+        {
+          "section": "Lessening or preventing a serious threat to life, health or safety",
+          "chunk_count": 3,
+          "token_count": 594
+        },
+        {
+          "section": "Taking appropriate action in relation to suspected unlawful activity \nor serious misconduct",
+          "chunk_count": 5,
+          "token_count": 1155
+        },
+        {
+          "section": "Reasonably necessary for establishing, exercising or defending a \nlegal or equitable claim",
+          "chunk_count": 2,
+          "token_count": 238
+        },
+        {
+          "section": "Reasonably necessary for a confidential alternative dispute \nresolution process",
+          "chunk_count": 1,
+          "token_count": 116
+        },
+        {
+          "section": "Necessary for a diplomatic or consular function or activity",
+          "chunk_count": 3,
+          "token_count": 380
+        },
+        {
+          "section": "Necessary for certain Defence Force activities outside Australia",
+          "chunk_count": 3,
+          "token_count": 217
+        },
+        {
+          "section": "Collecting sensitive information where a permitted health \nsituation exists",
+          "chunk_count": 1,
+          "token_count": 93
+        },
+        {
+          "section": "Providing a health service",
+          "chunk_count": 2,
+          "token_count": 193
+        },
+        {
+          "section": "Conducting research; compiling or analysing statistics; \nmanagement, funding or monitoring of a health service",
+          "chunk_count": 2,
+          "token_count": 455
+        },
+        {
+          "section": "Collecting sensitive information for an enforcement related \nactivity",
+          "chunk_count": 2,
+          "token_count": 632
+        },
+        {
+          "section": "Collection of sensitive information by a non-profit \norganisation",
+          "chunk_count": 2,
+          "token_count": 509
+        },
+        {
+          "section": "Collecting by lawful and fair means",
+          "chunk_count": 1,
+          "token_count": 33
+        },
+        {
+          "section": "Collecting by lawful means",
+          "chunk_count": 2,
+          "token_count": 262
+        },
+        {
+          "section": "Collecting by fair means",
+          "chunk_count": 4,
+          "token_count": 2381
+        },
+        {
+          "section": "Collecting directly from the individual",
+          "chunk_count": 2,
+          "token_count": 385
+        },
+        {
+          "section": "Unreasonable or impracticable to collect directly from the \nindividual",
+          "chunk_count": 1,
+          "token_count": 349
+        },
+        {
+          "section": "Consent by the individual — for agencies only",
+          "chunk_count": 2,
+          "token_count": 148
+        },
+        {
+          "section": "Required or authorised by law or a court or tribunal order — \nfor agencies only",
+          "chunk_count": 1,
+          "token_count": 140
+        },
+        {
+          "section": "Collecting personal information from a related \nbody corporate",
+          "chunk_count": 1,
+          "token_count": 221
+        },
+        {
+          "section": "Dealing with unsolicited personal \ninformation",
+          "chunk_count": 2,
+          "token_count": 38
+        },
+        {
+          "section": "What does APP 4 say?",
+          "chunk_count": 2,
+          "token_count": 373
+        },
+        {
+          "section": "‘Unsolicited’ personal information",
+          "chunk_count": 2,
+          "token_count": 524
+        },
+        {
+          "section": "Determining whether unsolicited personal \ninformation could have been collected under \nAPP 3",
+          "chunk_count": 1,
+          "token_count": 270
+        },
+        {
+          "section": "Dealing with unsolicited personal information \nthat could not have been collected under APP 3",
+          "chunk_count": 1,
+          "token_count": 86
+        },
+        {
+          "section": "Unsolicited personal information received by an agency",
+          "chunk_count": 2,
+          "token_count": 389
+        },
+        {
+          "section": "Unsolicited personal information received by an organisation",
+          "chunk_count": 1,
+          "token_count": 130
+        },
+        {
+          "section": "Destruction or de-identification that is ‘lawful’",
+          "chunk_count": 1,
+          "token_count": 186
+        },
+        {
+          "section": "Destruction or de-identification that is ‘reasonable’",
+          "chunk_count": 3,
+          "token_count": 983
+        },
+        {
+          "section": "Notification of the collection of personal \ninformation",
+          "chunk_count": 2,
+          "token_count": 40
+        },
+        {
+          "section": "What does APP 5 say?",
+          "chunk_count": 1,
+          "token_count": 181
+        },
+        {
+          "section": "Taking reasonable steps to notify or ensure \nawareness",
+          "chunk_count": 3,
+          "token_count": 835
+        },
+        {
+          "section": "When not taking any steps might be reasonable",
+          "chunk_count": 2,
+          "token_count": 613
+        },
+        {
+          "section": "Matters about which an individual must be \nnotified or made aware",
+          "chunk_count": 1,
+          "token_count": 99
+        },
+        {
+          "section": "The APP entity’s identity and contact details",
+          "chunk_count": 1,
+          "token_count": 132
+        },
+        {
+          "section": "The facts and circumstances of collection",
+          "chunk_count": 2,
+          "token_count": 356
+        },
+        {
+          "section": "If the collection is required or authorised by law",
+          "chunk_count": 1,
+          "token_count": 194
+        },
+        {
+          "section": "The purposes of collection",
+          "chunk_count": 1,
+          "token_count": 215
+        },
+        {
+          "section": "The consequences for the individual if personal information is \nnot collected",
+          "chunk_count": 2,
+          "token_count": 233
+        },
+        {
+          "section": "Other APP entities, bodies or persons to which the personal \ninformation is usually disclosed",
+          "chunk_count": 1,
+          "token_count": 377
+        },
+        {
+          "section": "Information about access and correction in the APP entity’s \nAPP Privacy Policy",
+          "chunk_count": 1,
+          "token_count": 151
+        },
+        {
+          "section": "Likely cross-border disclosures of the personal information",
+          "chunk_count": 2,
+          "token_count": 699
+        },
+        {
+          "section": "When notification is to occur",
+          "chunk_count": 2,
+          "token_count": 510
+        },
+        {
+          "section": "Use or disclosure of personal information",
+          "chunk_count": 2,
+          "token_count": 39
+        },
+        {
+          "section": "What does APP 6 say?",
+          "chunk_count": 2,
+          "token_count": 510
+        },
+        {
+          "section": "‘Holds’, ‘use’, ‘disclose’ and ‘purpose’",
+          "chunk_count": 1,
+          "token_count": 64
+        },
+        {
+          "section": "‘Holds’",
+          "chunk_count": 4,
+          "token_count": 902
+        },
+        {
+          "section": "‘Use’",
+          "chunk_count": 2,
+          "token_count": 144
+        },
+        {
+          "section": "‘Disclose’",
+          "chunk_count": 2,
+          "token_count": 754
+        },
+        {
+          "section": "‘Purpose’ of collection",
+          "chunk_count": 1,
+          "token_count": 173
+        },
+        {
+          "section": "Using or disclosing personal information for a \nsecondary purpose",
+          "chunk_count": 1,
+          "token_count": 97
+        },
+        {
+          "section": "Using or disclosing personal information with the individual’s \nconsent",
+          "chunk_count": 2,
+          "token_count": 280
+        },
+        {
+          "section": "Reasonably expect",
+          "chunk_count": 4,
+          "token_count": 957
+        },
+        {
+          "section": "Relationship between the primary and secondary purpose",
+          "chunk_count": 2,
+          "token_count": 748
+        },
+        {
+          "section": "Using or disclosing personal information as required or \nauthorised by law",
+          "chunk_count": 2,
+          "token_count": 365
+        },
+        {
+          "section": "Using or disclosing personal information where a permitted \ngeneral situation exists",
+          "chunk_count": 1,
+          "token_count": 330
+        },
+        {
+          "section": "Reasonably necessary for a confidential alternative dispute \nresolution processes",
+          "chunk_count": 1,
+          "token_count": 122
+        },
+        {
+          "section": "Using or disclosing personal information where a permitted \nhealth situation exists",
+          "chunk_count": 1,
+          "token_count": 102
+        },
+        {
+          "section": "Necessary to prevent a serious threat to the life, health or safety of a \ngenetic relative",
+          "chunk_count": 2,
+          "token_count": 308
+        },
+        {
+          "section": "Disclosure to a responsible person for the individual",
+          "chunk_count": 2,
+          "token_count": 440
+        },
+        {
+          "section": "Using or disclosing personal information for an enforcement \nrelated activity",
+          "chunk_count": 1,
+          "token_count": 216
+        },
+        {
+          "section": "Reasonable belief",
+          "chunk_count": 2,
+          "token_count": 215
+        },
+        {
+          "section": "Reasonably necessary",
+          "chunk_count": 2,
+          "token_count": 430
+        },
+        {
+          "section": "Making a written note of use or disclosure for this secondary \npurpose",
+          "chunk_count": 1,
+          "token_count": 201
+        },
+        {
+          "section": "Disclosing biometric information to an enforcement body",
+          "chunk_count": 2,
+          "token_count": 169
+        },
+        {
+          "section": "De-identifying certain health information \nbefore disclosure",
+          "chunk_count": 1,
+          "token_count": 326
+        },
+        {
+          "section": "Disclosing personal information to a related body corporate",
+          "chunk_count": 2,
+          "token_count": 192
+        },
+        {
+          "section": "Using or disclosing personal information collected from a \nrelated body corporate",
+          "chunk_count": 1,
+          "token_count": 199
+        },
+        {
+          "section": "Direct marketing",
+          "chunk_count": 2,
+          "token_count": 35
+        },
+        {
+          "section": "What does APP 7 say?",
+          "chunk_count": 2,
+          "token_count": 580
+        },
+        {
+          "section": "‘Direct marketing’",
+          "chunk_count": 2,
+          "token_count": 452
+        },
+        {
+          "section": "When are agencies covered by APP 7?",
+          "chunk_count": 1,
+          "token_count": 207
+        },
+        {
+          "section": "Providing a simple means for ‘opting out’",
+          "chunk_count": 2,
+          "token_count": 546
+        },
+        {
+          "section": "Providing a prominent statement about simple means for \n‘opting out’",
+          "chunk_count": 2,
+          "token_count": 414
+        },
+        {
+          "section": "Using and disclosing sensitive information for \nthe purpose of direct marketing with the \nindividual’s consent",
+          "chunk_count": 1,
+          "token_count": 132
+        },
+        {
+          "section": "Using and disclosing personal information for \nthe purpose of direct marketing by contracted \nservice providers",
+          "chunk_count": 1,
+          "token_count": 107
+        },
+        {
+          "section": "Requests by an individual to stop direct \nmarketing communications",
+          "chunk_count": 2,
+          "token_count": 316
+        },
+        {
+          "section": "Requests by an individual to stop facilitating \ndirect marketing",
+          "chunk_count": 1,
+          "token_count": 184
+        },
+        {
+          "section": "When does an organisation ‘facilitate’ direct marketing?",
+          "chunk_count": 2,
+          "token_count": 264
+        },
+        {
+          "section": "Requests by an individual to identify the source \nof the personal information",
+          "chunk_count": 1,
+          "token_count": 269
+        },
+        {
+          "section": "Interaction with other legislation",
+          "chunk_count": 1,
+          "token_count": 120
+        },
+        {
+          "section": "Cross-border disclosure of personal \ninformation",
+          "chunk_count": 2,
+          "token_count": 40
+        },
+        {
+          "section": "What does APP 8 say?",
+          "chunk_count": 2,
+          "token_count": 497
+        },
+        {
+          "section": "‘Overseas recipient’",
+          "chunk_count": 1,
+          "token_count": 157
+        },
+        {
+          "section": "When does an APP entity ‘disclose’ personal \ninformation about an individual to an overseas \nrecipient?",
+          "chunk_count": 2,
+          "token_count": 746
+        },
+        {
+          "section": "Providing personal information to a contractor",
+          "chunk_count": 2,
+          "token_count": 726
+        },
+        {
+          "section": "Taking reasonable steps to ensure an overseas \nrecipient does not breach the APPs",
+          "chunk_count": 3,
+          "token_count": 915
+        },
+        {
+          "section": "Law or binding scheme",
+          "chunk_count": 2,
+          "token_count": 420
+        },
+        {
+          "section": "Substantially similar to",
+          "chunk_count": 1,
+          "token_count": 197
+        },
+        {
+          "section": "Mechanisms to enforce privacy protections",
+          "chunk_count": 2,
+          "token_count": 554
+        },
+        {
+          "section": "Expressly inform",
+          "chunk_count": 2,
+          "token_count": 353
+        },
+        {
+          "section": "Exception 4 — Disclosing personal information \nto an overseas recipient as required or \nauthorised by law",
+          "chunk_count": 1,
+          "token_count": 268
+        },
+        {
+          "section": "Exception 5 — Disclosing personal information \nto an overseas recipient where a permitted \ngeneral situation exists",
+          "chunk_count": 1,
+          "token_count": 76
+        },
+        {
+          "section": "Lessening or preventing a serious threat to life, health or \nsafety",
+          "chunk_count": 2,
+          "token_count": 182
+        },
+        {
+          "section": "Taking appropriate action in relation to suspected unlawful \nactivity or serious misconduct",
+          "chunk_count": 1,
+          "token_count": 157
+        },
+        {
+          "section": "Necessary for certain Defence Force activities outside \nAustralia",
+          "chunk_count": 3,
+          "token_count": 676
+        },
+        {
+          "section": "Exception 7 — Disclosing personal information \nto an overseas recipient for an enforcement \nrelated activity",
+          "chunk_count": 1,
+          "token_count": 258
+        },
+        {
+          "section": "When is an APP entity accountable for personal \ninformation that it discloses to an overseas \nrecipient?",
+          "chunk_count": 2,
+          "token_count": 436
+        },
+        {
+          "section": "Overseas acts or practices required by a foreign law",
+          "chunk_count": 1,
+          "token_count": 369
+        },
+        {
+          "section": "Adoption, use or disclosure of government \nrelated identifiers",
+          "chunk_count": 2,
+          "token_count": 42
+        },
+        {
+          "section": "What does APP 9 say?",
+          "chunk_count": 1,
+          "token_count": 242
+        },
+        {
+          "section": "‘Identifiers’",
+          "chunk_count": 2,
+          "token_count": 158
+        },
+        {
+          "section": "‘Government related identifiers’",
+          "chunk_count": 1,
+          "token_count": 164
+        },
+        {
+          "section": "When are agencies covered by APP 9?",
+          "chunk_count": 2,
+          "token_count": 271
+        },
+        {
+          "section": "Adopting government related identifiers",
+          "chunk_count": 1,
+          "token_count": 33
+        },
+        {
+          "section": "‘Adoption’",
+          "chunk_count": 2,
+          "token_count": 553
+        },
+        {
+          "section": "Adopting a government related identifier as prescribed by \nregulations",
+          "chunk_count": 1,
+          "token_count": 87
+        },
+        {
+          "section": "Using and disclosing government related \nidentifiers",
+          "chunk_count": 1,
+          "token_count": 122
+        },
+        {
+          "section": "Using or disclosing a government related identifier where \nreasonably necessary to verify the identity of the individual",
+          "chunk_count": 3,
+          "token_count": 870
+        },
+        {
+          "section": "Using or disclosing a government related identifier where a \npermitted general situation exists",
+          "chunk_count": 1,
+          "token_count": 118
+        },
+        {
+          "section": "Using or disclosing a government related identifier to an \nenforcement body for enforcement related activities",
+          "chunk_count": 2,
+          "token_count": 359
+        },
+        {
+          "section": "Using or disclosing a government related identifier as \nprescribed by regulations",
+          "chunk_count": 1,
+          "token_count": 202
+        },
+        {
+          "section": "Quality of personal information",
+          "chunk_count": 2,
+          "token_count": 37
+        },
+        {
+          "section": "What does APP 10 say?",
+          "chunk_count": 1,
+          "token_count": 179
+        },
+        {
+          "section": "When an APP entity must take reasonable steps \nto ensure the quality of personal information",
+          "chunk_count": 1,
+          "token_count": 99
+        },
+        {
+          "section": "Taking reasonable steps",
+          "chunk_count": 2,
+          "token_count": 344
+        },
+        {
+          "section": "Examples of reasonable steps",
+          "chunk_count": 2,
+          "token_count": 417
+        },
+        {
+          "section": "What are the quality considerations?",
+          "chunk_count": 1,
+          "token_count": 251
+        },
+        {
+          "section": "Accurate",
+          "chunk_count": 3,
+          "token_count": 690
+        },
+        {
+          "section": "Up-to-date",
+          "chunk_count": 3,
+          "token_count": 508
+        },
+        {
+          "section": "Complete",
+          "chunk_count": 2,
+          "token_count": 315
+        },
+        {
+          "section": "Relevant",
+          "chunk_count": 2,
+          "token_count": 108
+        },
+        {
+          "section": "Interaction with other APPs",
+          "chunk_count": 2,
+          "token_count": 149
+        },
+        {
+          "section": "APP 3 (collection of solicited personal information)",
+          "chunk_count": 1,
+          "token_count": 130
+        },
+        {
+          "section": "APP 11 (security of personal information)",
+          "chunk_count": 1,
+          "token_count": 122
+        },
+        {
+          "section": "APP 12 (access to personal information) and APP 13 \n(correction of personal information)",
+          "chunk_count": 1,
+          "token_count": 221
+        },
+        {
+          "section": "Security of personal information",
+          "chunk_count": 2,
+          "token_count": 37
+        },
+        {
+          "section": "What does APP 11 say?",
+          "chunk_count": 2,
+          "token_count": 360
+        },
+        {
+          "section": "Taking reasonable steps to ensure the security \nof personal information",
+          "chunk_count": 3,
+          "token_count": 972
+        },
+        {
+          "section": "What are the security considerations?",
+          "chunk_count": 1,
+          "token_count": 78
+        },
+        {
+          "section": "Misuse",
+          "chunk_count": 1,
+          "token_count": 105
+        },
+        {
+          "section": "Interference",
+          "chunk_count": 1,
+          "token_count": 59
+        },
+        {
+          "section": "Loss",
+          "chunk_count": 1,
+          "token_count": 155
+        },
+        {
+          "section": "Unauthorised access",
+          "chunk_count": 2,
+          "token_count": 158
+        },
+        {
+          "section": "Unauthorised modification",
+          "chunk_count": 1,
+          "token_count": 75
+        },
+        {
+          "section": "Unauthorised disclosure",
+          "chunk_count": 1,
+          "token_count": 83
+        },
+        {
+          "section": "Destroying or de-identifying personal \ninformation",
+          "chunk_count": 2,
+          "token_count": 501
+        },
+        {
+          "section": "Personal information held by an agency",
+          "chunk_count": 1,
+          "token_count": 239
+        },
+        {
+          "section": "Personal information held by an organisation",
+          "chunk_count": 2,
+          "token_count": 304
+        },
+        {
+          "section": "Required by or under an Australian law or a court/tribunal \norder",
+          "chunk_count": 1,
+          "token_count": 99
+        },
+        {
+          "section": "Taking reasonable steps to destroy or \nde-identify personal information",
+          "chunk_count": 2,
+          "token_count": 574
+        },
+        {
+          "section": "Destroying personal information — irretrievable destruction",
+          "chunk_count": 1,
+          "token_count": 282
+        },
+        {
+          "section": "Destroying personal information held in electronic format — \nputting beyond use",
+          "chunk_count": 2,
+          "token_count": 365
+        },
+        {
+          "section": "De-identifying personal information",
+          "chunk_count": 1,
+          "token_count": 350
+        },
+        {
+          "section": "Access to personal information",
+          "chunk_count": 2,
+          "token_count": 37
+        },
+        {
+          "section": "What does APP 12 say?",
+          "chunk_count": 2,
+          "token_count": 461
+        },
+        {
+          "section": "Access to ‘personal information’",
+          "chunk_count": 2,
+          "token_count": 366
+        },
+        {
+          "section": "Verifying an individual’s identity",
+          "chunk_count": 1,
+          "token_count": 364
+        },
+        {
+          "section": "Giving access under APP 12 — general processing \nrequirements",
+          "chunk_count": 2,
+          "token_count": 506
+        },
+        {
+          "section": "Giving access under APP 12 — further processing \nrequirements for agencies",
+          "chunk_count": 2,
+          "token_count": 567
+        },
+        {
+          "section": "Refusing to give access under APP 12 — \nagencies",
+          "chunk_count": 1,
+          "token_count": 155
+        },
+        {
+          "section": "Authority to refuse access under the FOI Act",
+          "chunk_count": 2,
+          "token_count": 698
+        },
+        {
+          "section": "Required or authorised to refuse access under another Act",
+          "chunk_count": 2,
+          "token_count": 272
+        },
+        {
+          "section": "Refusing to give access under APP 12 — \norganisations",
+          "chunk_count": 2,
+          "token_count": 551
+        },
+        {
+          "section": "Giving access would have an unreasonable impact on the \nprivacy of other individuals",
+          "chunk_count": 1,
+          "token_count": 363
+        },
+        {
+          "section": "The request for access is frivolous or vexatious",
+          "chunk_count": 2,
+          "token_count": 235
+        },
+        {
+          "section": "The information requested relates to an existing or \nanticipated legal proceeding",
+          "chunk_count": 1,
+          "token_count": 56
+        },
+        {
+          "section": "Giving access would prejudice negotiations between the \norganisation and the individual",
+          "chunk_count": 1,
+          "token_count": 160
+        },
+        {
+          "section": "Giving access would be unlawful",
+          "chunk_count": 2,
+          "token_count": 120
+        },
+        {
+          "section": "Denying access is required or authorised by law or a \ncourt/tribunal order",
+          "chunk_count": 2,
+          "token_count": 843
+        },
+        {
+          "section": "Giving access would reveal evaluative information in \nconnection with a commercially sensitive decision-making \nprocess",
+          "chunk_count": 2,
+          "token_count": 251
+        },
+        {
+          "section": "APP 12 minimum access requirements",
+          "chunk_count": 1,
+          "token_count": 168
+        },
+        {
+          "section": "Difference with access requirements applying to agencies \nunder FOI Act",
+          "chunk_count": 1,
+          "token_count": 188
+        },
+        {
+          "section": "Timeframe for responding to a request for access under \nAPP 12 — agencies",
+          "chunk_count": 2,
+          "token_count": 253
+        },
+        {
+          "section": "Timeframe for responding to a request for access under \nAPP 12 — organisations",
+          "chunk_count": 1,
+          "token_count": 116
+        },
+        {
+          "section": "How access is to be given under APP 12",
+          "chunk_count": 1,
+          "token_count": 208
+        },
+        {
+          "section": "Giving access by other means",
+          "chunk_count": 2,
+          "token_count": 266
+        },
+        {
+          "section": "Giving access through an intermediary",
+          "chunk_count": 1,
+          "token_count": 290
+        },
+        {
+          "section": "Access charges under APP 12 — agencies",
+          "chunk_count": 1,
+          "token_count": 68
+        },
+        {
+          "section": "Access charges under APP 12 — organisations",
+          "chunk_count": 2,
+          "token_count": 472
+        },
+        {
+          "section": "Giving written notice where access is refused, or not given in \nthe manner requested under APP 12",
+          "chunk_count": 2,
+          "token_count": 561
+        },
+        {
+          "section": "Correction of personal information",
+          "chunk_count": 2,
+          "token_count": 37
+        },
+        {
+          "section": "What does APP 13 say?",
+          "chunk_count": 2,
+          "token_count": 402
+        },
+        {
+          "section": "Interaction of APP 13 and other correction procedures",
+          "chunk_count": 1,
+          "token_count": 162
+        },
+        {
+          "section": "Interaction of APP 13 and other APPs",
+          "chunk_count": 2,
+          "token_count": 360
+        },
+        {
+          "section": "Taking reasonable steps to correct personal \ninformation",
+          "chunk_count": 1,
+          "token_count": 42
+        },
+        {
+          "section": "Correcting at the APP entity’s initiative",
+          "chunk_count": 2,
+          "token_count": 326
+        },
+        {
+          "section": "Correcting at the individual’s request",
+          "chunk_count": 2,
+          "token_count": 704
+        },
+        {
+          "section": "Agencies — comparison of APP 13 and FOI Act procedures",
+          "chunk_count": 2,
+          "token_count": 1043
+        },
+        {
+          "section": "Grounds for correcting personal information",
+          "chunk_count": 2,
+          "token_count": 319
+        },
+        {
+          "section": "Not misleading",
+          "chunk_count": 1,
+          "token_count": 139
+        },
+        {
+          "section": "Being satisfied and taking reasonable steps",
+          "chunk_count": 1,
+          "token_count": 44
+        },
+        {
+          "section": "Being satisfied",
+          "chunk_count": 2,
+          "token_count": 448
+        },
+        {
+          "section": "Reasonable steps to correct",
+          "chunk_count": 2,
+          "token_count": 818
+        },
+        {
+          "section": "Taking reasonable steps to notify another APP entity",
+          "chunk_count": 2,
+          "token_count": 720
+        },
+        {
+          "section": "Giving written notice where correction is refused",
+          "chunk_count": 2,
+          "token_count": 481
+        },
+        {
+          "section": "Taking reasonable steps to associate a statement",
+          "chunk_count": 2,
+          "token_count": 492
+        },
+        {
+          "section": "Timeframe for responding to a request for correction under \nAPP 13",
+          "chunk_count": 1,
+          "token_count": 102
+        },
+        {
+          "section": "Access charges under APP 13",
+          "chunk_count": 1,
+          "token_count": 75
+        }
+      ]
+    },
+    {
+      "doc_id": "app-quick-reference-tool",
+      "short_name": "APP Quick Reference",
+      "title": "Australian Privacy Principles quick reference tool",
+      "version": "n.d.",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-quick-reference",
+      "format": "pdf",
+      "page_count": 1,
+      "what_it_is": "Australian Privacy Principles quick reference tool",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "Australian Privacy Principles\nA summary for APP entities.",
+          "chunk_count": 1,
+          "token_count": 460
+        }
+      ]
+    },
+    {
+      "doc_id": "c2026c00227",
+      "short_name": "Privacy Act 1988",
+      "title": "Privacy Act 1988",
+      "version": "Compilation No. 104 (4 June 2026)",
+      "publisher": "Federal Register of Legislation (Office of Parliamentary Counsel)",
+      "source_url": "https://www.legislation.gov.au/C2004A03712/latest",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Privacy Act 1988",
+      "chunk_count": 700,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 544
+        },
+        {
+          "section": "Part I—Preliminary",
+          "chunk_count": 12,
+          "token_count": 964
+        },
+        {
+          "section": "Part II—Interpretation",
+          "chunk_count": 91,
+          "token_count": 22260
+        },
+        {
+          "section": "Part III—Information privacy",
+          "chunk_count": 40,
+          "token_count": 4631
+        },
+        {
+          "section": "Part IIIA—Credit reporting",
+          "chunk_count": 172,
+          "token_count": 21260
+        },
+        {
+          "section": "Part IIIB—Privacy codes",
+          "chunk_count": 40,
+          "token_count": 5500
+        },
+        {
+          "section": "Part IIIC—Notification of eligible data breaches",
+          "chunk_count": 56,
+          "token_count": 9117
+        },
+        {
+          "section": "Part IV—Functions of the Information Commissioner",
+          "chunk_count": 32,
+          "token_count": 6052
+        },
+        {
+          "section": "Part V—Investigations etc.",
+          "chunk_count": 51,
+          "token_count": 12973
+        },
+        {
+          "section": "Part VI—Public interest determinations and temporary public interest determinations",
+          "chunk_count": 18,
+          "token_count": 1869
+        },
+        {
+          "section": "Part VIA—Dealing with personal information in emergencies and disasters",
+          "chunk_count": 13,
+          "token_count": 3109
+        },
+        {
+          "section": "Part VIB—Compliance and enforcement",
+          "chunk_count": 51,
+          "token_count": 4868
+        },
+        {
+          "section": "Part VII—Privacy Advisory Committee",
+          "chunk_count": 8,
+          "token_count": 1106
+        },
+        {
+          "section": "Part VIII—Obligations of confidence",
+          "chunk_count": 6,
+          "token_count": 527
+        },
+        {
+          "section": "Part IX—Miscellaneous",
+          "chunk_count": 18,
+          "token_count": 3352
+        },
+        {
+          "section": "Schedule 1—Australian Privacy Principles",
+          "chunk_count": 41,
+          "token_count": 6403
+        },
+        {
+          "section": "Schedule 2—Statutory Tort for Serious Invasions of Privacy",
+          "chunk_count": 50,
+          "token_count": 20876
+        }
+      ]
+    },
+    {
+      "doc_id": "checklist-privacy-consideration-training-ai-model-029596",
+      "short_name": "OAIC AI Training Checklist",
+      "title": "Privacy considerations checklist: training a generative AI model",
+      "version": "2024",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models",
+      "format": "pdf",
+      "page_count": 2,
+      "what_it_is": "Privacy considerations checklist: training a generative AI model",
+      "chunk_count": 5,
+      "structure": [
+        {
+          "section": "Privacy issue",
+          "chunk_count": 3,
+          "token_count": 567
+        },
+        {
+          "section": "Who is this guidance for?",
+          "chunk_count": 1,
+          "token_count": 87
+        },
+        {
+          "section": "Learn more",
+          "chunk_count": 1,
+          "token_count": 72
+        }
+      ]
+    },
+    {
+      "doc_id": "checklist-privacy-considerations-when-selecting-an-ai-product",
+      "short_name": "OAIC AI Selection Checklist",
+      "title": "Privacy considerations checklist: selecting an AI product",
+      "version": "2024",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-the-use-of-commercially-available-ai-products",
+      "format": "pdf",
+      "page_count": 2,
+      "what_it_is": "Privacy considerations checklist: selecting an AI product",
+      "chunk_count": 5,
+      "structure": [
+        {
+          "section": "Privacy issue",
+          "chunk_count": 3,
+          "token_count": 458
+        },
+        {
+          "section": "Who is this guidance for?",
+          "chunk_count": 1,
+          "token_count": 69
+        },
+        {
+          "section": "Learn more",
+          "chunk_count": 1,
+          "token_count": 70
+        }
+      ]
+    },
+    {
+      "doc_id": "top5-takeaways-privacy-consideration-training-ai-model-029596",
+      "short_name": "OAIC AI Training Top 5",
+      "title": "Top 5 takeaways: privacy considerations when training a generative AI model",
+      "version": "2024",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models",
+      "format": "pdf",
+      "page_count": 1,
+      "what_it_is": "Top 5 takeaways: privacy considerations when training a generative AI model",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "Top five takeaways\nPrivacy considerations when developing \nor training generative AI models",
+          "chunk_count": 1,
+          "token_count": 395
+        }
+      ]
+    },
+    {
+      "doc_id": "guide-to-undertaking-privacy-impact-assessments",
+      "short_name": "OAIC PIA Guide",
+      "title": "Guide to undertaking privacy impact assessments",
+      "version": "2020",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/privacy-impact-assessments",
+      "format": "pdf",
+      "page_count": 40,
+      "what_it_is": "Guide to undertaking privacy impact assessments",
+      "chunk_count": 92,
+      "structure": [
+        {
+          "section": "Guide to undertaking privacy impact \nassessments",
+          "chunk_count": 2,
+          "token_count": 17
+        },
+        {
+          "section": "Introduction to privacy impact assessments \n2",
+          "chunk_count": 1,
+          "token_count": 35
+        },
+        {
+          "section": "Undertaking a PIA \n7",
+          "chunk_count": 1,
+          "token_count": 62
+        },
+        {
+          "section": "Appendix A — Acknowledgments and resources \n37",
+          "chunk_count": 2,
+          "token_count": 23
+        },
+        {
+          "section": "About this Guide",
+          "chunk_count": 1,
+          "token_count": 327
+        },
+        {
+          "section": "What is a privacy impact assessment?",
+          "chunk_count": 2,
+          "token_count": 265
+        },
+        {
+          "section": "Why do a PIA?",
+          "chunk_count": 2,
+          "token_count": 402
+        },
+        {
+          "section": "Is a PIA necessary?",
+          "chunk_count": 1,
+          "token_count": 266
+        },
+        {
+          "section": "When to do a PIA",
+          "chunk_count": 2,
+          "token_count": 479
+        },
+        {
+          "section": "Agencies",
+          "chunk_count": 2,
+          "token_count": 401
+        },
+        {
+          "section": "Organisations",
+          "chunk_count": 2,
+          "token_count": 175
+        },
+        {
+          "section": "Undertaking a PIA",
+          "chunk_count": 1,
+          "token_count": 213
+        },
+        {
+          "section": "1. Threshold assessment",
+          "chunk_count": 2,
+          "token_count": 674
+        },
+        {
+          "section": "2. Plan the PIA",
+          "chunk_count": 2,
+          "token_count": 175
+        },
+        {
+          "section": "Assessing the project’s scope",
+          "chunk_count": 2,
+          "token_count": 414
+        },
+        {
+          "section": "Examples of PIA processes for different types of projects",
+          "chunk_count": 2,
+          "token_count": 488
+        },
+        {
+          "section": "Identifying who will conduct the PIA",
+          "chunk_count": 1,
+          "token_count": 251
+        },
+        {
+          "section": "Consultation",
+          "chunk_count": 2,
+          "token_count": 162
+        },
+        {
+          "section": "3. Describe the project",
+          "chunk_count": 1,
+          "token_count": 262
+        },
+        {
+          "section": "4. Identify and consult with stakeholders",
+          "chunk_count": 2,
+          "token_count": 440
+        },
+        {
+          "section": "5. Map information flows",
+          "chunk_count": 2,
+          "token_count": 324
+        },
+        {
+          "section": "Necessity of identity verification",
+          "chunk_count": 1,
+          "token_count": 106
+        },
+        {
+          "section": "Collection",
+          "chunk_count": 2,
+          "token_count": 515
+        },
+        {
+          "section": "Use",
+          "chunk_count": 2,
+          "token_count": 320
+        },
+        {
+          "section": "Disclosure",
+          "chunk_count": 2,
+          "token_count": 142
+        },
+        {
+          "section": "Information quality",
+          "chunk_count": 1,
+          "token_count": 88
+        },
+        {
+          "section": "Security",
+          "chunk_count": 1,
+          "token_count": 112
+        },
+        {
+          "section": "Retention and destruction",
+          "chunk_count": 2,
+          "token_count": 133
+        },
+        {
+          "section": "Access and correction",
+          "chunk_count": 1,
+          "token_count": 55
+        },
+        {
+          "section": "6. Privacy impact analysis and compliance check",
+          "chunk_count": 2,
+          "token_count": 607
+        },
+        {
+          "section": "Ensuring compliance",
+          "chunk_count": 9,
+          "token_count": 3566
+        },
+        {
+          "section": "7. Privacy management — addressing risks",
+          "chunk_count": 3,
+          "token_count": 1115
+        },
+        {
+          "section": "8. Recommendations",
+          "chunk_count": 2,
+          "token_count": 220
+        },
+        {
+          "section": "9. Report",
+          "chunk_count": 3,
+          "token_count": 1055
+        },
+        {
+          "section": "10. Respond and review",
+          "chunk_count": 1,
+          "token_count": 48
+        },
+        {
+          "section": "Respond to recommendations",
+          "chunk_count": 2,
+          "token_count": 264
+        },
+        {
+          "section": "Independent review/audit",
+          "chunk_count": 1,
+          "token_count": 223
+        },
+        {
+          "section": "Update the PIA if required",
+          "chunk_count": 2,
+          "token_count": 120
+        },
+        {
+          "section": "Glossary",
+          "chunk_count": 4,
+          "token_count": 863
+        },
+        {
+          "section": "Acknowledgements",
+          "chunk_count": 1,
+          "token_count": 99
+        },
+        {
+          "section": "PIA resources",
+          "chunk_count": 1,
+          "token_count": 21
+        },
+        {
+          "section": "Victoria (Australia)",
+          "chunk_count": 1,
+          "token_count": 10
+        },
+        {
+          "section": "New Zealand",
+          "chunk_count": 2,
+          "token_count": 142
+        },
+        {
+          "section": "Canada",
+          "chunk_count": 3,
+          "token_count": 61
+        },
+        {
+          "section": "United Kingdom",
+          "chunk_count": 2,
+          "token_count": 56
+        },
+        {
+          "section": "United States of America",
+          "chunk_count": 2,
+          "token_count": 60
+        },
+        {
+          "section": "Other resources",
+          "chunk_count": 2,
+          "token_count": 132
+        },
+        {
+          "section": "PIA reports",
+          "chunk_count": 1,
+          "token_count": 78
+        },
+        {
+          "section": "Australia",
+          "chunk_count": 1,
+          "token_count": 105
+        }
+      ]
+    },
+    {
+      "doc_id": "pia-tool",
+      "short_name": "OAIC PIA Tool",
+      "title": "Privacy Impact Assessment Tool",
+      "version": "May 2020",
+      "publisher": "Office of the Australian Information Commissioner",
+      "source_url": "https://www.oaic.gov.au/privacy/privacy-impact-assessments",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Privacy Impact Assessment Tool",
+      "chunk_count": 89,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 6
+        },
+        {
+          "section": "Privacy Impact Assessment Tool",
+          "chunk_count": 2,
+          "token_count": 228
+        },
+        {
+          "section": "Part 1: Plan the PIA",
+          "chunk_count": 4,
+          "token_count": 673
+        },
+        {
+          "section": "Part 2: Privacy impact analysis and compliance check",
+          "chunk_count": 70,
+          "token_count": 6020
+        },
+        {
+          "section": "Part 3: Privacy management — addressing risks",
+          "chunk_count": 3,
+          "token_count": 444
+        },
+        {
+          "section": "Part 4: Respond and review",
+          "chunk_count": 6,
+          "token_count": 326
+        },
+        {
+          "section": "Further information",
+          "chunk_count": 3,
+          "token_count": 92
+        }
+      ]
+    }
+  ],
+  "_coarsened": "collapse_to_top=True, detail=lean to fit index.max_tokens=25000; records remain fetchable by key.",
+  "index_tokens_estimate": 12365
+}

@@ -1,0 +1,63 @@
+# Ingestion Action (TECH_SPEC §8.6). Builds, per specialist, kb/<specialist>.sqlite
+# + .index.json + .manifest.json from corpus/<specialist>/, and commits them back.
+# All ingestion compute runs here in the runner, never on Render (§8). Commits use
+# the built-in GITHUB_TOKEN — no PAT needed inside Actions (CLAUDE.md §6).
+name: ingestion
+
+on:
+  workflow_dispatch:
+    inputs:
+      specialists:
+        description: "Space-separated specialists to ingest (blank = all six)"
+        required: false
+        default: ""
+  push:
+    paths:
+      - "corpus/**"
+      - "config/retrieval.yml"
+      - "config/licences.yml"
+      - "pipeline/retrieval/**"
+      - "pipeline/pyproject.toml"
+      - ".github/workflows/ingestion.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ingestion
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.11"
+
+      - name: Sync pipeline deps
+        working-directory: pipeline
+        run: uv sync
+
+      - name: Run rating + instrument + retrieval tests
+        working-directory: pipeline
+        run: uv run pytest -q
+
+      - name: Ingest corpora (licence gate enforced; fails loudly)
+        working-directory: pipeline
+        run: uv run python -m retrieval.ingest ${{ github.event.inputs.specialists }}
+
+      - name: Commit built KBs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add kb/
+          if git diff --cached --quiet; then
+            echo "No KB changes to commit."
+          else
+            git commit -m "Rebuild knowledge bases (ingestion.yml)"
+            git push
+          fi

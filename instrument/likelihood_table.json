@@ -1,0 +1,32 @@
+{
+  "_source": "AI impact assessment tool v1.0 — Table 1 (Risk likelihood scale). Transcribed verbatim from instrument/guidance/AI_impact_assessment_tool.md (§3, Table 1).",
+  "_note": "tiers_ordered is ascending (least to most likely). The rating engine (TECH_SPEC §10) validates likelihood labels against this list; the descriptors are supplied to generalists/reconciler per TECH_SPEC §9.3.",
+  "tiers_ordered": ["Rare", "Unlikely", "Possible", "Likely", "Almost certain"],
+  "tiers": [
+    {
+      "label": "Rare",
+      "probability": "Less than 5%",
+      "descriptor": "Will only eventuate in exceptional circumstances or as a result of a combination of unusual events"
+    },
+    {
+      "label": "Unlikely",
+      "probability": "5-30%",
+      "descriptor": "May eventuate at some time but is not likely to occur in the foreseeable future"
+    },
+    {
+      "label": "Possible",
+      "probability": "31-60%",
+      "descriptor": "May eventuate within the foreseeable future"
+    },
+    {
+      "label": "Likely",
+      "probability": "61-90%",
+      "descriptor": "Will probably eventuate within the foreseeable future"
+    },
+    {
+      "label": "Almost certain",
+      "probability": "91% and above",
+      "descriptor": "Almost certain to eventuate within the foreseeable future"
+    }
+  ]
+}

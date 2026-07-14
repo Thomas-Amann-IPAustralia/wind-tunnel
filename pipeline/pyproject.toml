@@ -7,8 +7,14 @@ description = "Windtunnel Governance pipeline: multi-agent AI impact assessment.
 requires-python = "==3.11.*"
 # Dependencies are pinned as stages are built. Keep them minimal and explicit.
 # Expected as the pipeline lands: nbformat, nbconvert (assembly §12),
-# a Gemini client (gemini.py §13), an embeddings lib + sqlite (retrieval §8).
-dependencies = []
+# a Gemini client (gemini.py §13). Retrieval (§8) uses stdlib sqlite3 + FTS5;
+# no embedding stack (TECH_SPEC §8.8).
+dependencies = [
+    "pyyaml>=6",       # instrument/config + corpus sidecars
+    "pymupdf>=1.24",   # PDF structure-aware extraction (TECH_SPEC §8.6)
+    "python-docx>=1.1",# DOCX style-tree extraction (guidance + legislation)
+    "openpyxl>=3.1",   # XLSX normalization (TECH_SPEC §8.7)
+]
 
 [dependency-groups]
 dev = [
@@ -26,4 +32,5 @@ extend-select = ["I"]  # import sorting
 [tool.pytest.ini_options]
 # pipeline/rating/ and the instrument encoding are the non-negotiable test
 # targets (CLAUDE.md §4, TECH_SPEC §15).
-testpaths = ["rating", "tests"]
+testpaths = ["rating", "tests", "retrieval"]
+pythonpath = ["."]  # make `rating`, `retrieval`, `tests` importable from pipeline/

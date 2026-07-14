@@ -1,0 +1,163 @@
+{
+  "specialist": "legal",
+  "generated_at": "2026-07-14T22:42:56Z",
+  "git_sha": "a28182364c2fd65985904298e0de955f5f3e9600",
+  "chunker": {
+    "target_tokens_min": 400,
+    "target_tokens_max": 900,
+    "overlap": "none (structural)",
+    "token_estimator": "word+punct count (retrieval/tokens.py)"
+  },
+  "retrieval_model": "index + fetch/search (FTS5 BM25); no embeddings (TECH_SPEC §8.8)",
+  "sqlite": {
+    "path": "legal.sqlite",
+    "sha256": "1380ad105ac0709cbfe88285ca9217062eaa0461410911ef5f64d3aa5286c46d"
+  },
+  "index": {
+    "path": "legal.index.json",
+    "sha256": "cabbd0c6fbbf01e7b65ff53abe665fce57780fdf3d89f8d09d467991e7f2ee06"
+  },
+  "document_count": 10,
+  "documents": [
+    {
+      "doc_id": "2025-ai-task-force-year2-report",
+      "short_name": "ABA AI Year 2 Report",
+      "title": "Year 2 Report on the Impact of AI on the Practice of Law",
+      "version": "December 2025",
+      "publisher": "American Bar Association Task Force on Law and Artificial Intelligence",
+      "source_url": "https://www.americanbar.org/groups/leadership/office_of_the_president/artificial-intelligence/",
+      "licence": "© American Bar Association (used with permission)",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "11f0badd5c3e87fa33f5cc00e9d57669f4ad522af5aa2b68ca256fab7f473d9e",
+      "page_count": 56,
+      "chunk_count": 81
+    },
+    {
+      "doc_id": "ai-and-australian-law",
+      "short_name": "AI & Australian Law",
+      "title": "AI and Australian law",
+      "version": "2024",
+      "publisher": "Department of Industry, Science and Resources",
+      "source_url": "https://www.industry.gov.au/science-technology-and-innovation/technology/artificial-intelligence",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "md",
+      "sha256": "6cb15e19380a9384d8af7ca4b9f9525b7da6ab5ee013e09f5aa689a97a0b249e",
+      "page_count": null,
+      "chunk_count": 8
+    },
+    {
+      "doc_id": "artificial-intelligence-guidance-may-2026",
+      "short_name": "BSB AI Guidance",
+      "title": "Guidance on the use of Artificial Intelligence and Other Technologies",
+      "version": "May 2026",
+      "publisher": "Bar Standards Board (United Kingdom)",
+      "source_url": "https://www.barstandardsboard.org.uk/asset/5E1BAA5C-614C-4105-AFAE9A9CCDF8D97B/",
+      "licence": "© Bar Standards Board (used with permission)",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "d12f414f297766a95c2de04eb3d671c65c6b02e95caf83b64e50d2546c38894f",
+      "page_count": 14,
+      "chunk_count": 22
+    },
+    {
+      "doc_id": "automated-decision-making-better-practice-guide-march-2025",
+      "short_name": "ADM Better Practice Guide",
+      "title": "Automated Decision-Making Better Practice Guide",
+      "version": "March 2025",
+      "publisher": "Commonwealth Ombudsman",
+      "source_url": "https://www.ombudsman.gov.au/__data/assets/pdf_file/0025/317437/Automated-Decision-Making-Better-Practice-Guide-March-2025.pdf",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "fc6b1b6a989128e9351f31d9c80987806e05f09f147dc55cf5005398fbeee2d2",
+      "page_count": 61,
+      "chunk_count": 121
+    },
+    {
+      "doc_id": "pn-sc-gen-23",
+      "short_name": "PN SC Gen 23",
+      "title": "Practice Note SC Gen 23 – Use of Generative Artificial Intelligence (Gen AI)",
+      "version": "2024",
+      "publisher": "Supreme Court of New South Wales",
+      "source_url": "https://supremecourt.nsw.gov.au/documents/Practice-and-Procedure/Practice-Notes/general/current/PN_SC_Gen_23.pdf",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "8e87e71ecfcd9d3ada6cd1cf3ec8b3abd36e9dd2f51e68cc5c649db6eb01bbab",
+      "page_count": 6,
+      "chunk_count": 6
+    },
+    {
+      "doc_id": "perry-j-20211021",
+      "short_name": "Perry J (2021)",
+      "title": "Justice Melissa Perry – speech (21 October 2021)",
+      "version": "21 October 2021",
+      "publisher": "Federal Court of Australia",
+      "source_url": "https://www.fedcourt.gov.au/digital-law-library/judges-speeches/justice-perry",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "rtf",
+      "sha256": "3ff275998b931bd0f86f8a5fc20645a166b897cf1c3a5be965c22d8047187942",
+      "page_count": null,
+      "chunk_count": 37
+    },
+    {
+      "doc_id": "the-legal-landscape-for-ai-in-australia",
+      "short_name": "Legal Landscape for AI",
+      "title": "The legal landscape for AI in Australia",
+      "version": "2024",
+      "publisher": "Department of Industry, Science and Resources",
+      "source_url": "https://www.industry.gov.au/science-technology-and-innovation/technology/artificial-intelligence",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "md",
+      "sha256": "2d810e3f4962facadc7b7acd0e091eb8d7df63d751f3cd24cf6c7ca855fd20d6",
+      "page_count": null,
+      "chunk_count": 6
+    },
+    {
+      "doc_id": "the-new-machinery-of-government-special-report-front-section",
+      "short_name": "New Machinery of Government",
+      "title": "The new machinery of government: using machine technology in administrative decision-making (front section)",
+      "version": "November 2021",
+      "publisher": "NSW Ombudsman",
+      "source_url": "https://www.ombo.nsw.gov.au/news-and-publications/publications/reports/the-new-machinery-of-government-using-machine-technology-in-administrative-decision-making",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "3c62a76ee181de0f05194a4474b2cc1037fbdf52fd5ffbc3a777201dfd2a229f",
+      "page_count": 105,
+      "chunk_count": 220
+    },
+    {
+      "doc_id": "use-of-generative-artificial-intelligence-practice-note",
+      "short_name": "GPN-AI",
+      "title": "Use of Generative Artificial Intelligence Practice Note (GPN-AI)",
+      "version": "16 April 2026",
+      "publisher": "Federal Court of Australia",
+      "source_url": "https://www.fedcourt.gov.au/law-and-practice/practice-documents/practice-notes/gpn-ai",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "txt",
+      "sha256": "887938185994c136b2456352c366f13edef8423c5e75500cd1e9fa4e87a6e877",
+      "page_count": null,
+      "chunk_count": 61
+    },
+    {
+      "doc_id": "hti-the-state-of-ai-governance-in-australia-31-may-2023",
+      "short_name": "HTI State of AI Governance",
+      "title": "The State of AI Governance in Australia",
+      "version": "31 May 2023",
+      "publisher": "Human Technology Institute, University of Technology Sydney",
+      "source_url": "https://www.uts.edu.au/human-technology-institute/projects/state-ai-governance-australia",
+      "licence": "© University of Technology Sydney (Human Technology Institute)",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "e2e35537971438df0f0a9b52d78ab2e2f9f62936ddf8e90dfef53ef54446f8cb",
+      "page_count": 70,
+      "chunk_count": 113
+    }
+  ]
+}

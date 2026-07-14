@@ -1,0 +1,2200 @@
+{
+  "specialist": "data_governance",
+  "generated_at": "2026-07-14T22:43:00Z",
+  "document_count": 4,
+  "retrieval": "Navigate this index, then fetch(refs) or search(query, k) (TECH_SPEC §8.1).",
+  "documents": [
+    {
+      "doc_id": "c2026c00223",
+      "short_name": "Archives Act 1983",
+      "title": "Archives Act 1983",
+      "version": "Compilation No. 51 (1 June 2026)",
+      "publisher": "Federal Register of Legislation (Office of Parliamentary Counsel)",
+      "source_url": "https://www.legislation.gov.au/C2004A02796/latest",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Archives Act 1983",
+      "chunk_count": 106,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 365,
+          "description": "(document root)",
+          "chunk_range": [
+            "c2026c00223:00000",
+            "c2026c00223:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part I—Preliminary > 1 Short title",
+          "chunk_count": 1,
+          "token_count": 11,
+          "description": "Part I—Preliminary > 1 Short title",
+          "chunk_range": [
+            "c2026c00223:00001",
+            "c2026c00223:00001"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part I—Preliminary > 2 Commencement",
+          "chunk_count": 1,
+          "token_count": 20,
+          "description": "Part I—Preliminary > 2 Commencement",
+          "chunk_range": [
+            "c2026c00223:00002",
+            "c2026c00223:00002"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part I—Preliminary > 2A Objects of this Act",
+          "chunk_count": 1,
+          "token_count": 86,
+          "description": "Part I—Preliminary > 2A Objects of this Act",
+          "chunk_range": [
+            "c2026c00223:00003",
+            "c2026c00223:00003"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part I—Preliminary > 3 Interpretation",
+          "chunk_count": 5,
+          "token_count": 2622,
+          "description": "Part I—Preliminary > 3 Interpretation",
+          "chunk_range": [
+            "c2026c00223:00004",
+            "c2026c00223:00008"
+          ],
+          "kinds": [
+            "prose",
+            "table"
+          ]
+        },
+        {
+          "section": "Part I—Preliminary > 3A A company no longer established for a public purpose",
+          "chunk_count": 1,
+          "token_count": 91,
+          "description": "Part I—Preliminary > 3A A company no longer established for a public purpose",
+          "chunk_range": [
+            "c2026c00223:00009",
+            "c2026c00223:00009"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part I—Preliminary > 3B Commonwealth-controlled companies or associations that are not authorities of the Commonwealth",
+          "chunk_count": 1,
+          "token_count": 146,
+          "description": "Part I—Preliminary > 3B Commonwealth-controlled companies or associations that are not authorities of the Commonwealth",
+          "chunk_range": [
+            "c2026c00223:00010",
+            "c2026c00223:00010"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part I—Preliminary > 3C Director-General may determine archival resources of the Commonwealth",
+          "chunk_count": 1,
+          "token_count": 174,
+          "description": "Part I—Preliminary > 3C Director-General may determine archival resources of the Commonwealth",
+          "chunk_range": [
+            "c2026c00223:00011",
+            "c2026c00223:00011"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part I—Preliminary > 4 Extension to Territories",
+          "chunk_count": 1,
+          "token_count": 8,
+          "description": "Part I—Preliminary > 4 Extension to Territories",
+          "chunk_range": [
+            "c2026c00223:00012",
+            "c2026c00223:00012"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part I—Preliminary > 4A Application of the Criminal Code",
+          "chunk_count": 1,
+          "token_count": 31,
+          "description": "Part I—Preliminary > 4A Application of the Criminal Code",
+          "chunk_range": [
+            "c2026c00223:00013",
+            "c2026c00223:00013"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part II—Establishment, functions and powers of the National Archives of Australia > 5 Establishment and functions of National Archives of Australia",
+          "chunk_count": 1,
+          "token_count": 645,
+          "description": "Part II—Establishment, functions and powers of the National Archives of Australia > 5 Establishment and functions of National Archives of Australia",
+          "chunk_range": [
+            "c2026c00223:00014",
+            "c2026c00223:00014"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part II—Establishment, functions and powers of the National Archives of Australia > 6 Powers of Archives",
+          "chunk_count": 1,
+          "token_count": 540,
+          "description": "Part II—Establishment, functions and powers of the National Archives of Australia > 6 Powers of Archives",
+          "chunk_range": [
+            "c2026c00223:00015",
+            "c2026c00223:00015"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part II—Establishment, functions and powers of the National Archives of Australia > 6A Records that are not part of the archival resources of the Commonwealth",
+          "chunk_count": 1,
+          "token_count": 163,
+          "description": "Part II—Establishment, functions and powers of the National Archives of Australia > 6A Records that are not part of the archival resources of the Commonwealth",
+          "chunk_range": [
+            "c2026c00223:00016",
+            "c2026c00223:00016"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part III—The Director-General and staff of the Archives > 7 Director-General",
+          "chunk_count": 1,
+          "token_count": 135,
+          "description": "Part III—The Director-General and staff of the Archives > 7 Director-General",
+          "chunk_range": [
+            "c2026c00223:00017",
+            "c2026c00223:00017"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part III—The Director-General and staff of the Archives > 8 Delegation by Director-General",
+          "chunk_count": 1,
+          "token_count": 109,
+          "description": "Part III—The Director-General and staff of the Archives > 8 Delegation by Director-General",
+          "chunk_range": [
+            "c2026c00223:00018",
+            "c2026c00223:00018"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part III—The Director-General and staff of the Archives > 9 Staff",
+          "chunk_count": 1,
+          "token_count": 16,
+          "description": "Part III—The Director-General and staff of the Archives > 9 Staff",
+          "chunk_range": [
+            "c2026c00223:00019",
+            "c2026c00223:00019"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IV—National Archives of Australia Advisory Council > 10 National Archives of Australia Advisory Council",
+          "chunk_count": 1,
+          "token_count": 210,
+          "description": "Part IV—National Archives of Australia Advisory Council > 10 National Archives of Australia Advisory Council",
+          "chunk_range": [
+            "c2026c00223:00020",
+            "c2026c00223:00020"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IV—National Archives of Australia Advisory Council > 11 Functions of Council",
+          "chunk_count": 1,
+          "token_count": 89,
+          "description": "Part IV—National Archives of Australia Advisory Council > 11 Functions of Council",
+          "chunk_range": [
+            "c2026c00223:00021",
+            "c2026c00223:00021"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IV—National Archives of Australia Advisory Council > 12 Chair and Deputy Chair of Council",
+          "chunk_count": 1,
+          "token_count": 23,
+          "description": "Part IV—National Archives of Australia Advisory Council > 12 Chair and Deputy Chair of Council",
+          "chunk_range": [
+            "c2026c00223:00022",
+            "c2026c00223:00022"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IV—National Archives of Australia Advisory Council > 13 Deputies of members",
+          "chunk_count": 1,
+          "token_count": 117,
+          "description": "Part IV—National Archives of Australia Advisory Council > 13 Deputies of members",
+          "chunk_range": [
+            "c2026c00223:00023",
+            "c2026c00223:00023"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IV—National Archives of Australia Advisory Council > 14 Remuneration and allowances of members",
+          "chunk_count": 1,
+          "token_count": 186,
+          "description": "Part IV—National Archives of Australia Advisory Council > 14 Remuneration and allowances of members",
+          "chunk_range": [
+            "c2026c00223:00024",
+            "c2026c00223:00024"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IV—National Archives of Australia Advisory Council > 15 Termination of office of member",
+          "chunk_count": 1,
+          "token_count": 198,
+          "description": "Part IV—National Archives of Australia Advisory Council > 15 Termination of office of member",
+          "chunk_range": [
+            "c2026c00223:00025",
+            "c2026c00223:00025"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IV—National Archives of Australia Advisory Council > 16 Resignation of member",
+          "chunk_count": 1,
+          "token_count": 94,
+          "description": "Part IV—National Archives of Australia Advisory Council > 16 Resignation of member",
+          "chunk_range": [
+            "c2026c00223:00026",
+            "c2026c00223:00026"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IV—National Archives of Australia Advisory Council > 17 Meetings of the Council",
+          "chunk_count": 1,
+          "token_count": 358,
+          "description": "Part IV—National Archives of Australia Advisory Council > 17 Meetings of the Council",
+          "chunk_range": [
+            "c2026c00223:00027",
+            "c2026c00223:00027"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 1—Preliminary > 18 Records of the Parliament",
+          "chunk_count": 1,
+          "token_count": 32,
+          "description": "Part V—Commonwealth records > Division 1—Preliminary > 18 Records of the Parliament",
+          "chunk_range": [
+            "c2026c00223:00028",
+            "c2026c00223:00028"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 1—Preliminary > 19 Court records",
+          "chunk_count": 1,
+          "token_count": 69,
+          "description": "Part V—Commonwealth records > Division 1—Preliminary > 19 Court records",
+          "chunk_range": [
+            "c2026c00223:00029",
+            "c2026c00223:00029"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 1—Preliminary > 20 Regulations and arrangements relating to certain records",
+          "chunk_count": 1,
+          "token_count": 369,
+          "description": "Part V—Commonwealth records > Division 1—Preliminary > 20 Regulations and arrangements relating to certain records",
+          "chunk_range": [
+            "c2026c00223:00030",
+            "c2026c00223:00030"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 1—Preliminary > 21 Archives may be given custody of certain records",
+          "chunk_count": 1,
+          "token_count": 93,
+          "description": "Part V—Commonwealth records > Division 1—Preliminary > 21 Archives may be given custody of certain records",
+          "chunk_range": [
+            "c2026c00223:00031",
+            "c2026c00223:00031"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 1—Preliminary > 22 Records of Royal Commissions etc.",
+          "chunk_count": 1,
+          "token_count": 415,
+          "description": "Part V—Commonwealth records > Division 1—Preliminary > 22 Records of Royal Commissions etc.",
+          "chunk_range": [
+            "c2026c00223:00032",
+            "c2026c00223:00032"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 1—Preliminary > 22AA Records of the Defence and Veterans’ Service Commission",
+          "chunk_count": 1,
+          "token_count": 82,
+          "description": "Part V—Commonwealth records > Division 1—Preliminary > 22AA Records of the Defence and Veterans’ Service Commission",
+          "chunk_range": [
+            "c2026c00223:00033",
+            "c2026c00223:00033"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 1—Preliminary > 22A Cabinet notebooks",
+          "chunk_count": 3,
+          "token_count": 415,
+          "description": "Part V—Commonwealth records > Division 1—Preliminary > 22A Cabinet notebooks",
+          "chunk_range": [
+            "c2026c00223:00034",
+            "c2026c00223:00036"
+          ],
+          "kinds": [
+            "prose",
+            "table"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 1—Preliminary > 22B Census information",
+          "chunk_count": 1,
+          "token_count": 105,
+          "description": "Part V—Commonwealth records > Division 1—Preliminary > 22B Census information",
+          "chunk_range": [
+            "c2026c00223:00037",
+            "c2026c00223:00037"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 1—Preliminary > 22C Independent Review documents and PWSS documents",
+          "chunk_count": 1,
+          "token_count": 140,
+          "description": "Part V—Commonwealth records > Division 1—Preliminary > 22C Independent Review documents and PWSS documents",
+          "chunk_range": [
+            "c2026c00223:00038",
+            "c2026c00223:00038"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 1—Preliminary > 23 Records of inter-governmental authorities",
+          "chunk_count": 1,
+          "token_count": 115,
+          "description": "Part V—Commonwealth records > Division 1—Preliminary > 23 Records of inter-governmental authorities",
+          "chunk_range": [
+            "c2026c00223:00039",
+            "c2026c00223:00039"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 24 Disposal, destruction etc. of Commonwealth records",
+          "chunk_count": 1,
+          "token_count": 450,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 24 Disposal, destruction etc. of Commonwealth records",
+          "chunk_range": [
+            "c2026c00223:00040",
+            "c2026c00223:00040"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 25 Advice to Council on disposal practices",
+          "chunk_count": 1,
+          "token_count": 305,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 25 Advice to Council on disposal practices",
+          "chunk_range": [
+            "c2026c00223:00041",
+            "c2026c00223:00041"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 26 Alteration of Commonwealth records",
+          "chunk_count": 1,
+          "token_count": 140,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 26 Alteration of Commonwealth records",
+          "chunk_range": [
+            "c2026c00223:00042",
+            "c2026c00223:00042"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 27 Transfer of certain Commonwealth records to care of Archives",
+          "chunk_count": 1,
+          "token_count": 162,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 27 Transfer of certain Commonwealth records to care of Archives",
+          "chunk_range": [
+            "c2026c00223:00043",
+            "c2026c00223:00043"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 28 Archives to have access to records",
+          "chunk_count": 1,
+          "token_count": 67,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 28 Archives to have access to records",
+          "chunk_range": [
+            "c2026c00223:00044",
+            "c2026c00223:00044"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 28A Records of companies or associations that cease to be authorities of the Commonwealth",
+          "chunk_count": 1,
+          "token_count": 118,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 28A Records of companies or associations that cease to be authorities of the Commonwealth",
+          "chunk_range": [
+            "c2026c00223:00045",
+            "c2026c00223:00045"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 29 Exemption of certain records",
+          "chunk_count": 2,
+          "token_count": 1010,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 29 Exemption of certain records",
+          "chunk_range": [
+            "c2026c00223:00046",
+            "c2026c00223:00047"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 30 Commonwealth records to be available to Commonwealth institutions",
+          "chunk_count": 1,
+          "token_count": 159,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 30 Commonwealth records to be available to Commonwealth institutions",
+          "chunk_range": [
+            "c2026c00223:00048",
+            "c2026c00223:00048"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 30A Non-disclosure of Census information > Non-disclosure to another person",
+          "chunk_count": 1,
+          "token_count": 95,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 30A Non-disclosure of Census information > Non-disclosure to another person",
+          "chunk_range": [
+            "c2026c00223:00049",
+            "c2026c00223:00049"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 30A Non-disclosure of Census information > Non-disclosure to a court or tribunal",
+          "chunk_count": 1,
+          "token_count": 77,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 30A Non-disclosure of Census information > Non-disclosure to a court or tribunal",
+          "chunk_range": [
+            "c2026c00223:00050",
+            "c2026c00223:00050"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 30A Non-disclosure of Census information > Section 58 has no effect on this section",
+          "chunk_count": 1,
+          "token_count": 14,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 30A Non-disclosure of Census information > Section 58 has no effect on this section",
+          "chunk_range": [
+            "c2026c00223:00051",
+            "c2026c00223:00051"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 30A Non-disclosure of Census information > Definition",
+          "chunk_count": 1,
+          "token_count": 24,
+          "description": "Part V—Commonwealth records > Division 2—Dealings with Commonwealth records > 30A Non-disclosure of Census information > Definition",
+          "chunk_range": [
+            "c2026c00223:00052",
+            "c2026c00223:00052"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 31 Records in open access period to be publicly available",
+          "chunk_count": 1,
+          "token_count": 304,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 31 Records in open access period to be publicly available",
+          "chunk_range": [
+            "c2026c00223:00053",
+            "c2026c00223:00053"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 32 Consultation with States",
+          "chunk_count": 1,
+          "token_count": 143,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 32 Consultation with States",
+          "chunk_range": [
+            "c2026c00223:00054",
+            "c2026c00223:00054"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 33 Exempt records",
+          "chunk_count": 2,
+          "token_count": 1758,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 33 Exempt records",
+          "chunk_range": [
+            "c2026c00223:00055",
+            "c2026c00223:00056"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 35 Identification of exempt records",
+          "chunk_count": 1,
+          "token_count": 314,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 35 Identification of exempt records",
+          "chunk_range": [
+            "c2026c00223:00057",
+            "c2026c00223:00057"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 36 Forms of access",
+          "chunk_count": 1,
+          "token_count": 477,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 36 Forms of access",
+          "chunk_range": [
+            "c2026c00223:00058",
+            "c2026c00223:00058"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 37 Conditions in respect of proper care of records",
+          "chunk_count": 1,
+          "token_count": 102,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 37 Conditions in respect of proper care of records",
+          "chunk_range": [
+            "c2026c00223:00059",
+            "c2026c00223:00059"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 38 Access to part of exempt record",
+          "chunk_count": 1,
+          "token_count": 85,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 38 Access to part of exempt record",
+          "chunk_range": [
+            "c2026c00223:00060",
+            "c2026c00223:00060"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 39 Information as to existence of certain documents",
+          "chunk_count": 1,
+          "token_count": 291,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 39 Information as to existence of certain documents",
+          "chunk_range": [
+            "c2026c00223:00061",
+            "c2026c00223:00061"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40 Applications for access to records > Applications to which this section applies",
+          "chunk_count": 1,
+          "token_count": 154,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40 Applications for access to records > Applications to which this section applies",
+          "chunk_range": [
+            "c2026c00223:00062",
+            "c2026c00223:00062"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40 Applications for access to records > Assistance to make applications",
+          "chunk_count": 1,
+          "token_count": 28,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40 Applications for access to records > Assistance to make applications",
+          "chunk_range": [
+            "c2026c00223:00063",
+            "c2026c00223:00063"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40 Applications for access to records > Timeframe for making decision on application",
+          "chunk_count": 1,
+          "token_count": 62,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40 Applications for access to records > Timeframe for making decision on application",
+          "chunk_range": [
+            "c2026c00223:00064",
+            "c2026c00223:00064"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40 Applications for access to records > Notice of decision relating to refusal to grant access",
+          "chunk_count": 1,
+          "token_count": 278,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40 Applications for access to records > Notice of decision relating to refusal to grant access",
+          "chunk_range": [
+            "c2026c00223:00065",
+            "c2026c00223:00065"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40 Applications for access to records > Effect of delay in dealing with application",
+          "chunk_count": 1,
+          "token_count": 478,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40 Applications for access to records > Effect of delay in dealing with application",
+          "chunk_range": [
+            "c2026c00223:00066",
+            "c2026c00223:00066"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records",
+          "chunk_count": 1,
+          "token_count": 114,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records",
+          "chunk_range": [
+            "c2026c00223:00067",
+            "c2026c00223:00067"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records > Extending the initial period—by agreement with applicant",
+          "chunk_count": 1,
+          "token_count": 104,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records > Extending the initial period—by agreement with applicant",
+          "chunk_range": [
+            "c2026c00223:00068",
+            "c2026c00223:00068"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records > Extending the initial period—number of items exceeds the application cap",
+          "chunk_count": 1,
+          "token_count": 231,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records > Extending the initial period—number of items exceeds the application cap",
+          "chunk_range": [
+            "c2026c00223:00069",
+            "c2026c00223:00069"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records > Limit on extensions under subsection (4)",
+          "chunk_count": 1,
+          "token_count": 151,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records > Limit on extensions under subsection (4)",
+          "chunk_range": [
+            "c2026c00223:00070",
+            "c2026c00223:00070"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records > Varying or revoking extensions under subsection (4)",
+          "chunk_count": 1,
+          "token_count": 112,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records > Varying or revoking extensions under subsection (4)",
+          "chunk_range": [
+            "c2026c00223:00071",
+            "c2026c00223:00071"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records > Matters to be taken into account for extensions under subsection (4)",
+          "chunk_count": 1,
+          "token_count": 56,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40A Consideration period for applications for access to records > Matters to be taken into account for extensions under subsection (4)",
+          "chunk_range": [
+            "c2026c00223:00072",
+            "c2026c00223:00072"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40B Applications for access to records made by persons acting in concert etc.",
+          "chunk_count": 1,
+          "token_count": 158,
+          "description": "Part V—Commonwealth records > Division 3—Access to Commonwealth records > 40B Applications for access to records made by persons acting in concert etc.",
+          "chunk_range": [
+            "c2026c00223:00073",
+            "c2026c00223:00073"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 4—Review of decisions > 42 Internal reconsideration of decisions",
+          "chunk_count": 1,
+          "token_count": 261,
+          "description": "Part V—Commonwealth records > Division 4—Review of decisions > 42 Internal reconsideration of decisions",
+          "chunk_range": [
+            "c2026c00223:00074",
+            "c2026c00223:00074"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 4—Review of decisions > 43 Applications to Administrative Review Tribunal",
+          "chunk_count": 2,
+          "token_count": 987,
+          "description": "Part V—Commonwealth records > Division 4—Review of decisions > 43 Applications to Administrative Review Tribunal",
+          "chunk_range": [
+            "c2026c00223:00075",
+            "c2026c00223:00076"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 4—Review of decisions > 44 Powers of Tribunal",
+          "chunk_count": 1,
+          "token_count": 301,
+          "description": "Part V—Commonwealth records > Division 4—Review of decisions > 44 Powers of Tribunal",
+          "chunk_range": [
+            "c2026c00223:00077",
+            "c2026c00223:00077"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 4—Review of decisions > 50 Parties",
+          "chunk_count": 1,
+          "token_count": 43,
+          "description": "Part V—Commonwealth records > Division 4—Review of decisions > 50 Parties",
+          "chunk_range": [
+            "c2026c00223:00078",
+            "c2026c00223:00078"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 4—Review of decisions > 50A Inspector-General of Intelligence and Security must be requested to give evidence in certain proceedings",
+          "chunk_count": 2,
+          "token_count": 1157,
+          "description": "Part V—Commonwealth records > Division 4—Review of decisions > 50A Inspector-General of Intelligence and Security must be requested to give evidence in certain proceedings",
+          "chunk_range": [
+            "c2026c00223:00079",
+            "c2026c00223:00080"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 4—Review of decisions > 51 Onus",
+          "chunk_count": 1,
+          "token_count": 66,
+          "description": "Part V—Commonwealth records > Division 4—Review of decisions > 51 Onus",
+          "chunk_range": [
+            "c2026c00223:00081",
+            "c2026c00223:00081"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 4—Review of decisions > 52 Tribunal to ensure non-disclosure of certain matters",
+          "chunk_count": 1,
+          "token_count": 253,
+          "description": "Part V—Commonwealth records > Division 4—Review of decisions > 52 Tribunal to ensure non-disclosure of certain matters",
+          "chunk_range": [
+            "c2026c00223:00082",
+            "c2026c00223:00082"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 4—Review of decisions > 53 Production of exempt records",
+          "chunk_count": 1,
+          "token_count": 816,
+          "description": "Part V—Commonwealth records > Division 4—Review of decisions > 53 Production of exempt records",
+          "chunk_range": [
+            "c2026c00223:00083",
+            "c2026c00223:00083"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 4—Review of decisions > 55 Complaints to Ombudsman",
+          "chunk_count": 1,
+          "token_count": 282,
+          "description": "Part V—Commonwealth records > Division 4—Review of decisions > 55 Complaints to Ombudsman",
+          "chunk_range": [
+            "c2026c00223:00084",
+            "c2026c00223:00084"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 4—Review of decisions > 55A Automatic stay of certain decisions on appeal",
+          "chunk_count": 1,
+          "token_count": 409,
+          "description": "Part V—Commonwealth records > Division 4—Review of decisions > 55A Automatic stay of certain decisions on appeal",
+          "chunk_range": [
+            "c2026c00223:00085",
+            "c2026c00223:00085"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 5—Miscellaneous > 56 Arrangements for accelerated or special access",
+          "chunk_count": 1,
+          "token_count": 318,
+          "description": "Part V—Commonwealth records > Division 5—Miscellaneous > 56 Arrangements for accelerated or special access",
+          "chunk_range": [
+            "c2026c00223:00086",
+            "c2026c00223:00086"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 5—Miscellaneous > 57 Protection against certain actions",
+          "chunk_count": 1,
+          "token_count": 367,
+          "description": "Part V—Commonwealth records > Division 5—Miscellaneous > 57 Protection against certain actions",
+          "chunk_range": [
+            "c2026c00223:00087",
+            "c2026c00223:00087"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 5—Miscellaneous > 58 Access to records apart from Act",
+          "chunk_count": 1,
+          "token_count": 45,
+          "description": "Part V—Commonwealth records > Division 5—Miscellaneous > 58 Access to records apart from Act",
+          "chunk_range": [
+            "c2026c00223:00088",
+            "c2026c00223:00088"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 5—Miscellaneous > 59 Security classifications",
+          "chunk_count": 1,
+          "token_count": 30,
+          "description": "Part V—Commonwealth records > Division 5—Miscellaneous > 59 Security classifications",
+          "chunk_range": [
+            "c2026c00223:00089",
+            "c2026c00223:00089"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part V—Commonwealth records > Division 5—Miscellaneous > 60 Transitional provisions relating to access",
+          "chunk_count": 1,
+          "token_count": 99,
+          "description": "Part V—Commonwealth records > Division 5—Miscellaneous > 60 Transitional provisions relating to access",
+          "chunk_range": [
+            "c2026c00223:00090",
+            "c2026c00223:00090"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part VI—Samples of material for the Archives > 62 Samples of material for Archives",
+          "chunk_count": 1,
+          "token_count": 217,
+          "description": "Part VI—Samples of material for the Archives > 62 Samples of material for Archives",
+          "chunk_range": [
+            "c2026c00223:00091",
+            "c2026c00223:00091"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part VII—Care of material of the Archives > 63 Location of material of the Archives",
+          "chunk_count": 1,
+          "token_count": 143,
+          "description": "Part VII—Care of material of the Archives > 63 Location of material of the Archives",
+          "chunk_range": [
+            "c2026c00223:00092",
+            "c2026c00223:00092"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part VII—Care of material of the Archives > 64 Custody of material of the Archives other than by Archives",
+          "chunk_count": 1,
+          "token_count": 255,
+          "description": "Part VII—Care of material of the Archives > 64 Custody of material of the Archives other than by Archives",
+          "chunk_range": [
+            "c2026c00223:00093",
+            "c2026c00223:00093"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IX—Miscellaneous > 68 Annual Report by the Council",
+          "chunk_count": 1,
+          "token_count": 81,
+          "description": "Part IX—Miscellaneous > 68 Annual Report by the Council",
+          "chunk_range": [
+            "c2026c00223:00094",
+            "c2026c00223:00094"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IX—Miscellaneous > 69 Certified copies of records",
+          "chunk_count": 1,
+          "token_count": 89,
+          "description": "Part IX—Miscellaneous > 69 Certified copies of records",
+          "chunk_range": [
+            "c2026c00223:00095",
+            "c2026c00223:00095"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IX—Miscellaneous > 69A Charges for discretionary service for Commonwealth institutions",
+          "chunk_count": 1,
+          "token_count": 60,
+          "description": "Part IX—Miscellaneous > 69A Charges for discretionary service for Commonwealth institutions",
+          "chunk_range": [
+            "c2026c00223:00096",
+            "c2026c00223:00096"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IX—Miscellaneous > 70 Transitional",
+          "chunk_count": 1,
+          "token_count": 232,
+          "description": "Part IX—Miscellaneous > 70 Transitional",
+          "chunk_range": [
+            "c2026c00223:00097",
+            "c2026c00223:00097"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Part IX—Miscellaneous > 71 Regulations",
+          "chunk_count": 8,
+          "token_count": 5446,
+          "description": "Part IX—Miscellaneous > 71 Regulations",
+          "chunk_range": [
+            "c2026c00223:00098",
+            "c2026c00223:00105"
+          ],
+          "kinds": [
+            "prose",
+            "table"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "data-and-digital-government-strategy-v1-0-0",
+      "short_name": "DDGS",
+      "title": "Data and Digital Government Strategy",
+      "version": "v1.0 (December 2023)",
+      "publisher": "Digital Transformation Agency and Department of Finance",
+      "source_url": "https://www.dataanddigital.gov.au/strategy",
+      "format": "pdf",
+      "page_count": 34,
+      "what_it_is": "Data and Digital Government Strategy",
+      "chunk_count": 75,
+      "structure": [
+        {
+          "section": "The data and digital vision for a world-class APS to 2030",
+          "chunk_count": 1,
+          "token_count": 6,
+          "description": "The data and digital vision for a world-class APS to 2030",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00000",
+            "data-and-digital-government-strategy-v1-0-0:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Acknowledgement",
+          "chunk_count": 2,
+          "token_count": 280,
+          "description": "Acknowledgement",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00001",
+            "data-and-digital-government-strategy-v1-0-0:00002"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Glossary \n32",
+          "chunk_count": 1,
+          "token_count": 6,
+          "description": "Glossary \n32",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00003",
+            "data-and-digital-government-strategy-v1-0-0:00003"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Minister's \nforeword",
+          "chunk_count": 2,
+          "token_count": 531,
+          "description": "Minister's \nforeword",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00004",
+            "data-and-digital-government-strategy-v1-0-0:00005"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "and digital capabilities.",
+          "chunk_count": 1,
+          "token_count": 6,
+          "description": "and digital capabilities.",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00006",
+            "data-and-digital-government-strategy-v1-0-0:00006"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "2030\n\nvision",
+          "chunk_count": 1,
+          "token_count": 27,
+          "description": "2030\n\nvision",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00007",
+            "data-and-digital-government-strategy-v1-0-0:00007"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Missions",
+          "chunk_count": 1,
+          "token_count": 15,
+          "description": "Missions",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00008",
+            "data-and-digital-government-strategy-v1-0-0:00008"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Delivering for all \n\npeople and business",
+          "chunk_count": 1,
+          "token_count": 18,
+          "description": "Delivering for all \n\npeople and business",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00009",
+            "data-and-digital-government-strategy-v1-0-0:00009"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Simple and \n\nseamless services",
+          "chunk_count": 1,
+          "token_count": 15,
+          "description": "Simple and \n\nseamless services",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00010",
+            "data-and-digital-government-strategy-v1-0-0:00010"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Government \n\nfor the future",
+          "chunk_count": 1,
+          "token_count": 8,
+          "description": "Government \n\nfor the future",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00011",
+            "data-and-digital-government-strategy-v1-0-0:00011"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Trusted \n\nand secure",
+          "chunk_count": 1,
+          "token_count": 16,
+          "description": "Trusted \n\nand secure",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00012",
+            "data-and-digital-government-strategy-v1-0-0:00012"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Data and digital \nfoundations",
+          "chunk_count": 3,
+          "token_count": 30,
+          "description": "Data and digital \nfoundations",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00013",
+            "data-and-digital-government-strategy-v1-0-0:00026"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Investment",
+          "chunk_count": 5,
+          "token_count": 160,
+          "description": "Investment",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00014",
+            "data-and-digital-government-strategy-v1-0-0:00068"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Current state",
+          "chunk_count": 3,
+          "token_count": 737,
+          "description": "Current state",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00016",
+            "data-and-digital-government-strategy-v1-0-0:00018"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Opportunities",
+          "chunk_count": 1,
+          "token_count": 248,
+          "description": "Opportunities",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00019",
+            "data-and-digital-government-strategy-v1-0-0:00019"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Measuring success",
+          "chunk_count": 2,
+          "token_count": 141,
+          "description": "Measuring success",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00020",
+            "data-and-digital-government-strategy-v1-0-0:00021"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "What success \n\nlooks like",
+          "chunk_count": 2,
+          "token_count": 130,
+          "description": "What success \n\nlooks like",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00022",
+            "data-and-digital-government-strategy-v1-0-0:00023"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Data and Digital Government Strategy\nMissions",
+          "chunk_count": 1,
+          "token_count": 35,
+          "description": "Data and Digital Government Strategy\nMissions",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00024",
+            "data-and-digital-government-strategy-v1-0-0:00024"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Delivering for all people and business",
+          "chunk_count": 1,
+          "token_count": 229,
+          "description": "Delivering for all people and business",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00027",
+            "data-and-digital-government-strategy-v1-0-0:00027"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Embed co-design",
+          "chunk_count": 2,
+          "token_count": 288,
+          "description": "Embed co-design",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00028",
+            "data-and-digital-government-strategy-v1-0-0:00029"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Embed inclusion \n\nand accessibility",
+          "chunk_count": 2,
+          "token_count": 288,
+          "description": "Embed inclusion \n\nand accessibility",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00030",
+            "data-and-digital-government-strategy-v1-0-0:00031"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Strengthen partnerships",
+          "chunk_count": 2,
+          "token_count": 635,
+          "description": "Strengthen partnerships",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00032",
+            "data-and-digital-government-strategy-v1-0-0:00033"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Maximise value from data",
+          "chunk_count": 3,
+          "token_count": 815,
+          "description": "Maximise value from data",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00034",
+            "data-and-digital-government-strategy-v1-0-0:00036"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Simple and seamless services",
+          "chunk_count": 1,
+          "token_count": 133,
+          "description": "Simple and seamless services",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00037",
+            "data-and-digital-government-strategy-v1-0-0:00037"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Be digital by design",
+          "chunk_count": 2,
+          "token_count": 229,
+          "description": "Be digital by design",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00038",
+            "data-and-digital-government-strategy-v1-0-0:00039"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Deploy scalable \n\nand secure architecture",
+          "chunk_count": 2,
+          "token_count": 308,
+          "description": "Deploy scalable \n\nand secure architecture",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00040",
+            "data-and-digital-government-strategy-v1-0-0:00041"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Tell us once",
+          "chunk_count": 2,
+          "token_count": 352,
+          "description": "Tell us once",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00042",
+            "data-and-digital-government-strategy-v1-0-0:00043"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Government for the future",
+          "chunk_count": 1,
+          "token_count": 94,
+          "description": "Government for the future",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00044",
+            "data-and-digital-government-strategy-v1-0-0:00044"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Adopt emerging technologies",
+          "chunk_count": 2,
+          "token_count": 370,
+          "description": "Adopt emerging technologies",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00045",
+            "data-and-digital-government-strategy-v1-0-0:00046"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Modernise investment \n\napproaches",
+          "chunk_count": 2,
+          "token_count": 461,
+          "description": "Modernise investment \n\napproaches",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00047",
+            "data-and-digital-government-strategy-v1-0-0:00048"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Trusted and secure",
+          "chunk_count": 1,
+          "token_count": 155,
+          "description": "Trusted and secure",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00049",
+            "data-and-digital-government-strategy-v1-0-0:00049"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Build and maintain trust",
+          "chunk_count": 3,
+          "token_count": 614,
+          "description": "Build and maintain trust",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00050",
+            "data-and-digital-government-strategy-v1-0-0:00052"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Modernise legislation",
+          "chunk_count": 2,
+          "token_count": 613,
+          "description": "Modernise legislation",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00053",
+            "data-and-digital-government-strategy-v1-0-0:00054"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Connect data, digital \n\nand cyber security",
+          "chunk_count": 2,
+          "token_count": 508,
+          "description": "Connect data, digital \n\nand cyber security",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00055",
+            "data-and-digital-government-strategy-v1-0-0:00056"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Data and digital foundations",
+          "chunk_count": 1,
+          "token_count": 119,
+          "description": "Data and digital foundations",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00057",
+            "data-and-digital-government-strategy-v1-0-0:00057"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Manage data as a valuable \nnational asset",
+          "chunk_count": 2,
+          "token_count": 383,
+          "description": "Manage data as a valuable \nnational asset",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00058",
+            "data-and-digital-government-strategy-v1-0-0:00059"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Build a data and digital-capable APS",
+          "chunk_count": 2,
+          "token_count": 447,
+          "description": "Build a data and digital-capable APS",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00060",
+            "data-and-digital-government-strategy-v1-0-0:00061"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Grow APS maturity",
+          "chunk_count": 1,
+          "token_count": 192,
+          "description": "Grow APS maturity",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00062",
+            "data-and-digital-government-strategy-v1-0-0:00062"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "People capability",
+          "chunk_count": 1,
+          "token_count": 92,
+          "description": "People capability",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00064",
+            "data-and-digital-government-strategy-v1-0-0:00064"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Governance",
+          "chunk_count": 1,
+          "token_count": 59,
+          "description": "Governance",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00065",
+            "data-and-digital-government-strategy-v1-0-0:00065"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Cyber security",
+          "chunk_count": 1,
+          "token_count": 74,
+          "description": "Cyber security",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00066",
+            "data-and-digital-government-strategy-v1-0-0:00066"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "APS data and digital landscape",
+          "chunk_count": 1,
+          "token_count": 26,
+          "description": "APS data and digital landscape",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00069",
+            "data-and-digital-government-strategy-v1-0-0:00069"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "APS Reform Agenda",
+          "chunk_count": 1,
+          "token_count": 76,
+          "description": "APS Reform Agenda",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00070",
+            "data-and-digital-government-strategy-v1-0-0:00070"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "DATA AND DIGITAL\nGOVERNMENT STRATEGY",
+          "chunk_count": 2,
+          "token_count": 9,
+          "description": "DATA AND DIGITAL\nGOVERNMENT STRATEGY",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00071",
+            "data-and-digital-government-strategy-v1-0-0:00072"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Glossary",
+          "chunk_count": 2,
+          "token_count": 1201,
+          "description": "Glossary",
+          "chunk_range": [
+            "data-and-digital-government-strategy-v1-0-0:00073",
+            "data-and-digital-government-strategy-v1-0-0:00074"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "data-quality-checklist",
+      "short_name": "Data Quality Checklist",
+      "title": "Strengthen data quality: data quality checklist",
+      "version": "2026",
+      "publisher": "National AI Centre",
+      "source_url": "https://www.ai.gov.au/planning-ai/strengthen-data-quality",
+      "format": "pdf",
+      "page_count": 3,
+      "what_it_is": "Strengthen data quality: data quality checklist",
+      "chunk_count": 12,
+      "structure": [
+        {
+          "section": "Data quality checklist",
+          "chunk_count": 1,
+          "token_count": 48,
+          "description": "Data quality checklist",
+          "chunk_range": [
+            "data-quality-checklist:00000",
+            "data-quality-checklist:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Accuracy",
+          "chunk_count": 1,
+          "token_count": 61,
+          "description": "Accuracy",
+          "chunk_range": [
+            "data-quality-checklist:00001",
+            "data-quality-checklist:00001"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Completeness",
+          "chunk_count": 1,
+          "token_count": 61,
+          "description": "Completeness",
+          "chunk_range": [
+            "data-quality-checklist:00002",
+            "data-quality-checklist:00002"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Consistency",
+          "chunk_count": 1,
+          "token_count": 76,
+          "description": "Consistency",
+          "chunk_range": [
+            "data-quality-checklist:00003",
+            "data-quality-checklist:00003"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Data rules",
+          "chunk_count": 1,
+          "token_count": 52,
+          "description": "Data rules",
+          "chunk_range": [
+            "data-quality-checklist:00004",
+            "data-quality-checklist:00004"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Timeliness",
+          "chunk_count": 1,
+          "token_count": 83,
+          "description": "Timeliness",
+          "chunk_range": [
+            "data-quality-checklist:00005",
+            "data-quality-checklist:00005"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Uniqueness",
+          "chunk_count": 1,
+          "token_count": 48,
+          "description": "Uniqueness",
+          "chunk_range": [
+            "data-quality-checklist:00006",
+            "data-quality-checklist:00006"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Additional data trust checks for AI",
+          "chunk_count": 1,
+          "token_count": 21,
+          "description": "Additional data trust checks for AI",
+          "chunk_range": [
+            "data-quality-checklist:00007",
+            "data-quality-checklist:00007"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Traceability (lineage)",
+          "chunk_count": 1,
+          "token_count": 32,
+          "description": "Traceability (lineage)",
+          "chunk_range": [
+            "data-quality-checklist:00008",
+            "data-quality-checklist:00008"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Ownership",
+          "chunk_count": 1,
+          "token_count": 43,
+          "description": "Ownership",
+          "chunk_range": [
+            "data-quality-checklist:00009",
+            "data-quality-checklist:00009"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Interpretability/reference",
+          "chunk_count": 1,
+          "token_count": 37,
+          "description": "Interpretability/reference",
+          "chunk_range": [
+            "data-quality-checklist:00010",
+            "data-quality-checklist:00010"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Data coverage/bias",
+          "chunk_count": 1,
+          "token_count": 43,
+          "description": "Data coverage/bias",
+          "chunk_range": [
+            "data-quality-checklist:00011",
+            "data-quality-checklist:00011"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "information-management-for-records-created-using-artificial-intelligence",
+      "short_name": "NAA AI Records Guidance",
+      "title": "Information management for records created using Artificial Intelligence (AI) technologies",
+      "version": "January 2025",
+      "publisher": "National Archives of Australia",
+      "source_url": "https://www.naa.gov.au/information-management/information-management-basics/artificial-intelligence",
+      "format": "md",
+      "page_count": null,
+      "what_it_is": "Information management for records created using Artificial Intelligence (AI) technologies",
+      "chunk_count": 18,
+      "structure": [
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies",
+          "chunk_count": 1,
+          "token_count": 70,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00000",
+            "information-management-for-records-created-using-artificial-intelligence:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > What are the types of AI technologies?",
+          "chunk_count": 1,
+          "token_count": 307,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > What are the types of AI technologies?",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00001",
+            "information-management-for-records-created-using-artificial-intelligence:00001"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > What are the types of AI records?",
+          "chunk_count": 1,
+          "token_count": 77,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > What are the types of AI records?",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00002",
+            "information-management-for-records-created-using-artificial-intelligence:00002"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > General principles for managing records generated by AI",
+          "chunk_count": 1,
+          "token_count": 739,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > General principles for managing records generated by AI",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00003",
+            "information-management-for-records-created-using-artificial-intelligence:00003"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Determining how long to keep AI generated records",
+          "chunk_count": 1,
+          "token_count": 358,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Determining how long to keep AI generated records",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00004",
+            "information-management-for-records-created-using-artificial-intelligence:00004"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot)",
+          "chunk_count": 1,
+          "token_count": 228,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot)",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00005",
+            "information-management-for-records-created-using-artificial-intelligence:00005"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Final versions of business records created using generative AI outputs",
+          "chunk_count": 1,
+          "token_count": 209,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Final versions of business records created using generative AI outputs",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00006",
+            "information-management-for-records-created-using-artificial-intelligence:00006"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Generative AI assistants' outputs that must be retained",
+          "chunk_count": 1,
+          "token_count": 205,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Generative AI assistants' outputs that must be retained",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00007",
+            "information-management-for-records-created-using-artificial-intelligence:00007"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Generative AI assistant outputs that may be destroyed",
+          "chunk_count": 1,
+          "token_count": 250,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Generative AI assistant outputs that may be destroyed",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00008",
+            "information-management-for-records-created-using-artificial-intelligence:00008"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Disposal of generative AI assistant prompts and inputs",
+          "chunk_count": 1,
+          "token_count": 397,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Disposal of generative AI assistant prompts and inputs",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00009",
+            "information-management-for-records-created-using-artificial-intelligence:00009"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Considerations for managing generative AI related records",
+          "chunk_count": 1,
+          "token_count": 476,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Considerations for managing generative AI related records",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00010",
+            "information-management-for-records-created-using-artificial-intelligence:00010"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Considerations for managing generative AI related records > Example: AI assistant created draft document content",
+          "chunk_count": 1,
+          "token_count": 188,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Considerations for managing generative AI related records > Example: AI assistant created draft document content",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00011",
+            "information-management-for-records-created-using-artificial-intelligence:00011"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Considerations for managing generative AI related records > Example: AI assistant generated transcripts of meetings",
+          "chunk_count": 1,
+          "token_count": 463,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Managing records created with generative AI assistants (including Microsoft 365 Copilot) > Considerations for managing generative AI related records > Example: AI assistant generated transcripts of meetings",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00012",
+            "information-management-for-records-created-using-artificial-intelligence:00012"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Managing AI technologies incorporated into business systems",
+          "chunk_count": 1,
+          "token_count": 388,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Managing AI technologies incorporated into business systems",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00013",
+            "information-management-for-records-created-using-artificial-intelligence:00013"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Managing AI technologies incorporated into business systems > Example: AI decision making incorporated into personnel recruitment platforms",
+          "chunk_count": 1,
+          "token_count": 395,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Managing AI technologies incorporated into business systems > Example: AI decision making incorporated into personnel recruitment platforms",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00014",
+            "information-management-for-records-created-using-artificial-intelligence:00014"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Managing AI technologies incorporated into business systems > Example: AI technologies incorporated into a regulatory compliance assessment business system",
+          "chunk_count": 1,
+          "token_count": 469,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Managing AI technologies incorporated into business systems > Example: AI technologies incorporated into a regulatory compliance assessment business system",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00015",
+            "information-management-for-records-created-using-artificial-intelligence:00015"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > Records supporting development and implementation of AI systems",
+          "chunk_count": 1,
+          "token_count": 187,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > Records supporting development and implementation of AI systems",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00016",
+            "information-management-for-records-created-using-artificial-intelligence:00016"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Information management for records created using Artificial Intelligence (AI) technologies > More information on the use of AI in Australian Government",
+          "chunk_count": 1,
+          "token_count": 299,
+          "description": "Information management for records created using Artificial Intelligence (AI) technologies > More information on the use of AI in Australian Government",
+          "chunk_range": [
+            "information-management-for-records-created-using-artificial-intelligence:00017",
+            "information-management-for-records-created-using-artificial-intelligence:00017"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    }
+  ],
+  "index_tokens_estimate": 16560
+}

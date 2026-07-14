@@ -1,0 +1,2755 @@
+{
+  "specialist": "solution_architect",
+  "generated_at": "2026-07-14T22:43:02Z",
+  "document_count": 56,
+  "retrieval": "Navigate this index, then fetch(refs) or search(query, k) (TECH_SPEC §8.1).",
+  "documents": [
+    {
+      "doc_id": "2305-09300v2",
+      "short_name": "QB4AIRA",
+      "title": "QB4AIRA: A Question Bank for AI Risk Assessment",
+      "version": "v2 (2023)",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://arxiv.org/abs/2305.09300",
+      "format": "pdf",
+      "page_count": 8,
+      "what_it_is": "QB4AIRA: A Question Bank for AI Risk Assessment",
+      "chunk_count": 15,
+      "structure": [
+        {
+          "section": "QB4AIRA: A QUESTION BANK FOR AI RISK ASSESSMENT",
+          "chunk_count": 1,
+          "token_count": 38,
+          "description": "QB4AIRA: A QUESTION BANK FOR AI RISK ASSESSMENT",
+          "chunk_range": [
+            "2305-09300v2:00000",
+            "2305-09300v2:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "ABSTRACT",
+          "chunk_count": 1,
+          "token_count": 143,
+          "description": "ABSTRACT",
+          "chunk_range": [
+            "2305-09300v2:00001",
+            "2305-09300v2:00001"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "1\nIntroduction",
+          "chunk_count": 1,
+          "token_count": 469,
+          "description": "1\nIntroduction",
+          "chunk_range": [
+            "2305-09300v2:00002",
+            "2305-09300v2:00002"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "arXiv:2305.09300v2 [cs.SE] 11 Jul 2023",
+          "chunk_count": 1,
+          "token_count": 237,
+          "description": "arXiv:2305.09300v2 [cs.SE] 11 Jul 2023",
+          "chunk_range": [
+            "2305-09300v2:00003",
+            "2305-09300v2:00003"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "2\nThe Question Bank: QB4AIRA",
+          "chunk_count": 3,
+          "token_count": 1576,
+          "description": "2\nThe Question Bank: QB4AIRA",
+          "chunk_range": [
+            "2305-09300v2:00004",
+            "2305-09300v2:00006"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "...",
+          "chunk_count": 3,
+          "token_count": 1304,
+          "description": "...",
+          "chunk_range": [
+            "2305-09300v2:00007",
+            "2305-09300v2:00009"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "3\nEvaluation",
+          "chunk_count": 2,
+          "token_count": 709,
+          "description": "3\nEvaluation",
+          "chunk_range": [
+            "2305-09300v2:00010",
+            "2305-09300v2:00011"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "4\nConclusion",
+          "chunk_count": 1,
+          "token_count": 237,
+          "description": "4\nConclusion",
+          "chunk_range": [
+            "2305-09300v2:00012",
+            "2305-09300v2:00012"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "References",
+          "chunk_count": 2,
+          "token_count": 462,
+          "description": "References",
+          "chunk_range": [
+            "2305-09300v2:00013",
+            "2305-09300v2:00014"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "ai-mode-switcher",
+      "short_name": "AI Mode Switcher",
+      "title": "AI Mode Switcher",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "AI Mode Switcher",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 811,
+          "description": "(document root)",
+          "chunk_range": [
+            "ai-mode-switcher:00000",
+            "ai-mode-switcher:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "ai-suitability-assessment",
+      "short_name": "AI Suitability Assessment",
+      "title": "AI Suitability Assessment",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "AI Suitability Assessment",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 513,
+          "description": "(document root)",
+          "chunk_range": [
+            "ai-suitability-assessment:00000",
+            "ai-suitability-assessment:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "addendum-agentic-ai",
+      "short_name": "Agentic AI Addendum",
+      "title": "Agentic AI addendum to the AI technical standard for Australian Government",
+      "version": "2025",
+      "publisher": "Digital Transformation Agency",
+      "source_url": "https://www.digital.gov.au/policy/ai/standard",
+      "format": "pdf",
+      "page_count": 32,
+      "what_it_is": "Agentic AI addendum to the AI technical standard for Australian Government",
+      "chunk_count": 59,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 18,
+          "description": "(document root)",
+          "chunk_range": [
+            "addendum-agentic-ai:00000",
+            "addendum-agentic-ai:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "OFFICIAL",
+          "chunk_count": 1,
+          "token_count": 1,
+          "description": "OFFICIAL",
+          "chunk_range": [
+            "addendum-agentic-ai:00001",
+            "addendum-agentic-ai:00001"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Government",
+          "chunk_count": 3,
+          "token_count": 226,
+          "description": "Government",
+          "chunk_range": [
+            "addendum-agentic-ai:00002",
+            "addendum-agentic-ai:00030"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Contents",
+          "chunk_count": 4,
+          "token_count": 2059,
+          "description": "Contents",
+          "chunk_range": [
+            "addendum-agentic-ai:00004",
+            "addendum-agentic-ai:00007"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Key terms",
+          "chunk_count": 2,
+          "token_count": 266,
+          "description": "Key terms",
+          "chunk_range": [
+            "addendum-agentic-ai:00008",
+            "addendum-agentic-ai:00009"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Introduction",
+          "chunk_count": 2,
+          "token_count": 285,
+          "description": "Introduction",
+          "chunk_range": [
+            "addendum-agentic-ai:00010",
+            "addendum-agentic-ai:00011"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Key drivers and best practice guidance",
+          "chunk_count": 3,
+          "token_count": 982,
+          "description": "Key drivers and best practice guidance",
+          "chunk_range": [
+            "addendum-agentic-ai:00012",
+            "addendum-agentic-ai:00014"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Applicability of the agentic AI standard",
+          "chunk_count": 1,
+          "token_count": 32,
+          "description": "Applicability of the agentic AI standard",
+          "chunk_range": [
+            "addendum-agentic-ai:00015",
+            "addendum-agentic-ai:00015"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Comply with policies, legislations and standards",
+          "chunk_count": 2,
+          "token_count": 148,
+          "description": "Comply with policies, legislations and standards",
+          "chunk_range": [
+            "addendum-agentic-ai:00016",
+            "addendum-agentic-ai:00017"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Adopt human oversight for accountability and explainability",
+          "chunk_count": 2,
+          "token_count": 102,
+          "description": "Adopt human oversight for accountability and explainability",
+          "chunk_range": [
+            "addendum-agentic-ai:00018",
+            "addendum-agentic-ai:00019"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "AI Agent Concept",
+          "chunk_count": 3,
+          "token_count": 590,
+          "description": "AI Agent Concept",
+          "chunk_range": [
+            "addendum-agentic-ai:00020",
+            "addendum-agentic-ai:00022"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Agentic AI Concept",
+          "chunk_count": 1,
+          "token_count": 193,
+          "description": "Agentic AI Concept",
+          "chunk_range": [
+            "addendum-agentic-ai:00023",
+            "addendum-agentic-ai:00023"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Agentic AI Key Components",
+          "chunk_count": 3,
+          "token_count": 320,
+          "description": "Agentic AI Key Components",
+          "chunk_range": [
+            "addendum-agentic-ai:00024",
+            "addendum-agentic-ai:00026"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Common methods and technologies for agentic AI",
+          "chunk_count": 3,
+          "token_count": 512,
+          "description": "Common methods and technologies for agentic AI",
+          "chunk_range": [
+            "addendum-agentic-ai:00027",
+            "addendum-agentic-ai:00029"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "systems",
+          "chunk_count": 4,
+          "token_count": 795,
+          "description": "systems",
+          "chunk_range": [
+            "addendum-agentic-ai:00031",
+            "addendum-agentic-ai:00034"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Statement AGT.2: Establish memory management mechanisms",
+          "chunk_count": 2,
+          "token_count": 474,
+          "description": "Statement AGT.2: Establish memory management mechanisms",
+          "chunk_range": [
+            "addendum-agentic-ai:00035",
+            "addendum-agentic-ai:00036"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Statement AGT.3: Design for agentic workflow",
+          "chunk_count": 4,
+          "token_count": 956,
+          "description": "Statement AGT.3: Design for agentic workflow",
+          "chunk_range": [
+            "addendum-agentic-ai:00037",
+            "addendum-agentic-ai:00040"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Data",
+          "chunk_count": 1,
+          "token_count": 55,
+          "description": "Data",
+          "chunk_range": [
+            "addendum-agentic-ai:00041",
+            "addendum-agentic-ai:00041"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "mechanisms for agents",
+          "chunk_count": 2,
+          "token_count": 226,
+          "description": "mechanisms for agents",
+          "chunk_range": [
+            "addendum-agentic-ai:00042",
+            "addendum-agentic-ai:00043"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Statement AGT.5: Select appropriate agent, model, and AI technology",
+          "chunk_count": 5,
+          "token_count": 1381,
+          "description": "Statement AGT.5: Select appropriate agent, model, and AI technology",
+          "chunk_range": [
+            "addendum-agentic-ai:00044",
+            "addendum-agentic-ai:00048"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Evaluate",
+          "chunk_count": 1,
+          "token_count": 78,
+          "description": "Evaluate",
+          "chunk_range": [
+            "addendum-agentic-ai:00049",
+            "addendum-agentic-ai:00049"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "agents",
+          "chunk_count": 3,
+          "token_count": 566,
+          "description": "agents",
+          "chunk_range": [
+            "addendum-agentic-ai:00050",
+            "addendum-agentic-ai:00052"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "interact with their environment.",
+          "chunk_count": 2,
+          "token_count": 399,
+          "description": "interact with their environment.",
+          "chunk_range": [
+            "addendum-agentic-ai:00053",
+            "addendum-agentic-ai:00054"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "and agentic systems",
+          "chunk_count": 3,
+          "token_count": 502,
+          "description": "and agentic systems",
+          "chunk_range": [
+            "addendum-agentic-ai:00055",
+            "addendum-agentic-ai:00057"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Statement 41: Shut down the AI system (existing)",
+          "chunk_count": 1,
+          "token_count": 71,
+          "description": "Statement 41: Shut down the AI system (existing)",
+          "chunk_range": [
+            "addendum-agentic-ai:00058",
+            "addendum-agentic-ai:00058"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "australian-government-ai-technical-standard",
+      "short_name": "AI Technical Standard",
+      "title": "Technical Standard for Government's use of Artificial Intelligence (AI technical standard)",
+      "version": "2025",
+      "publisher": "Digital Transformation Agency",
+      "source_url": "https://www.digital.gov.au/policy/ai/standard",
+      "format": "xlsx",
+      "page_count": null,
+      "what_it_is": "Technical Standard for Government's use of Artificial Intelligence (AI technical standard)",
+      "chunk_count": 148,
+      "structure": [
+        {
+          "section": "DTA-Tech-Standards",
+          "chunk_count": 148,
+          "token_count": 18481,
+          "description": "DTA-Tech-Standards",
+          "chunk_range": [
+            "australian-government-ai-technical-standard:00000",
+            "australian-government-ai-technical-standard:00147"
+          ],
+          "kinds": [
+            "table"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "building-code",
+      "short_name": "Building Code",
+      "title": "Building Code",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Building Code",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 533,
+          "description": "(document root)",
+          "chunk_range": [
+            "building-code:00000",
+            "building-code:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "co-versioning-registry",
+      "short_name": "Co-Versioning Registry",
+      "title": "Co-Versioning Registry",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Co-Versioning Registry",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 770,
+          "description": "(document root)",
+          "chunk_range": [
+            "co-versioning-registry:00000",
+            "co-versioning-registry:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "continuous-deployment-for-rai",
+      "short_name": "Continuous Deployment for RAI",
+      "title": "Continuous Deployment for RAI",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Continuous Deployment for RAI",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 625,
+          "description": "(document root)",
+          "chunk_range": [
+            "continuous-deployment-for-rai:00000",
+            "continuous-deployment-for-rai:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "continuous-documentation-using-templates",
+      "short_name": "Continuous Documentation Using Templates",
+      "title": "Continuous Documentation Using Templates",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Continuous Documentation Using Templates",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 584,
+          "description": "(document root)",
+          "chunk_range": [
+            "continuous-documentation-using-templates:00000",
+            "continuous-documentation-using-templates:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "continuous-rai-validator",
+      "short_name": "Continuous RAI Validator",
+      "title": "Continuous RAI Validator",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Continuous RAI Validator",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 726,
+          "description": "(document root)",
+          "chunk_range": [
+            "continuous-rai-validator:00000",
+            "continuous-rai-validator:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "customized-agile-process",
+      "short_name": "Customized Agile Process",
+      "title": "Customized Agile Process",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Customized Agile Process",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 518,
+          "description": "(document root)",
+          "chunk_range": [
+            "customized-agile-process:00000",
+            "customized-agile-process:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "discrimination-mitigator",
+      "short_name": "Discrimination Mitigator",
+      "title": "Discrimination Mitigator",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Discrimination Mitigator",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 889,
+          "description": "(document root)",
+          "chunk_range": [
+            "discrimination-mitigator:00000",
+            "discrimination-mitigator:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "diverse-team",
+      "short_name": "Diverse Team",
+      "title": "Diverse Team",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Diverse Team",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 634,
+          "description": "(document root)",
+          "chunk_range": [
+            "diverse-team:00000",
+            "diverse-team:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "encrypted-data-based-trainer",
+      "short_name": "Encrypted-Data-Based Trainer",
+      "title": "Encrypted-Data-Based Trainer",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Encrypted-Data-Based Trainer",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 437,
+          "description": "(document root)",
+          "chunk_range": [
+            "encrypted-data-based-trainer:00000",
+            "encrypted-data-based-trainer:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "envisioning-card",
+      "short_name": "Envisioning Card",
+      "title": "Envisioning Card",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Envisioning Card",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 514,
+          "description": "(document root)",
+          "chunk_range": [
+            "envisioning-card:00000",
+            "envisioning-card:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "extensible-adaptive-and-dynamic-rai-risk-assessment",
+      "short_name": "Extensible, Adaptive and Dynamic RAI Risk Assessment",
+      "title": "Extensible, Adaptive and Dynamic RAI Risk Assessment",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Extensible, Adaptive and Dynamic RAI Risk Assessment",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 534,
+          "description": "(document root)",
+          "chunk_range": [
+            "extensible-adaptive-and-dynamic-rai-risk-assessment:00000",
+            "extensible-adaptive-and-dynamic-rai-risk-assessment:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "failure-mode-and-effects-analysis",
+      "short_name": "Failure Mode and Effects Analysis",
+      "title": "Failure Mode and Effects Analysis",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Failure Mode and Effects Analysis",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 595,
+          "description": "(document root)",
+          "chunk_range": [
+            "failure-mode-and-effects-analysis:00000",
+            "failure-mode-and-effects-analysis:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "fairness-assessor",
+      "short_name": "Fairness Assessor",
+      "title": "Fairness Assessor",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Fairness Assessor",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 882,
+          "description": "(document root)",
+          "chunk_range": [
+            "fairness-assessor:00000",
+            "fairness-assessor:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "fault-tree-analysis",
+      "short_name": "Fault Tree Analysis",
+      "title": "Fault Tree Analysis",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Fault Tree Analysis",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 545,
+          "description": "(document root)",
+          "chunk_range": [
+            "fault-tree-analysis:00000",
+            "fault-tree-analysis:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "federated-learner",
+      "short_name": "Federated Learner",
+      "title": "Federated Learner",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Federated Learner",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 537,
+          "description": "(document root)",
+          "chunk_range": [
+            "federated-learner:00000",
+            "federated-learner:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "global-explainer",
+      "short_name": "Global Explainer",
+      "title": "Global Explainer",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Global Explainer",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 608,
+          "description": "(document root)",
+          "chunk_range": [
+            "global-explainer:00000",
+            "global-explainer:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "global-view-auditor",
+      "short_name": "Global View Auditor",
+      "title": "Global View Auditor",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Global View Auditor",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 566,
+          "description": "(document root)",
+          "chunk_range": [
+            "global-view-auditor:00000",
+            "global-view-auditor:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "homogeneous-redundancy",
+      "short_name": "Homogeneous Redundancy",
+      "title": "Homogeneous Redundancy",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Homogeneous Redundancy",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 539,
+          "description": "(document root)",
+          "chunk_range": [
+            "homogeneous-redundancy:00000",
+            "homogeneous-redundancy:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "human-ai-interaction-patterns",
+      "short_name": "Human-AI Interaction Patterns",
+      "title": "Human-AI Interaction Patterns",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Human-AI Interaction Patterns",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 481,
+          "description": "(document root)",
+          "chunk_range": [
+            "human-ai-interaction-patterns:00000",
+            "human-ai-interaction-patterns:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "incentive-registry",
+      "short_name": "Incentive Registry",
+      "title": "Incentive Registry",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Incentive Registry",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 773,
+          "description": "(document root)",
+          "chunk_range": [
+            "incentive-registry:00000",
+            "incentive-registry:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "lifecycle-driven-data-requirement",
+      "short_name": "Lifecycle-Driven Data Requirement",
+      "title": "Lifecycle-Driven Data Requirement",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Lifecycle-Driven Data Requirement",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 785,
+          "description": "(document root)",
+          "chunk_range": [
+            "lifecycle-driven-data-requirement:00000",
+            "lifecycle-driven-data-requirement:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "local-explainer",
+      "short_name": "Local Explainer",
+      "title": "Local Explainer",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Local Explainer",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 577,
+          "description": "(document root)",
+          "chunk_range": [
+            "local-explainer:00000",
+            "local-explainer:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "multi-level-co-architecting",
+      "short_name": "Multi-Level Co-Architecting",
+      "title": "Multi-Level Co-Architecting",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Multi-Level Co-Architecting",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 689,
+          "description": "(document root)",
+          "chunk_range": [
+            "multi-level-co-architecting:00000",
+            "multi-level-co-architecting:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "multi-level-co-versioning",
+      "short_name": "Multi-Level Co-Versioning",
+      "title": "Multi-Level Co-Versioning",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Multi-Level Co-Versioning",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 569,
+          "description": "(document root)",
+          "chunk_range": [
+            "multi-level-co-versioning:00000",
+            "multi-level-co-versioning:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "multi-model-decision-maker",
+      "short_name": "Multi-Model Decision-Maker",
+      "title": "Multi-Model Decision-Maker",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Multi-Model Decision-Maker",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 674,
+          "description": "(document root)",
+          "chunk_range": [
+            "multi-model-decision-maker:00000",
+            "multi-model-decision-maker:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-acceptance-testing",
+      "short_name": "RAI Acceptance Testing",
+      "title": "RAI Acceptance Testing",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Acceptance Testing",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 577,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-acceptance-testing:00000",
+            "rai-acceptance-testing:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-assessment-for-test-cases",
+      "short_name": "RAI Assessment for Test Cases",
+      "title": "RAI Assessment for Test Cases",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Assessment for Test Cases",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 470,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-assessment-for-test-cases:00000",
+            "rai-assessment-for-test-cases:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-bill-of-materials-registry",
+      "short_name": "RAI Bill of Materials Registry",
+      "title": "RAI Bill of Materials Registry",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Bill of Materials Registry",
+      "chunk_count": 2,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 2,
+          "token_count": 967,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-bill-of-materials-registry:00000",
+            "rai-bill-of-materials-registry:00001"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-black-box",
+      "short_name": "RAI Black Box",
+      "title": "RAI Black Box",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Black Box",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 695,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-black-box:00000",
+            "rai-black-box:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-construction-with-reuse",
+      "short_name": "RAI Construction with Reuse",
+      "title": "RAI Construction with Reuse",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Construction with Reuse",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 484,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-construction-with-reuse:00000",
+            "rai-construction-with-reuse:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-design-modelling",
+      "short_name": "RAI Design Modelling",
+      "title": "RAI Design Modelling",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Design Modelling",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 622,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-design-modelling:00000",
+            "rai-design-modelling:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-digital-twin",
+      "short_name": "RAI Digital Twin",
+      "title": "RAI Digital Twin",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Digital Twin",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 846,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-digital-twin:00000",
+            "rai-digital-twin:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-governance-of-apis",
+      "short_name": "RAI Governance of APIs",
+      "title": "RAI Governance of APIs",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Governance of APIs",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 483,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-governance-of-apis:00000",
+            "rai-governance-of-apis:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-governance-via-apis",
+      "short_name": "RAI Governance via APIs",
+      "title": "RAI Governance via APIs",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Governance via APIs",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 516,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-governance-via-apis:00000",
+            "rai-governance-via-apis:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-knowledge-base",
+      "short_name": "RAI Knowledge Base",
+      "title": "RAI Knowledge Base",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Knowledge Base",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 639,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-knowledge-base:00000",
+            "rai-knowledge-base:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-sandbox",
+      "short_name": "RAI Sandbox",
+      "title": "RAI Sandbox",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Sandbox",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 563,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-sandbox:00000",
+            "rai-sandbox:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-standards",
+      "short_name": "RAI Standards",
+      "title": "RAI Standards",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI Standards",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 594,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-standards:00000",
+            "rai-standards:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "rai-user-story",
+      "short_name": "RAI User Story",
+      "title": "RAI User Story",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "RAI User Story",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 573,
+          "description": "(document root)",
+          "chunk_range": [
+            "rai-user-story:00000",
+            "rai-user-story:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "random-noise-data-generator",
+      "short_name": "Random Noise Data Generator",
+      "title": "Random Noise Data Generator",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Random Noise Data Generator",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 487,
+          "description": "(document root)",
+          "chunk_range": [
+            "random-noise-data-generator:00000",
+            "random-noise-data-generator:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "regulatory-sandbox",
+      "short_name": "Regulatory Sandbox",
+      "title": "Regulatory Sandbox",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Regulatory Sandbox",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 640,
+          "description": "(document root)",
+          "chunk_range": [
+            "regulatory-sandbox:00000",
+            "regulatory-sandbox:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "responsible-ai-pattern-catalogue",
+      "short_name": "RAI Pattern Catalogue",
+      "title": "Responsible AI Pattern Catalogue",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Responsible AI Pattern Catalogue",
+      "chunk_count": 3,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 3,
+          "token_count": 2513,
+          "description": "(document root)",
+          "chunk_range": [
+            "responsible-ai-pattern-catalogue:00000",
+            "responsible-ai-pattern-catalogue:00002"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "secure-aggregator",
+      "short_name": "Secure Aggregator",
+      "title": "Secure Aggregator",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Secure Aggregator",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 502,
+          "description": "(document root)",
+          "chunk_range": [
+            "secure-aggregator:00000",
+            "secure-aggregator:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "stakeholder-engagement",
+      "short_name": "Stakeholder Engagement",
+      "title": "Stakeholder Engagement",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Stakeholder Engagement",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 439,
+          "description": "(document root)",
+          "chunk_range": [
+            "stakeholder-engagement:00000",
+            "stakeholder-engagement:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "system-level-rai-simulation",
+      "short_name": "System-Level RAI Simulation",
+      "title": "System-Level RAI Simulation",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "System-Level RAI Simulation",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 531,
+          "description": "(document root)",
+          "chunk_range": [
+            "system-level-rai-simulation:00000",
+            "system-level-rai-simulation:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "tight-coupling-of-ai-and-non-ai-development",
+      "short_name": "Tight Coupling of AI and Non-AI Development",
+      "title": "Tight Coupling of AI and Non-AI Development",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Tight Coupling of AI and Non-AI Development",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 704,
+          "description": "(document root)",
+          "chunk_range": [
+            "tight-coupling-of-ai-and-non-ai-development:00000",
+            "tight-coupling-of-ai-and-non-ai-development:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "verifiable-claim-for-ai-system-artifacts",
+      "short_name": "Verifiable Claim for AI System Artifacts",
+      "title": "Verifiable Claim for AI System Artifacts",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Verifiable Claim for AI System Artifacts",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 635,
+          "description": "(document root)",
+          "chunk_range": [
+            "verifiable-claim-for-ai-system-artifacts:00000",
+            "verifiable-claim-for-ai-system-artifacts:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "verifiable-rai-credential",
+      "short_name": "Verifiable RAI Credential",
+      "title": "Verifiable RAI Credential",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Verifiable RAI Credential",
+      "chunk_count": 2,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 2,
+          "token_count": 1122,
+          "description": "(document root)",
+          "chunk_range": [
+            "verifiable-rai-credential:00000",
+            "verifiable-rai-credential:00001"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "verifiable-rai-requirement",
+      "short_name": "Verifiable RAI Requirement",
+      "title": "Verifiable RAI Requirement",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "Verifiable RAI Requirement",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 646,
+          "description": "(document root)",
+          "chunk_range": [
+            "verifiable-rai-requirement:00000",
+            "verifiable-rai-requirement:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "xai-interface",
+      "short_name": "XAI Interface",
+      "title": "XAI Interface",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "docx",
+      "page_count": null,
+      "what_it_is": "XAI Interface",
+      "chunk_count": 1,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 576,
+          "description": "(document root)",
+          "chunk_range": [
+            "xai-interface:00000",
+            "xai-interface:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "f4a6c658-en",
+      "short_name": "OECD AI in Public Audit",
+      "title": "The state of artificial intelligence in public audit: Evidence from selected countries and the European Union",
+      "version": "2026 (OECD Artificial Intelligence Papers No. 58)",
+      "publisher": "OECD",
+      "source_url": "https://doi.org/10.1787/f4a6c658-en",
+      "format": "pdf",
+      "page_count": 58,
+      "what_it_is": "The state of artificial intelligence in public audit: Evidence from selected countries and the European Union",
+      "chunk_count": 106,
+      "structure": [
+        {
+          "section": "OECD ARTIFICIAL \nINTELLIGENCE PAPERS\nMay 2026 No. 58",
+          "chunk_count": 1,
+          "token_count": 13,
+          "description": "OECD ARTIFICIAL \nINTELLIGENCE PAPERS\nMay 2026 No. 58",
+          "chunk_range": [
+            "f4a6c658-en:00000",
+            "f4a6c658-en:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Evidence from selected countries and the European Union",
+          "chunk_count": 3,
+          "token_count": 418,
+          "description": "Evidence from selected countries and the European Union",
+          "chunk_range": [
+            "f4a6c658-en:00001",
+            "f4a6c658-en:00003"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Abstract",
+          "chunk_count": 2,
+          "token_count": 164,
+          "description": "Abstract",
+          "chunk_range": [
+            "f4a6c658-en:00004",
+            "f4a6c658-en:00005"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Acknowledgements",
+          "chunk_count": 2,
+          "token_count": 468,
+          "description": "Acknowledgements",
+          "chunk_range": [
+            "f4a6c658-en:00006",
+            "f4a6c658-en:00007"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Abbreviations and acronyms \n7",
+          "chunk_count": 1,
+          "token_count": 47,
+          "description": "Abbreviations and acronyms \n7",
+          "chunk_range": [
+            "f4a6c658-en:00008",
+            "f4a6c658-en:00008"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "2 Overview and state of play \n10",
+          "chunk_count": 1,
+          "token_count": 77,
+          "description": "2 Overview and state of play \n10",
+          "chunk_range": [
+            "f4a6c658-en:00009",
+            "f4a6c658-en:00009"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "5 Measuring impact \n36",
+          "chunk_count": 2,
+          "token_count": 107,
+          "description": "5 Measuring impact \n36",
+          "chunk_range": [
+            "f4a6c658-en:00010",
+            "f4a6c658-en:00011"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "References \n57",
+          "chunk_count": 1,
+          "token_count": 13,
+          "description": "References \n57",
+          "chunk_range": [
+            "f4a6c658-en:00012",
+            "f4a6c658-en:00012"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Abbreviations and acronyms",
+          "chunk_count": 2,
+          "token_count": 62,
+          "description": "Abbreviations and acronyms",
+          "chunk_range": [
+            "f4a6c658-en:00013",
+            "f4a6c658-en:00014"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "AI in public audit: An emergent but rapidly evolving landscape",
+          "chunk_count": 1,
+          "token_count": 129,
+          "description": "AI in public audit: An emergent but rapidly evolving landscape",
+          "chunk_range": [
+            "f4a6c658-en:00015",
+            "f4a6c658-en:00015"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Infrastructure and capacity: Bridging the gap between pilots and production",
+          "chunk_count": 1,
+          "token_count": 122,
+          "description": "Infrastructure and capacity: Bridging the gap between pilots and production",
+          "chunk_range": [
+            "f4a6c658-en:00016",
+            "f4a6c658-en:00016"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Data governance: The foundation that AI cannot afford to lack",
+          "chunk_count": 1,
+          "token_count": 141,
+          "description": "Data governance: The foundation that AI cannot afford to lack",
+          "chunk_range": [
+            "f4a6c658-en:00017",
+            "f4a6c658-en:00017"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "1 Executive summary",
+          "chunk_count": 1,
+          "token_count": 13,
+          "description": "1 Executive summary",
+          "chunk_range": [
+            "f4a6c658-en:00018",
+            "f4a6c658-en:00018"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Shared challenges and emerging good practices",
+          "chunk_count": 2,
+          "token_count": 605,
+          "description": "Shared challenges and emerging good practices",
+          "chunk_range": [
+            "f4a6c658-en:00019",
+            "f4a6c658-en:00020"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "2 Overview and state of play",
+          "chunk_count": 1,
+          "token_count": 13,
+          "description": "2 Overview and state of play",
+          "chunk_range": [
+            "f4a6c658-en:00021",
+            "f4a6c658-en:00021"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Figure 1. AI adoption among audit public institutions",
+          "chunk_count": 2,
+          "token_count": 738,
+          "description": "Figure 1. AI adoption among audit public institutions",
+          "chunk_range": [
+            "f4a6c658-en:00022",
+            "f4a6c658-en:00023"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Figure 2. OECD Framework for Trustworthy Artificial Intelligence in Government",
+          "chunk_count": 3,
+          "token_count": 219,
+          "description": "Figure 2. OECD Framework for Trustworthy Artificial Intelligence in Government",
+          "chunk_range": [
+            "f4a6c658-en:00024",
+            "f4a6c658-en:00026"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Anomaly detection and risk assessments",
+          "chunk_count": 1,
+          "token_count": 331,
+          "description": "Anomaly detection and risk assessments",
+          "chunk_range": [
+            "f4a6c658-en:00027",
+            "f4a6c658-en:00027"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "3 Use cases",
+          "chunk_count": 2,
+          "token_count": 1116,
+          "description": "3 Use cases",
+          "chunk_range": [
+            "f4a6c658-en:00028",
+            "f4a6c658-en:00029"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "AI for classification in audit and oversight",
+          "chunk_count": 2,
+          "token_count": 421,
+          "description": "AI for classification in audit and oversight",
+          "chunk_range": [
+            "f4a6c658-en:00030",
+            "f4a6c658-en:00031"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Box 2. Norway’s National Audit Office (NAO): ML for the identification of police efforts related to \nICT crime",
+          "chunk_count": 2,
+          "token_count": 359,
+          "description": "Box 2. Norway’s National Audit Office (NAO): ML for the identification of police efforts related to \nICT crime",
+          "chunk_range": [
+            "f4a6c658-en:00032",
+            "f4a6c658-en:00033"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Predictive and preventive audit models",
+          "chunk_count": 1,
+          "token_count": 460,
+          "description": "Predictive and preventive audit models",
+          "chunk_range": [
+            "f4a6c658-en:00034",
+            "f4a6c658-en:00034"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Box 3. Italy’s Court of Accounts: Predicting municipalities in financial distress",
+          "chunk_count": 2,
+          "token_count": 608,
+          "description": "Box 3. Italy’s Court of Accounts: Predicting municipalities in financial distress",
+          "chunk_range": [
+            "f4a6c658-en:00035",
+            "f4a6c658-en:00036"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Search, retrieval and knowledge management",
+          "chunk_count": 3,
+          "token_count": 841,
+          "description": "Search, retrieval and knowledge management",
+          "chunk_range": [
+            "f4a6c658-en:00037",
+            "f4a6c658-en:00039"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Box 4. Brazil’s Office of the Comptroller General of the Union (CGU): AuditPesquisa",
+          "chunk_count": 1,
+          "token_count": 562,
+          "description": "Box 4. Brazil’s Office of the Comptroller General of the Union (CGU): AuditPesquisa",
+          "chunk_range": [
+            "f4a6c658-en:00040",
+            "f4a6c658-en:00040"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Intelligent Document Processing (IDP) and data extraction",
+          "chunk_count": 2,
+          "token_count": 298,
+          "description": "Intelligent Document Processing (IDP) and data extraction",
+          "chunk_range": [
+            "f4a6c658-en:00041",
+            "f4a6c658-en:00042"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Box 5. Italian Court of Accounts – GiusBERTo",
+          "chunk_count": 2,
+          "token_count": 408,
+          "description": "Box 5. Italian Court of Accounts – GiusBERTo",
+          "chunk_range": [
+            "f4a6c658-en:00043",
+            "f4a6c658-en:00044"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Generative AI for drafting, summarising and translating",
+          "chunk_count": 2,
+          "token_count": 626,
+          "description": "Generative AI for drafting, summarising and translating",
+          "chunk_range": [
+            "f4a6c658-en:00045",
+            "f4a6c658-en:00046"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Box 6. French Court of Audit- ChatJF: Development of a sovereign generative AI assistant",
+          "chunk_count": 2,
+          "token_count": 675,
+          "description": "Box 6. French Court of Audit- ChatJF: Development of a sovereign generative AI assistant",
+          "chunk_range": [
+            "f4a6c658-en:00047",
+            "f4a6c658-en:00048"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Visual and spatial data analysis",
+          "chunk_count": 1,
+          "token_count": 242,
+          "description": "Visual and spatial data analysis",
+          "chunk_range": [
+            "f4a6c658-en:00049",
+            "f4a6c658-en:00049"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Box 7. Costa Rica’s Comptroller General of the Republic (CGR) dIAra – Monitoring of \ninfrastructure projects",
+          "chunk_count": 4,
+          "token_count": 1448,
+          "description": "Box 7. Costa Rica’s Comptroller General of the Republic (CGR) dIAra – Monitoring of \ninfrastructure projects",
+          "chunk_range": [
+            "f4a6c658-en:00050",
+            "f4a6c658-en:00053"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Box 8. Korea’s Board of Audit and Inspection (BAI): An AI-based methodology for analysing \ninternal audit results",
+          "chunk_count": 3,
+          "token_count": 888,
+          "description": "Box 8. Korea’s Board of Audit and Inspection (BAI): An AI-based methodology for analysing \ninternal audit results",
+          "chunk_range": [
+            "f4a6c658-en:00054",
+            "f4a6c658-en:00056"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Hardware infrastructure",
+          "chunk_count": 1,
+          "token_count": 462,
+          "description": "Hardware infrastructure",
+          "chunk_range": [
+            "f4a6c658-en:00057",
+            "f4a6c658-en:00057"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "4 Infrastructure and capacity",
+          "chunk_count": 1,
+          "token_count": 536,
+          "description": "4 Infrastructure and capacity",
+          "chunk_range": [
+            "f4a6c658-en:00058",
+            "f4a6c658-en:00058"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Software environment and stack",
+          "chunk_count": 2,
+          "token_count": 584,
+          "description": "Software environment and stack",
+          "chunk_range": [
+            "f4a6c658-en:00059",
+            "f4a6c658-en:00060"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Data infrastructure and governance",
+          "chunk_count": 3,
+          "token_count": 981,
+          "description": "Data infrastructure and governance",
+          "chunk_range": [
+            "f4a6c658-en:00061",
+            "f4a6c658-en:00063"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Development capabilities",
+          "chunk_count": 3,
+          "token_count": 1630,
+          "description": "Development capabilities",
+          "chunk_range": [
+            "f4a6c658-en:00064",
+            "f4a6c658-en:00066"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "5 Measuring impact",
+          "chunk_count": 2,
+          "token_count": 195,
+          "description": "5 Measuring impact",
+          "chunk_range": [
+            "f4a6c658-en:00067",
+            "f4a6c658-en:00068"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Ethics, explainability and bias",
+          "chunk_count": 1,
+          "token_count": 466,
+          "description": "Ethics, explainability and bias",
+          "chunk_range": [
+            "f4a6c658-en:00069",
+            "f4a6c658-en:00069"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "6 Challenges and strategic \nconsiderations",
+          "chunk_count": 1,
+          "token_count": 218,
+          "description": "6 Challenges and strategic \nconsiderations",
+          "chunk_range": [
+            "f4a6c658-en:00070",
+            "f4a6c658-en:00070"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Organisational culture, capacity and supporting adoption",
+          "chunk_count": 2,
+          "token_count": 382,
+          "description": "Organisational culture, capacity and supporting adoption",
+          "chunk_range": [
+            "f4a6c658-en:00071",
+            "f4a6c658-en:00072"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Data quality as a strategic asset",
+          "chunk_count": 1,
+          "token_count": 219,
+          "description": "Data quality as a strategic asset",
+          "chunk_range": [
+            "f4a6c658-en:00073",
+            "f4a6c658-en:00073"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Governance and security",
+          "chunk_count": 1,
+          "token_count": 313,
+          "description": "Governance and security",
+          "chunk_range": [
+            "f4a6c658-en:00074",
+            "f4a6c658-en:00074"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Managing the pace of change and reducing third-party dependencies",
+          "chunk_count": 2,
+          "token_count": 288,
+          "description": "Managing the pace of change and reducing third-party dependencies",
+          "chunk_range": [
+            "f4a6c658-en:00075",
+            "f4a6c658-en:00076"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Balancing innovation, long-term stability and sustainability",
+          "chunk_count": 2,
+          "token_count": 327,
+          "description": "Balancing innovation, long-term stability and sustainability",
+          "chunk_range": [
+            "f4a6c658-en:00077",
+            "f4a6c658-en:00078"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Box 9. The UK National Audit Office (NAO): Integrating LLMs for semantic search and response \ngeneration",
+          "chunk_count": 3,
+          "token_count": 380,
+          "description": "Box 9. The UK National Audit Office (NAO): Integrating LLMs for semantic search and response \ngeneration",
+          "chunk_range": [
+            "f4a6c658-en:00079",
+            "f4a6c658-en:00081"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Transparency and explainability",
+          "chunk_count": 1,
+          "token_count": 333,
+          "description": "Transparency and explainability",
+          "chunk_range": [
+            "f4a6c658-en:00082",
+            "f4a6c658-en:00082"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "User and stakeholder involvement: facilitating bottom-up innovation",
+          "chunk_count": 1,
+          "token_count": 104,
+          "description": "User and stakeholder involvement: facilitating bottom-up innovation",
+          "chunk_range": [
+            "f4a6c658-en:00083",
+            "f4a6c658-en:00083"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "7 Good practices and success factors",
+          "chunk_count": 1,
+          "token_count": 519,
+          "description": "7 Good practices and success factors",
+          "chunk_range": [
+            "f4a6c658-en:00084",
+            "f4a6c658-en:00084"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Management and leadership support",
+          "chunk_count": 2,
+          "token_count": 207,
+          "description": "Management and leadership support",
+          "chunk_range": [
+            "f4a6c658-en:00085",
+            "f4a6c658-en:00086"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Box 10. Costa Rica’s Comptroller General of the Republic (CGR): Facilitating adoption",
+          "chunk_count": 2,
+          "token_count": 520,
+          "description": "Box 10. Costa Rica’s Comptroller General of the Republic (CGR): Facilitating adoption",
+          "chunk_range": [
+            "f4a6c658-en:00087",
+            "f4a6c658-en:00088"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Institutional governance and oversight",
+          "chunk_count": 1,
+          "token_count": 344,
+          "description": "Institutional governance and oversight",
+          "chunk_range": [
+            "f4a6c658-en:00089",
+            "f4a6c658-en:00089"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Effective training and knowledge sharing",
+          "chunk_count": 2,
+          "token_count": 317,
+          "description": "Effective training and knowledge sharing",
+          "chunk_range": [
+            "f4a6c658-en:00090",
+            "f4a6c658-en:00091"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Box 11. A holistic approach to AI training: The experience of the European Court of Auditors \n(ECA)",
+          "chunk_count": 1,
+          "token_count": 226,
+          "description": "Box 11. A holistic approach to AI training: The experience of the European Court of Auditors \n(ECA)",
+          "chunk_range": [
+            "f4a6c658-en:00092",
+            "f4a6c658-en:00092"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Strategic partnerships",
+          "chunk_count": 3,
+          "token_count": 818,
+          "description": "Strategic partnerships",
+          "chunk_range": [
+            "f4a6c658-en:00093",
+            "f4a6c658-en:00095"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "8 Future directions",
+          "chunk_count": 2,
+          "token_count": 743,
+          "description": "8 Future directions",
+          "chunk_range": [
+            "f4a6c658-en:00096",
+            "f4a6c658-en:00097"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "9 Conclusions",
+          "chunk_count": 2,
+          "token_count": 129,
+          "description": "9 Conclusions",
+          "chunk_range": [
+            "f4a6c658-en:00098",
+            "f4a6c658-en:00099"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Glossary",
+          "chunk_count": 4,
+          "token_count": 1394,
+          "description": "Glossary",
+          "chunk_range": [
+            "f4a6c658-en:00100",
+            "f4a6c658-en:00103"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "References",
+          "chunk_count": 1,
+          "token_count": 22,
+          "description": "References",
+          "chunk_range": [
+            "f4a6c658-en:00104",
+            "f4a6c658-en:00104"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "examples, https://one.oecd.org/official-document/DSTI/DPC/GPAI(2025)18/en (accessed on \n13 January 2026).",
+          "chunk_count": 1,
+          "token_count": 311,
+          "description": "examples, https://one.oecd.org/official-document/DSTI/DPC/GPAI(2025)18/en (accessed on \n13 January 2026).",
+          "chunk_range": [
+            "f4a6c658-en:00105",
+            "f4a6c658-en:00105"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
+    },
+    {
+      "doc_id": "mapping-pattern-catalogue",
+      "short_name": "RAI Pattern Catalogue Mapping",
+      "title": "Responsible AI Pattern Catalogue: mapping to ISO and the EU AI Act",
+      "version": "2023",
+      "publisher": "CSIRO Data61",
+      "source_url": "https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/",
+      "format": "xlsx",
+      "page_count": null,
+      "what_it_is": "Responsible AI Pattern Catalogue: mapping to ISO and the EU AI Act",
+      "chunk_count": 109,
+      "structure": [
+        {
+          "section": "ISO-all",
+          "chunk_count": 27,
+          "token_count": 480,
+          "description": "ISO-all",
+          "chunk_range": [
+            "mapping-pattern-catalogue:00000",
+            "mapping-pattern-catalogue:00026"
+          ],
+          "kinds": [
+            "record"
+          ],
+          "record_keys": {
+            "count": 27,
+            "range": [
+              "ISO-ID",
+              "ISO-029"
+            ],
+            "examples": [
+              "ISO-ID",
+              "ISO-001",
+              "ISO-004"
+            ]
+          }
+        },
+        {
+          "section": "EU Act-all",
+          "chunk_count": 25,
+          "token_count": 778,
+          "description": "EU Act-all",
+          "chunk_range": [
+            "mapping-pattern-catalogue:00027",
+            "mapping-pattern-catalogue:00051"
+          ],
+          "kinds": [
+            "record",
+            "table"
+          ],
+          "record_keys": {
+            "count": 23,
+            "range": [
+              "EUA-001",
+              "EUA-022"
+            ],
+            "examples": [
+              "EUA-001",
+              "EUA-023",
+              "EUA-002"
+            ]
+          }
+        },
+        {
+          "section": "RAI pattern catalogue",
+          "chunk_count": 57,
+          "token_count": 2107,
+          "description": "RAI pattern catalogue",
+          "chunk_range": [
+            "mapping-pattern-catalogue:00052",
+            "mapping-pattern-catalogue:00108"
+          ],
+          "kinds": [
+            "table"
+          ]
+        }
+      ]
+    }
+  ],
+  "index_tokens_estimate": 18065
+}
