@@ -1,0 +1,7 @@
+short_name: "OAIC PIA Tool"
+title: "Privacy Impact Assessment Tool"
+version: "May 2020"
+publisher: "Office of the Australian Information Commissioner"
+source_url: "https://www.oaic.gov.au/privacy/privacy-impact-assessments"
+licence: "CC-BY-4.0"
+redistributable: true

@@ -1,0 +1,7 @@
+short_name: "ISM"
+title: "Information security manual"
+version: "June 2026"
+publisher: "Australian Signals Directorate"
+source_url: "https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism"
+licence: "CC-BY-4.0"
+redistributable: true

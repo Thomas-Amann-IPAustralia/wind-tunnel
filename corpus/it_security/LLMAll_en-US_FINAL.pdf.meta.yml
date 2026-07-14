@@ -1,0 +1,7 @@
+short_name: "OWASP LLM Top 10"
+title: "OWASP Top 10 for Large Language Model Applications"
+version: "2025"
+publisher: "OWASP Foundation"
+source_url: "https://genai.owasp.org/llm-top-10/"
+licence: "CC-BY-SA-4.0"
+redistributable: true

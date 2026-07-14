@@ -1,0 +1,7 @@
+short_name: "Secure AI Dev Guidelines"
+title: "Guidelines for secure AI system development"
+version: "November 2023"
+publisher: "UK National Cyber Security Centre and US CISA (with partners incl. ASD ACSC)"
+source_url: "https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development"
+licence: "UK Open Government Licence v3.0"
+redistributable: true

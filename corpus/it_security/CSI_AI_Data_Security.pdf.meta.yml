@@ -1,0 +1,7 @@
+short_name: "AI Data Security CSI"
+title: "AI Data Security: Best Practices for Securing Data Used to Train & Operate AI Systems"
+version: "May 2025"
+publisher: "US National Security Agency (with CISA, FBI and ASD ACSC)"
+source_url: "https://www.cisa.gov/resources-tools/resources/ai-data-security"
+licence: "Public Domain (U.S. Government work)"
+redistributable: true

@@ -13,6 +13,21 @@ ingestion/retrieval code don't exist yet.
 
 ## Done
 
+- **Corpus `.meta.yml` sidecars authored — all 106 documents** (TECH_SPEC §8.6
+  step 1, `corpus/README.md` template). One sidecar per document, seven fields
+  each (`short_name`, `title`, `version`, `publisher`, `source_url`, `licence`,
+  `redistributable`), named `<exact filename>.meta.yml`. `redistributable: true`
+  on every file — **Tom (corpus owner) attested in-session that every document is
+  cleared for use in the project**, discharging the licence-attestation that was
+  Blocked-on-Tom. Metadata was researched per document (embedded docx/pdf/xlsx
+  metadata + web verification); the ~50 CSIRO *Responsible AI Pattern Catalogue*
+  entries under `solution_architect/` share provenance and are generated with
+  `title`/`short_name` = pattern name. Validated: all parse as YAML, all seven
+  fields present, `short_name` unique within each specialist (it is the citation
+  key). Generator kept at `scratchpad/gen_sidecars.py` (not committed) and
+  **asserts no document is left without a sidecar** — re-runnable/idempotent.
+  This clears the licence hard gate's *input* for ingestion; see handoff notes
+  for the licence-allow-list follow-up and the few best-effort fields.
 - **Repo scaffold** matching TECH_SPEC §2 — every directory in the layout now
   exists with a `README.md` (structural dirs) or `.gitkeep` (code leaves)
   pointing to its governing tech-spec section.
@@ -60,11 +75,23 @@ ingestion/retrieval code don't exist yet.
 
 ## In progress / handoff notes
 
-Nothing mid-flight. Next concrete steps toward the Stage 0 exit test, in
-dependency order:
+Sidecars are done (see Done). Next concrete steps toward the Stage 0 exit test,
+in dependency order:
 
-1. **Tom: `.meta.yml` sidecars** per the template in `corpus/README.md`,
-   including licence verification (see Blocked on Tom).
+1. **Licence allow-list config** — the ingestion licence gate (§8.6 step 1)
+   checks `redistributable: true` **and** `licence` ∈ allow-list. Sidecars now
+   carry accurate licence strings, and while most are `CC-BY-4.0`, several are
+   **not CC and must be added to the allow-list** for the gate to pass on Tom's
+   attestation: `CC-BY-SA-4.0` (OWASP ×2, the CSIRO/NAIC RAI-tools report),
+   `Public Domain (U.S. Government work)` (NIST SP 800-61r3, the NSA/CISA AI
+   data-security & secure-deployment guidance), `UK Open Government Licence v3.0`
+   (NCSC secure-AI-development guidelines), `OECD Terms and Conditions` (the OECD
+   public-audit paper), `arXiv.org perpetual non-exclusive license` (QB4AIRA,
+   Diversity & Inclusion in AI), `© American Bar Association …` (ABA Year-2
+   report), `© University of Technology Sydney …` (HTI report), `© Bar Standards
+   Board …` (UK BSB guidance), and `Internal – Commonwealth (IP Australia)` (the
+   TRS guidance). Decide whether the allow-list enumerates these or the gate
+   treats `redistributable: true` as sufficient given the owner's attestation.
 2. **Instrument encoding** (`instrument/*.json`) — now unblocked: deterministic
    transcription from `instrument/guidance/*.md`, asserting at build time that
    every section maps to exactly one specialist owner (TECH_SPEC §6.2).
@@ -73,9 +100,29 @@ dependency order:
    (PyMuPDF for PDFs; docx style trees; xlsx normalization per §8.7) →
    structural chunking → index build → sqlite/index/manifest write. No
    embedding stack: deps stay small (pymupdf, openpyxl, pyyaml, stdlib sqlite3).
-   The code can be written now; the licence gate needs sidecars to pass.
+   The code can be written now; the licence gate now has its sidecar inputs
+   (pending the allow-list decision in step 1).
 4. **Rating engine** (`pipeline/rating/`) — against the **real** Table 2 now in
    the repo (TECH_SPEC §10); the scaffold-matrix contingency is obsolete.
+
+Sidecar fields that are **best-effort and worth a glance from Tom** (metadata is
+accurate where confidently verified; these few were inferred):
+
+- `ethics/TRS-GUIDANCE-AI-150925.pdf` — **not externally identifiable** (no web
+  presence, no title metadata, macOS-printed 15 Sep 2025). Inferred to be an
+  **internal IP Australia** document from the repo owner and filename; sidecar
+  says so (`publisher: IP Australia`, `source_url: Internal (IP Australia)`,
+  `licence: Internal – Commonwealth (IP Australia)`). Tom to confirm the real
+  title / short_name / provenance.
+- `data_governance/Data-quality-checklist.pdf` and
+  `ethics/Guidance-for-AI-adoption-implementation-guidance_0_0.pdf` — attributed
+  to the **DTA** (both are 2026-05-05 macOS-Quartz exports with no title
+  metadata; the checklist's fields are generic data-quality dimensions). Publisher
+  and exact title are best-effort.
+- A handful of `version`/`source_url` values are landing-page-level rather than
+  the exact document permalink (e.g. OAIC guideline consolidation date, PSPF/OT
+  ASD publication URLs). Good enough for the citation manifest; refine if a
+  reader needs the deep link.
 
 Corpus observations for whoever builds ingestion (from the July 2026 review):
 
@@ -87,15 +134,20 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
   controls matrix `Principles` sheet; the pattern-mapping workbook) —
   normalization per §8.7 must detect header depth and fill down groupings.
 - The ADM Better Practice Guide appears twice: `legal/…March-2025.pdf` and
-  `ethics/apo-nid306481.pdf` (an earlier edition of the same guide).
-  Per-specialist KBs are independent so this works, but Tom may want to drop
-  the stale copy or give them distinct `short_name`s + versions.
-- `legal/Artificial-Intelligence-Guidance-May-2026.pdf` is the **UK Bar
-  Standards Board's** guidance — Tom to confirm it's wanted alongside the AU
-  material, or swap for an AU equivalent.
+  `ethics/apo-nid306481.pdf` (an earlier edition of the same guide). They now
+  carry distinct `short_name`s (`ADM Better Practice Guide` vs
+  `ADM Guide (earlier ed.)`) and live in different specialists, so KBs stay
+  independent; Tom may still drop the stale copy. The earlier edition's exact
+  `version` is unconfirmed (marked `earlier edition`).
+- `legal/Artificial-Intelligence-Guidance-May-2026.pdf` is confirmed the **UK Bar
+  Standards Board's** guidance (in force 18 May 2026) — Tom to confirm it's
+  wanted alongside the AU material, or swap for an AU equivalent.
+- `solution_architect/f4a6c658-en.pdf` is an **OECD** paper, *The state of AI in
+  public audit* — an odd fit for the solution-architect corpus; Tom to confirm
+  it belongs there (kept as placed).
 - `The-new-machinery-of-government…pdf.pdf` has a doubled extension; harmless
-  (doc_id slugging normalizes it). `placeholder.md` files can be deleted as
-  sidecars land.
+  (doc_id slugging normalizes it). `placeholder.md` files can now be deleted —
+  every folder holds real documents with sidecars.
 
 ## Decisions made (that the documents were silent on)
 
@@ -125,23 +177,32 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 - **Spreadsheets ingest as normalized sheets classified by shape** (TECH_SPEC
   §8.7): instructions → prose; registries → row-group markdown chunks with
   `record_key`s; boolean matrices → per-row records naming only meaningful cells.
+- **Sidecar `short_name` = citation key, unique per specialist** (not globally).
+  KBs are per-specialist (§8.3), so uniqueness is only asserted within a folder;
+  the CSIRO pattern entries use the pattern name as `short_name`, so a citation
+  renders `[Fairness Assessor, §Benefits]`. Legislation cites by Act title
+  (`[Privacy Act 1988, s 6]`), registries by their own short name (`[ISM, p.112]`).
+  Chosen because these are the human-recognisable keys a reader would check.
+- **`redistributable: true` on all 106 sidecars rests on Tom's in-session
+  attestation**, not a per-document licence audit. The `licence` field still
+  records the *actual* licence (CC-BY-4.0 for most Commonwealth material, plus
+  CC-BY-SA / US public-domain / UK OGL / OECD / arXiv / ABA / UTS / BSB /
+  IP-Australia-internal for the rest). The ingestion gate's allow-list must
+  reconcile with these — see In progress step 1.
 
 ## Blocked on Tom
 
 These block the *next* tasks (CLAUDE.md §8, TECH_SPEC §16). The instrument
 source and Table 1/Table 2 landed July 2026 (see Done) and are no longer here:
 
-- **`.meta.yml` sidecars with verified licences** — template in
-  `corpus/README.md`; at least one cleared doc unlocks the Stage 0 exit test.
-  Commonwealth material (DTA, OAIC, ASD/ACSC, NAA, eSafety, the DDG strategy)
-  is usually CC BY 4.0 — confirm each imprint page. **Verify before flagging
-  redistributable:** the OECD paper (OECD terms, not CC), the two arXiv papers
-  (author-chosen licences), the two AHRC reports, the two HTI/UTS reports, the
-  CSIRO/Data61 report + the 50 pattern-catalogue extracts, the Creative
-  Australia paper, the three court items (SC PN Gen 23, the GenAI practice-note
-  txt, the Perry J speech rtf), the Indigenous data governance framework, and
-  the UK BSB guidance. US NIST/CISA/NSA publications are public domain; OWASP
-  is already on the allow-list.
+- **~~`.meta.yml` sidecars with verified licences~~ — DONE (July 2026).** Tom
+  attested in-session that every document is cleared for use, so all 106 sidecars
+  are authored with `redistributable: true` and accurate `licence` strings (see
+  Done). What remains from this item is a *config* decision, not a Tom blocker:
+  the ingestion licence allow-list must accommodate the non-CC licences the
+  sidecars record (In progress step 1). Two provenance confirmations would still
+  help (not blocking): the identity of `TRS-GUIDANCE-AI-150925.pdf` and the
+  publisher/title of the two DTA-attributed checklists (see handoff notes).
 - **Exact Gemini model identifiers** in `config/models.yml` — blocks the first
   real LLM call.
 
