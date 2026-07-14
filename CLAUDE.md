@@ -19,7 +19,7 @@ Windtunnel takes a public servant's loose idea for an AI solution, sharpens it t
 1. **`PROJECT_BRIEF.md`** — what the product is and why; the decisions taken as fixed. Governs *intent*.
 2. **`TECH_SPEC.md`** — the build: repo layout, state machine, data contracts, API, engine, prompts. Governs *the pipeline and the build*. This is your primary working document.
 3. **`DESIGN_BRIEF.md`** — the interface, the transparency animation, and the report. Governs *the interface and the report*.
-4. **`AI_IMPACT_ASSESSMENT.md`** — the DTA instrument itself, the source content you encode into `instrument/` and assess against. (Confirm the actual filename in the repo; this is the markdown copy of the tool.)
+4. **`instrument/guidance/AI_impact_assessment_tool.md`** and its companion **`Guidance_AI_impact_assessment_tool.md`** — the DTA instrument itself (tool + guidance, including Table 1, Table 2 and the consequence appendix), the source content you encode into `instrument/*.json` and assess against. (Landed July 2026.)
 5. **`templates/outline.md`** — the outline contract made concrete; pair it with `TECH_SPEC.md` §7.1.
 
 Don't reread all four every session. Read this file, skim the brief, then go deep on the tech-spec sections your task touches — the section map in §5 below tells you which.
@@ -122,10 +122,9 @@ Update `STATUS.md` in the **same commit** as the work it describes, so state and
 
 These come from outside the documents. Scaffold around them — none blocks starting — but flag any that block your *current* task in `STATUS.md`, and never invent a substitute silently.
 
-- **The DTA instrument content** → encoded into `instrument/*.json`. This is deterministic transcription from `AI_IMPACT_ASSESSMENT.md`, and a legitimate early task. **Assert at build time that every instrument section maps to exactly one specialist owner (tech spec §6.2), or the ownership map has a silent hole.** The Table 2 matrix and consequence/likelihood descriptors are **blocking for Stage 2 correctness** — build the engine and its tests against a clearly-marked scaffold matrix, but it cannot be trusted until the real values are in (tech spec §16).
-- **At least one licence-cleared corpus document** in `corpus/<specialist>/` with its `.meta.yml`, for the Stage 0 exit test. Easy to overlook because attention goes to the instrument; without it Stage 0 can't pass.
+- **The DTA instrument content** → encoded into `instrument/*.json`. **Landed July 2026** at `instrument/guidance/` (tool + guidance, including the real Table 1/Table 2 and the consequence appendix), so the deterministic transcription is an open early task, not a blocked one. **Assert at build time that every instrument section maps to exactly one specialist owner (tech spec §6.2), or the ownership map has a silent hole.** The rating engine and its tests build against the real Table 2 from the start; the scaffold-matrix contingency (tech spec §16) is obsolete.
+- **`.meta.yml` sidecars with verified licences** for the corpus documents (the documents themselves landed July 2026). At least one cleared document is needed for the Stage 0 exit test; the licence attestation is inherently Tom's.
 - **Exact Gemini model identifiers** in `config/models.yml`. Blocks the first real LLM call, nothing before it.
-- **Embedding model choice** (recommended `BAAI/bge-small-en-v1.5`); ingestion and query must use the same one.
 
 Full lists: tech spec §16 and design §11.
 

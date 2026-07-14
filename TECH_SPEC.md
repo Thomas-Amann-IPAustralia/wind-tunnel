@@ -53,7 +53,7 @@ Windtunnel is three deployables around one durable store. Nothing holds state in
 │  ├─ run.py                    # entrypoint: load run.json, route to current stage
 │  ├─ stages/                   # one module per state (§5)
 │  ├─ agents/                   # agent runners (prompt + model call + output parse)
-│  ├─ retrieval/                # KB query: BM25 + cosine + optional rerank (§8)
+│  ├─ retrieval/                # KB access: fetch + FTS5 BM25 search tools (§8)
 │  ├─ rating/                   # deterministic rating engine (§10) — importable, no LLM
 │  ├─ reviewer/                 # coverage + coherence protocol (§11)
 │  ├─ assembly/                 # nbformat notebook + nbconvert HTML (§12)
@@ -75,11 +75,11 @@ Windtunnel is three deployables around one durable store. Nothing holds state in
 │  └─ <specialist>/
 │     ├─ <doc>.pdf
 │     └─ <doc>.meta.yml         # short_name, version, licence, redistributable, source_url
-├─ kb/                          # built SQLite KBs + manifests (or release-asset pointers)
-│  └─ <specialist>.sqlite  +  <specialist>.manifest.json
+├─ kb/                          # built SQLite KBs + indexes + manifests (or release-asset pointers)
+│  └─ <specialist>.sqlite  +  <specialist>.index.json  +  <specialist>.manifest.json
 ├─ config/
 │  ├─ models.yml                # model allocation (§13)
-│  ├─ retrieval.yml             # top-k, rerank on/off, fusion weights
+│  ├─ retrieval.yml             # chunking targets, index budget, fetch caps, search top-k (§8)
 │  └─ budgets.yml               # per-stage call budgets + expected_range hints (§6, §13)
 ├─ runs/<run-id>/               # all run state (§4)
 ├─ fixtures/                    # golden-path project + hand-worked rating cases (§15)
@@ -324,7 +324,7 @@ Each event is append-only with a stable ordinal id. The frontend keeps the highe
   "agent": "full.specialist.privacy",   // a node_id, or its friendly name
   "type": "retrieval",         // controlled vocabulary below
   "detail": "reading OAIC PIA guidance",
-  "ref": { "doc": "OAIC PIA", "page": 14 }   // optional, shape depends on type
+  "ref": { "doc": "OAIC PIA", "locator": "p.14" }   // optional, shape depends on type
 }
 ```
 
@@ -333,7 +333,7 @@ Each event is append-only with a stable ordinal id. The frontend keeps the highe
 | `type` | Emitted when | `detail` | `ref` shape | Node effect (design) |
 | --- | --- | --- | --- | --- |
 | `stage_started` | a node begins work | e.g. "Threshold assessment started" | `null` | node → `active` |
-| `retrieval` | an agent retrieves a chunk | e.g. "reading OAIC PIA guidance" | `{doc, page}` | ephemeral label on node |
+| `retrieval` | an agent retrieves a chunk | e.g. "reading OAIC PIA guidance" | `{doc, locator}` | ephemeral label on node |
 | `drafting` | node sub-activity | e.g. "drafting §7.3" | `{section}` optional | sub-activity on node |
 | `question_raised` | a specialist raises a checkpoint question | e.g. "has a question about data storage" | `{specialist, question_id}` | feeds the pause count |
 | `revision` | a reviewer-directed amend, or a specialist revising after answers | e.g. "review pass 1 of 2" | `{cycle, target}` optional | edge re-animates, loop counter |
@@ -445,9 +445,38 @@ The outline is the single source of truth for the concept (brief §4), and every
 
 ## 8. Knowledge bases and ingestion
 
-**Inherited:** one SQLite file per specialist; page-anchored chunks; embeddings stored as blobs (no dedicated vector store); hybrid BM25 + brute-force cosine retrieval with optional cross-encoder rerank; YAKE keywords per chunk; **all embedding compute inside Actions runners**, never on Render (the free tier lacks the memory for embedding models); the licence flag is a **hard gate**.
+> **Revised (July 2026) after review of the landed corpus, replacing the inherited embedding design.** The corpus turned out to be 106 documents, ~1.8M extractable tokens across six specialists (≈73K–507K tokens each), and overwhelmingly *structured reference material*: numbered control registries (the ISM's ~1,100 `ISM-XXXX` controls — twice, as PDF prose and as a spreadsheet matrix), fixed-field pattern records (50 near-identical docx), criteria and mapping spreadsheets, legislation with formal provision structure, and chaptered guidance. At this scale and shape an LLM-navigated structural index beats small-model dense retrieval on recall, citation quality and operational simplicity — full decision record at §8.8. Also decisive: **two-thirds of the files are docx/xlsx/md with no true pages**, so the page-only citation anchor had to generalize regardless (§8.2).
 
-### 8.1 Schema (per-specialist `kb/<specialist>.sqlite`)
+**Kept from the inherited design:** one SQLite file per specialist; chunks with true source anchors; FTS5 (BM25) for lexical search; **all ingestion compute inside Actions runners**, never on Render; the licence flag as a **hard gate**. **Dropped:** dense embeddings, brute-force cosine, RRF fusion, cross-encoder rerank, YAKE keywords — and with them torch/sentence-transformers in the runners, the ingestion/query model-identity assertion, and every fusion/rerank tuning knob. **Added:** a committed LLM-readable **index** per specialist (§8.4) and a two-tool retrieval interface the specialist drives itself (§8.1).
+
+### 8.1 The retrieval model — index + fetch, not similarity
+
+Specialists do survey-and-synthesis, not needle lookup: given the outline, each must judge *which of the things in its library apply* to a novel concept, then read them. So retrieval hands the model the whole map and lets it choose, rather than guessing its information need from one embedded query. A specialist draft is **one budgeted call (§13) comprising a bounded tool loop**:
+
+1. The system prompt embeds the specialist's **index** (§8.4) — the catalogue of everything its library contains.
+2. The wrapper pre-fetches **seed context** — FTS5 BM25 top-k over the owned DTA question text + outline keywords — so grounding never starts empty even if the model under-uses its tools.
+3. The model calls two deterministic, LLM-free tools (`pipeline/retrieval/`) for up to `max_rounds` (config, default 4):
+   - `fetch(refs)` — refs are chunk ids, section paths, or **record keys** (`ISM-1612`, `APP 6`, pattern `G4`); code returns exactly those chunks.
+   - `search(query, k)` — FTS5 BM25 over its own KB; the lexical backstop for anything the index descriptions under-sell.
+4. Every returned chunk arrives as `(short_name, locator, text)`; every fetch/search emits a `retrieval` event `{doc, locator}` (§6.3) and lands in provenance. The model can only cite what it actually fetched, and *what it chose to read* is itself part of the audit trail (and feeds the transparency animation).
+
+Caps live in `config/retrieval.yml`: max rounds, max tokens per round, max total fetched tokens. On cap, the wrapper demands the final draft from what has been fetched. Retrieval stays a thin deterministic layer; the *selection intelligence* lives in the specialist call that was being made anyway.
+
+### 8.2 Locators — the citation anchor, generalized
+
+The corpus is 37 pdf / 58 docx / 12 md / 4 xlsx / 1 txt / 1 rtf: only the PDFs have true pages (docx/md pagination is renderer-dependent; spreadsheets have none), so a page number cannot be the universal anchor. Every chunk instead carries a typed **`locator`** — the most precise *human-checkable* pointer its format supports:
+
+| Format | Locator | Example |
+| --- | --- | --- |
+| PDF | true source page (+ nearest heading) | `p.112` |
+| Legislation (docx) | provision, from the legislative styles | `s 6(1)`, `Sch 1 APP 6` |
+| DOCX / MD prose | heading path | `§Break glass accounts` |
+| XLSX | sheet + row range, or record key | `Controls!r412–r471`, `ISM-1997` |
+| TXT / RTF | paragraph range | `¶¶12–18` |
+
+Citations are `(short_name, locator)` — rendered `[ISM, p.112]`, `[Privacy Act 1988, s 6]`, `[CCM, Controls!r412]` (§9.4; design §8). For PDFs this is exactly the old true-page guarantee (brief §10), unchanged.
+
+### 8.3 Schema (per-specialist `kb/<specialist>.sqlite`)
 
 ```sql
 CREATE TABLE documents (
@@ -459,45 +488,70 @@ CREATE TABLE documents (
   source_url    TEXT,
   licence       TEXT NOT NULL,          -- e.g. "CC-BY-4.0"
   redistributable INTEGER NOT NULL,     -- hard gate; must be 1 to ingest
+  format        TEXT NOT NULL,          -- pdf | docx | xlsx | md | txt | rtf
   sha256        TEXT NOT NULL,          -- of the source file
-  page_count    INTEGER,
+  page_count    INTEGER,                -- PDFs only
   ingested_at   TEXT NOT NULL
 );
 
 CREATE TABLE chunks (
   chunk_id      TEXT PRIMARY KEY,
   doc_id        TEXT NOT NULL REFERENCES documents(doc_id),
-  page_number   INTEGER NOT NULL,       -- TRUE source page (citation integrity, brief §10)
-  char_start    INTEGER, char_end INTEGER,
+  seq           INTEGER NOT NULL,       -- reading order within the document
+  locator       TEXT NOT NULL,          -- §8.2 — TRUE source page for PDFs (citation integrity, brief §10)
+  section_path  TEXT,                   -- e.g. "Guidelines for system hardening > Operating system hardening"
+  kind          TEXT NOT NULL,          -- prose | record | table
+  record_key    TEXT,                   -- ISM-1612 / APP 6 / G4 / DTA statement 12 … fetchable by key
   text          TEXT NOT NULL,
-  keywords      TEXT,                   -- YAKE, comma-separated
-  token_count   INTEGER,
-  embedding     BLOB NOT NULL           -- float32[dim], model + dim recorded in manifest
+  token_count   INTEGER NOT NULL
 );
 
--- BM25 via SQLite FTS5 (no external BM25 dependency); rank with the built-in bm25()
-CREATE VIRTUAL TABLE chunks_fts USING fts5(text, content='chunks', content_rowid='rowid');
+-- Lexical search via SQLite FTS5 (no external dependency); rank with the built-in bm25()
+CREATE VIRTUAL TABLE chunks_fts USING fts5(
+  text, section_path, record_key, content='chunks', content_rowid='rowid'
+);
 ```
 
-The embedding vector is stored as a packed `float32` blob; the query loads all vectors for the specialist and does a brute-force cosine — fine at these corpus sizes and free of any vector-store dependency (inherited). Every chunk keeps its **true source page number**, because page-level citations are only as trustworthy as the extraction (brief §10).
+No embedding column. If Stage-3 quality testing shows genuine recall gaps (§15), a dense channel is **additive** — a new column and a third tool — with no change to this schema's contract, the manifest, or the citation format. The decision is reversible by construction.
 
-### 8.2 Manifest (`kb/<specialist>.manifest.json`)
+### 8.4 The index (`kb/<specialist>.index.json`)
 
-Records what a citation resolves against and what built the KB: embedding model name + dimension, chunker parameters, the document list with versions and licence/redistributable flags, the build's git SHA and timestamp, and — if the DB was published as a release asset (§14) — the asset URL and sha. Provenance (§13) records the manifest version used for the run, so a reader can audit exactly which corpus produced which claim.
+The committed, LLM-readable catalogue the specialist navigates. Per document: sidecar metadata plus a 1–2 line `what_it_is`, then the structure tree — section / sheet nodes each with a one-line description, chunk-id range, token count, and (for registries) the key column and key range. **Descriptions are extractive-first**: headings, control topics, pattern `Summary` fields and sheet column schemas already describe this corpus well; only prose sections with uninformative headings get an LLM-written line (Flash, once, at ingestion — committed, so reviewable, diffable, and stable across runs). A token budget (config, default 25K) bounds each index; the builder rolls the deepest levels up into their parents until under budget. The worst case here (it_security, ~507K tokens) indexes at ISM *section* level well inside that budget, with individual controls still addressable via `record_key`.
 
-### 8.3 Retrieval
+### 8.5 Manifest (`kb/<specialist>.manifest.json`)
 
-Hybrid, config-driven (`config/retrieval.yml`): take BM25 top-k (FTS5 `bm25()`) and cosine top-k, fuse by reciprocal-rank fusion, optionally rerank the fused candidates with a cross-encoder, and return the top-n chunks each as `(short_name, page, text)`. Every returned chunk is citable as `(short_name, p.N)` and every citation is resolvable against the manifest (§9.4, §15). The query embedding is computed in-runner with the **same** sentence-transformers model as ingestion — a mismatch silently degrades retrieval, so the model id is asserted equal between manifest and runtime at run start.
+Records what a citation resolves against and what built the KB: chunker parameters, the document list with versions and licence/redistributable flags, sha256 of the sqlite and the index, the build's git SHA and timestamp, and — if the DB was published as a release asset (§14) — the asset URL and sha. Provenance (§13) records the manifest version used for the run, so a reader can audit exactly which corpus produced which claim. (At the current corpus size the built KBs are a few MB of text and commit directly; the release-asset path remains as the overflow valve.)
 
-### 8.4 Ingestion Action (`ingestion.yml`)
+### 8.6 Ingestion Action (`ingestion.yml`)
 
-Triggered manually or by a push to `corpus/**`. Per specialist folder, for each document:
+Triggered manually or by a push to `corpus/**`. Per specialist folder, for each document (non-corpus files — `*.meta.yml`, `README.md`, `placeholder.md` — are skipped):
 
 1. **Licence hard gate (enforcement point).** Read the sidecar `<doc>.meta.yml` (`short_name`, `version`, `licence`, `redistributable`, `source_url`). If `redistributable` is not `true` **or** `licence` is not in the allow-list (`config` — Commonwealth CC-BY, OWASP terms, and similar cleared licences), **fail the build loudly** with the offending file named. The repo is public and every chunk republishes source text, so this is a gate, not a router (brief §3, §10). Nothing downstream can be reached without passing it.
-2. **Page-aware extraction.** PDFs via a page-preserving extractor (PyMuPDF/pdfplumber) so each chunk records its real page; HTML/MD/TXT supported with synthetic page anchoring where no pages exist.
-3. **Chunking.** Page-anchored, target ~500–800 tokens with ~15% overlap, **never crossing a page boundary** so a chunk's page number is unambiguous; sub-minimum fragments are merged forward.
-4. **Keywords + embeddings.** YAKE keywords per chunk; embeddings with the local sentence-transformers model (recommended `BAAI/bge-small-en-v1.5`, 384-dim — quality/size balance; **For Tom**: this is a config choice, must match ingestion and query).
-5. **Write** the SQLite + manifest; commit back (or publish as a release asset if oversized, §14).
+2. **Structure-aware extraction.** PDF via PyMuPDF: true pages plus heading detection. DOCX via the style tree: heading styles give guidance its section structure; the legislative styles (`ActHead*`, `subsection`) give Acts their provision structure. XLSX per §8.7. MD by heading tree; TXT/RTF converted to plain text and treated as prose with paragraph anchors.
+3. **Structural chunking.** Chunk along the document's own structure — section, provision, control, pattern, sheet row-group — packing small siblings to ~400–900 tokens and splitting oversized sections at paragraph boundaries (the locator gains a part suffix). **A chunk never crosses a structural boundary**, so its locator is unambiguous. No sliding-window overlap: structure replaces it. Atomic numbered items (controls, criteria, patterns, APPs) become `record` chunks carrying `record_key`.
+4. **Index build** (§8.4).
+5. **Write** the SQLite + index + manifest; commit back (or publish as a release asset if oversized, §14).
+
+### 8.7 Spreadsheets
+
+Four workbooks in the corpus, three shapes; ingestion classifies each **sheet** — no per-file configuration:
+
+1. **Normalize.** Detect header depth (one or two rows — this corpus has grouped two-row headers), flatten group headers into column names (`Provider Responsibilities – Implementation Status`), fill down merged/blank grouping cells, drop empty rows/columns.
+2. **Classify by shape and serialize accordingly.**
+   - **Instructions sheets** (one dominant text column — e.g. the cloud controls matrix `Info` sheet) → prose chunks.
+   - **Registries** (a key column + substantive text columns — the 1,102-row `Controls` sheet keyed `ISM-XXXX`; the DTA AI technical standard's 149 criteria keyed by statement number; the pattern-catalogue sheets keyed by pattern id) → **row-group chunks along the natural grouping column** (Guideline/Section; lifecycle stage), serialized as markdown tables with headers repeated in every chunk, ~400–900 tokens, locator = `Sheet!rN–rM`; every row also carries its `record_key`, so `fetch("ISM-1997")` returns the exact rows deterministically.
+   - **Matrices** (mostly boolean/enum cells — the E8↔ISM mapping) → per-row **records** naming only the meaningful cells ("ISM-1807 — ML2, ML3; Multi-factor authentication, Restrict administrative privileges"). A boolean grid dumped as a table is nearly meaningless to search or cite; as records it is both.
+3. **Index entry per sheet:** name, rows×columns, flattened column schema, key column, one-line description. The manifest records the normalization decisions (header rows, dropped ranges) for audit.
+
+### 8.8 Why not embeddings (decision record)
+
+The inherited hybrid (bge-small cosine + BM25 + RRF + optional rerank) is the right default for large, unstructured corpora queried unpredictably. This corpus is the opposite on every axis:
+
+- **Scale.** The largest library (~507K tokens) catalogues into 10–20K tokens of index — the whole *map* fits comfortably in the specialist's context. Dense retrieval earns its complexity when the map can't fit; here it can.
+- **Shape.** Roughly half the volume is registry text: terse, jargon-dense numbered items. Small embedding models are weakest exactly there, while the registries' own structure (guideline → section → control id) is a near-perfect retrieval key that cosine similarity would only approximate.
+- **Task.** Specialists survey and synthesise. Top-k similarity returns disconnected snippets with no sense of what else exists; the index gives the model *corpus awareness* — it can see that the Essential Eight FAQ exists and decide it is irrelevant. That awareness is where "thoughtful and informed" output comes from.
+- **Failure modes.** A dense-retrieval miss is silent: the specialist never sees the relevant guidance, writes thin prose, and nothing flags why. An index miss is visible to the model (the map is in front of it) and recoverable inside the loop; `search` backstops vocabulary the descriptions miss. Silent recall loss is the one failure mode this product cannot afford (brief §10).
+- **Operations.** No torch/sentence-transformers in every runner, no embedding-model pinning (that §16 open item disappears), no fusion weights or rerank thresholds to tune empirically. What remains — SQLite, FTS5, one deterministic chunker — has no quality dials, which is the operating requirement: the corpus owner uploads documents and the system just works.
 
 ---
 
@@ -530,7 +584,7 @@ Each generalist and specialist is given, from `instrument/`: the DTA **question 
 
 ### 9.4 Citation format and resolution
 
-Every corpus-resting claim cites `(short_name, p.N)`. A citation validator resolves each against the specialist's KB manifest; unresolvable citations are flagged (they fail the build in testing, §15, and are surfaced as gaps at run time). The threshold precautionary rules are encoded in the generalist/reconciler prompts (brief §5.1): where uncertain or in disagreement take the higher rating, document assumptions, and default likelihood to at least "possible" when evidence is thin. **Agents never assert a risk rating** — they output consequence + likelihood + rationale only (§10).
+Every corpus-resting claim cites `(short_name, locator)` — `p.N` for paginated sources, provision / heading / sheet-row anchors otherwise (§8.2). A citation validator resolves each against the specialist's KB manifest; unresolvable citations are flagged (they fail the build in testing, §15, and are surfaced as gaps at run time). The threshold precautionary rules are encoded in the generalist/reconciler prompts (brief §5.1): where uncertain or in disagreement take the higher rating, document assumptions, and default likelihood to at least "possible" when evidence is thin. **Agents never assert a risk rating** — they output consequence + likelihood + rationale only (§10).
 
 ---
 
@@ -548,8 +602,9 @@ The engine is pure logic; its *data* is transcribed verbatim from the DTA tool v
 
 ```jsonc
 // risk_matrix.json  — shape; CELL VALUES AND TIER LABELS MUST BE TRANSCRIBED FROM
-// THE DTA AI IMPACT ASSESSMENT TOOL v1.0, TABLE 2.  The scaffold below is the standard
-// Australian 5×5 pattern and is a PLACEHOLDER to be verified against the source before trust.
+// instrument/guidance/AI_impact_assessment_tool.md, TABLE 2 (in-repo since July 2026).
+// The scaffold below is the conventional 5×5 pattern and is a PLACEHOLDER — the real
+// Table 2 does NOT match it cell-for-cell, so transcribe, never copy.
 {
   "consequence_tiers": ["Insignificant","Minor","Moderate","Major","Severe"],   // confirm labels
   "likelihood_tiers":  ["Rare","Unlikely","Possible","Likely","Almost certain"],// = Table 1 labels
@@ -565,7 +620,7 @@ The engine is pure logic; its *data* is transcribed verbatim from the DTA tool v
 }
 ```
 
-> **For Tom (blocking for Stage 2 correctness).** The tier labels, the rating set, and every cell above must be replaced with the exact contents of the DTA tool v1.0 Table 2 and Table 1, and the consequence descriptors with the guidance appendix. The scaffold reproduces the conventional 5×5 shape so the engine and tests can be written now, but a single wrong cell is a fidelity failure — so §15's rating-engine tests are hand-worked from the *actual* tool, and Stage 2's exit test is "ratings match a hand-worked assessment exactly" (brief §9).
+> **Transcription note (source landed July 2026 — no longer blocked on Tom).** The tier labels, the rating set, and every cell above must be transcribed from the in-repo source: Tables 1–2 in `instrument/guidance/AI_impact_assessment_tool.md`, and the consequence descriptors from the appendix of `Guidance_AI_impact_assessment_tool.md`. The real Table 2 differs from the conventional scaffold above (it is not a copy-paste), and a single wrong cell is a fidelity failure — so §15's rating-engine tests are hand-worked from the *actual* tool, and Stage 2's exit test is "ratings match a hand-worked assessment exactly" (brief §9).
 
 ### 10.2 Interface
 
@@ -643,7 +698,7 @@ Conflicts still live after two cycles are written to `unresolved.json` and rende
 3. **Sections 5–12 (full)** — each specialist's owned sections in tool order, with inline `(short_name, p.N)` citations resolved against the manifests.
 4. **12.3 / 12.4** — residual risk summary and rating, the engine reused on post-mitigation inputs; **12.5** emitted as a flagged human action (no agent can perform internal-governance-body review).
 5. **Appendices** — Implementation Plan (architect); **Recommended next steps** (the aggregated gap register, including skipped checkpoint questions); Assessor divergence notes; **Points of unresolved disagreement**; and the **provenance** cell.
-6. **Reference list** — the full page-cited apparatus, deduplicated across specialists.
+6. **Reference list** — the full pinpoint-cited apparatus, deduplicated across specialists.
 
 ### 12.2 Provenance cell
 
@@ -668,7 +723,7 @@ nbconvert runs with a custom template/stylesheet replacing the default theme, de
 **Decided (spec).** All Gemini traffic goes through one wrapper (`pipeline/gemini.py`, and the backend's equivalent) that owns three concerns:
 
 - **Backoff.** Exponential backoff with jitter on 429/5xx, honouring `Retry-After`, to a capped retry count; on exhaustion it raises the error that becomes the calm failure state (§5.6). A full assessment is dozens of calls and, with backoff, a run may take tens of minutes — which is acceptable precisely because the transparency animation makes waiting tolerable (brief §10).
-- **Per-stage call budget.** `config/budgets.yml` records expected call counts per stage (2 generalists + 1 reconciler; 6 specialists × (1 draft + 1 revise); 1 architect; reviewer × ≤2 cycles × affected specialists; plus retrieval-driven query embeddings) and the `expected_range` seconds per phase that feed `status.json` (§6.1). Budgets are asserted at run time so a runaway loop trips a guard rather than silently burning tokens.
+- **Per-stage call budget.** `config/budgets.yml` records expected call counts per stage (2 generalists + 1 reconciler; 6 specialists × (1 draft + 1 revise); 1 architect; reviewer × ≤2 cycles × affected specialists; each specialist call internally bounded to `max_rounds` fetch/search tool rounds, §8.1) and the `expected_range` seconds per phase that feed `status.json` (§6.1). Budgets are asserted at run time so a runaway loop trips a guard rather than silently burning tokens.
 - **Token accounting.** Every call records model, role, prompt/response tokens, and latency, appended to `provenance.json`; per-run totals land in the provenance cell (§12.2).
 
 **Model allocation** (`config/models.yml`, one file, adjustable — inherited §8): Flash-Lite for interviewer turns and sufficiency/feasibility checks; Flash for outline/PoC/map synthesis, the two threshold generalists, and the six specialists; Pro for the reconciler, the architect, and the reviewer. If quality testing shows specialists need Pro, it is a one-line flip — budget for that possibility. **For Tom:** the exact Gemini model *identifiers* (which version with each tier) are pinned here against current Gemini availability; the tier→role mapping above is the decided part.
@@ -715,7 +770,7 @@ Each identified trap, with its decided mitigation.
 
 - **Rating-engine unit tests (the non-negotiable core).** Hand-worked cases from the *actual* DTA Table 2 covering every matrix cell and the highest-wins rule, plus off-vocabulary inputs that must raise. This is Stage 2's exit test: a known test case's ratings match a hand-worked assessment exactly. These tests are written against the transcribed `instrument/*.json`, so they fail immediately if a cell was mis-transcribed (§10.1).
 - **Golden-path fixture.** A canned outline in `fixtures/` driven through threshold → full end to end (with a small fixed corpus and, where useful, a recorded/stubbed Gemini layer so the run is deterministic), asserting: all artefacts produced, every citation resolves against a manifest, ratings computed by the engine, the notebook and HTML assemble.
-- **Citation spot-check.** Automated: every citation in every produced section resolves to a real `(doc, page)` in the specialist's manifest; unresolvable citations fail the build. Manual: a sampled set checked against the source PDFs, because page-level citations are only as good as the extraction (Stage 3 exit test — an SME can follow every claim to a cited source; brief §10).
+- **Citation spot-check.** Automated: every citation in every produced section resolves to a real `(doc, locator)` in the specialist's manifest; unresolvable citations fail the build. Manual: a sampled set checked against the source documents, because pinpoint citations are only as good as the extraction (Stage 3 exit test — an SME can follow every claim to a cited source; brief §10).
 - **Resume-from-every-checkpoint.** For each checkpoint commit in the state machine, a test simulates a fresh dispatch resuming from it and asserts the run continues correctly and idempotently — the pause-resume and failure-resume paths share this test because they share the mechanism (§5).
 - **Ingestion licence gate.** A negative test: a document marked non-redistributable (or with an off-allow-list licence) must fail the ingestion build with the file named. The gate failing open would republish material the repo is not cleared to hold.
 
@@ -726,10 +781,9 @@ Each identified trap, with its decided mitigation.
 Collected so the genuine choices are in one place; none blocks starting the build except where noted.
 
 - **The name** (§0, design §1). Design recommends keeping *Windtunnel*; a shortlist exists there. One-token change downstream.
-- **DTA Table 1 / Table 2 / consequence descriptors** (§10.1) — **blocking for Stage 2 correctness.** The scaffolded matrix must be replaced with the exact tool values before the rating engine is trusted; the engine, tests and everything else can be built against the scaffold in the meantime.
+- ~~DTA Table 1 / Table 2 / consequence descriptors~~ — **landed July 2026** in `instrument/guidance/` (tool + guidance incl. the consequence appendix). Transcription into `instrument/*.json` (§10.1) is now an open build task; the scaffold-matrix contingency is obsolete.
 - **Exact Gemini model identifiers** (§13) — pin each tier to a current Gemini model id. The tier→role allocation is decided.
-- **Embedding model choice** (§8.4) — recommended `BAAI/bge-small-en-v1.5`; any local sentence-transformers model is fine provided ingestion and query use the same one.
-- **Final corpus lists per specialist** (§8) — the brief's lists are indicative; each document needs a `.meta.yml` with a cleared, redistributable licence, or the hard gate rejects it.
+- **Final corpus lists per specialist** (§8) — the corpus has landed (July 2026); each document still needs a `.meta.yml` with a cleared, redistributable licence, or the hard gate rejects it. (The embedding-model choice that used to sit here is gone: §8 no longer uses embeddings — §8.8.)
 - **Competition submission constraints** (brief §10) — deadline and demo format back-propagate into stage sequencing (governance quality first; polish and brainstorm niceties are the first cuts if timeboxed).
 
 ---

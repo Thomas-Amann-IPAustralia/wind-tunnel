@@ -87,8 +87,9 @@ The foundational documents are the source of truth; read them in this order:
    (governs *the pipeline and the build*).
 3. **`DESIGN_BRIEF.md`** — interface, transparency animation, report (governs
    *the interface and the report*).
-4. **`AI_IMPACT_ASSESSMENT.md`** — the DTA instrument, the source content encoded
-   into `instrument/`. *(Not yet in the repo — see `STATUS.md`.)*
+4. **`instrument/guidance/AI_impact_assessment_tool.md`** (+ its companion
+   guidance file) — the DTA instrument, the source content encoded into
+   `instrument/`.
 
 **Building on Windtunnel?** Read **`CLAUDE.md`** (working conventions, invariants,
 handoff protocol) and **`STATUS.md`** (current build state) before writing code.

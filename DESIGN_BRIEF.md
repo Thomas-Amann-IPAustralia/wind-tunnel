@@ -96,7 +96,7 @@ The type system is one engineered superfamily plus one signage face. It is chose
 - **Display & labels — Archivo (Expanded for large moments).** An expanded technical grotesque that reads like facility signage and instrument-panel labelling. Used with restraint: headings, stage labels, node names, the wordmark.
 - **App body & UI — IBM Plex Sans.** Plex was drawn as a technology company's instrument-like identity; it is precise but humane, and it is not the Inter default. This carries the interface.
 - **Report body — IBM Plex Serif.** The final report must read as a *document* a director takes seriously. The serif from the same superfamily gives gravitas while staying cohesive with the app.
-- **Data, run codes, citations, timestamps, provenance — IBM Plex Mono.** Mono makes `WT-7K3D-Q2` unambiguous, sets page-cited references cleanly, and ties the whole thing to the "machinery" feel.
+- **Data, run codes, citations, timestamps, provenance — IBM Plex Mono.** Mono makes `WT-7K3D-Q2` unambiguous, sets pinpoint-cited references cleanly, and ties the whole thing to the "machinery" feel.
 
 Using the Plex superfamily across app, report and code gives cohesion for free (§ principle 4): the same voice, three registers. **For Tom:** these are all free and GitHub-Pages-friendly, and any of them can be substituted — the system depends on the *roles* (a signage display, a UI sans, a document serif, a data mono), not the specific families.
 
@@ -414,7 +414,7 @@ The screen's whole reason to exist is making tens of minutes tolerable and trust
   | `type` | Renders as | `detail` / `ref` example |
   | --- | --- | --- |
   | `stage_started` | node → active, log line | "Threshold assessment started" |
-  | `retrieval` | ephemeral label on node + log line | detail: "reading OAIC PIA guidance"; ref: `{doc, page}` |
+  | `retrieval` | ephemeral label on node + log line | detail: "reading OAIC PIA guidance"; ref: `{doc, locator}` |
   | `drafting` | node sub-activity | "drafting §7.3" |
   | `question_raised` | feeds the pause count | ref: `{specialist, question_id}` |
   | `revision` | edge re-animates, loop counter | "review pass 1 of 2" |
@@ -496,7 +496,7 @@ The default nbconvert theme is replaced with a custom stylesheet delivering:
 
 - **A title block, not a notebook header.** Project title, *DRAFT — for SME review* mark, run code, generation date, and the standing disclaimer (§4.2) — so the document announces what it is before its first section.
 - **The DTA 12-section structure, faithfully numbered.** Sections 1–12 with the tool's own numbering (1–4 threshold, 5–12 full). Numbering here is load-bearing — it maps directly to the instrument an SME already knows — so it is prominent and exact.
-- **Page-cited references as a first-class apparatus.** Every corpus-based claim carries an inline citation (mono: *[ISM, p.112]*) and the document ends with a full reference list. Where feasible, citations link to their entry. Citations are the report's credibility; they are styled to be scannable, never buried.
+- **Pinpoint-cited references as a first-class apparatus.** Every corpus-based claim carries an inline citation (mono: *[ISM, p.112]*, *[Privacy Act 1988, s 6]*) and the document ends with a full reference list. Where feasible, citations link to their entry. Citations are the report's credibility; they are styled to be scannable, never buried.
 - **Specialist diagrams** embedded as pre-rendered SVG (the node/flow grammar, §3.5), captioned and attributed to the specialist who authored them.
 - **The gap / next-steps register** — a clear, actionable section (*"Recommended next steps"*), each gap stating what couldn't be determined and the concrete step the project team should take. Skipped checkpoint questions (§7.3) land here. This reads as *a plan*, not a list of failures.
 - **The unresolved-disagreement block — designed to read as rigour, not failure.** Titled *"Points of unresolved disagreement,"* it presents each unresolved conflict as two well-argued positions the system chose **not** to force into false consensus, with a plain framing line: *"For a governance assessment, honest disagreement is more credible than manufactured agreement. These points are flagged for human judgement."* Visually it is calm and confident — a bordered panel in neutral tones, not an error box. This block is a highlight of the product's integrity and should be styled to be found, not skimmed past.

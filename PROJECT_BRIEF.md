@@ -10,7 +10,7 @@
 
 Windtunnel takes a public servant's loose idea for an AI solution and carries it through two phases. The **Brainstorm phase** is an interactive co-design session that sharpens the idea into a structured project outline, optionally accompanied by an HTML proof-of-concept and an information-flow map — "a lens coming into focus." The **Governance phase** then subjects those artefacts to a rigorous, multi-agent assessment built directly on the Australian Government's *AI impact assessment tool* (DTA, v1.0), producing a substantially complete draft impact assessment as a Jupyter notebook (source of record) and a rendered HTML report (the thing you actually hand to subject matter experts).
 
-The name is a placeholder Tom can replace; the metaphor — test the design under load before you build the aircraft — is the point. The Governance phase is the heart of the project and where quality effort should concentrate: the arguments made by the specialist agents must be thoughtful, evidenced, cited to page level, and able to withstand scrutiny from real human experts.
+The name is a placeholder Tom can replace; the metaphor — test the design under load before you build the aircraft — is the point. The Governance phase is the heart of the project and where quality effort should concentrate: the arguments made by the specialist agents must be thoughtful, evidenced, pinpoint-cited to their sources (page, provision or row level), and able to withstand scrutiny from real human experts.
 
 **Context:** Built as an entry in a competition for Australian public servants. It is a demonstration system, but it must behave like a serious one. No real login-gated user base is expected in v1.
 
@@ -109,7 +109,7 @@ Six specialist agents, each with its own discrete SQLite knowledge base and clea
 
 Section 12.3/12.4 are assembled by code plus the reviewer; 12.5 (internal governance body review) is emitted as a flagged human action, since no agent can perform it.
 
-Each specialist works from: the brainstorm artefacts, the completed threshold assessment, retrieval over its own KB, and the tool's question text plus the corresponding guidance section. Specialists have broad creative freedom — subheadings, Mermaid diagrams, worked examples — provided every claim resting on the corpus **cites document and page number**. Where information is missing from the scoping material, the specialist does not silently guess: it states the gap, recommends the concrete step the project team should take, and flags it in a machine-readable way so gaps aggregate into a "Recommended next steps" register in the final notebook.
+Each specialist works from: the brainstorm artefacts, the completed threshold assessment, retrieval over its own KB, and the tool's question text plus the corresponding guidance section. Specialists have broad creative freedom — subheadings, Mermaid diagrams, worked examples — provided every claim resting on the corpus **cites document and pinpoint locator** (true page for PDFs; provision, heading or sheet/row anchor otherwise — tech spec §8.2). Where information is missing from the scoping material, the specialist does not silently guess: it states the gap, recommends the concrete step the project team should take, and flags it in a machine-readable way so gaps aggregate into a "Recommended next steps" register in the final notebook.
 
 ### 5.4 The question checkpoint (single pause)
 
@@ -153,8 +153,8 @@ Recorded here so the tech spec elaborates rather than re-decides.
 | Interactive backend | Python FastAPI on Render free tier | Runs the Brainstorm phase (live Gemini calls), issues run codes, triggers Governance runs via `workflow_dispatch`, proxies run status. Render free tier sleeps when idle — UI must set the ~60s cold-start expectation gracefully |
 | Governance pipeline | Python, GitHub Actions in the repo | Free unlimited minutes on public-repo standard runners; commits state back with the built-in Actions token |
 | Persistence | Git commits to the repo (`runs/<run-id>/`) | Render's disk is ephemeral; the repo is the durable store and doubles as the public audit trail |
-| Specialist KBs | One SQLite file per specialist | Page-anchored chunks; embeddings stored as blobs (no dedicated vector store); brute-force cosine + BM25 hybrid retrieval, optional cross-encoder rerank; YAKE keywords per chunk. All embedding compute (ingestion and query-time) happens inside Actions runners, never on Render — Render's free tier lacks the memory for embedding models |
-| Ingestion | GitHub Action, manually or push-triggered | Tom uploads corpus documents to per-specialist folders; the Action extracts (page-aware for PDFs), chunks, embeds with a local sentence-transformers model, indexes, and writes each KB with a manifest recording document metadata, version and a licence/redistributability flag. The flag is a hard gate: ingestion refuses any document not cleared for public redistribution, since the repo is public |
+| Specialist KBs | One SQLite file per specialist | Structure-anchored chunks with typed locators (page / provision / sheet-row); a committed LLM-readable index per KB plus FTS5 BM25 search — specialists navigate the index and fetch chunks through a bounded tool loop; no dense-embedding stack (tech spec §8, revised after corpus review). All ingestion compute happens inside Actions runners, never on Render |
+| Ingestion | GitHub Action, manually or push-triggered | Tom uploads corpus documents to per-specialist folders; the Action extracts structure-aware (true pages for PDFs, style trees for docx, normalized sheets for xlsx), chunks along document structure, builds the index and FTS search, and writes each KB with a manifest recording document metadata, version and a licence/redistributability flag. The flag is a hard gate: ingestion refuses any document not cleared for public redistribution, since the repo is public |
 | LLM provider | Gemini (Tom's pre-paid tokens) | Key in Render env + Actions secrets. Exponential backoff on rate limits; per-run token/cost logging into the provenance record |
 
 **Model allocation (single config file, adjustable):** Flash-Lite — brainstorm interviewer turns and sufficiency checks; Flash — outline synthesis, PoC and map generation, the two threshold generalists, the six specialists; Pro — threshold reconciler, adjudicating reviewer, solution architect. Rationale: Flash-Lite is fine where the artefact is conversational or rubric-checked; risk reasoning and cited argumentation warrant Flash; synthesis-and-judgement roles warrant Pro. If quality testing shows specialists need Pro, the config flip is one line — budget for that possibility.
@@ -165,7 +165,7 @@ Recorded here so the tech spec elaborates rather than re-decides.
 
 | Stage | Scope | Exit test |
 | --- | --- | --- |
-| 0 — Foundations | Single-repo scaffold (§3), run-state model + run codes, ingestion pipeline, one populated specialist KB end-to-end | Retrieval query returns page-cited chunks from a real corpus doc |
+| 0 — Foundations | Single-repo scaffold (§3), run-state model + run codes, ingestion pipeline, one populated specialist KB end-to-end | A fetch/search returns pinpoint-cited chunks from a real corpus doc |
 | 1 — Brainstorm | Interview + live outline canvas, sufficiency gate, PoC + feasibility gate, flow map, amendment propagation, submission gate | A stranger takes a loose idea to a submitted outline (+PoC) unaided |
 | 2 — Threshold | Generalists, reconciler, deterministic rating engine, review/revise UI, markdown export | Threshold output for a known test case matches a hand-worked assessment's ratings exactly |
 | 3 — Full assessment | Specialist college, question checkpoint, architect appendix, reviewer loop, notebook + HTML assembly | An SME reads the HTML report cold and can follow every claim to a cited source |
@@ -183,7 +183,7 @@ The Governance phase (stages 2–3) is the priority; if timeboxing forces cuts, 
 
 **Corpus licensing.** With a single public repo, every corpus document is republished twice over — as source and as chunked text inside the KBs — so only genuinely redistributable material can be ingested (Commonwealth CC-BY material and OWASP are fine; verify anything else before adding it). The ingestion manifest's licence flag enforces this as a hard gate.
 
-**Citation integrity.** Page-level citations are only as good as the extraction. Ingestion must store true source page numbers with each chunk, and stage-3 exit testing must include manual spot-checks of citations against source PDFs.
+**Citation integrity.** Pinpoint citations are only as good as the extraction. Ingestion must store a true source locator with each chunk (real page numbers for PDFs; provision, heading or sheet/row anchors for formats without fixed pages), and stage-3 exit testing must include manual spot-checks of citations against source documents.
 
 **Reviewer authority.** "Amend the less-correct specialist" requires the reviewer to justify its ruling in writing; those rulings are preserved in provenance so a human can audit the audit.
 

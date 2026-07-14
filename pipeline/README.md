@@ -13,7 +13,7 @@ the built-in Actions token after every stage.
 | `run.py` | entrypoint: load `run.json`, route to current stage |
 | `stages/` | one module per state (§5) |
 | `agents/` | agent runners (prompt + model call + output parse) |
-| `retrieval/` | KB query: BM25 + cosine + optional rerank (§8) |
+| `retrieval/` | KB access: index + `fetch` + FTS5 BM25 `search` tools (§8) |
 | `rating/` | **deterministic rating engine (§10) — importable, no LLM, unit-tested** |
 | `reviewer/` | coverage + coherence protocol (§11) |
 | `assembly/` | nbformat notebook + nbconvert HTML (§12) |
