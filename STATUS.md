@@ -285,11 +285,14 @@ source and Table 1/Table 2 landed July 2026 (see Done) and are no longer here:
 - **~~`.meta.yml` sidecars with verified licences~~ — DONE (July 2026), and the
   follow-on allow-list config is now RESOLVED** (`config/licences.yml`). Nothing
   from this item blocks anymore.
-- **Exact Gemini model identifiers** in `config/models.yml` — the one remaining
-  hard blocker. Blocks the first real LLM call (interviewer, generalists,
-  specialists, reconciler, architect, reviewer). Everything built so far is
-  LLM-free and unblocked: the rating engine, the instrument encoding, and the
-  whole ingestion/retrieval path run and are tested without any model call.
+- **~~Exact Gemini model identifiers~~ in `config/models.yml` — DONE (July 2026).**
+  Tom pinned the tier ids: lite → `gemini-3.1-flash-lite`, flash →
+  `gemini-3.5-flash`, pro → `gemini-3.1-pro-preview`. The `GEMINI_API_KEY` secret
+  is also set in the repo (backend + Actions). **No hard blockers remain** — the
+  first real LLM call (interviewer, generalists, specialists, reconciler,
+  architect, reviewer) is unblocked. Everything built so far is LLM-free and was
+  already unblocked: the rating engine, the instrument encoding, and the whole
+  ingestion/retrieval path.
 
 ## Deploy-layer reminders (pinned in CLAUDE.md §9, not yet actioned)
 
