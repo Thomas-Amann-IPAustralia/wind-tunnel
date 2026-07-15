@@ -33,3 +33,9 @@ prompts:
     model_role: architect              # resolves via config/models.yml (Pro)
                                         # writes the Implementation Plan appendix after
                                         # every specialist is final (§5.1 ARCHITECT)
+  reviewer:
+    file: reviewer.v1.md
+    model_role: reviewer               # resolves via config/models.yml (Pro)
+                                        # audits coverage + coherence, issues amend
+                                        # directives, judges residual 12.3/12.4 (§5.1
+                                        # REVIEW, §11); the engine computes the ratings

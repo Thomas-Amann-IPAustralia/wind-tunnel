@@ -22,8 +22,9 @@ a terminal state, or a failure (§5.3). Four invariants live here:
 The driver routes the threshold path end-to-end to ``THRESHOLD_REVIEW``, and the
 full path through ``FULL_DRAFTING`` to whichever comes next: the ``FULL_CHECKPOINT``
 user pause if a specialist raised a question, or ``ARCHITECT`` otherwise. ``ARCHITECT``
-then writes the implementation-plan appendix and advances to ``REVIEW``. Stages from
-``REVIEW`` onward are not built yet and raise ``StageNotImplemented``.
+writes the implementation-plan appendix, then ``REVIEW`` runs the bounded reviewer loop
+(coverage + coherence + residual, §11) and advances to ``ASSEMBLY``. Stages from
+``ASSEMBLY`` onward are not built yet and raise ``StageNotImplemented``.
 """
 
 from __future__ import annotations
@@ -42,9 +43,12 @@ from stages.full import (
     ARCHITECT_MD_RELPATH,
     ARCHITECT_NODE,
     QUESTIONS_RELPATH,
+    RESIDUAL_RELPATH,
+    REVIEWER_NODE,
     SPECIALISTS,
     architect,
     full_drafting,
+    review,
 )
 from stages.threshold import (
     NODE_A,
@@ -62,6 +66,7 @@ _HANDLERS: dict[Stage, Callable[[StageContext], None]] = {
     Stage.THRESHOLD_RECONCILING: threshold_reconciling,
     Stage.FULL_DRAFTING: full_drafting,
     Stage.ARCHITECT: architect,
+    Stage.REVIEW: review,
 }
 
 # Stage → the next stage on success. FULL_DRAFTING is conditional (see
@@ -72,6 +77,7 @@ _NEXT: dict[Stage, Stage] = {
     Stage.THRESHOLD_RECONCILING: Stage.THRESHOLD_REVIEW,
     Stage.FULL_DRAFTING: Stage.FULL_CHECKPOINT,
     Stage.ARCHITECT: Stage.REVIEW,
+    Stage.REVIEW: Stage.ASSEMBLY,
 }
 
 
@@ -96,6 +102,7 @@ _CHECKPOINT_OUTPUTS: dict[Stage, tuple[str, ...]] = {
     ),
     Stage.FULL_DRAFTING: tuple(f"full/specialists/{s}.json" for s in SPECIALISTS),
     Stage.ARCHITECT: (ARCHITECT_MD_RELPATH,),
+    Stage.REVIEW: (RESIDUAL_RELPATH,),
 }
 
 # Stage → a representative node for a failure with no single active node (§5.6).
@@ -104,6 +111,7 @@ _STAGE_FAIL_NODE: dict[Stage, str] = {
     Stage.THRESHOLD_RECONCILING: NODE_RECONCILER,
     Stage.FULL_DRAFTING: f"full.specialist.{SPECIALISTS[0]}",
     Stage.ARCHITECT: ARCHITECT_NODE,
+    Stage.REVIEW: REVIEWER_NODE,
 }
 
 # Human phrase per stage for the calm failure message (§5.6, design §7.2.4).
@@ -112,6 +120,7 @@ _STAGE_PHRASE: dict[Stage, str] = {
     Stage.THRESHOLD_RECONCILING: "reconciling the threshold assessment",
     Stage.FULL_DRAFTING: "drafting the full assessment specialist sections",
     Stage.ARCHITECT: "writing the implementation-plan appendix",
+    Stage.REVIEW: "reviewing the full assessment",
 }
 
 

@@ -132,6 +132,46 @@ def response_type_of(section_id: str) -> str:
     return entry["response_type"]
 
 
+def full_assessment_ownership() -> dict[str, str]:
+    """The section→owner map for §5–12 (§6.2, §9.3). Owners are a drafting specialist
+    id, ``reviewer`` (12.3/12.4 residual), or ``human_action`` (12.5). The one place
+    the reviewer's coverage checklist and directive validation read ownership from."""
+    return dict(_sections()["full_assessment_ownership"])
+
+
+def full_subsection_ids() -> tuple[str, ...]:
+    """Every full-assessment (§5–12) subsection id, ascending — the coverage
+    inventory the reviewer walks (§11.1)."""
+    return tuple(sorted(_full_question_index().keys(), key=_section_sort_key))
+
+
+def full_subsection_title(section_id: str) -> str:
+    """The human title of a full-assessment subsection (for coverage rendering)."""
+    entry = _full_question_index().get(section_id)
+    if entry is None:
+        raise PromptError(f"No question entry for full-assessment section {section_id!r}.")
+    return entry["title"]
+
+
+def reviewer_scope_context() -> str:
+    """The valid directive targets the reviewer is shown (§11.3): each drafting
+    specialist and the exact sections it owns. A directive may only name a
+    (specialist, section) pair listed here — stated in the prompt so the reviewer
+    rules within scope rather than guessing at ownership."""
+    lines = [
+        "# Directive scope — who owns what\n",
+        "An `amend_directive` may only name a section its specialist owns. These are "
+        "the only valid `(target_specialist, target_section)` pairs:\n",
+    ]
+    for specialist in specialists():
+        owned = specialist_owned_sections(specialist)
+        titled = ", ".join(f"{sid} {full_subsection_title(sid)}" for sid in owned)
+        lines.append(
+            f"- **full.specialist.{specialist}** ({specialist_friendly_name(specialist)}): {titled}"
+        )
+    return "\n".join(lines)
+
+
 def specialist_instrument_context(specialist_id: str) -> str:
     """The DTA question text for one specialist's owned sections (§9.3) — the
     tool's own wording, not a paraphrase, grouped by containing section."""

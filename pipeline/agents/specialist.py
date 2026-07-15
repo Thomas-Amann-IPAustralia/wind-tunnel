@@ -71,6 +71,23 @@ class SpecialistDraft:
             "provenance": {"model": self.model, "prompt_version": self.prompt_version},
         }
 
+    @classmethod
+    def from_dict(cls, data: dict) -> "SpecialistDraft":
+        """Rehydrate a committed ``full/specialists/<id>.json`` — the prior draft a
+        reviewer-directed amendment (§11.3) is merged over."""
+        questions = data.get("questions") or {}
+        prov = data.get("provenance") or {}
+        return cls(
+            specialist=data["specialist"],
+            sections=dict(data.get("sections") or {}),
+            citations={k: list(v) for k, v in (data.get("citations") or {}).items()},
+            questions_why=str(questions.get("why", "")),
+            questions=list(questions.get("items") or []),
+            gaps=list(data.get("gaps") or []),
+            model=str(prov.get("model", "")),
+            prompt_version=str(prov.get("prompt_version", "")),
+        )
+
 
 @lru_cache(maxsize=1)
 def _retrieval_config() -> dict:
@@ -104,34 +121,145 @@ def run_specialist(
 
     ``status``/``node_id`` are optional so this stays testable without a status
     model; when given, every fetch/search emits a `retrieval` event (§6.3)."""
-    cfg = _retrieval_config()
-    max_rounds = max_rounds if max_rounds is not None else cfg["fetch"]["max_rounds"]
-    search_top_k = search_top_k if search_top_k is not None else cfg["search"]["top_k"]
-    seed_top_k = seed_top_k if seed_top_k is not None else cfg["search"]["seed_top_k"]
-    max_total_tokens = (
-        max_total_tokens if max_total_tokens is not None else cfg["fetch"]["max_total_tokens"]
-    )
-
+    params = _resolve_params(max_rounds, search_top_k, seed_top_k, max_total_tokens)
     prompt = load_prompt("specialist")
     owned = specialist_owned_sections(specialist_id)
     context = specialist_instrument_context(specialist_id)
 
+    def build_user(history: list[str], round_no: int, max_rounds: int, final: bool) -> str:
+        return _build_user(
+            context,
+            index_text,
+            outline_md,
+            threshold_md,
+            history,
+            round_no,
+            max_rounds,
+            final=final,
+        )
+
+    return _drive_retrieval(
+        client,
+        prompt,
+        specialist_id,
+        kb,
+        specialist_seed_terms(specialist_id),
+        build_user,
+        lambda data, resp: _parse_draft(data, specialist_id, owned, resp, prompt),
+        params,
+        status,
+        node_id,
+    )
+
+
+def run_specialist_amendment(
+    client: LLMClient,
+    specialist_id: str,
+    prior_draft: SpecialistDraft,
+    target_sections: tuple[str, ...],
+    directive_context: str,
+    seed_terms: str,
+    outline_md: str,
+    threshold_md: str,
+    kb: KB,
+    index_text: str,
+    *,
+    status: object | None = None,
+    node_id: str | None = None,
+    max_rounds: int | None = None,
+    search_top_k: int | None = None,
+    seed_top_k: int | None = None,
+    max_total_tokens: int | None = None,
+) -> SpecialistDraft:
+    """Amend a subset of a specialist's own sections in light of a reviewer directive
+    (§11.3, and the §5.8 revision path). The amendment may touch **only** the directed
+    sections (a subset of the specialist's owned sections) — its output is scoped to
+    ``target_sections`` and merged over ``prior_draft``, so a directive cannot reach any
+    section the reviewer did not name. No new checkpoint questions are raised in an
+    amendment; anything the specialist cannot determine becomes a gap (§5.8)."""
+    unknown = set(target_sections) - set(specialist_owned_sections(specialist_id))
+    if unknown:
+        raise AgentError(
+            f"{specialist_id}: amendment directed at non-owned sections {sorted(unknown)} "
+            "(§9.3 structural write-scope)."
+        )
+    params = _resolve_params(max_rounds, search_top_k, seed_top_k, max_total_tokens)
+    prompt = load_prompt("specialist")
+    context = specialist_instrument_context(specialist_id)
+    targets = tuple(target_sections)
+
+    def build_user(history: list[str], round_no: int, max_rounds: int, final: bool) -> str:
+        return _build_amendment_user(
+            context,
+            index_text,
+            outline_md,
+            threshold_md,
+            prior_draft,
+            targets,
+            directive_context,
+            history,
+            round_no,
+            max_rounds,
+            final=final,
+        )
+
+    def parse(data: dict, resp) -> SpecialistDraft:
+        partial = _parse_amendment(data, specialist_id, targets)
+        return _merge_amendment(
+            prior_draft, partial, targets, model=resp.model, prompt_version=prompt.version
+        )
+
+    return _drive_retrieval(
+        client, prompt, specialist_id, kb, seed_terms, build_user, parse, params, status, node_id
+    )
+
+
+def _resolve_params(
+    max_rounds: int | None,
+    search_top_k: int | None,
+    seed_top_k: int | None,
+    max_total_tokens: int | None,
+) -> tuple[int, int, int, int]:
+    cfg = _retrieval_config()
+    return (
+        max_rounds if max_rounds is not None else cfg["fetch"]["max_rounds"],
+        search_top_k if search_top_k is not None else cfg["search"]["top_k"],
+        seed_top_k if seed_top_k is not None else cfg["search"]["seed_top_k"],
+        max_total_tokens if max_total_tokens is not None else cfg["fetch"]["max_total_tokens"],
+    )
+
+
+def _drive_retrieval(
+    client: LLMClient,
+    prompt,
+    specialist_id: str,
+    kb: KB,
+    seed_terms: str,
+    build_user,
+    parse,
+    params: tuple[int, int, int, int],
+    status: object | None,
+    node_id: str | None,
+):
+    """The bounded fetch/search/draft loop shared by drafting and amendment (§8.1).
+    ``build_user`` renders each turn's prompt; ``parse`` turns the final ``draft`` action
+    into the caller's result. Seeds a pre-fetch search, loops up to ``max_rounds`` (or the
+    fetched-token cap), then forces a final draft from whatever was retrieved."""
+    max_rounds, search_top_k, seed_top_k, max_total_tokens = params
     history: list[str] = []
     fetched_tokens = 0
-    seed = kb.search(specialist_seed_terms(specialist_id), k=seed_top_k)
+    seed = kb.search(seed_terms, k=seed_top_k) if seed_terms.strip() else []
     if seed:
         _narrate(status, node_id, seed)
         history.append(_render_chunks("Seed context (pre-fetched)", seed))
         fetched_tokens += sum(estimate_tokens(c.text) for c in seed)
 
     for round_no in range(1, max_rounds + 1):
-        user = _build_user(
-            context, index_text, outline_md, threshold_md, history, round_no, max_rounds
-        )
+        user = build_user(history, round_no, max_rounds, False)
         data, resp = client.complete_json("specialist", prompt.system, user)
         action = data.get("action")
         if action == "draft":
-            return _parse_draft(data, specialist_id, owned, resp, prompt)
+            return parse(data, resp)
         if action not in ("fetch", "search"):
             raise AgentError(
                 f"{specialist_id}: unknown action {action!r} (expected fetch/search/draft)."
@@ -145,13 +273,11 @@ def run_specialist(
 
     # Forced final round (§8.1: "on cap, the wrapper demands the final draft from
     # what has been fetched") — no more tool calls permitted.
-    user = _build_user(
-        context, index_text, outline_md, threshold_md, history, max_rounds, max_rounds, final=True
-    )
+    user = build_user(history, max_rounds, max_rounds, True)
     data, resp = client.complete_json("specialist", prompt.system, user)
     if data.get("action") != "draft":
         raise AgentError(f"{specialist_id}: did not return a draft on the forced final round.")
-    return _parse_draft(data, specialist_id, owned, resp, prompt)
+    return parse(data, resp)
 
 
 def _run_tool(
@@ -234,6 +360,74 @@ def _build_user(
     return "\n\n".join(parts)
 
 
+def _build_amendment_user(
+    context: str,
+    index_text: str,
+    outline_md: str,
+    threshold_md: str,
+    prior_draft: SpecialistDraft,
+    targets: tuple[str, ...],
+    directive_context: str,
+    history: list[str],
+    round_no: int,
+    max_rounds: int,
+    *,
+    final: bool = False,
+) -> str:
+    """The amendment turn: the reviewer's directive plus the specialist's current draft
+    of the directed sections, scoped to those sections only (§11.3)."""
+    target_list = ", ".join(targets)
+    parts = [
+        context,
+        f"## Your knowledge base index\n\n{index_text}",
+        wrap_untrusted(outline_md, label="## Use-case outline (the concept under assessment)"),
+        wrap_untrusted(
+            threshold_md,
+            label="## Threshold assessment (already completed — sections 1–4 and the "
+            "computed inherent risk ratings)",
+        ),
+        "## Reviewer directive — amend your own sections\n\n"
+        "The adjudicating reviewer has ruled on your assessment. Amend **only** the "
+        f"sections named below ({target_list}); you may not touch any other section.\n\n"
+        + directive_context,
+        "## Your current draft of the sections to amend\n\n" + _render_prior(prior_draft, targets),
+    ]
+    if history:
+        parts.append("## Retrieval so far\n\n" + "\n\n".join(history))
+    if final:
+        parts.append(
+            "## Final round — no more tool calls\n\n"
+            f'Return your final `{{"action": "draft", ...}}` now, with `sections` containing '
+            f"exactly these ids: {target_list}. Use only what you have already fetched or "
+            "searched. If a directed section still cannot be determined, record it in `gaps` "
+            "with a reason rather than inventing detail. Raise no questions."
+        )
+    else:
+        parts.append(
+            f"## This turn (round {round_no} of {max_rounds})\n\n"
+            "Return exactly one JSON object: either a tool call "
+            '(`{"action":"fetch","refs":[...]}` or `{"action":"search","query":"...","k":8}`) '
+            'to ground your amendment, or your final answer (`{"action":"draft","sections":{...},'
+            '"citations":{...},"gaps":[...]}`) covering exactly the directed sections '
+            f"({target_list}). Do not repeat a fetch/search already shown above, and do not "
+            "raise questions in an amendment."
+        )
+    return "\n\n".join(parts)
+
+
+def _render_prior(prior_draft: SpecialistDraft, targets: tuple[str, ...]) -> str:
+    lines: list[str] = []
+    for sid in targets:
+        current = prior_draft.sections.get(sid)
+        if current:
+            lines += [f"### {sid} (current draft)", current]
+        else:
+            gap = next((g for g in prior_draft.gaps if g["section"] == sid), None)
+            reason = gap["reason"] if gap else "not yet drafted"
+            lines += [f"### {sid} (currently a gap)", f"*Gap: {reason}*"]
+    return "\n\n".join(lines)
+
+
 # -- validation (§9.3 structural write-scope, §9.4 citation shape) -------------
 
 
@@ -288,6 +482,81 @@ def _parse_draft(
         gaps=gaps_out,
         model=resp.model,
         prompt_version=prompt.version,
+    )
+
+
+def _parse_amendment(data: dict, specialist_id: str, targets: tuple[str, ...]) -> dict:
+    """Validate an amendment's partial output — scoped to ``targets`` only (§11.3). Same
+    drafted-or-gapped discipline as a fresh draft, but the allowed keys are the directed
+    sections, not the specialist's whole owned set."""
+    sections_in = data.get("sections")
+    if not isinstance(sections_in, dict):
+        raise AgentError(f"{specialist_id}: amendment 'sections' must be an object.")
+    out_of_scope = set(sections_in) - set(targets)
+    if out_of_scope:
+        raise AgentError(
+            f"{specialist_id}: amendment touched non-directed sections {sorted(out_of_scope)} "
+            "— a directive may only change the sections it named (§11.3)."
+        )
+    gaps_out = _require_gaps(data.get("gaps"), specialist_id, targets)
+    gap_ids = {g["section"] for g in gaps_out}
+
+    sections_out: dict[str, str] = {}
+    for sid in targets:
+        value = sections_in.get(sid)
+        has_text = isinstance(value, str) and bool(value.strip())
+        if sid in gap_ids:
+            if has_text:
+                raise AgentError(
+                    f"{specialist_id}: {sid!r} is both amended and flagged as a gap — pick one."
+                )
+            continue
+        if not has_text:
+            raise AgentError(
+                f"{specialist_id}: directed section {sid!r} is neither amended nor flagged "
+                "as a gap (every directed section must be one or the other)."
+            )
+        text = value.strip()
+        if response_type_of(sid) == "yes_no_na" and not text.lower().startswith(_YES_NO_NA):
+            raise AgentError(
+                f"{specialist_id}: {sid!r} is a yes/no/N-A question and must open with "
+                f"'Yes', 'No', or 'Not applicable' — got {text[:40]!r}."
+            )
+        sections_out[sid] = text
+
+    citations_out = _require_citations(data.get("citations"), specialist_id, targets)
+    return {"sections": sections_out, "citations": citations_out, "gaps": gaps_out}
+
+
+def _merge_amendment(
+    prior: SpecialistDraft,
+    partial: dict,
+    targets: tuple[str, ...],
+    *,
+    model: str,
+    prompt_version: str,
+) -> SpecialistDraft:
+    """Merge a scoped amendment over the prior draft: the directed sections are replaced
+    (drafted or newly gapped); every other section, citation and gap is left untouched,
+    so the amendment cannot silently drop a specialist's other work."""
+    targets_set = set(targets)
+    sections = {sid: text for sid, text in prior.sections.items() if sid not in targets_set}
+    citations = {sid: cites for sid, cites in prior.citations.items() if sid not in targets_set}
+    gaps = [g for g in prior.gaps if g["section"] not in targets_set]
+
+    sections.update(partial["sections"])
+    citations.update(partial["citations"])
+    gaps += partial["gaps"]
+
+    return SpecialistDraft(
+        specialist=prior.specialist,
+        sections=sections,
+        citations=citations,
+        questions_why="",
+        questions=[],
+        gaps=gaps,
+        model=model,
+        prompt_version=prompt_version,
     )
 
 
