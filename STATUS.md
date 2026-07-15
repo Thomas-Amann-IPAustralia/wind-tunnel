@@ -3,9 +3,12 @@
 ## Current stage
 
 **Stage 3 — Full assessment** (PROJECT_BRIEF.md §9): **the full governance path runs
-end-to-end to a `COMPLETE` run, the checkpoint-answer branch is wired, and the ≤2
-post-COMPLETE user-revision path (`USER_REVISION`, §5.8) is now built — every governance
-stage exists and is driven.**
+end-to-end to a `COMPLETE` run, the checkpoint-answer branch is wired, the ≤2
+post-COMPLETE user-revision path (`USER_REVISION`, §5.8) is built, and — this branch —
+the Brainstorm interview core (`POST /brainstorm/message` + `/edit-outline`) turns
+`Stage.BRAINSTORM` into something a user actually drives.** Every governance stage exists
+and is driven; the front half (Brainstorm) now has its interview loop, with PoC/flow-map
+still to come.
 `FULL_DRAFTING → ARCHITECT → REVIEW → ASSEMBLY → COMPLETE` drives in one dispatch; when
 a specialist raises a question the run pauses at `FULL_CHECKPOINT`, and a
 `resume_from=FULL_REVISING` dispatch (from the new `POST /api/runs/{id}/answers`) resumes
@@ -65,12 +68,14 @@ or out-of-scope asks), the targeted specialists amend their own sections, one re
 verify pass confirms + re-judges residual (engine recomputes), and ASSEMBLY rebuilds with a
 "Revision N of 2" label after archiving the superseded report. See Done below.
 
-**Not yet built:** the Brainstorm interview (interviewer, sufficiency, PoC/flow-map
-endpoints — note the PoC embed slot in ASSEMBLY (§12.3) is built and dormant, waiting on
-`brainstorm/poc.html`); the frontend entirely; and a first live Gemini run. With
-USER_REVISION done, **every governance stage in the §5.1 state machine is now built and
-driven end-to-end** — what remains is the Brainstorm front half and the SPA. See handoff
-notes for the concrete next steps.
+**Not yet built:** the rest of Brainstorm — PoC / flow-map generation + the feasibility
+gate (the PoC embed slot in ASSEMBLY (§12.3) is built and dormant, waiting on
+`brainstorm/poc.html`) and the non-`full` `/revise` branches; the frontend entirely; and a
+first live Gemini run. With USER_REVISION done **every governance stage in the §5.1 state
+machine is built and driven end-to-end**, and — this branch — the **Brainstorm interview
+core** (`/brainstorm/message` + `/edit-outline`, interviewer + sufficiency + the `Outline`
+model) makes `Stage.BRAINSTORM` user-drivable. What remains is PoC/flow-map and the SPA. See
+handoff notes for the concrete next steps.
 
 **Exit test** ("threshold output for a known test case matches a hand-worked
 assessment's ratings exactly", brief §9): **met for the engine wiring.**
@@ -89,6 +94,44 @@ pipeline.
 
 ## Done
 
+- **Brainstorm interview core — the co-design loop that fills the outline (TECH_SPEC §7,
+  §7.1; PROJECT_BRIEF §4; Stage 1; this branch).** Turns `Stage.BRAINSTORM` from a seeded
+  template into something a user drives. The pieces:
+  - **`backend/outline.py` — the `Outline` document model (§7.1), the single owner of the
+    outline format.** Parses the YAML front-matter + the nine anchored sections, replaces
+    **whole section bodies between anchors** (regeneration at section granularity, never a
+    text patch), maintains `resolved`/`updated_at`/`title`/`summary` in the same write, and
+    computes the `outline_delta` (`{updated, newly_resolved, title_changed}`) the canvas
+    animates. `resolved` is the single deterministic completeness record (no text heuristic);
+    `SECTION_REGISTRY` is the fixed id→heading contract, asserted against the template. Round-
+    trips (`parse(text).render()` reproduces an equivalent document; front-matter re-emitted
+    canonically). `render_initial_outline` (the create-run write) is unchanged.
+  - **`backend/brainstorm/` — the two Flash-Lite agents + the transcript.** `interviewer.py`
+    (`run_interviewer`): one conversational turn — reply + write whatever sections the
+    conversation now supports + set title/summary once known; write-scope is the nine registry
+    ids (a stray id is dropped, not failed — the surface is conversational and re-promptable).
+    `sufficiency.py` (`assess_sufficiency`): the §7.1 rubric — the **deterministic gate** (all
+    nine resolved, computed) plus the **judged checks** (contradictions + happy-path
+    narratability, Flash-Lite), returning `{ready, missing:[{section_id, reason}]}` with
+    unresolved sections first; the judge is skipped when nothing is resolved yet (a pure
+    saving — `ready` is already false). `transcript.py`: the append-only `transcript.jsonl`
+    the stateless backend re-reads each turn. Prompts `interviewer.v1.md` + `sufficiency.v1.md`
+    (registered, Flash-Lite), both untrusted-wrapping the user text (§9.2).
+  - **`backend/app.py` — `POST /brainstorm/message` + `/brainstorm/edit-outline`.** `message`
+    runs the interviewer, applies the section updates, appends both turns to the transcript,
+    runs sufficiency, and commits the outline (when it changed) + transcript as one commit;
+    returns `{assistant_message, outline_md, outline_delta, sufficiency, stage}`. `edit-outline`
+    applies a **per-section patch** (never raw markdown, so a user can't break the anchors/
+    front-matter), re-runs sufficiency, commits. Both are valid only at `BRAINSTORM` (409
+    after submission). `create_app` gained an injectable `make_llm` factory (called once per
+    request → a fresh call budget per turn; tests inject a scripted client).
+  - **30 new tests** (`backend/tests/test_outline.py` (13): parse/render/delta, registry-vs-
+    template, refine-vs-newly-resolved, registry-ordering, unknown-id reject, summary-only
+    commit, round-trip, sanitisation; `test_brainstorm.py` (17): the interviewer parse/filter/
+    require-message, the sufficiency gate + judged-issue + skip-when-empty + ignore-unresolved-
+    judge, and the two endpoints end-to-end — resolve-and-commit, pure-question turn, prior-
+    dialogue-reaches-the-model, empty→400, off-brainstorm→409, edit set/unknown/empty). LLM-
+    free (§15); ruff clean. **63 backend + 184 pipeline tests green.**
 - **`USER_REVISION` + `POST /api/runs/{id}/revise` — the ≤2 post-COMPLETE full-assessment
   revision path (TECH_SPEC §5.1 USER_REVISION, §5.8, §7; Stage 3; this branch).** The last
   governance stage; with it, every §5.1 stage is built. The pieces:
@@ -662,21 +705,22 @@ pipeline.
 
 ## In progress / handoff notes
 
-The whole **governance half** of the pipeline is now complete and driven end-to-end: the
-former handoff steps 1–2 (backend `POST /api/runs` + dispatch + status proxy,
-`governance.yml`), the checkpoint-answer branch (`FULL_REVISING` + `/answers`), and — this
-branch — the post-COMPLETE revision path (`USER_REVISION` + `/revise`). Every stage in the
-§5.1 state machine has a handler. What remains is the **Brainstorm front half** and the
+The whole **governance half** of the pipeline is complete and driven end-to-end, and — this
+branch — the **Brainstorm interview core** is built: the interviewer, the sufficiency judge,
+the `Outline` document model, and `POST /brainstorm/message` + `/edit-outline`. A user can
+now drive `Stage.BRAINSTORM` (converse, watch the outline resolve, see the sufficiency
+banner) up to `/submit`. What remains is the rest of Brainstorm (PoC / flow-map) and the
 **frontend**. Next concrete steps, in rough dependency order:
 
-1. **Brainstorm interview + outline canvas (backend `brainstorm/` + frontend).**
-   `POST /api/runs` currently only *seeds* `brainstorm/outline.md` from the template
-   (`backend/outline.py`) — nothing yet amends it. Needed: the interviewer
-   (Flash-Lite, §7.1), the sufficiency judge, `POST /api/runs/{id}/brainstorm/message`
-   + `.../edit-outline`, the feasibility gate + PoC/flow-map generation
-   (`POST .../poc`, `.../flow-map`), and `POST .../revise` for the ≤2-per-artefact
-   brainstorm revisions (brief §7). This is what turns `Stage.BRAINSTORM` into
-   something a user actually drives, ahead of hitting `/submit`.
+1. **PoC / flow-map generation (the rest of `brainstorm/`).** `POST /api/runs/{id}/poc`
+   (feasibility gate first — `feasibility_gate`, Flash-Lite, reads `ux_ui` + `happy_path`,
+   §7; writes `brainstorm/feasibility.json`; if not feasible, produce the map instead and
+   return `{produced, reason}`), `POST .../flow-map` (Flash `map_gen` → Mermaid; the SPA
+   renders the SVG client-side and posts it back to commit, per CLAUDE.md §9 — so this one
+   is co-designed with the frontend), and extending `POST .../revise` to the brainstorm
+   artefacts (`outline`/`poc`/`flow_map` — outline revisions re-run the interviewer with a
+   revision framing; the ≤2 cap + `record_revision` already exist). The PoC embed slot in
+   ASSEMBLY (§12.3) is built and dormant, waiting on `brainstorm/poc.html`.
 2. **Frontend, entirely.** `frontend/` is still just a `README.md` + `.gitkeep`. Needed
    before *any* of the above is usable end-to-end by a person: the ghosted-canvas
    Brainstorm UI (design §6), the transparency animation driven by `status.json`
@@ -768,6 +812,30 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **A canvas edit (`/brainstorm/edit-outline`) is a per-section patch, not raw markdown
+  (this branch, `backend/app.py::EditOutlineBody`).** §7 says the endpoint "accepts a patch
+  to outline.md"; the shape is left open. Chosen: `{sections:{id:body}, title?, summary?}`,
+  applied through the same `Outline.apply_updates` the interviewer uses. This keeps the
+  outline the single source of truth and makes it structurally impossible for a user edit to
+  break the section anchors or front-matter (a raw-markdown PUT could). To *un-resolve* a
+  section is out of scope (an empty body is ignored, never clears a section).
+- **A stray section id from the interviewer is dropped, not failed (this branch,
+  `brainstorm/interviewer.py`).** The governance agents reject out-of-scope keys loudly
+  (§9.3) because a bad key there corrupts an integrity artefact. The Brainstorm surface is
+  conversational and fully user-revisable, so a hallucinated id costs a re-prompt, not a
+  lost run — the interviewer filters unknown ids and keeps the turn alive; the one hard
+  requirement is a non-empty `assistant_message`.
+- **The sufficiency judge (Flash-Lite) is skipped when no section is resolved yet (this
+  branch, `brainstorm/sufficiency.py`).** The deterministic gate already makes `ready` false
+  while any section is unresolved, and there is nothing for the judge to contradict, so the
+  call is a pure saving with an identical result. It runs from the first resolved section on,
+  so contradictions surface during refinement, not only at the end.
+- **The outline front-matter is canonicalised on the first amendment (this branch,
+  `backend/outline.py::Outline.render`).** `render_initial_outline` keeps the template's
+  inline guidance comments verbatim (§7.1 "copies it verbatim"); the first interviewer/canvas
+  write re-emits the front-matter in canonical key order (via `json.dumps`, valid YAML) and
+  drops those comments. The file is backend-owned machine state after creation, so this is a
+  one-time cosmetic normalisation, not a contract change — the keys and values round-trip.
 - **The superseded report is archived at the USER_REVISION boundary, not inside ASSEMBLY
   (this branch, `stages/full.py::user_revision` → `stages/assembly.py::archive_superseded`).**
   §5.8's prose reads "advances to ASSEMBLY, which first archives the outgoing

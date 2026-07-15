@@ -17,6 +17,16 @@
 # feasibility_gate, outline_synth, poc_gen, map_gen, reviewer.
 
 prompts:
+  interviewer:
+    file: interviewer.v1.md
+    model_role: interviewer            # resolves via config/models.yml (Flash-Lite)
+                                        # one co-design Brainstorm turn: reply + write
+                                        # resolved outline sections (§7, §7.1)
+  sufficiency:
+    file: sufficiency.v1.md
+    model_role: sufficiency            # resolves via config/models.yml (Flash-Lite)
+                                        # the judged half of the sufficiency rubric —
+                                        # contradictions + happy-path narratability (§7.1)
   threshold_generalist:
     file: threshold_generalist.v1.md
     model_role: threshold_generalist   # resolves via config/models.yml (Flash)

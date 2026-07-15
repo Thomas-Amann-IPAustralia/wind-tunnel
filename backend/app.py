@@ -1,14 +1,14 @@
 """FastAPI endpoints (TECH_SPEC §7) — the slice this build covers.
 
-Run creation, the status proxy, the artefact download proxy, submission into
-Governance, threshold routing, checkpoint answers (``/answers`` →
-``FULL_REVISING``), full-assessment revision (``/revise {artefact:"full"}`` →
-``USER_REVISION``), and resume-by-code. **Not** in this slice: the Brainstorm
-interview endpoints (``/brainstorm/message``, ``/edit-outline``, ``/poc``,
-``/flow-map``) and the non-``full`` branches of ``/revise`` (outline/poc/flow_map
-regenerate from the amended outline; ``threshold`` revises at ``THRESHOLD_REVIEW``) —
-those belong to the interviewer/PoC build (STATUS.md "Brainstorm interview + outline
-canvas"), which this backend does not implement yet.
+Run creation, the Brainstorm interview (``/brainstorm/message`` →
+interviewer + sufficiency; ``/brainstorm/edit-outline`` → canvas edit), the status
+proxy, the artefact download proxy, submission into Governance, threshold routing,
+checkpoint answers (``/answers`` → ``FULL_REVISING``), full-assessment revision
+(``/revise {artefact:"full"}`` → ``USER_REVISION``), and resume-by-code. **Not** in
+this slice: the PoC / flow-map endpoints (``/poc``, ``/flow-map`` — feasibility gate +
+Mermaid, the rest of the ``brainstorm/`` run directory) and the non-``full`` branches
+of ``/revise`` (outline/poc/flow_map regenerate from the amended outline; ``threshold``
+revises at ``THRESHOLD_REVIEW``) — a following slice (STATUS.md).
 
 **Statelessness (§14).** Render's disk is ephemeral and a cold instance has no
 memory of any run, so every endpoint re-reads ``run.json``/``status.json``
@@ -28,7 +28,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
-from typing import Literal
+from typing import Callable, Literal
 
 _PIPELINE_DIR = Path(__file__).resolve().parent.parent / "pipeline"
 if str(_PIPELINE_DIR) not in sys.path:
@@ -41,12 +41,15 @@ from fastapi import Depends, FastAPI, Header, HTTPException  # noqa: E402
 from fastapi import status as http_status  # noqa: E402
 from fastapi.middleware.cors import CORSMiddleware  # noqa: E402
 from fastapi.responses import Response  # noqa: E402
+from llm import GeminiTransport, LLMClient, LLMError  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
 
+from brainstorm import Transcript, assess_sufficiency, run_interviewer  # noqa: E402
+from brainstorm.interviewer import BrainstormError  # noqa: E402
 from config import Settings, load_settings  # noqa: E402
 from dispatch import Dispatcher, DispatchError, WorkflowDispatcher  # noqa: E402
 from github_io import GitHubClient, GitHubError, RestGitHubClient  # noqa: E402
-from outline import render_initial_outline  # noqa: E402
+from outline import Outline, OutlineError, render_initial_outline  # noqa: E402
 
 # name -> path within runs/<id>/, and its download media type (§7 artefact proxy;
 # "name is allow-listed; arbitrary repo paths are refused").
@@ -79,14 +82,29 @@ class ReviseBody(BaseModel):
     instructions: str
 
 
+class MessageBody(BaseModel):
+    message: str
+
+
+class EditOutlineBody(BaseModel):
+    # A canvas edit is a per-section patch (§7.1 "replaces whole section bodies between
+    # anchors"), never raw markdown — so a user can never break the anchors or front-matter.
+    sections: dict[str, str] = {}
+    title: str | None = None
+    summary: str | None = None
+
+
 def create_app(
     *,
     github: GitHubClient | None = None,
     dispatcher: Dispatcher | None = None,
     settings: Settings | None = None,
+    make_llm: Callable[[], LLMClient] | None = None,
 ) -> FastAPI:
     """The FastAPI app factory. Real clients are constructed only when no fake
-    is injected, so tests never touch the network (TECH_SPEC §15)."""
+    is injected, so tests never touch the network (TECH_SPEC §15). ``make_llm`` is a
+    factory called once per Brainstorm request so each interview turn gets a fresh call
+    budget (§13); tests inject one that returns a scripted client."""
     settings = settings or load_settings()
     github = github or RestGitHubClient(
         owner=settings.github_owner, repo=settings.github_repo, branch=settings.github_branch
@@ -94,6 +112,7 @@ def create_app(
     dispatcher = dispatcher or WorkflowDispatcher(
         owner=settings.github_owner, repo=settings.github_repo
     )
+    make_llm = make_llm or (lambda: LLMClient(transport=GeminiTransport()))
 
     app = FastAPI(title="Windtunnel backend")
     app.add_middleware(
@@ -132,6 +151,24 @@ def create_app(
         data = json.loads(result.content)
         events = [status_module.Event.from_dict(e) for e in data.get("log", [])]
         return status_module.rebuild(run, events)
+
+    def _load_outline(run_id: str) -> Outline:
+        result = github.get_file(_run_path(run_id, "brainstorm", "outline.md"))
+        if result.status == "missing":
+            # The outline is written at run creation (§7.1); its absence is a corrupt run,
+            # not a normal 404 the client can act on.
+            raise HTTPException(
+                http_status.HTTP_500_INTERNAL_SERVER_ERROR,
+                f"Run {run_id} has no brainstorm/outline.md on record.",
+            )
+        try:
+            return Outline.parse(result.content.decode("utf-8"))
+        except OutlineError as exc:
+            raise HTTPException(http_status.HTTP_500_INTERNAL_SERVER_ERROR, str(exc)) from exc
+
+    def _get_bytes_optional(run_id: str, *parts: str) -> bytes | None:
+        result = github.get_file(_run_path(run_id, *parts))
+        return result.content if result.status == "ok" else None
 
     def _commit_run_and_status(
         run_id: str, run: statefile.RunState, st: status_module.StatusModel, message: str
@@ -191,6 +228,105 @@ def create_app(
         except GitHubError as exc:
             raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
         return {"run_id": run_id, "run_code": run_id}
+
+    def _require_brainstorm(run_id: str) -> statefile.RunState:
+        """The Brainstorm endpoints are valid only before submission — once a run leaves
+        ``BRAINSTORM`` the outline is frozen and later changes go through the revision paths
+        (§5.8, §7). Returns the loaded run or raises 409/404."""
+        run = _load_run(run_id)
+        if run.stage is not statefile.Stage.BRAINSTORM:
+            raise HTTPException(
+                http_status.HTTP_409_CONFLICT,
+                f"Run {run_id} has left Brainstorm (currently {run.stage}); the outline is "
+                "no longer editable here.",
+            )
+        return run
+
+    def _brainstorm_response(run_id: str, outline: Outline, client: LLMClient) -> dict:
+        """The shared tail of both Brainstorm endpoints: render the outline and run the
+        sufficiency check (§7.1) for the banner. Never raises for a healthy outline."""
+        outline_md = outline.render()
+        try:
+            sufficiency = assess_sufficiency(outline, outline_md, client)
+        except LLMError as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+        return {"outline_md": outline_md, "sufficiency": sufficiency, "stage": "BRAINSTORM"}
+
+    @app.post("/api/runs/{run_id}/brainstorm/message")
+    def brainstorm_message(body: MessageBody, run_id: str = Depends(_valid_run_id)) -> dict:
+        """One interview turn (§7, §7.1): runs the interviewer, writes any resolved outline
+        sections, appends both messages to the transcript, runs the sufficiency check, and
+        commits the outline (when it changed) + transcript as one commit. Returns
+        ``{assistant_message, outline_md, outline_delta, sufficiency, stage}``."""
+        message = body.message.strip()
+        if not message:
+            raise HTTPException(http_status.HTTP_400_BAD_REQUEST, "Message must not be empty.")
+        _require_brainstorm(run_id)
+        outline = _load_outline(run_id)
+        transcript = Transcript.parse(_get_bytes_optional(run_id, "brainstorm", "transcript.jsonl"))
+        dialogue = transcript.as_dialogue()  # the conversation *before* this turn
+
+        now = statefile.utc_now_iso()
+        client = make_llm()
+        try:
+            result = run_interviewer(
+                client, outline_md=outline.render(), dialogue=dialogue, user_message=message
+            )
+        except (LLMError, BrainstormError) as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+
+        update = outline.apply_updates(
+            result.section_updates, title=result.title, summary=result.summary, now=now
+        )
+        transcript.append("user", message, now)
+        transcript.append("assistant", result.assistant_message, now)
+
+        files = {_run_path(run_id, "brainstorm", "transcript.jsonl"): transcript.render()}
+        if update.changed:
+            files[_run_path(run_id, "brainstorm", "outline.md")] = outline.render().encode("utf-8")
+        try:
+            github.commit_files(files, f"run {run_id}: brainstorm turn")
+        except GitHubError as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+
+        return {
+            "assistant_message": result.assistant_message,
+            "outline_delta": update.delta,
+            **_brainstorm_response(run_id, outline, client),
+        }
+
+    @app.post("/api/runs/{run_id}/brainstorm/edit-outline")
+    def brainstorm_edit_outline(
+        body: EditOutlineBody, run_id: str = Depends(_valid_run_id)
+    ) -> dict:
+        """A user canvas edit (§7, §7.1): applies a per-section patch (plus optional
+        title/summary) to the outline — the outline stays the single source of truth (brief
+        §4). Returns ``{outline_md, outline_delta, sufficiency, stage}``."""
+        if not body.sections and body.title is None and body.summary is None:
+            raise HTTPException(http_status.HTTP_400_BAD_REQUEST, "No outline edits supplied.")
+        _require_brainstorm(run_id)
+        outline = _load_outline(run_id)
+        now = statefile.utc_now_iso()
+        try:
+            update = outline.apply_updates(
+                body.sections, title=body.title, summary=body.summary, now=now
+            )
+        except OutlineError as exc:
+            raise HTTPException(http_status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+
+        if update.changed:
+            files = {
+                _run_path(run_id, "brainstorm", "outline.md"): outline.render().encode("utf-8")
+            }
+            try:
+                github.commit_files(files, f"run {run_id}: brainstorm canvas edit")
+            except GitHubError as exc:
+                raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+
+        return {
+            "outline_delta": update.delta,
+            **_brainstorm_response(run_id, outline, make_llm()),
+        }
 
     @app.get("/api/runs/{run_id}/status")
     def get_run_status(
