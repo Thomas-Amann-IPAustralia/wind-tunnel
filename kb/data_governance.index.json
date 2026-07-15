@@ -1,7 +1,7 @@
 {
   "specialist": "data_governance",
-  "generated_at": "2026-07-15T01:20:15Z",
-  "document_count": 4,
+  "generated_at": "2026-07-15T02:04:09Z",
+  "document_count": 5,
   "retrieval": "Navigate this index, then fetch(refs) or search(query, k) (TECH_SPEC §8.1).",
   "documents": [
     {
@@ -2194,7 +2194,593 @@
           ]
         }
       ]
+    },
+    {
+      "doc_id": "policy-for-the-responsible-use-of-ai-in-government-2-0-0",
+      "short_name": "AI Use Policy v2.0",
+      "title": "Policy for the responsible use of AI in government",
+      "version": "2.0",
+      "publisher": "Digital Transformation Agency",
+      "source_url": "https://www.dta.gov.au/policies-and-guidance/policy-responsible-use-ai-government",
+      "format": "pdf",
+      "page_count": 22,
+      "what_it_is": "Policy for the responsible use of AI in government",
+      "chunk_count": 56,
+      "structure": [
+        {
+          "section": "Version 2.0",
+          "chunk_count": 1,
+          "token_count": 163,
+          "description": "Version 2.0",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00000",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00000"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Contents",
+          "chunk_count": 7,
+          "token_count": 5176,
+          "description": "Contents",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00001",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00007"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Policy introduction",
+          "chunk_count": 1,
+          "token_count": 200,
+          "description": "Policy introduction",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00008",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00008"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Policy overview",
+          "chunk_count": 1,
+          "token_count": 146,
+          "description": "Policy overview",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00009",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00009"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Policy aims",
+          "chunk_count": 1,
+          "token_count": 35,
+          "description": "Policy aims",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00010",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00010"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Embrace the opportunity",
+          "chunk_count": 1,
+          "token_count": 76,
+          "description": "Embrace the opportunity",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00011",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00011"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Strengthen public trust",
+          "chunk_count": 1,
+          "token_count": 61,
+          "description": "Strengthen public trust",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00012",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00012"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Adapt to change",
+          "chunk_count": 1,
+          "token_count": 65,
+          "description": "Adapt to change",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00013",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00013"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Application",
+          "chunk_count": 1,
+          "token_count": 72,
+          "description": "Application",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00014",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00014"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "National security carveouts",
+          "chunk_count": 1,
+          "token_count": 175,
+          "description": "National security carveouts",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00015",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00015"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Existing frameworks",
+          "chunk_count": 1,
+          "token_count": 85,
+          "description": "Existing frameworks",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00016",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00016"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Definitions",
+          "chunk_count": 1,
+          "token_count": 98,
+          "description": "Definitions",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00017",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00017"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Timeframes",
+          "chunk_count": 1,
+          "token_count": 64,
+          "description": "Timeframes",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00018",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00018"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "In-scope AI use cases",
+          "chunk_count": 3,
+          "token_count": 403,
+          "description": "In-scope AI use cases",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00019",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00041"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Principles and \nrequirements",
+          "chunk_count": 1,
+          "token_count": 25,
+          "description": "Principles and \nrequirements",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00020",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00020"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "AI use case impact \nassessment",
+          "chunk_count": 1,
+          "token_count": 11,
+          "description": "AI use case impact \nassessment",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00021",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00021"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Strategy and oversight",
+          "chunk_count": 1,
+          "token_count": 44,
+          "description": "Strategy and oversight",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00022",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00022"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Principles",
+          "chunk_count": 3,
+          "token_count": 130,
+          "description": "Principles",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00023",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00038"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "AI transparency statement",
+          "chunk_count": 1,
+          "token_count": 75,
+          "description": "AI transparency statement",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00024",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00024"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Strategic position on AI adoption",
+          "chunk_count": 1,
+          "token_count": 97,
+          "description": "Strategic position on AI adoption",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00025",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00025"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Accountable officials",
+          "chunk_count": 1,
+          "token_count": 75,
+          "description": "Accountable officials",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00026",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00026"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Accountable use case owners",
+          "chunk_count": 1,
+          "token_count": 66,
+          "description": "Accountable use case owners",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00027",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00027"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Internal AI use case register",
+          "chunk_count": 1,
+          "token_count": 128,
+          "description": "Internal AI use case register",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00028",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00028"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Preparedness and operations",
+          "chunk_count": 1,
+          "token_count": 26,
+          "description": "Preparedness and operations",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00029",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00029"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Operationalise the responsible use of AI",
+          "chunk_count": 1,
+          "token_count": 263,
+          "description": "Operationalise the responsible use of AI",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00031",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00031"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Staff training on AI",
+          "chunk_count": 1,
+          "token_count": 125,
+          "description": "Staff training on AI",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00032",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00032"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "AI technical standard",
+          "chunk_count": 1,
+          "token_count": 46,
+          "description": "AI technical standard",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00033",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00033"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "AI procurement guidance",
+          "chunk_count": 1,
+          "token_count": 49,
+          "description": "AI procurement guidance",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00034",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00034"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Applying the generative AI guidance",
+          "chunk_count": 1,
+          "token_count": 22,
+          "description": "Applying the generative AI guidance",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00035",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00035"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Capability development",
+          "chunk_count": 1,
+          "token_count": 27,
+          "description": "Capability development",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00036",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00036"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "AI use case impact assessment",
+          "chunk_count": 1,
+          "token_count": 25,
+          "description": "AI use case impact assessment",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00037",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00037"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "All new AI use cases",
+          "chunk_count": 1,
+          "token_count": 106,
+          "description": "All new AI use cases",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00039",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00039"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Medium-risk AI use cases",
+          "chunk_count": 1,
+          "token_count": 79,
+          "description": "Medium-risk AI use cases",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00042",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00042"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "High-risk AI use cases",
+          "chunk_count": 1,
+          "token_count": 179,
+          "description": "High-risk AI use cases",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00043",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00043"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Out-of-scope AI use cases",
+          "chunk_count": 1,
+          "token_count": 107,
+          "description": "Out-of-scope AI use cases",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00044",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00044"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Appendix A: Related frameworks \nfor AI",
+          "chunk_count": 1,
+          "token_count": 32,
+          "description": "Appendix A: Related frameworks \nfor AI",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00045",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00045"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Artificial intelligence",
+          "chunk_count": 2,
+          "token_count": 240,
+          "description": "Artificial intelligence",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00046",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00049"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Automated decision-making",
+          "chunk_count": 1,
+          "token_count": 7,
+          "description": "Automated decision-making",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00047",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00047"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Data and digital",
+          "chunk_count": 1,
+          "token_count": 16,
+          "description": "Data and digital",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00048",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00048"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "AI use case",
+          "chunk_count": 1,
+          "token_count": 207,
+          "description": "AI use case",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00050",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00050"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "AI incident",
+          "chunk_count": 1,
+          "token_count": 151,
+          "description": "AI incident",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00051",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00051"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "infrastructure; \nc. violations of human rights or harms arising from a breach",
+          "chunk_count": 1,
+          "token_count": 65,
+          "description": "infrastructure; \nc. violations of human rights or harms arising from a breach",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00052",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00052"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Criteria and areas of consideration",
+          "chunk_count": 2,
+          "token_count": 373,
+          "description": "Criteria and areas of consideration",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00053",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00054"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        },
+        {
+          "section": "Experimentation",
+          "chunk_count": 1,
+          "token_count": 120,
+          "description": "Experimentation",
+          "chunk_range": [
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00055",
+            "policy-for-the-responsible-use-of-ai-in-government-2-0-0:00055"
+          ],
+          "kinds": [
+            "prose"
+          ]
+        }
+      ]
     }
   ],
-  "index_tokens_estimate": 16560
+  "index_tokens_estimate": 21449
 }
