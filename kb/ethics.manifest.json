@@ -1,7 +1,7 @@
 {
   "specialist": "ethics",
-  "generated_at": "2026-07-14T22:47:08Z",
-  "git_sha": "8e724fff684ba2504c4db28a48e753633656c30f",
+  "generated_at": "2026-07-15T01:19:59Z",
+  "git_sha": "b8569aef37e88188b90c9b8f04d86198d9b97e3d",
   "chunker": {
     "target_tokens_min": 400,
     "target_tokens_max": 900,
@@ -11,13 +11,13 @@
   "retrieval_model": "index + fetch/search (FTS5 BM25); no embeddings (TECH_SPEC §8.8)",
   "sqlite": {
     "path": "ethics.sqlite",
-    "sha256": "2c387914af77b814db12edd38539390fb45086fac6f70c19774d796b167b7a8a"
+    "sha256": "d0672add78216291729f013e05a0d2b3cf18e07263b9c408263b0e238f3c4a1f"
   },
   "index": {
     "path": "ethics.index.json",
-    "sha256": "6a2ab12464a8d00d11a3a4e0ec8fb95c95e6ba35944acab16e5be42e67d42ce4"
+    "sha256": "52b507509223f044c49f6d4b874e96ec42410992d9ca72c09c88868967afbef5"
   },
-  "document_count": 15,
+  "document_count": 17,
   "documents": [
     {
       "doc_id": "23-00122-data61-report-naic-responsibleaitools-web-230620",
@@ -90,6 +90,20 @@
       "chunk_count": 10
     },
     {
+      "doc_id": "automated-decision-making-better-practice-guide-march-2025",
+      "short_name": "ADM Better Practice Guide",
+      "title": "Automated Decision-Making Better Practice Guide",
+      "version": "March 2025",
+      "publisher": "Commonwealth Ombudsman",
+      "source_url": "https://www.ombudsman.gov.au/__data/assets/pdf_file/0025/317437/Automated-Decision-Making-Better-Practice-Guide-March-2025.pdf",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "fc6b1b6a989128e9351f31d9c80987806e05f09f147dc55cf5005398fbeee2d2",
+      "page_count": 61,
+      "chunk_count": 121
+    },
+    {
       "doc_id": "creative-australia-generative-ai-and-creative-work-paper",
       "short_name": "Creative Australia GenAI",
       "title": "Generative AI and creative work – Creative Australia Principles",
@@ -158,6 +172,20 @@
       "sha256": "3456c2ba0e2b983267a663243417bd26c48059882a2c78fcb288f64f74c7e180",
       "page_count": 15,
       "chunk_count": 37
+    },
+    {
+      "doc_id": "the-new-machinery-of-government-special-report-front-section",
+      "short_name": "New Machinery of Government",
+      "title": "The new machinery of government: using machine technology in administrative decision-making (front section)",
+      "version": "November 2021",
+      "publisher": "NSW Ombudsman",
+      "source_url": "https://www.ombo.nsw.gov.au/news-and-publications/publications/reports/the-new-machinery-of-government-using-machine-technology-in-administrative-decision-making",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "3c62a76ee181de0f05194a4474b2cc1037fbdf52fd5ffbc3a777201dfd2a229f",
+      "page_count": 105,
+      "chunk_count": 220
     },
     {
       "doc_id": "voluntary-ai-safety-standard",
