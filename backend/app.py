@@ -1,11 +1,11 @@
 """FastAPI endpoints (TECH_SPEC §7) — the slice this build covers.
 
 Run creation, the status proxy, the artefact download proxy, submission into
-Governance, threshold routing, and resume-by-code. **Not** in this slice: the
-Brainstorm interview endpoints (``/brainstorm/message``, ``/edit-outline``,
-``/poc``, ``/flow-map``, ``/revise``, ``/answers``) — those belong to the
-interviewer/PoC build (STATUS.md "Brainstorm interview + outline canvas"),
-which this backend does not implement yet.
+Governance, threshold routing, checkpoint answers (``/answers`` →
+``FULL_REVISING``), and resume-by-code. **Not** in this slice: the Brainstorm
+interview endpoints (``/brainstorm/message``, ``/edit-outline``, ``/poc``,
+``/flow-map``, ``/revise``) — those belong to the interviewer/PoC build (STATUS.md
+"Brainstorm interview + outline canvas"), which this backend does not implement yet.
 
 **Statelessness (§14).** Render's disk is ephemeral and a cold instance has no
 memory of any run, so every endpoint re-reads ``run.json``/``status.json``
@@ -57,6 +57,16 @@ _ARTEFACTS: dict[str, tuple[str, str]] = {
 
 class RouteBody(BaseModel):
     outcome: Literal["conclude", "full"]
+
+
+class AnswerItem(BaseModel):
+    question_id: str
+    value: str
+
+
+class AnswersBody(BaseModel):
+    answers: list[AnswerItem] = []
+    skips: list[str] = []
 
 
 def create_app(
@@ -255,6 +265,69 @@ def create_app(
         _dispatch(settings.governance_workflow, run_id, "FULL_DRAFTING")
         return {"run_id": run_id, "outcome": "full", "stage": str(run.stage), "dispatched": True}
 
+    @app.post("/api/runs/{run_id}/answers")
+    def submit_answers(body: AnswersBody, run_id: str = Depends(_valid_run_id)) -> dict:
+        """Checkpoint answers (§7, §5.1 FULL_CHECKPOINT → FULL_REVISING). Validates each
+        submitted id against ``full/questions.json``, commits ``full/answers.json``
+        alongside the advanced ``run.json``/``status.json``, and dispatches Governance with
+        ``resume_from=FULL_REVISING``. Only valid while paused at ``FULL_CHECKPOINT``."""
+        run = _load_run(run_id)
+        if (
+            run.stage is not statefile.Stage.FULL_CHECKPOINT
+            or run.stage_status is not statefile.StageStatus.AWAITING_USER
+        ):
+            raise HTTPException(
+                http_status.HTTP_409_CONFLICT,
+                f"Run {run_id} is not paused at FULL_CHECKPOINT (stage={run.stage}, "
+                f"status={run.stage_status}); no checkpoint questions to answer.",
+            )
+
+        valid_ids = _question_ids(run_id)
+        answered_ids = [a.question_id for a in body.answers]
+        skip_ids = list(body.skips)
+        _validate_answer_ids(answered_ids, skip_ids, valid_ids)
+
+        now = statefile.utc_now_iso()
+        answers_doc = {
+            "answers": [{"question_id": a.question_id, "value": a.value} for a in body.answers],
+            "skips": skip_ids,
+            "submitted_at": now,
+        }
+        st = _load_status(run_id, run)
+        run.advance_to(statefile.Stage.FULL_REVISING, now=now)
+        st.set_running(now=now)
+        st.heartbeat(agent="backend", now=now)
+        files = {
+            _run_path(run_id, "full", "answers.json"): _dump_json(answers_doc),
+            _run_path(run_id, "run.json"): _dump_json(run.to_dict()),
+            _run_path(run_id, "status.json"): _dump_json(st.to_dict()),
+        }
+        try:
+            github.commit_files(files, f"run {run_id}: checkpoint answers — revising")
+        except GitHubError as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+        _dispatch(settings.governance_workflow, run_id, "FULL_REVISING")
+        return {
+            "run_id": run_id,
+            "answered": len(answered_ids),
+            "skipped": len(skip_ids),
+            "dispatched": True,
+        }
+
+    def _question_ids(run_id: str) -> set[str]:
+        result = github.get_file(_run_path(run_id, "full", "questions.json"))
+        if result.status == "missing":
+            raise HTTPException(
+                http_status.HTTP_409_CONFLICT,
+                f"Run {run_id} has no checkpoint questions on record.",
+            )
+        payload = json.loads(result.content)
+        return {
+            item["question_id"]
+            for spec in payload.get("specialists", [])
+            for item in spec.get("items", [])
+        }
+
     @app.post("/api/runs/{run_id}/resume")
     def resume_run(run_id: str = Depends(_valid_run_id)) -> dict:
         """Resume by code (§7): validated already by ``_valid_run_id``; a code
@@ -271,6 +344,34 @@ def create_app(
         }
 
     return app
+
+
+def _validate_answer_ids(answered_ids: list[str], skip_ids: list[str], valid_ids: set[str]) -> None:
+    """Every submitted id must be a real checkpoint question, and no id may be both
+    answered and skipped (a UI contradiction). Unaddressed questions are permitted — the
+    pipeline treats a question with neither an answer nor an explicit skip as skipped (§5.1
+    "skipped questions → gaps"). Raises HTTP 400 on any violation."""
+    submitted = answered_ids + skip_ids
+    unknown = sorted(set(submitted) - valid_ids)
+    if unknown:
+        raise HTTPException(
+            http_status.HTTP_400_BAD_REQUEST,
+            f"Unknown question id(s): {unknown}. Answers must reference the run's own "
+            "checkpoint questions.",
+        )
+    both = sorted(set(answered_ids) & set(skip_ids))
+    if both:
+        raise HTTPException(
+            http_status.HTTP_400_BAD_REQUEST,
+            f"Question id(s) both answered and skipped: {both}. Choose one.",
+        )
+    for kind, ids in (("answered", answered_ids), ("skipped", skip_ids)):
+        dupes = sorted({q for q in ids if ids.count(q) > 1})
+        if dupes:
+            raise HTTPException(
+                http_status.HTTP_400_BAD_REQUEST,
+                f"Duplicate {kind} question id(s): {dupes}.",
+            )
 
 
 def _dump_json(obj: object) -> bytes:

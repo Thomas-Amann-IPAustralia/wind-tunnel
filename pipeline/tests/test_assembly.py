@@ -313,6 +313,48 @@ def test_gather_inputs_orders_full_sections_and_gaps(tmp_path):
     assert data["title"] == "AI triage assistant for enquiries"
 
 
+def test_gather_inputs_surfaces_skipped_checkpoint_questions(tmp_path):
+    # A run that paused at the checkpoint and had a question skipped: the skipped question
+    # must reach the report's recommended-next-steps (§5.1 "skipped questions → gaps").
+    run_dir = _seed_assembly_run_dir(tmp_path, "WT-ASM-SKIP")
+    (run_dir / "full" / "questions.json").write_text(
+        json.dumps(
+            {
+                "specialists": [
+                    {
+                        "node_id": "full.specialist.privacy",
+                        "items": [
+                            {"question_id": "privacy-1", "text": "Where is PI stored?"},
+                            {"question_id": "privacy-2", "text": "Is a pilot planned?"},
+                        ],
+                    }
+                ]
+            }
+        ),
+        "utf-8",
+    )
+    (run_dir / "full" / "answers.json").write_text(
+        json.dumps(
+            {
+                "answers": [{"question_id": "privacy-1", "value": "AWS Sydney"}],
+                "skips": ["privacy-2"],
+            }
+        ),
+        "utf-8",
+    )
+    ctx = StageContext(
+        run_dir=run_dir,
+        run=RunState.new("WT-ASM-SKIP"),
+        status=StatusModel.initial(RunState.new("WT-ASM-SKIP")),
+        llm=_noop_llm(),
+        kb_root=tmp_path / "kb",
+    )
+    (tmp_path / "kb").mkdir()
+    skipped = gather_inputs(ctx)["skipped_questions"]
+    # Only the unanswered question surfaces; the answered one does not.
+    assert [q["question_id"] for q in skipped] == ["privacy-2"]
+
+
 # -- driver: ASSEMBLY finalises at COMPLETE -------------------------------------
 
 

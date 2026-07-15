@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 
 import statefile
-from conftest import run_path, seed_run
+from conftest import dump_json, run_path, seed_run
 
 
 def test_health(client):
@@ -241,3 +241,110 @@ def test_resume_normalises_lowercase_input(client, github):
 def test_resume_400s_malformed_code(client):
     resp = client.post("/api/runs/definitely-not-a-code/resume")
     assert resp.status_code == 400
+
+
+# -- checkpoint answers -----------------------------------------------------------
+
+
+def _seed_checkpoint(github, run_id: str, *, question_ids=("privacy-1", "it_security-1")) -> None:
+    """Seed a run paused at FULL_CHECKPOINT with a questions.json carrying ``question_ids``,
+    grouped one per specialist by the id's prefix."""
+    seed_run(
+        github,
+        run_id,
+        stage=statefile.Stage.FULL_CHECKPOINT,
+        stage_status=statefile.StageStatus.AWAITING_USER,
+    )
+    specialists: dict[str, list[dict]] = {}
+    for qid in question_ids:
+        spec = qid.rsplit("-", 1)[0]
+        specialists.setdefault(spec, []).append(
+            {
+                "question_id": qid,
+                "text": f"fact for {qid}?",
+                "options": None,
+                "allow_free_text": True,
+            }
+        )
+    payload = {
+        "batch_id": "q-1",
+        "specialists": [
+            {"node_id": f"full.specialist.{s}", "friendly": s, "why": "w", "items": items}
+            for s, items in specialists.items()
+        ],
+        "counts": {"total": len(question_ids), "answered": 0, "skipped": 0},
+    }
+    github.files[run_path(run_id, "full", "questions.json")] = dump_json(payload)
+
+
+def test_answers_commits_and_dispatches_revising(client, github, dispatcher):
+    _seed_checkpoint(github, "WT-ANSW-23")
+    resp = client.post(
+        "/api/runs/WT-ANSW-23/answers",
+        json={
+            "answers": [{"question_id": "privacy-1", "value": "AWS Sydney"}],
+            "skips": ["it_security-1"],
+        },
+    )
+    assert resp.status_code == 200
+    assert resp.json() == {"run_id": "WT-ANSW-23", "answered": 1, "skipped": 1, "dispatched": True}
+
+    # answers.json committed with both the answer and the skip (§5.1 "skips → gaps").
+    answers = json.loads(github.files[run_path("WT-ANSW-23", "full", "answers.json")])
+    assert answers["answers"] == [{"question_id": "privacy-1", "value": "AWS Sydney"}]
+    assert answers["skips"] == ["it_security-1"]
+
+    # run.json advanced to FULL_REVISING and governance dispatched to resume there.
+    run = statefile.RunState.from_dict(json.loads(github.files[run_path("WT-ANSW-23", "run.json")]))
+    assert run.stage is statefile.Stage.FULL_REVISING
+    assert dispatcher.calls[0]["inputs"] == {"run_id": "WT-ANSW-23", "resume_from": "FULL_REVISING"}
+
+
+def test_answers_refuses_when_not_at_checkpoint(client, github):
+    seed_run(github, "WT-ANSW-24", stage=statefile.Stage.FULL_DRAFTING)
+    resp = client.post("/api/runs/WT-ANSW-24/answers", json={"answers": [], "skips": []})
+    assert resp.status_code == 409
+
+
+def test_answers_rejects_unknown_question_id(client, github):
+    _seed_checkpoint(github, "WT-ANSW-25")
+    resp = client.post(
+        "/api/runs/WT-ANSW-25/answers",
+        json={"answers": [{"question_id": "ethics-9", "value": "x"}], "skips": []},
+    )
+    assert resp.status_code == 400
+    assert "Unknown question id" in resp.json()["detail"]
+
+
+def test_answers_rejects_answer_and_skip_of_same_id(client, github):
+    _seed_checkpoint(github, "WT-ANSW-26")
+    resp = client.post(
+        "/api/runs/WT-ANSW-26/answers",
+        json={"answers": [{"question_id": "privacy-1", "value": "x"}], "skips": ["privacy-1"]},
+    )
+    assert resp.status_code == 400
+    assert "both answered and skipped" in resp.json()["detail"]
+
+
+def test_answers_allows_partial_coverage(client, github, dispatcher):
+    # Answering one of two questions is fine — the unaddressed one is treated as skipped
+    # downstream (§5.1). The endpoint must not require full coverage.
+    _seed_checkpoint(github, "WT-ANSW-27")
+    resp = client.post(
+        "/api/runs/WT-ANSW-27/answers",
+        json={"answers": [{"question_id": "privacy-1", "value": "AWS Sydney"}], "skips": []},
+    )
+    assert resp.status_code == 200
+    assert dispatcher.calls[0]["inputs"]["resume_from"] == "FULL_REVISING"
+
+
+def test_answers_409s_when_no_questions_on_record(client, github):
+    # Paused at the checkpoint but questions.json is missing — a corrupt state, refused.
+    seed_run(
+        github,
+        "WT-ANSW-28",
+        stage=statefile.Stage.FULL_CHECKPOINT,
+        stage_status=statefile.StageStatus.AWAITING_USER,
+    )
+    resp = client.post("/api/runs/WT-ANSW-28/answers", json={"answers": [], "skips": []})
+    assert resp.status_code == 409

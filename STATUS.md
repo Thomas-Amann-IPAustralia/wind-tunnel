@@ -2,14 +2,18 @@
 
 ## Current stage
 
-**Stage 3 — Full assessment** (PROJECT_BRIEF.md §9): **the full governance path now
-runs end-to-end to a `COMPLETE` run.** `FULL_DRAFTING → ARCHITECT → REVIEW → ASSEMBLY
-→ COMPLETE` all drive in one dispatch (still pausing at `FULL_CHECKPOINT` only when a
-specialist raises a question). This branch added the last two: **`REVIEW`** (the
+**Stage 3 — Full assessment** (PROJECT_BRIEF.md §9): **the full governance path runs
+end-to-end to a `COMPLETE` run, and the checkpoint-answer branch is now wired.**
+`FULL_DRAFTING → ARCHITECT → REVIEW → ASSEMBLY → COMPLETE` drives in one dispatch; when
+a specialist raises a question the run pauses at `FULL_CHECKPOINT`, and a
+`resume_from=FULL_REVISING` dispatch (from the new `POST /api/runs/{id}/answers`) resumes
+into `FULL_REVISING → ARCHITECT → …`. **Built this branch: `FULL_REVISING`** (the
+questioning specialists revise their own sections in light of the user's answers, a thin
+orchestration over `run_specialist_amendment`; skipped questions become gaps) **and its
+backend `POST /api/runs/{id}/answers` endpoint.** Prior branch added `REVIEW` (the
 bounded reviewer loop — coverage + coherence + amend directives + residual §12.3/§12.4)
-and **`ASSEMBLY`** (the nbformat notebook + nbconvert HTML report, §12). Stage 2 —
-Threshold remains met in full (record preserved below); Stage 0 — Foundations remains
-met.
+and `ASSEMBLY` (the nbformat notebook + nbconvert HTML report, §12). Stage 2 — Threshold
+remains met in full (record preserved below); Stage 0 — Foundations remains met.
 
 **Built this branch, part 2 (ASSEMBLY — the report, §5.1, §12; design §8):** the
 `pipeline/assembly/` package — `references.py` (citation dedup + manifest resolution),
@@ -52,14 +56,12 @@ owned-section instrument text. `pipeline/run.py` gained conditional stage
 resolution (`_resolve_next`) and a pause-setup hook (`_PAUSE_SETUP`), both
 general enough for the remaining `full.*` stages to reuse.
 
-**Not yet built:** `FULL_REVISING` (specialist re-draft after checkpoint answers —
-now mostly a thin wrapper over the `run_specialist_amendment` built this branch) and
-its backend `POST /api/runs/{id}/answers` endpoint; `USER_REVISION` (§5.8, the ≤2
-post-COMPLETE full-assessment revisions); the Brainstorm interview (interviewer,
-sufficiency, PoC/flow-map endpoints — note the PoC embed slot in ASSEMBLY (§12.3) is
-built and dormant, waiting on `brainstorm/poc.html`); the frontend entirely; and a
-first live Gemini run. See handoff notes below for the
-concrete next steps and how they build on this branch.
+**Not yet built:** `USER_REVISION` (§5.8, the ≤2 post-COMPLETE full-assessment
+revisions); the Brainstorm interview (interviewer, sufficiency, PoC/flow-map endpoints —
+note the PoC embed slot in ASSEMBLY (§12.3) is built and dormant, waiting on
+`brainstorm/poc.html`); the frontend entirely; and a first live Gemini run. The
+checkpoint-answer path (`FULL_REVISING` + `POST /api/runs/{id}/answers`) is **built this
+branch** — see Done below. See handoff notes for the concrete next steps.
 
 **Exit test** ("threshold output for a known test case matches a hand-worked
 assessment's ratings exactly", brief §9): **met for the engine wiring.**
@@ -78,6 +80,52 @@ pipeline.
 
 ## Done
 
+- **`FULL_REVISING` + `POST /api/runs/{id}/answers` — the checkpoint-answer branch,
+  driven end-to-end (TECH_SPEC §5.1 FULL_REVISING, §5.8, §7; Stage 3; this branch).**
+  The path a `FULL_CHECKPOINT` pause takes once the user answers. The pieces:
+  - **`pipeline/stages/full.py::full_revising` — the stage handler.** Reads
+    `full/questions.json` (who asked what) and `full/answers.json` (the user's answers +
+    skips). For each specialist that raised a question it re-drafts that specialist's
+    **whole owned set** via `run_specialist_amendment` (a question is not tied to one
+    section, so the specialist re-works its slice with the new facts in hand), with the
+    Q&A as the directive. A skipped/unanswered question is rendered as an unavailable fact,
+    so a section the specialist still cannot ground becomes a gap (§5.1 "skipped questions
+    → gaps"). Specialists that raised no question are untouched. Writes updated
+    `full/specialists/*` and `full/revised.json` (the checkpoint marker + a record of which
+    specialists revised and the answered/skipped counts).
+  - **`pipeline/agents/specialist.py` — the amendment framing is now parameterised.**
+    `run_specialist_amendment` gained `directive_heading`/`directive_intro` (defaults =
+    the reviewer-ruling wording, unchanged; `{targets}` filled with the directed ids), so
+    FULL_REVISING frames the same machinery as *answered checkpoint questions* rather than
+    a reviewer directive. `_build_amendment_user` takes the heading/intro through — no
+    behaviour change on the REVIEW path (its tests are untouched and green).
+  - **`pipeline/run.py` — table entries only.** `FULL_REVISING` slots into `_HANDLERS`,
+    `_NEXT` (→ `ARCHITECT`), `_CHECKPOINT_OUTPUTS` (`full/revised.json` — so a re-dispatch
+    after it committed skips it and resumes at ARCHITECT, §5.3), `_STAGE_FAIL_NODE`, and
+    `_STAGE_PHRASE`. No new driver machinery: a `resume_from=FULL_REVISING` dispatch jumps
+    straight past the `FULL_CHECKPOINT` pause via the existing resume block (see Decisions
+    — no `_NEXT[FULL_CHECKPOINT]` is needed because a pause stage always returns before
+    `_NEXT` is consulted).
+  - **`backend/app.py::POST /api/runs/{id}/answers`.** Valid only while paused at
+    `FULL_CHECKPOINT`+`awaiting_user` (409 otherwise). Validates every submitted id against
+    `full/questions.json` (unknown id → 400; an id both answered and skipped → 400;
+    duplicates → 400); partial coverage is allowed (an unaddressed question is treated as a
+    skip downstream). Commits `full/answers.json` alongside the advanced
+    `run.json`/`status.json` as **one** atomic commit, then dispatches
+    `resume_from=FULL_REVISING`. `AnswersBody`/`AnswerItem` pydantic models.
+  - **ASSEMBLY dormant slot activated.** `gather_inputs` now populates `skipped_questions`
+    from `full/answers.json` × `full/questions.json`, so unanswered questions surface in the
+    report's "Recommended next steps" appendix (the notebook's `_next_steps` already
+    rendered them; it was fed nothing until now).
+  - **17 new tests.** `pipeline/tests/test_full_revising.py` (10): `_specialist_from_node`
+    round-trip + rejects, the answered/skipped directive counts, seed terms, the handler
+    (revises only the questioner, skip→gap, multiple specialists, the answer text actually
+    reaching the amendment prompt with the checkpoint-answer framing), the driver
+    end-to-end (`resume_from=FULL_REVISING` from a paused checkpoint → COMPLETE), and
+    idempotent-skip-on-resume. `backend/tests/test_app.py` (6): commit+dispatch, refuse
+    off-checkpoint, unknown-id, answer-and-skip conflict, partial coverage, missing
+    questions.json. `test_assembly.py` (1): skipped questions surface. LLM-free (§15);
+    ruff clean. **170 pipeline + 27 backend tests green.**
 - **`ASSEMBLY` — the notebook + HTML report, and the full path to `COMPLETE`
   (TECH_SPEC §5.1, §12; design §8; Stage 3; this branch).** The final deliverable
   and the end of the governance pipeline. The pieces:
@@ -552,36 +600,21 @@ pipeline.
 ## In progress / handoff notes
 
 The former handoff steps 1–2 (backend `POST /api/runs` + dispatch + status proxy,
-`governance.yml`) are **done** — see Done → *Backend API + dispatch + status
-proxy*. The pipeline is live-dispatchable end-to-end through the threshold
-path, and `POST /api/runs/{id}/threshold/route` can dispatch onward to
-`FULL_DRAFTING`, which the driver implements, and now **`ARCHITECT`** as well
-(this branch — see Done → *`ARCHITECT`* / *`FULL_DRAFTING`*). Next concrete
-steps, in rough dependency order:
+`governance.yml`) are **done**, and the whole full-assessment pipeline — including the
+**checkpoint-answer branch** (`FULL_REVISING` + `POST /api/runs/{id}/answers`, this
+branch) — now drives end-to-end. `POST /api/runs/{id}/threshold/route` dispatches onward
+to `FULL_DRAFTING`; a `FULL_CHECKPOINT` pause is now actionable via `/answers`. Next
+concrete steps, in rough dependency order:
 
-1. **The checkpoint-answer path (`FULL_REVISING` + `POST /api/runs/{id}/answers`,
-   §5.1, §7).** The happy path is complete end-to-end (`FULL_DRAFTING → ARCHITECT →
-   REVIEW → ASSEMBLY → COMPLETE`). What remains on the full-assessment side is the
-   branch a `FULL_CHECKPOINT` pause takes when a specialist raised a question:
-   - **`FULL_REVISING`** — each specialist that raised a question revises its own
-     sections once in light of the answers; skipped questions become gaps. **Now a
-     thin wrapper over `run_specialist_amendment` (built this branch)** — call it per
-     specialist with the answers as the directive context (instead of a reviewer
-     ruling) and the raised question ids as the target sections. Register it in
-     `run.py`'s five stage→X maps with `_NEXT[FULL_REVISING] = ARCHITECT`; the
-     `_resolve_next` FULL_DRAFTING→FULL_CHECKPOINT branch and a `_NEXT[FULL_CHECKPOINT]`
-     entry still need wiring so the checkpoint resumes into `FULL_REVISING`.
-   - The backend **`POST /api/runs/{id}/answers`** endpoint (TECH_SPEC §7)
-     still doesn't exist — needed before a real user can act on a
-     `FULL_CHECKPOINT` pause and dispatch `resume_from=FULL_REVISING`. Small:
-     validate against `full/questions.json` question ids, commit
-     `full/answers.json`, dispatch. Natural to build alongside `FULL_REVISING`
-     rather than before it, since there's nothing to resume into yet without it.
-   - **`USER_REVISION`** (§5.8) — the ≤2 post-COMPLETE full-assessment revisions:
-     reviewer triage → targeted specialist amendment (again `run_specialist_amendment`)
-     → one reviewer verify pass → `ASSEMBLY` re-runs (archiving the superseded artefacts
-     to `artefacts/superseded/rev_<N>/` first). `RunState.record_revision("full")` and
-     the revision caps already exist; ASSEMBLY already rebuilds idempotently.
+1. **`USER_REVISION` (§5.8) — the ≤2 post-COMPLETE full-assessment revisions.** The last
+   unbuilt governance stage. Reviewer triage → targeted specialist amendment (again
+   `run_specialist_amendment`, whose framing is now parameterised — pass a
+   revision-request heading/intro) → one reviewer verify pass → `ASSEMBLY` re-runs
+   (archiving the superseded artefacts to `artefacts/superseded/rev_<N>/` first).
+   `RunState.record_revision("full")` and the revision caps already exist; ASSEMBLY already
+   rebuilds idempotently. The backend entry point is `POST /api/runs/{id}/revise` with
+   `{artefact:"full", instructions}` (valid only at `COMPLETE`), which dispatches
+   `resume_from=USER_REVISION` — mirror the `/answers` endpoint built this branch.
 2. **Brainstorm interview + outline canvas (backend `brainstorm/` + frontend).**
    `POST /api/runs` currently only *seeds* `brainstorm/outline.md` from the template
    (`backend/outline.py`) — nothing yet amends it. Needed: the interviewer
@@ -680,6 +713,30 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **FULL_REVISING re-drafts each questioning specialist's *whole* owned set, not a
+  question-scoped subset (this branch, `stages/full.py::full_revising`).** A checkpoint
+  `question_id` is `<specialist>-N` (specialist.v1.md) and is **not** tied to a specific
+  section — the tool doesn't record which owned section a question bears on. So the honest
+  target is the specialist's whole owned set (§5.1 "revises **its own sections**"), passed
+  to `run_specialist_amendment`; the specialist re-works its slice with the answers in
+  hand and gaps whatever a skip left ungroundable. Specialists that raised no question are
+  untouched. Cheaper question→section scoping would need the specialists to tag questions
+  with a section id — a future prompt/schema change, not assumed now.
+- **No `_NEXT[FULL_CHECKPOINT]` entry; the checkpoint resumes into FULL_REVISING via the
+  `resume_from` dispatch, not a `_NEXT` edge (this branch, `run.py`).** A pause stage
+  always `return`s from `_drive` before `_NEXT`/`_resolve_next` is consulted, so an edge
+  out of `FULL_CHECKPOINT` would be dead config. The backend's `/answers` dispatch sets
+  `resume_from=FULL_REVISING`, and `run_pipeline`'s resume block advances straight there —
+  the same mechanism the threshold pause already uses. (The prior handoff suggested adding
+  the edge; it's genuinely unreachable, so it's deliberately omitted with this note.)
+- **FULL_REVISING's durable checkpoint marker is `full/revised.json`, not the updated
+  specialist files (this branch).** The specialist JSONs already exist from FULL_DRAFTING,
+  so their existence can't gate idempotent resume (§5.3). `full/revised.json` (which
+  specialists revised + answered/skipped counts) is the one new artefact whose presence
+  proves the stage completed, so it is FULL_REVISING's `_CHECKPOINT_OUTPUTS` entry. It
+  also doubles as the FULL_REVISING half of the `gaps.json`-style record the tree envisions
+  (the aggregated gap register itself is still computed at ASSEMBLY from the specialist
+  drafts — one owner for that fact).
 - **ASSEMBLY renders via nbconvert's `basic` template wrapped in a hand-written
   self-contained HTML document, not a full custom nbconvert template (this branch,
   `assembly/render.py`).** §12.5 mandates "a custom template/stylesheet replacing the
@@ -950,8 +1007,9 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 - **The `run.py` driver extends by table entry.** New stages are added by registering
   a handler in `_HANDLERS`, a successor in `_NEXT`, and checkpoint outputs in
   `_CHECKPOINT_OUTPUTS` (plus a pause/terminal set if applicable) — the loop, resume,
-  heartbeat and failure handling are stage-agnostic. `full.*` stages currently raise
-  `StageNotImplemented`, which the §5.6 handler surfaces as a calm failure.
+  heartbeat and failure handling are stage-agnostic. Only `USER_REVISION` remains
+  unimplemented; routing to it raises `StageNotImplemented`, which the §5.6 handler
+  surfaces as a calm failure.
 - **Cross-KB corpus duplication is retrieval-scoped and intentional.** A document
   may live in more than one `corpus/<specialist>/` folder so it lands in multiple
   specialist KBs. This affects only what a specialist can *retrieve and cite* — it
