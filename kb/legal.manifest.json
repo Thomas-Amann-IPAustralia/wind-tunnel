@@ -1,7 +1,7 @@
 {
   "specialist": "legal",
-  "generated_at": "2026-07-15T14:39:52Z",
-  "git_sha": "6e760a7f1e0ee83fe81ff9602239495b27e22519",
+  "generated_at": "2026-07-15T14:44:49Z",
+  "git_sha": "b3eecfd7692e27d280fe3f5a206eefba08f12117",
   "chunker": {
     "target_tokens_min": 400,
     "target_tokens_max": 900,
@@ -11,11 +11,11 @@
   "retrieval_model": "index + fetch/search (FTS5 BM25); no embeddings (TECH_SPEC §8.8)",
   "sqlite": {
     "path": "legal.sqlite",
-    "sha256": "1a47c7a93837d0579456d4007226f6490700b8be8a048f5bda341a313679c993"
+    "sha256": "6155b899d34fe42f4f05b63a427d3d58280fae3be0cce4ba6f173366b7d24a45"
   },
   "index": {
     "path": "legal.index.json",
-    "sha256": "8fa5e96eb7cbce618be3024d07f477562f2a349d8811ba045ef0cd63f99547e4"
+    "sha256": "999bbebefabceca88367c9f89c1925d7f43f1d6481792f788666322ccefee7e2"
   },
   "document_count": 11,
   "documents": [
