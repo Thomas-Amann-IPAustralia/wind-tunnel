@@ -82,6 +82,40 @@ def _handler_all_draft_immediately(questions_by_specialist: dict[str, dict] | No
     return handler
 
 
+def _architect_response() -> str:
+    """A minimal valid Implementation Plan tracing one step to a section privacy
+    drafts (7.1) — enough to carry the driver past ARCHITECT."""
+    return json.dumps(
+        {
+            "overview": "Build and deploy the system in three sequenced phases.",
+            "steps": [
+                {
+                    "title": "Encrypt personal data at rest and in transit",
+                    "detail": "Use platform-managed AES-256 for storage and TLS 1.3 in transit.",
+                    "traces_to": [
+                        {"specialist": "privacy", "section": "7.1", "mitigation": "encryption"}
+                    ],
+                }
+            ],
+        }
+    )
+
+
+def _handler_full_then_architect(questions_by_specialist: dict[str, dict] | None = None):
+    """Serves the six specialist drafts and, once they are final, the architect —
+    so a no-questions run drives FULL_DRAFTING → ARCHITECT in one dispatch."""
+    specialist_handler = _handler_all_draft_immediately(questions_by_specialist)
+
+    def handler(*, model, system, user, response_json):
+        if "Completed specialist assessment" in user:
+            return _architect_response()
+        return specialist_handler(
+            model=model, system=system, user=user, response_json=response_json
+        )
+
+    return handler
+
+
 # -- run_specialist: the retrieval tool loop + validation ------------------------
 
 
@@ -365,17 +399,20 @@ def test_pipeline_skips_checkpoint_when_no_questions(tmp_path):
 
     result = run_pipeline(
         run_dir,
-        llm=_client(_handler_all_draft_immediately()),
+        llm=_client(_handler_full_then_architect()),
         committer=FakeCommitter(),
         kb_root=kb_root,
     )
 
-    # ARCHITECT is not built yet — a calm, resumable failure there is the
-    # correct, documented outcome; the point of this test is that the driver
-    # skipped FULL_CHECKPOINT/FULL_REVISING rather than pausing needlessly.
+    # The driver skipped FULL_CHECKPOINT/FULL_REVISING (no questions) and ran
+    # ARCHITECT straight through; REVIEW is not built yet, so the calm, resumable
+    # failure there is the documented stopping point. The architect appendix
+    # having been written proves the skip landed at ARCHITECT, not a needless pause.
     assert result.ok is False
+    assert not (run_dir / "full" / "questions.json").is_file()
+    assert (run_dir / "full" / "architect.md").is_file()
     run = RunState.load(run_dir)
-    assert run.stage is Stage.ARCHITECT
+    assert run.stage is Stage.REVIEW
     assert run.stage_status is StageStatus.FAILED
 
 
@@ -387,12 +424,12 @@ def test_pipeline_is_idempotent_on_full_drafting_resume(tmp_path):
 
     run_pipeline(
         run_dir,
-        llm=_client(_handler_all_draft_immediately()),
+        llm=_client(_handler_full_then_architect()),
         committer=FakeCommitter(),
         kb_root=kb_root,
     )
     run = RunState.load(run_dir)
-    assert run.stage is Stage.ARCHITECT  # advanced past FULL_DRAFTING already
+    assert run.stage is Stage.REVIEW  # advanced past FULL_DRAFTING and ARCHITECT already
 
     run.advance_to(Stage.FULL_DRAFTING)
     run.save(run_dir)
@@ -407,10 +444,11 @@ def test_pipeline_is_idempotent_on_full_drafting_resume(tmp_path):
         committer=FakeCommitter(),
         kb_root=kb_root,
     )
-    # Still fails at ARCHITECT (not built), but crucially without re-calling the model.
+    # Still fails at REVIEW (not built), but crucially without re-calling the model:
+    # both FULL_DRAFTING and ARCHITECT checkpoints already exist and are skipped.
     assert result.ok is False
     run = RunState.load(run_dir)
-    assert run.stage is Stage.ARCHITECT
+    assert run.stage is Stage.REVIEW
 
 
 def test_pipeline_fails_calmly_when_a_specialist_errors(tmp_path):

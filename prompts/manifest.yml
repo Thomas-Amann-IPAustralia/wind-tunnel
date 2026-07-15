@@ -14,7 +14,7 @@
 #     model_role: interviewer        # resolves via config/models.yml
 #
 # Roles still to author (from config/models.yml): interviewer, sufficiency,
-# feasibility_gate, outline_synth, poc_gen, map_gen, architect, reviewer.
+# feasibility_gate, outline_synth, poc_gen, map_gen, reviewer.
 
 prompts:
   threshold_generalist:
@@ -28,3 +28,8 @@ prompts:
     model_role: specialist             # resolves via config/models.yml (Flash)
                                         # shared by all six full-assessment specialists
                                         # (owned sections + KB vary per call, not the prompt)
+  architect:
+    file: architect.v1.md
+    model_role: architect              # resolves via config/models.yml (Pro)
+                                        # writes the Implementation Plan appendix after
+                                        # every specialist is final (§5.1 ARCHITECT)

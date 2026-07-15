@@ -2,30 +2,41 @@
 
 ## Current stage
 
-**Stage 3 — Full assessment** (PROJECT_BRIEF.md §9) is now underway: the first
-`full.*` pipeline stage is built. **`FULL_DRAFTING`** — all six specialists,
-each driving its own KB through the bounded fetch/search retrieval loop and
-drafting only its owned §5–12 sections — is wired end-to-end into
-`pipeline/run.py`, with the `FULL_CHECKPOINT` user pause correctly entered when
-a specialist raises a question, and correctly *skipped* (straight to the
-not-yet-built `ARCHITECT`) when none do. Stage 2 — Threshold remains met in
-full (record preserved below); Stage 0 — Foundations remains met.
+**Stage 3 — Full assessment** (PROJECT_BRIEF.md §9) continues: the specialist
+bloom and the architect appendix are both built. **`FULL_DRAFTING`** (all six
+specialists, each driving its own KB through the bounded fetch/search retrieval
+loop, drafting only its owned §5–12 sections) and now **`ARCHITECT`** (the Pro
+call that reads the finalised specialist drafts + threshold + outline and writes
+the Implementation Plan appendix with machine-checked traceability to the
+mitigations specialists actually drafted) are wired end-to-end into
+`pipeline/run.py`. The happy path drives `FULL_DRAFTING → ARCHITECT` in one
+dispatch, entering the `FULL_CHECKPOINT` pause only when a specialist raises a
+question; the driver now stops cleanly at the not-yet-built `REVIEW`. Stage 2 —
+Threshold remains met in full (record preserved below); Stage 0 — Foundations
+remains met.
 
-**Built this branch:** `pipeline/agents/specialist.py` (the retrieval tool loop
-+ output validation), `pipeline/stages/full.py` (the `FULL_DRAFTING` handler +
-questions payload + markdown render), `prompts/specialist.v1.md` (one shared
-prompt for all six specialists — the instrument context, KB index, and KB
-differ per call, not the prompt), and the `agents/prompting.py` additions that
-give every specialist call its owned-section instrument text. `pipeline/run.py`
-gained conditional stage resolution (`_resolve_next`) and a pause-setup hook
-(`_PAUSE_SETUP`) — the first two places the driver needed runtime branching
-beyond the fixed `_NEXT` table, both now general enough for the remaining
-`full.*` stages to reuse. 19 new tests (`pipeline/tests/test_full_drafting.py`),
-112 total pipeline tests green; ruff clean. Verified once against a **real**
-committed KB (`kb/ethics.sqlite`, not a test fixture) driving an actual
-search → draft round-trip, LLM-free.
+**Built this branch (ARCHITECT):** `pipeline/agents/architect.py` (a single-shot
+Pro agent — no retrieval loop — that validates the plan at the boundary),
+`prompts/architect.v1.md` (registered in `prompts/manifest.yml` under role
+`architect` → Pro), the `architect` handler + `render_architect_markdown` +
+specialist-context renderer in `pipeline/stages/full.py`, and the `run.py` table
+entries (`_HANDLERS`/`_NEXT`/`_CHECKPOINT_OUTPUTS`/`_STAGE_FAIL_NODE`/
+`_STAGE_PHRASE`) that slot `ARCHITECT` between `FULL_DRAFTING` and `REVIEW`. 13
+new tests (`pipeline/tests/test_architect.py`) + two updated `test_full_drafting`
+driver tests (they now assert the no-questions path runs the architect and stops
+at `REVIEW`, rather than at `ARCHITECT`). 125 total pipeline tests green; ruff
+clean. Verified once against the real repo config/instrument driving the stage +
+the traceability rejection, LLM-free.
 
-**Not yet built:** `ARCHITECT`, `REVIEW` (the reviewer loop), `FULL_REVISING`,
+**Prior branch (FULL_DRAFTING):** `pipeline/agents/specialist.py` (the retrieval
+tool loop + output validation), `pipeline/stages/full.py` (the `FULL_DRAFTING`
+handler + questions payload + markdown render), `prompts/specialist.v1.md`, and
+the `agents/prompting.py` additions that give every specialist call its
+owned-section instrument text. `pipeline/run.py` gained conditional stage
+resolution (`_resolve_next`) and a pause-setup hook (`_PAUSE_SETUP`), both
+general enough for the remaining `full.*` stages to reuse.
+
+**Not yet built:** `REVIEW` (the reviewer loop), `FULL_REVISING`,
 `ASSEMBLY` (notebook + HTML), the Brainstorm interview (interviewer,
 sufficiency, PoC/flow-map endpoints), the backend `POST /api/runs/{id}/answers`
 endpoint (needed once a real user can answer a `FULL_CHECKPOINT` pause), the
@@ -49,8 +60,55 @@ pipeline.
 
 ## Done
 
+- **`ARCHITECT` — the Implementation Plan appendix stage, driven end-to-end
+  (TECH_SPEC §5.1, §12.1; PROJECT_BRIEF §5.5; Stage 3; this branch).** The pieces:
+  - **`pipeline/agents/architect.py` — a single Pro call, no retrieval loop.**
+    `run_architect(...)` gives the model the outline, the completed threshold
+    assessment, and every specialist's drafted sections/citations/gaps (all
+    untrusted-wrapped, §9.2), plus an exhaustive **traceable-sections list**, and
+    returns `{overview, steps[]}`. Two boundaries are enforced at the validation
+    boundary, echoing "models argue, code computes" (§10) and structural
+    write-scope (§9.3): (1) the architect's output has **no section-content
+    field**, so it structurally *cannot* restate or re-draft a specialist's owned
+    section (§5.1 "cannot modify other content") — it writes only the appendix;
+    (2) **every step must trace to a `(specialist, section)` pair the specialist
+    actually drafted** — a trace to an un-drafted, gapped, or wrong-owner section
+    is *rejected*, not ignored. That is the machine-checkable half of §5.5's "the
+    plan demonstrably answers the assessment rather than existing beside it": a
+    step cannot implement a control the assessment never made.
+  - **`prompts/architect.v1.md`** — registered in `prompts/manifest.yml` under
+    role `architect` (resolving to Pro per `config/models.yml`). Encodes the
+    architecture/sequencing/traceability brief (§5.5), the untrusted-content
+    discipline, the "you never assert or change a rating / never re-draft a
+    section" rules, and the strict-JSON output shape. Optional `mermaid` diagrams
+    and code snippets are allowed inside a step's markdown `detail` (rendered
+    later at ASSEMBLY, not by the architect — §12.3).
+  - **`pipeline/stages/full.py` — the `architect` handler.** Loads the six
+    specialist JSONs, renders them into the single context block the architect
+    reads, builds `valid_targets` (each specialist → its **drafted** section ids,
+    gaps excluded), narrates the design-brief log line ("Writing an
+    implementation plan that answers the risks the specialists raised."), runs the
+    agent, and writes `full/architect.json` (structured + provenance) +
+    `full/architect.md` (the rendered appendix, each step footed with its
+    `*Answers: [Friendly name, §x] — mitigation*` traceability line).
+  - **`pipeline/run.py` — table entries only, no new machinery.** `ARCHITECT`
+    slots in via `_HANDLERS`/`_NEXT` (→ `REVIEW`)/`_CHECKPOINT_OUTPUTS`
+    (`full/architect.md`)/`_STAGE_FAIL_NODE` (`full.architect`)/`_STAGE_PHRASE`.
+    The `_resolve_next` FULL_DRAFTING branch and `_NEXT[FULL_CHECKPOINT-skip]`
+    already routed the happy path here; now the handler exists, so the driver
+    runs it and stops calmly at the unbuilt `REVIEW`.
+  - **13 new tests** (`pipeline/tests/test_architect.py`): the happy path +
+    provenance, multi-trace-across-specialists, and every validation rejection
+    (missing overview, empty steps, step with no detail, step with no trace, trace
+    to an unknown specialist, trace to a section another specialist owns, trace to
+    a *gapped* section) — plus the stage handler writing both artefacts and
+    completing its node, the context actually containing all six specialists +
+    the traceable-sections list, and a driver end-to-end test (seed at ARCHITECT →
+    run → stop at REVIEW). Two `test_full_drafting` driver tests updated to the new
+    boundary (happy path now runs the architect and stops at REVIEW). LLM-free
+    throughout (§15).
 - **`FULL_DRAFTING` — the six-specialist retrieval + draft stage, driven
-  end-to-end (TECH_SPEC §5.1, §8.1, §9.3; Stage 3; this branch).** The pieces:
+  end-to-end (TECH_SPEC §5.1, §8.1, §9.3; Stage 3; prior branch).** The pieces:
   - **`pipeline/agents/specialist.py` — the retrieval tool loop + output
     validation.** `run_specialist(...)` gives the model its owned-section
     instrument context, its KB index, the outline, and the completed threshold
@@ -385,23 +443,17 @@ The former handoff steps 1–2 (backend `POST /api/runs` + dispatch + status pro
 `governance.yml`) are **done** — see Done → *Backend API + dispatch + status
 proxy*. The pipeline is live-dispatchable end-to-end through the threshold
 path, and `POST /api/runs/{id}/threshold/route` can dispatch onward to
-`FULL_DRAFTING`, which the driver **now implements** (this branch — see Done →
-*`FULL_DRAFTING`*). Next concrete steps, in rough dependency order:
+`FULL_DRAFTING`, which the driver implements, and now **`ARCHITECT`** as well
+(this branch — see Done → *`ARCHITECT`* / *`FULL_DRAFTING`*). Next concrete
+steps, in rough dependency order:
 
-1. **The rest of the full-assessment stages (`ARCHITECT` onward, §5.1).** The
-   driver now stops cleanly past `FULL_DRAFTING` — at the `FULL_CHECKPOINT`
-   pause if a specialist raised a question, or at `ARCHITECT` (which raises
-   `StageNotImplemented`, a calm failure) if not. Still to build, each
-   registered in `run.py`'s `_HANDLERS`/`_CHECKPOINT_OUTPUTS`/`_STAGE_FAIL_NODE`/
-   `_STAGE_PHRASE` maps (and `_NEXT`, now that `_resolve_next` exists for any
-   stage needing runtime branching):
-   - **`ARCHITECT`.** One Pro call reading the complete specialist draft +
-     threshold assessment + brainstorm outline, writing `full/architect.md`
-     (the Implementation Plan appendix) with explicit traceability to
-     specialists' mitigations. A new prompt (`prompts/architect.v1.md`) and
-     likely a new `agents/architect.py`, structurally simpler than
-     `agents/specialist.py` (no tool loop — it reads what's already drafted,
-     not a KB).
+1. **The rest of the full-assessment stages (`REVIEW` onward, §5.1).** The
+   driver now runs `FULL_DRAFTING → ARCHITECT` on the happy path and stops
+   cleanly at `REVIEW` (which raises `StageNotImplemented`, a calm failure), or
+   pauses at `FULL_CHECKPOINT` if a specialist raised a question. Still to build,
+   each registered in `run.py`'s `_HANDLERS`/`_NEXT`/`_CHECKPOINT_OUTPUTS`/
+   `_STAGE_FAIL_NODE`/`_STAGE_PHRASE` maps (`ARCHITECT` is the worked example of a
+   pure table-entry addition — no new driver machinery was needed):
    - **`FULL_REVISING`** (only reachable once answers exist — see the backend
      endpoint below). Each specialist that raised a question revises its own
      sections once in light of the answers; skipped questions become gaps
@@ -522,8 +574,35 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **The architect emits structured `{overview, steps[]}` JSON (→ rendered to
+  `full/architect.md`), and its traceability is validated against the real
+  ownership map — not free-form prose (this branch, `agents/architect.py`).**
+  TECH_SPEC §5.1 names only `full/architect.md` as the output and describes
+  "explicit traceability to specialists' mitigations" without a mechanism. A
+  free-form markdown blob would make §5.5's "the plan demonstrably answers the
+  assessment rather than existing beside it" unenforceable — nothing would stop a
+  step from citing a control no specialist made, or the architect from quietly
+  re-drafting a section. So the architect returns a structured plan whose every
+  step carries a non-empty `traces_to` of `(specialist, section)` pairs, and the
+  agent boundary **rejects** any trace to a section that specialist did not
+  actually draft (out-of-scope, wrong-owner, or gapped) — the same "reject, don't
+  repair" discipline the specialists and threshold agents use (§9.3, §9.4).
+  Because the output has no section-content field, the architect *structurally*
+  cannot modify other content (§5.1). `full/architect.json` is kept alongside the
+  `.md` as structured provenance (mirroring `reconciled.json`+`threshold_assessment.md`
+  and `specialists/<id>.json`+`.md`); idempotent resume keys on `full/architect.md`,
+  the spec-named checkpoint output. Reversible: nothing downstream reads the JSON
+  shape yet (ASSEMBLY will), so the fields can still change.
+- **`ARCHITECT` needed no new `run.py` machinery — it is the worked example of the
+  "extend by table entry" design.** Unlike `FULL_DRAFTING` (which needed
+  `_resolve_next` and `_PAUSE_SETUP` the first time a successor was runtime-
+  conditional and a pause needed extra setup), `ARCHITECT` has a fixed successor
+  (`REVIEW`) and no pause, so it slots in purely through the five stage→X maps.
+  This confirms the driver's stage-agnosticism holds for a plain sequential stage;
+  `FULL_REVISING`/`REVIEW` will reuse `_resolve_next`/`record_review_cycle` where
+  they genuinely branch, not reinvent driver plumbing.
 - **The specialist retrieval tool loop is a plain JSON action protocol, not
-  native LLM function-calling (this branch, `agents/specialist.py`).**
+  native LLM function-calling (prior branch, `agents/specialist.py`).**
   TECH_SPEC §8.1 describes "the model calls two deterministic tools" without
   specifying the mechanism; `llm.py`'s seam (`Transport.generate(system, user)
   → text`) has no function-calling support and adding one would mean a second,

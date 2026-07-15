@@ -14,6 +14,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from agents.architect import ArchitectPlan, run_architect
+from agents.prompting import specialist_friendly_name
 from agents.specialist import SpecialistDraft, run_specialist
 from retrieval.retrieve import KB
 from stages.context import StageContext
@@ -32,6 +34,8 @@ SPECIALISTS: tuple[str, ...] = (
 )
 
 QUESTIONS_RELPATH = "full/questions.json"
+ARCHITECT_NODE = "full.architect"
+ARCHITECT_MD_RELPATH = "full/architect.md"
 
 
 def _default_kb_root() -> Path:
@@ -85,6 +89,84 @@ def full_drafting(ctx: StageContext) -> None:
         for node, draft in raised:
             for item in draft.questions:
                 ctx.status.question_raised(node, item["question_id"], item["text"])
+
+
+# -- ARCHITECT -----------------------------------------------------------------
+
+
+def architect(ctx: StageContext) -> None:
+    """The architect reads the finalised specialist drafts + threshold + outline and
+    writes the Implementation Plan appendix (§5.1 ARCHITECT, §12.1). A single Pro
+    call, no retrieval — it answers what has already been drafted. Outputs
+    ``full/architect.json`` (structured + provenance) and ``full/architect.md`` (the
+    rendered appendix); every step traces to a section a specialist actually drafted
+    (§5.5, enforced in ``agents/architect.py``)."""
+    outline = ctx.outline()
+    threshold_md = ctx.read_text("threshold/threshold_assessment.md")
+
+    drafts = {s: ctx.read_json(f"full/specialists/{s}.json") for s in SPECIALISTS}
+    specialist_context = _render_specialist_context(drafts)
+    valid_targets = {
+        s: tuple(sorted((drafts[s].get("sections") or {}).keys())) for s in SPECIALISTS
+    }
+
+    ctx.status.start_node(ARCHITECT_NODE)
+    ctx.status.drafting(
+        ARCHITECT_NODE,
+        "Writing an implementation plan that answers the risks the specialists raised.",
+    )
+    plan = run_architect(ctx.llm, outline, threshold_md, specialist_context, valid_targets)
+    ctx.status.complete_node(ARCHITECT_NODE)
+
+    ctx.write_json("full/architect.json", plan.to_dict())
+    ctx.write_text(ARCHITECT_MD_RELPATH, render_architect_markdown(plan))
+
+
+def _render_specialist_context(drafts: dict[str, dict]) -> str:
+    """Render every specialist's drafted sections, citations and gaps into the single
+    block the architect reads (§5.5 "reads the complete draft")."""
+    lines: list[str] = []
+    for specialist in SPECIALISTS:
+        draft = drafts[specialist]
+        lines.append(f"### {specialist_friendly_name(specialist)} ({specialist})")
+        sections = draft.get("sections") or {}
+        citations = draft.get("citations") or {}
+        for sid in sorted(sections):
+            lines += [f"#### {sid}", sections[sid]]
+            cites = citations.get(sid) or []
+            if cites:
+                rendered = ", ".join(f"[{c['short_name']}, {c['locator']}]" for c in cites)
+                lines.append(f"*Citations: {rendered}*")
+        gaps = draft.get("gaps") or []
+        if gaps:
+            lines.append("**Gaps (not drafted):**")
+            for g in gaps:
+                lines.append(f"- {g['section']}: {g['reason']}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def render_architect_markdown(plan: ArchitectPlan) -> str:
+    """The Implementation Plan appendix as markdown (assembled into the notebook,
+    §12.1 appendices). Each step names the mitigations it answers so the plan's
+    traceability is visible in the report, not only in the JSON."""
+    lines = [
+        "# Appendix — Implementation Plan",
+        "",
+        plan.overview,
+        "",
+        "## Implementation steps",
+        "",
+    ]
+    for i, step in enumerate(plan.steps, start=1):
+        lines += [f"### {i}. {step['title']}", "", step["detail"], ""]
+        traced = []
+        for t in step["traces_to"]:
+            friendly = specialist_friendly_name(t["specialist"])
+            mitigation = f" — {t['mitigation']}" if t.get("mitigation") else ""
+            traced.append(f"[{friendly}, §{t['section']}]{mitigation}")
+        lines += [f"*Answers: {'; '.join(traced)}*", ""]
+    return "\n".join(lines)
 
 
 def _build_questions_payload(raised: list[tuple[str, SpecialistDraft]]) -> dict:
