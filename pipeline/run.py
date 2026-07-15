@@ -19,12 +19,15 @@ a terminal state, or a failure (§5.3). Four invariants live here:
     the stage artefacts is done through an injected :class:`Committer`, so the whole
     driver is testable with no git (a fake) and runs for real in Actions (git).
 
-The full-assessment stages (FULL_DRAFTING onward) are not built yet; the driver
-routes the threshold path end-to-end and stops cleanly at ``THRESHOLD_REVIEW``.
+The driver routes the threshold path end-to-end to ``THRESHOLD_REVIEW``, and the
+full path through ``FULL_DRAFTING`` to whichever comes next: the ``FULL_CHECKPOINT``
+user pause if a specialist raised a question, or ``ARCHITECT`` otherwise. Stages
+from ``ARCHITECT`` onward are not built yet and raise ``StageNotImplemented``.
 """
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 import time
@@ -34,6 +37,7 @@ from typing import Callable, Protocol
 
 from llm import GeminiTransport, LLMClient
 from stages.context import StageContext
+from stages.full import QUESTIONS_RELPATH, SPECIALISTS, full_drafting
 from stages.threshold import (
     NODE_A,
     NODE_RECONCILER,
@@ -44,18 +48,32 @@ from statefile import RunState, Stage, StageStatus, utc_now_iso
 from status import StatusModel
 
 # Stage → its handler. Stages absent here are either boundary/pause/terminal states
-# handled inline, or not yet implemented (full.*).
+# handled inline, or not yet implemented (full.* beyond drafting).
 _HANDLERS: dict[Stage, Callable[[StageContext], None]] = {
     Stage.THRESHOLD_DRAFTING: threshold_drafting,
     Stage.THRESHOLD_RECONCILING: threshold_reconciling,
+    Stage.FULL_DRAFTING: full_drafting,
 }
 
-# Stage → the next stage on success.
+# Stage → the next stage on success. FULL_DRAFTING is conditional (see
+# _resolve_next) — this is its default (questions were raised).
 _NEXT: dict[Stage, Stage] = {
     Stage.SUBMITTED: Stage.THRESHOLD_DRAFTING,
     Stage.THRESHOLD_DRAFTING: Stage.THRESHOLD_RECONCILING,
     Stage.THRESHOLD_RECONCILING: Stage.THRESHOLD_REVIEW,
+    Stage.FULL_DRAFTING: Stage.FULL_CHECKPOINT,
 }
+
+
+def _resolve_next(stage: Stage, run_dir: Path) -> Stage:
+    """The stage after ``stage`` completes. Only FULL_DRAFTING branches at
+    runtime (§5.1): if no specialist raised a question, FULL_CHECKPOINT (and
+    FULL_REVISING, which exists only to act on answers) are skipped entirely —
+    the happy path goes straight to ARCHITECT (not yet built, §5.6 calm failure)."""
+    if stage is Stage.FULL_DRAFTING and not (run_dir / QUESTIONS_RELPATH).is_file():
+        return Stage.ARCHITECT
+    return _NEXT[stage]
+
 
 # Stage → the checkpoint output files whose existence means the stage is done (§5.3).
 _CHECKPOINT_OUTPUTS: dict[Stage, tuple[str, ...]] = {
@@ -66,18 +84,36 @@ _CHECKPOINT_OUTPUTS: dict[Stage, tuple[str, ...]] = {
         "threshold/routing.json",
         "threshold/divergence.json",
     ),
+    Stage.FULL_DRAFTING: tuple(f"full/specialists/{s}.json" for s in SPECIALISTS),
 }
 
 # Stage → a representative node for a failure with no single active node (§5.6).
 _STAGE_FAIL_NODE: dict[Stage, str] = {
     Stage.THRESHOLD_DRAFTING: NODE_A,
     Stage.THRESHOLD_RECONCILING: NODE_RECONCILER,
+    Stage.FULL_DRAFTING: f"full.specialist.{SPECIALISTS[0]}",
 }
 
 # Human phrase per stage for the calm failure message (§5.6, design §7.2.4).
 _STAGE_PHRASE: dict[Stage, str] = {
     Stage.THRESHOLD_DRAFTING: "drafting the threshold assessment",
     Stage.THRESHOLD_RECONCILING: "reconciling the threshold assessment",
+    Stage.FULL_DRAFTING: "drafting the full assessment specialist sections",
+}
+
+
+def _setup_full_checkpoint(run_dir: Path, status: StatusModel) -> None:
+    questions = json.loads((run_dir / QUESTIONS_RELPATH).read_text(encoding="utf-8"))
+    status.wait_node("full.checkpoint")
+    status.set_questions(questions)
+
+
+# Stage → one-time setup run when a pause stage is first entered (§5.1, §6.4).
+# THRESHOLD_REVIEW needs none — it pauses via overall_state alone (Decisions,
+# STATUS.md). FULL_CHECKPOINT additionally sets its node waiting_user and
+# attaches the batched questions payload written by FULL_DRAFTING.
+_PAUSE_SETUP: dict[Stage, Callable[[Path, StatusModel], None]] = {
+    Stage.FULL_CHECKPOINT: _setup_full_checkpoint,
 }
 
 _PAUSE_STAGES: frozenset[Stage] = frozenset({Stage.THRESHOLD_REVIEW, Stage.FULL_CHECKPOINT})
@@ -220,12 +256,15 @@ def run_pipeline(
     committer: Committer,
     resume_from: str | None = None,
     now: Callable[[], str] = utc_now_iso,
+    kb_root: Path | None = None,
 ) -> RunResult:
     """Drive one dispatch of the run at ``run_dir`` to its next pause/terminal/failure.
 
     ``resume_from`` (the dispatch input, §5.3/§5.7) is trusted as the dispatcher's
     statement of where to resume; idempotent skip then protects any stage whose
-    outputs already exist."""
+    outputs already exist. ``kb_root`` overrides where FULL_DRAFTING looks for
+    specialist KBs (§8) — tests inject a fixture directory; production leaves it
+    None and the stage resolves the real repo ``kb/``."""
     run_dir = Path(run_dir)
     run = RunState.load(run_dir)
     status = StatusModel.load(run_dir, run)
@@ -241,7 +280,7 @@ def run_pipeline(
     commits = _persist_and_commit(run, status, run_dir, committer, "heartbeat (running)")
 
     try:
-        commits += _drive(run_dir, run, status, llm, committer, now)
+        commits += _drive(run_dir, run, status, llm, committer, now, kb_root)
     except Exception as exc:  # §5.6: any unhandled error → calm, resumable failure
         commits += _fail(run, status, run_dir, committer, exc, now)
         return RunResult(False, run.stage, run.stage_status, commits)
@@ -256,6 +295,7 @@ def _drive(
     llm: LLMClient,
     committer: Committer,
     now: Callable[[], str],
+    kb_root: Path | None = None,
 ) -> int:
     commits = 0
     while True:
@@ -270,6 +310,9 @@ def _drive(
             if run.stage_status is not StageStatus.AWAITING_USER:
                 run.advance_to(stage, StageStatus.AWAITING_USER, now=now())
                 status.set_overall("paused", now=now())
+                setup = _PAUSE_SETUP.get(stage)
+                if setup is not None:
+                    setup(run_dir, status)
                 commits += _persist_and_commit(
                     run, status, run_dir, committer, f"paused at {stage} (awaiting user)"
                 )
@@ -284,11 +327,13 @@ def _drive(
             raise StageNotImplemented(f"No handler for stage {stage} (full.* not built yet).")
 
         if _checkpoint_exists(run_dir, stage):
-            run.advance_to(_NEXT[stage], now=now())
+            run.advance_to(_resolve_next(stage, run_dir), now=now())
             continue
 
         status.heartbeat(agent="pipeline", now=now())
-        handler(StageContext(run_dir=run_dir, run=run, status=status, llm=llm, now=now))
+        handler(
+            StageContext(run_dir=run_dir, run=run, status=status, llm=llm, now=now, kb_root=kb_root)
+        )
 
         # Commit the stage's outputs + status at THIS stage (checkpoint), then advance
         # in memory; the advance persists on the next commit. Idempotency keys off the
@@ -297,7 +342,7 @@ def _drive(
         sha = _commit(run_dir, committer, f"{stage} checkpoint")
         commits += 1
         run.set_checkpoint(stage, sha, now=now())
-        run.advance_to(_NEXT[stage], now=now())
+        run.advance_to(_resolve_next(stage, run_dir), now=now())
 
 
 def _checkpoint_exists(run_dir: Path, stage: Stage) -> bool:

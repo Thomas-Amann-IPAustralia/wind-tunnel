@@ -29,6 +29,7 @@ class StageContext:
     status: StatusModel
     llm: object  # llm.LLMClient — typed loosely to keep stages import-light
     now: Callable[[], str] = utc_now_iso
+    kb_root: Path | None = None  # kb/ directory (§8); None ⇒ stage resolves the real repo kb/
 
     def path(self, *parts: str) -> Path:
         return self.run_dir.joinpath(*parts)
