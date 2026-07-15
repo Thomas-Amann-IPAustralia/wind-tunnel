@@ -13,9 +13,14 @@
 #     file: interviewer.v1.md
 #     model_role: interviewer        # resolves via config/models.yml
 #
-# Roles to author (from config/models.yml): interviewer, sufficiency,
-# feasibility_gate, outline_synth, poc_gen, map_gen, threshold_generalist,
-# specialist (per-specialist owned DTA sections — §9.3), threshold_reconciler,
-# architect, reviewer.
+# Roles still to author (from config/models.yml): interviewer, sufficiency,
+# feasibility_gate, outline_synth, poc_gen, map_gen,
+# specialist (per-specialist owned DTA sections — §9.3), architect, reviewer.
 
-prompts: {}
+prompts:
+  threshold_generalist:
+    file: threshold_generalist.v1.md
+    model_role: threshold_generalist   # resolves via config/models.yml (Flash)
+  threshold_reconciler:
+    file: threshold_reconciler.v1.md
+    model_role: threshold_reconciler   # resolves via config/models.yml (Pro)

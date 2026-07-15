@@ -1,0 +1,303 @@
+"""End-to-end tests for the threshold governance slice (TECH_SPEC §5, §9, §10).
+
+The whole path runs LLM-free through a scripted transport (§15): two generalists →
+higher-wins resolution in code → the deterministic engine → routing → the
+THRESHOLD_REVIEW pause. The section-3 inputs below are chosen so the ratings are
+hand-workable from the real Table 2 — the spirit of Stage 2's exit test for the
+engine wiring.
+"""
+
+from __future__ import annotations
+
+import json
+
+import pytest
+
+from agents.prompting import RISK_SECTIONS
+from agents.threshold import AgentError, run_generalist
+from llm import CallBudget, LLMClient, LLMError, ScriptedTransport, resolve_model
+from run import FakeCommitter, run_pipeline
+from stages.threshold import compute_ratings, compute_routing, resolve_inputs
+from statefile import RunState, Stage, StageStatus
+from status import StatusModel
+
+# Assessor A and B section-3 inputs (consequence, likelihood). 3.4 and 3.5 diverge.
+_A = {
+    "3.1": ("Insignificant", "Rare"),
+    "3.2": ("Minor", "Unlikely"),
+    "3.3": ("Insignificant", "Possible"),
+    "3.4": ("Moderate", "Possible"),
+    "3.5": ("Major", "Unlikely"),
+    "3.6": ("Minor", "Possible"),
+    "3.7": ("Insignificant", "Rare"),
+    "3.8": ("Minor", "Rare"),
+}
+_B = {
+    "3.1": ("Insignificant", "Rare"),
+    "3.2": ("Insignificant", "Rare"),
+    "3.3": ("Insignificant", "Rare"),
+    "3.4": ("Major", "Possible"),  # diverges up from A's Moderate
+    "3.5": ("Moderate", "Unlikely"),  # A's Major consequence wins
+    "3.6": ("Minor", "Possible"),
+    "3.7": ("Insignificant", "Rare"),
+    "3.8": ("Minor", "Rare"),
+}
+# Hand-worked from risk_matrix.json for the resolved (higher-wins) inputs.
+_EXPECTED_RATINGS = {
+    "3.1": "Low",  # Insignificant/Rare
+    "3.2": "Low",  # Minor/Unlikely
+    "3.3": "Low",  # Insignificant/Possible
+    "3.4": "High",  # Major/Possible
+    "3.5": "Medium",  # Major/Unlikely
+    "3.6": "Medium",  # Minor/Possible
+    "3.7": "Low",  # Insignificant/Rare
+    "3.8": "Low",  # Minor/Rare
+}
+_EXPECTED_OVERALL = "High"
+
+
+def _generalist_json(risks: dict[str, tuple[str, str]]) -> str:
+    return json.dumps(
+        {
+            "sections": {"1": "Basic info.", "2": "Purpose.", "4": "Recommendation."},
+            "risks": {
+                sid: {"consequence": c, "likelihood": lk, "rationale": f"rationale {sid}"}
+                for sid, (c, lk) in risks.items()
+            },
+        }
+    )
+
+
+def _reconciler_json() -> str:
+    return json.dumps(
+        {
+            "sections": {"1": "Reconciled 1.", "2": "Reconciled 2.", "4": "Reconciled 4."},
+            "risk_rationale": {sid: f"reconciled rationale {sid}" for sid in RISK_SECTIONS},
+            "divergence_notes": {"3.4": "A: Moderate, B: Major → Major.", "3.5": "consequence up."},
+        }
+    )
+
+
+def _scripted_client() -> LLMClient:
+    transport = ScriptedTransport(
+        responses={
+            resolve_model("threshold_generalist"): [_generalist_json(_A), _generalist_json(_B)],
+            resolve_model("threshold_reconciler"): _reconciler_json(),
+        }
+    )
+    return LLMClient(transport=transport)
+
+
+def _make_run(run_dir, run_id="WT-TEST-01", stage=Stage.SUBMITTED) -> RunState:
+    run = RunState.new(run_id)
+    run.advance_to(stage)
+    run.save(run_dir)
+    StatusModel.initial(run).save(run_dir)
+    (run_dir / "brainstorm").mkdir(parents=True, exist_ok=True)
+    (run_dir / "brainstorm" / "outline.md").write_text(
+        "# Outline\nAn AI triage assistant for citizen enquiries.\n", encoding="utf-8"
+    )
+    return run
+
+
+# -- the deterministic core ----------------------------------------------------
+
+
+def test_resolve_inputs_is_higher_wins():
+    client = LLMClient(
+        transport=ScriptedTransport(
+            responses={
+                resolve_model("threshold_generalist"): [_generalist_json(_A), _generalist_json(_B)]
+            }
+        )
+    )
+    da = run_generalist(client, "generalist_a", "o")
+    db = run_generalist(client, "generalist_b", "o")
+    resolved = resolve_inputs(da, db)
+    assert resolved["3.4"] == {"consequence": "Major", "likelihood": "Possible"}
+    assert resolved["3.5"] == {"consequence": "Major", "likelihood": "Unlikely"}
+    assert resolved["3.1"] == {"consequence": "Insignificant", "likelihood": "Rare"}
+
+
+def test_ratings_match_hand_worked():
+    client = LLMClient(
+        transport=ScriptedTransport(
+            responses={
+                resolve_model("threshold_generalist"): [_generalist_json(_A), _generalist_json(_B)]
+            }
+        )
+    )
+    da = run_generalist(client, "generalist_a", "o")
+    db = run_generalist(client, "generalist_b", "o")
+    ratings = compute_ratings(resolve_inputs(da, db))
+    got = {sid: ratings["sections"][sid]["rating"] for sid in RISK_SECTIONS}
+    assert got == _EXPECTED_RATINGS
+    assert ratings["overall_inherent"] == _EXPECTED_OVERALL
+
+
+def test_routing_from_overall_high():
+    ratings = {
+        "sections": {sid: {"rating": r} for sid, r in _EXPECTED_RATINGS.items()},
+        "overall_inherent": _EXPECTED_OVERALL,
+    }
+    routing = compute_routing(ratings)
+    assert routing["full_assessment"] == "required"
+    assert routing["may_conclude"] is False
+    assert routing["high_risk_governance_review_required"] is True
+    assert routing["medium_or_high_sections"] == ["3.4", "3.5", "3.6"]
+
+
+def test_routing_all_low_may_conclude():
+    ratings = {
+        "sections": {sid: {"rating": "Low"} for sid in RISK_SECTIONS},
+        "overall_inherent": "Low",
+    }
+    routing = compute_routing(ratings)
+    assert routing["full_assessment"] == "optional"
+    assert routing["may_conclude"] is True
+    assert routing["high_risk_governance_review_required"] is False
+    assert routing["medium_or_high_sections"] == []
+
+
+# -- agent output discipline (§9.4, §10) ---------------------------------------
+
+
+def test_agent_rejects_asserted_rating():
+    bad = json.dumps(
+        {
+            "sections": {"1": "a", "2": "b", "4": "c"},
+            "risks": {
+                sid: {
+                    "consequence": "Minor",
+                    "likelihood": "Rare",
+                    "rationale": "x",
+                    "rating": "Low",
+                }
+                for sid in RISK_SECTIONS
+            },
+        }
+    )
+    client = LLMClient(
+        transport=ScriptedTransport(responses={resolve_model("threshold_generalist"): bad})
+    )
+    with pytest.raises(AgentError, match="asserts a rating"):
+        run_generalist(client, "generalist_a", "o")
+
+
+def test_agent_rejects_off_vocabulary_tier():
+    bad = json.dumps(
+        {
+            "sections": {"1": "a", "2": "b", "4": "c"},
+            "risks": {
+                sid: {"consequence": "Catastrophic", "likelihood": "Rare", "rationale": "x"}
+                for sid in RISK_SECTIONS
+            },
+        }
+    )
+    client = LLMClient(
+        transport=ScriptedTransport(responses={resolve_model("threshold_generalist"): bad})
+    )
+    with pytest.raises(AgentError, match="not a valid tier"):
+        run_generalist(client, "generalist_a", "o")
+
+
+# -- the driver end-to-end -----------------------------------------------------
+
+
+def test_pipeline_runs_threshold_to_review_pause(tmp_path):
+    run_dir = tmp_path / "WT-TEST-01"
+    run_dir.mkdir()
+    _make_run(run_dir)
+
+    result = run_pipeline(run_dir, llm=_scripted_client(), committer=FakeCommitter())
+
+    assert result.ok
+    assert result.final_stage is Stage.THRESHOLD_REVIEW
+    assert result.stage_status is StageStatus.AWAITING_USER
+
+    # run.json paused at review; status.json paused; rating engine complete.
+    run = RunState.load(run_dir)
+    assert run.stage is Stage.THRESHOLD_REVIEW
+    assert run.stage_status is StageStatus.AWAITING_USER
+    status = json.loads((run_dir / "status.json").read_text())
+    assert status["overall_state"] == "paused"
+    assert status["nodes"]["threshold.rating_engine"] == "complete"
+    assert status["nodes"]["threshold.reconciler"] == "complete"
+
+    # artefacts written with engine-computed ratings.
+    ratings = json.loads((run_dir / "threshold" / "ratings.json").read_text())
+    got = {sid: ratings["sections"][sid]["rating"] for sid in RISK_SECTIONS}
+    assert got == _EXPECTED_RATINGS
+    assert ratings["overall_inherent"] == _EXPECTED_OVERALL
+
+    routing = json.loads((run_dir / "threshold" / "routing.json").read_text())
+    assert routing["full_assessment"] == "required"
+
+    divergence = json.loads((run_dir / "threshold" / "divergence.json").read_text())
+    assert divergence["sections"]["3.4"]["diverged"] is True
+    assert divergence["sections"]["3.1"]["diverged"] is False
+
+    md = (run_dir / "threshold" / "threshold_assessment.md").read_text()
+    assert "Overall inherent risk rating (highest-wins): High" in md
+    assert "full assessment is **required**" in md.lower()
+
+
+def test_pipeline_is_idempotent_on_resume(tmp_path):
+    run_dir = tmp_path / "WT-TEST-02"
+    run_dir.mkdir()
+    _make_run(run_dir, run_id="WT-TEST-02")
+    run_pipeline(run_dir, llm=_scripted_client(), committer=FakeCommitter())
+
+    # Simulate a re-dispatch that rewinds the stage: the committed checkpoint output
+    # files still exist, so re-running must NOT call the model again (§5.3).
+    run = RunState.load(run_dir)
+    run.advance_to(Stage.THRESHOLD_DRAFTING)
+    run.save(run_dir)
+
+    class _Boom:
+        def generate(self, **_):
+            raise AssertionError("model must not be called on an idempotent resume")
+
+    result = run_pipeline(run_dir, llm=LLMClient(transport=_Boom()), committer=FakeCommitter())
+    assert result.ok
+    assert result.final_stage is Stage.THRESHOLD_REVIEW
+    assert result.stage_status is StageStatus.AWAITING_USER
+
+
+def test_pipeline_fails_calmly_on_bad_model_json(tmp_path):
+    run_dir = tmp_path / "WT-TEST-03"
+    run_dir.mkdir()
+    _make_run(run_dir, run_id="WT-TEST-03")
+
+    client = LLMClient(
+        transport=ScriptedTransport(
+            responses={resolve_model("threshold_generalist"): "not json at all"}
+        )
+    )
+    result = run_pipeline(run_dir, llm=client, committer=FakeCommitter())
+
+    assert result.ok is False
+    run = RunState.load(run_dir)
+    assert run.stage is Stage.THRESHOLD_DRAFTING  # stays at the failing stage (§5.6)
+    assert run.stage_status is StageStatus.FAILED
+    assert run.last_error and "run code" in run.last_error["message"].lower()
+    status = json.loads((run_dir / "status.json").read_text())
+    assert status["overall_state"] == "failed"
+    assert status["failure"]["run_code"] == "WT-TEST-03"
+
+
+# -- llm seam ------------------------------------------------------------------
+
+
+def test_llm_parses_fenced_json():
+    # A model that wraps its JSON in a ```json fence is still parsed loudly-or-cleanly.
+    from llm import _strip_code_fence
+
+    assert json.loads(_strip_code_fence('```json\n{"ok": true}\n```')) == {"ok": True}
+
+
+def test_call_budget_trips():
+    budget = CallBudget(max_calls=1)
+    budget.charge()
+    with pytest.raises(LLMError, match="budget exhausted"):
+        budget.charge()

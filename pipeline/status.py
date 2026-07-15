@@ -209,6 +209,19 @@ class Event:
             out["ref"] = self.ref
         return out
 
+    @classmethod
+    def from_dict(cls, data: dict) -> Event:
+        """Parse one persisted log entry back into an Event — used when reloading the
+        committed status.json log on resume so ids stay monotonic (§6.3)."""
+        return cls(
+            id=data["id"],
+            ts=data.get("ts", ""),
+            agent=data["agent"],
+            type=data["type"],
+            detail=data.get("detail", ""),
+            ref=data.get("ref"),
+        )
+
 
 def _event_id(ordinal: int) -> str:
     return f"evt_{ordinal:06d}"
@@ -257,6 +270,29 @@ class StatusModel:
             else load_expected_ranges(),
             updated_at=ts,
         )
+
+    @classmethod
+    def load(
+        cls,
+        run_dir: str | os.PathLike,
+        run: RunState,
+        *,
+        expected_ranges: dict | None = None,
+    ) -> StatusModel:
+        """Reload the committed projection for ``run`` on resume, or build a fresh one
+        if no status.json exists yet.
+
+        The durable event log lives inside status.json, so reload reads it back and
+        rebuilds the whole projection through :func:`rebuild` — the same
+        recompute-from-log path the projection guarantee rests on (§6). Appending then
+        continues from the restored log with monotonic ids (§6.3)."""
+        path = Path(run_dir) / STATUS_JSON
+        if not path.is_file():
+            return cls.initial(run, expected_ranges=expected_ranges)
+        with path.open(encoding="utf-8") as fh:
+            data = json.load(fh)
+        events = [Event.from_dict(e) for e in data.get("log", [])]
+        return rebuild(run, events, expected_ranges=expected_ranges)
 
     # -- node/event coupling: active | complete | failed (§6.3) -----------------
 
