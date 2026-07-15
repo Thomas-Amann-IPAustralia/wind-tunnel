@@ -2,32 +2,83 @@
 
 ## Current stage
 
-**Stage 0 — Foundations** (PROJECT_BRIEF.md §9) — **exit test MET.**
+**Stage 2 — Threshold** (PROJECT_BRIEF.md §9) — **governance slice built and tested;
+exit test MET for the deterministic wiring.** (Stage 0 — Foundations remains met;
+its record is preserved below under Done.)
 
-Scope: single-repo scaffold (TECH_SPEC §2), run-state model + run codes,
-ingestion pipeline, one populated specialist KB end-to-end.
+Scope of Stage 2: generalists, reconciler, deterministic rating engine, review/revise
+UI, markdown export. **Built this branch:** the whole pipeline-side threshold path —
+two generalists → code higher-wins resolution → the deterministic engine → routing →
+the `THRESHOLD_REVIEW` pause — driven end-to-end by `pipeline/run.py`, plus markdown
+export. **Not yet built:** the backend API that serves/routes a paused run and the
+frontend review/revise UI (those are Stage 2's remaining surface), and live Gemini
+calls (the seam is mockable; the live transport is written but only exercised in
+Actions with a key).
 
-**Exit test:** a fetch/search returns pinpoint-cited chunks from a real corpus
-doc. **Met.** All six specialist KBs build from the real corpus
-(`python -m retrieval.ingest`), and `KB.search`/`KB.fetch` return chunks carrying
-`(short_name, locator)` citations — verified end-to-end against real documents in
-`retrieval/tests/test_retrieval.py::test_stage0_exit_real_corpus_md`. Live
-examples: `[ISM, p.17]` (true PDF page), `[Archives Act 1983, s 30A]` (legislative
-provision), `[NAA AI Records Guidance, §Disposal of generative AI assistant
-prompts and inputs]` (heading path), and `fetch("ISM-2002")` returns the exact
-control by key. The run-identity/state line items (run-code creation,
-`run.json`/`status.json`, TECH_SPEC §3–§6) that were carried into Stage 1 are now
-**built and tested** (see Done → *Run-state core*) — pure data/projection layer,
-with the commit/dispatch plumbing around it the next pickup (handoff step 1).
+**Exit test** ("threshold output for a known test case matches a hand-worked
+assessment's ratings exactly", brief §9): **met for the engine wiring.**
+`tests/test_threshold_pipeline.py::test_ratings_match_hand_worked` and the
+end-to-end `test_pipeline_runs_threshold_to_review_pause` drive the full path with a
+scripted transport and assert every §3.1–3.8 rating and the §3.9 overall match values
+hand-worked from the real Table 2 (e.g. resolved Major/Possible → High, overall High).
+The LLM's *judgement* (which consequence/likelihood a real model picks) is not unit
+tested — that needs a live model and a Stage-2 eval — but the integrity-critical part
+(ratings are a provable output of code from the resolved inputs) is.
 
-**Boundary note:** the rating engine + instrument encoding (a Stage 2 target) were
-built now because they were unblocked, self-contained and testable — do not read
-their presence as Stage 2 being underway. Stage 2's exit test (ratings match a
-hand-worked assessment) is met *for the engine in isolation*; the generalists,
-reconciler and the wiring that feed it do not exist yet.
+**Stage 0 boundary (still true):** the rating engine + instrument encoding were built
+under Stage 0 as unblocked, self-contained pieces. They are now *wired in* by the
+threshold stage — this is the first place `pipeline/rating/` is consumed by a running
+pipeline.
 
 ## Done
 
+- **Threshold governance slice — generalists → reconciler → engine → routing,
+  driven end-to-end (TECH_SPEC §5.1, §9, §10; Stage 2).** 12 new tests
+  (`tests/test_threshold_pipeline.py`), 89 total green; ruff clean. The pieces:
+  - **LLM seam (`pipeline/llm.py`).** Role→model resolution from `config/models.yml`,
+    a `CallBudget` enforcing `run_max_calls` (§13), and JSON discipline
+    (`complete_json` parses loudly — a non-JSON answer is a loud `LLMError`, never a
+    silent empty result). The transport is injectable: `ScriptedTransport` for
+    tests/offline (the whole path runs LLM-free, §15) and `GeminiTransport` — the
+    live `:generateContent` REST call over stdlib urllib (no new dep), the sole
+    holder of `GEMINI_API_KEY` (§6). The live transport is written but exercised only
+    in Actions with a key.
+  - **Prompts (`prompts/threshold_generalist.v1.md`, `threshold_reconciler.v1.md`)**
+    + manifest entries (§9.1). Both encode the untrusted-content discipline (§9.2),
+    the precautionary threshold posture (higher-when-uncertain, likelihood ≥ Possible
+    on thin evidence), and the **hard rule that no agent emits a rating** (§10). The
+    generalist schema forbids a `rating` key; the reconciler emits narrative +
+    rationale only (it does not even select tiers).
+  - **Agent layer (`pipeline/agents/`).** `prompting.py` owns prompt loading, the
+    untrusted wrapper, and the threshold instrument context (question text +
+    consequence/likelihood descriptor tables from `instrument/*.json`, §9.3).
+    `threshold.py` runs the two generalists and the reconciler and **validates the
+    output at the boundary**: off-vocabulary tiers and any asserted-rating key are
+    *rejected*, not repaired (§9.4, §10).
+  - **Threshold stages (`pipeline/stages/threshold.py`).** `THRESHOLD_DRAFTING` (two
+    independent generalists) → `THRESHOLD_RECONCILING`: **code resolves the two
+    drafts' §3 tiers higher-wins** (§10.3), the deterministic engine (`pipeline/rating/`,
+    already built — now *wired in*) computes every rating and the §3.9 overall, and
+    routing is computed from §3.9 per the tool's own rule (guidance §4: Low ⇒ conclude
+    possible / full optional; Medium/High ⇒ full required; High ⇒ + governance-body
+    flag §12.5). Emits `reconciled.json`, `divergence.json`, `ratings.json`,
+    `routing.json`, and a readable `threshold_assessment.md` (Stage 2 markdown export).
+  - **Pipeline driver (`pipeline/run.py`).** The §5 state machine: reads `run.json`,
+    routes to the stage handler, and advances to the `THRESHOLD_REVIEW` pause.
+    Idempotent resume keyed on **checkpoint-output-file existence** (§5.3's literal
+    test); the §5.7 start handshake (first action = heartbeat + `overall_state=running`,
+    committed); calm §5.6 failure (any error → `run.json` failed + `status.json`
+    failure payload, run code surfaced, resumable, no stack trace to the primary UI);
+    and a **commit seam** — `FakeCommitter` for tests, `GitCommitter` (Actions-side
+    `GITHUB_TOKEN`, §14) for real — so the whole driver is testable with no git. CLI
+    `python -m run <run-id> [--resume-from STAGE]`.
+  - **`status.py` additions** (additive, existing tests unaffected): `Event.from_dict`
+    + `StatusModel.load` — reload the committed `status.json` log on resume so event
+    ids stay monotonic, rebuilt through the existing `rebuild()` projection (§6).
+  - **Exit test (Stage 2) met for the deterministic wiring:** ratings for a known
+    case match values hand-worked from the real Table 2 (resolved Major/Possible →
+    High; overall highest-wins → High), asserted both in isolation and through the
+    full driver run.
 - **Run-state core (`pipeline/runcode.py`, `statefile.py`, `status.py`) — the
   resume model (TECH_SPEC §3–§6).** LLM-free, 36 tests (`tests/test_runstate.py`),
   exercised end-to-end (a run drives a threshold slice → real `run.json`/`status.json`).
@@ -148,38 +199,43 @@ reconciler and the wiring that feed it do not exist yet.
 
 ## In progress / handoff notes
 
-The four dependency-ordered steps that stood between the scaffold and the Stage-0
-exit test (licence config → instrument encoding → ingestion → rating engine) are
-**all done** (see Done). The **run-state core** (former step 1) is now also done:
-`runcode.py` + `statefile.py` + `status.py` give a tested, LLM-free `run.json`
-authority and `status.json` projection. Next concrete steps, in rough dependency
-order:
+The former handoff steps 1–3 (commit/dispatch plumbing, prompts, threshold stage)
+are **done** this branch — see Done → *Threshold governance slice*. `pipeline/run.py`
+is the live driver, the threshold prompts are authored, and the two-generalists →
+reconciler → engine → routing path runs end-to-end to the `THRESHOLD_REVIEW` pause.
+Next concrete steps, in rough dependency order:
 
-1. **Commit/dispatch plumbing around the run-state core (TECH_SPEC §5.3, §7, §14).**
-   The core is pure (no git/API I/O by design). What's still needed to make it a
-   live pipeline: `pipeline/run.py` (the entrypoint — load `run.json`, route to the
-   current `Stage`, run the handler, commit, advance; §5.3); a checkpoint-commit
-   helper (Actions-side `GITHUB_TOKEN` commit, §14); and the backend's
-   `POST /api/runs` path that calls `runcode.generate_unique` (existence check via
-   Contents API) + `RunState.new().save()` + `StatusModel.initial().save()` and
-   commits the skeleton (§7). Note (decision): backend and pipeline don't share a
-   runtime filesystem, only the repo; the run-state modules are placed in
-   `pipeline/` per the §2 layout, so the backend consuming them is a packaging
-   question to settle when `backend/app.py` lands (vendor the three modules, or a
-   thin shared import).
-2. **Prompts (`prompts/*.md` + `manifest.yml`, TECH_SPEC §9)** — author the
-   versioned role prompts. The instrument JSON now gives each generalist/specialist
-   its owned question text, guidance, and (for §3) consequence/likelihood tables.
-   Wrap all user text in the untrusted delimiter (§9.2). Prompt *content* is
-   authorable now; the first real **call** is blocked on the Gemini ids.
-3. **Threshold stage (`pipeline/stages/`, `pipeline/agents/`)** — two generalists
-   → reconciler → feed the rating engine (already built) → `divergence.json`.
-   This is the first place the rating engine is wired in (§5.1, §10.3).
-4. **Specialist retrieval loop wiring (`pipeline/agents/`)** — give each specialist
-   its `kb/<specialist>.index.json` in-context + the `KB.fetch`/`KB.search` tools
-   (`retrieval.KB`, already built), enforcing `config/retrieval.yml` caps and
-   emitting `retrieval` events (§6.3). Retrieval mechanics are done; this is the
-   agent-loop harness around them.
+1. **Backend `POST /api/runs` + dispatch + status proxy (TECH_SPEC §7, §5.7, §14).**
+   The pipeline driver is ready to be *dispatched*; what's missing is the backend
+   that creates a run and triggers `governance.yml`. Needed: `backend/app.py`
+   (`POST /api/runs` → `runcode.generate_unique` with a Contents-API existence check
+   + `RunState.new().save()` + `StatusModel.initial().save()` + commit the skeleton
+   incl. `brainstorm/outline.md`; the status/artefact GET proxies; `POST
+   /api/runs/{id}/route` at the threshold pause → dispatch `resume_from=FULL_DRAFTING`
+   or set `CONCLUDED`); `backend/github_io.py` (Contents/Git-Data API commit helper,
+   serialise-per-run, §14); `backend/dispatch.py` (`workflow_dispatch` trigger, §5.7).
+   Packaging note still open: backend and pipeline share only the repo at runtime, and
+   the run-state + runcode modules live in `pipeline/` — vendor them into `backend/`
+   or add a thin shared import when `backend/` lands.
+2. **`.github/workflows/governance.yml`** — the `workflow_dispatch` workflow (inputs
+   `{run_id, resume_from}`) that installs `pipeline/` deps via `uv` and runs
+   `python -m run <run_id> --resume-from <stage>` with `GEMINI_API_KEY` + the built-in
+   `GITHUB_TOKEN` (the driver's `GitCommitter` uses the working-copy checkout). This
+   plus step 1 turns the built driver into a live, dispatchable run.
+3. **Full-assessment stages (`pipeline/stages/`, `FULL_DRAFTING` onward, §5.1).** The
+   driver stops at `THRESHOLD_REVIEW` and raises `StageNotImplemented` for `full.*`.
+   Build: specialist prompts (per-specialist owned sections, §9.3) + the specialist
+   retrieval loop (give each specialist its `kb/<specialist>.index.json` in-context +
+   the `KB.fetch`/`KB.search` tools — `retrieval.KB`, already built — enforcing
+   `config/retrieval.yml` caps and emitting `retrieval` events §6.3); the question
+   checkpoint (`FULL_CHECKPOINT` pause, already a pause-stage in the driver); the
+   architect appendix; the reviewer loop (§11, residual 12.3/12.4 reuse the engine);
+   and notebook + HTML assembly (§12). Register each in `run.py`'s `_HANDLERS`/`_NEXT`/
+   `_CHECKPOINT_OUTPUTS` maps — the driver is built to extend by table entry.
+4. **Frontend threshold review/revise UI + live-model wiring** — the remaining Stage 2
+   surface: the review screen at the pause (design §7.4), user revision (≤2) of the
+   threshold artefact, and a first live Gemini run to eval real generalist/reconciler
+   judgement (the seam is mockable and unit-tested; live quality is untested).
 
 **Deferred within retrieval (not blocking):** the optional Flash-written one-line
 descriptions for uninformative index headings (§8.4) are not generated — the index
@@ -257,6 +313,36 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **§3 tier resolution is done in code, not by the reconciler LLM.** §10.3 describes
+  the reconciler "taking the higher tier"; since higher-wins is a mechanical rule and
+  the invariant is "code computes," the *tier resolution* is deterministic
+  (`stages/threshold.py::resolve_inputs`) and the reconciler agent writes only
+  narrative + rationale + divergence notes — it never emits a tier or a rating. This
+  makes the entire §3 rating path a provable code output (the strongest reading of
+  §10) and is why `threshold_reconciler.v1.md` has no tier fields in its schema.
+- **Idempotent resume keys on checkpoint-output-file existence, not the `run.json`
+  `checkpoints` sha.** §5.3 says literally "check whether its checkpoint outputs
+  already exist." Because a stage's own commit sha cannot be known before that commit
+  (a circular definition), the driver treats a stage as done iff its declared output
+  files exist (`run.py::_CHECKPOINT_OUTPUTS`); `run.set_checkpoint(stage, sha)` still
+  records the sha afterwards as best-effort provenance (it persists on the next
+  commit). This is robust: a death after a stage's commit but before the next
+  correctly skips the completed stage on resume.
+- **`GeminiTransport` targets the Google Generative Language `:generateContent` REST
+  endpoint via stdlib urllib** (no new dependency). The request shape
+  (`systemInstruction` / `contents` / `generationConfig.responseMimeType`) is stable
+  and independent of the specific tier id, so it stays correct as Tom's pinned ids
+  change. It reads `GEMINI_API_KEY` from env and is exercised only in Actions; unit
+  tests use `ScriptedTransport`.
+- **The call budget is a per-run ceiling (`run_max_calls`), enforced in `CallBudget`.**
+  §13's per-stage `max_calls` are documented in `budgets.yml`; the driver-shared
+  `CallBudget` enforces the whole-run guard now (the cheap, always-correct backstop),
+  and per-stage enforcement can be layered on when the full stages land.
+- **The `run.py` driver extends by table entry.** New stages are added by registering
+  a handler in `_HANDLERS`, a successor in `_NEXT`, and checkpoint outputs in
+  `_CHECKPOINT_OUTPUTS` (plus a pause/terminal set if applicable) — the loop, resume,
+  heartbeat and failure handling are stage-agnostic. `full.*` stages currently raise
+  `StageNotImplemented`, which the §5.6 handler surfaces as a calm failure.
 - **Cross-KB corpus duplication is retrieval-scoped and intentional.** A document
   may live in more than one `corpus/<specialist>/` folder so it lands in multiple
   specialist KBs. This affects only what a specialist can *retrieve and cite* — it
