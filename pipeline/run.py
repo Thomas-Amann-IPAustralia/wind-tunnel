@@ -27,7 +27,8 @@ from __future__ import annotations
 
 import subprocess
 import sys
-from dataclasses import dataclass
+import time
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable, Protocol
 
@@ -117,13 +118,35 @@ class FakeCommitter:
         return f"fake{self.count:04d}"
 
 
+class GitPushError(RuntimeError):
+    """Raised when a checkpoint commit could not be pushed after retrying through
+    the fetch→rebase→push cycle (TECH_SPEC §14). Left unpushed, a checkpoint only
+    exists in the ephemeral Actions container and is not durable — this must be a
+    loud failure, not a silent local-only commit."""
+
+
 @dataclass
 class GitCommitter:
-    """The Actions-side committer (§14): ``git add`` the run directory and commit with
-    the built-in ``GITHUB_TOKEN`` identity. A no-op commit (nothing staged) returns
-    the current HEAD rather than failing."""
+    """The Actions-side committer (§14): ``git add`` the run directory, commit with
+    the built-in ``GITHUB_TOKEN`` identity, and **push every commit immediately**.
+
+    Every stage checkpoint must be durable the instant it is committed — the
+    Actions runner's disk is destroyed at job end (§14 "Render disk is ephemeral"
+    applies equally here), and a user pause or a mid-run crash both rely on the
+    *pushed* history for resume (§5.2, §5.6). A local-only commit that is never
+    pushed would be invisible to the next dispatch and to the backend's status
+    proxy, silently breaking near-real-time polling. Push failures are retried
+    with the fetch→rebase→push cycle (§14) to absorb another writer's commits to
+    a different run's disjoint path.
+
+    A no-op commit (nothing staged) returns the current HEAD rather than failing
+    or pushing."""
 
     repo_root: Path
+    remote: str = "origin"
+    branch: str | None = None  # None => whatever is currently checked out
+    push_retries: int = 4
+    sleep: Callable[[float], None] = field(default=time.sleep)
 
     def commit(self, run_dir: Path, message: str) -> str:
         subprocess.run(["git", "add", "-A", str(run_dir)], cwd=self.repo_root, check=True)
@@ -136,6 +159,7 @@ class GitCommitter:
         )
         if status.stdout.strip():
             subprocess.run(["git", "commit", "-m", message], cwd=self.repo_root, check=True)
+            self._push_with_retry()
         head = subprocess.run(
             ["git", "rev-parse", "HEAD"],
             cwd=self.repo_root,
@@ -144,6 +168,49 @@ class GitCommitter:
             text=True,
         )
         return head.stdout.strip()
+
+    def _push_with_retry(self) -> None:
+        branch = self.branch or self._current_branch()
+        delay = 1.0
+        for attempt in range(1, self.push_retries + 1):
+            result = subprocess.run(
+                ["git", "push", self.remote, f"HEAD:{branch}"],
+                cwd=self.repo_root,
+                capture_output=True,
+                text=True,
+            )
+            if result.returncode == 0:
+                return
+            if attempt == self.push_retries:
+                raise GitPushError(
+                    f"git push to {self.remote}/{branch} failed after "
+                    f"{self.push_retries} attempts: {result.stderr.strip()}"
+                )
+            # Non-fast-forward: another writer committed to a disjoint path (§14).
+            # Rebase onto the latest remote tip and retry — our changes touch only
+            # this run's own files, so the rebase applies cleanly. Best-effort: if
+            # the remote is genuinely unreachable, fetch/rebase themselves fail
+            # (not just the push), and the loop's final push attempt reports that.
+            subprocess.run(
+                ["git", "fetch", self.remote, branch], cwd=self.repo_root, capture_output=True
+            )
+            subprocess.run(
+                ["git", "rebase", f"{self.remote}/{branch}"],
+                cwd=self.repo_root,
+                capture_output=True,
+            )
+            self.sleep(delay)
+            delay *= 2
+
+    def _current_branch(self) -> str:
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            cwd=self.repo_root,
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        return result.stdout.strip()
 
 
 def run_pipeline(

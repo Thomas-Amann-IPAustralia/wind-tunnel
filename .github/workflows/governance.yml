@@ -1,0 +1,57 @@
+# Governance Action (TECH_SPEC §5, §5.7, §14). Runs pipeline/run.py for one
+# run, dispatched by the backend (POST /api/runs/{id}/submit, .../route) with
+# {run_id, resume_from}. The driver commits+pushes its own checkpoints as it
+# goes (pipeline/run.py::GitCommitter, §14) — this job does no committing of
+# its own beyond configuring the identity the driver commits under.
+
+name: governance
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: "Run code, e.g. WT-7K3D-Q2 (TECH_SPEC §3)"
+        required: true
+      resume_from:
+        description: "Stage to resume from (TECH_SPEC §5.3), e.g. THRESHOLD_DRAFTING"
+        required: true
+
+permissions:
+  contents: write
+
+# One workflow run per run_id at a time — a second dispatch for the same run
+# (e.g. a retried "hasn't started yet" re-dispatch, §5.7) queues rather than
+# racing the first. Different runs are disjoint paths (§14) and run in parallel.
+concurrency:
+  group: governance-${{ github.event.inputs.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  govern:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.11"
+
+      - name: Sync pipeline deps
+        working-directory: pipeline
+        run: uv sync
+
+      - name: Configure git identity for checkpoint commits
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Run governance pipeline
+        working-directory: pipeline
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          uv run python -m run \
+            "${{ github.event.inputs.run_id }}" \
+            --resume-from "${{ github.event.inputs.resume_from }}"

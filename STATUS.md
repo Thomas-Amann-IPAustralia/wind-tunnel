@@ -3,17 +3,24 @@
 ## Current stage
 
 **Stage 2 — Threshold** (PROJECT_BRIEF.md §9) — **governance slice built and tested;
-exit test MET for the deterministic wiring.** (Stage 0 — Foundations remains met;
-its record is preserved below under Done.)
+exit test MET for the deterministic wiring. The backend is now live-dispatchable
+end-to-end** (run creation → submit → Governance Action → checkpoint pushes →
+status proxy → threshold routing), still with the LLM seam mockable and the
+frontend not yet built. (Stage 0 — Foundations remains met; its record is
+preserved below under Done.)
 
 Scope of Stage 2: generalists, reconciler, deterministic rating engine, review/revise
-UI, markdown export. **Built this branch:** the whole pipeline-side threshold path —
+UI, markdown export. **Built previously:** the whole pipeline-side threshold path —
 two generalists → code higher-wins resolution → the deterministic engine → routing →
 the `THRESHOLD_REVIEW` pause — driven end-to-end by `pipeline/run.py`, plus markdown
-export. **Not yet built:** the backend API that serves/routes a paused run and the
-frontend review/revise UI (those are Stage 2's remaining surface), and live Gemini
-calls (the seam is mockable; the live transport is written but only exercised in
-Actions with a key).
+export. **Built this branch:** the backend that dispatches it (`backend/app.py`,
+`github_io.py`, `dispatch.py`, `config.py`, `outline.py`) and the `governance.yml`
+Action that runs it, plus a durability fix to the pipeline's own commit helper (see
+Done, below). **Not yet built:** the Brainstorm interview (interviewer, sufficiency,
+PoC/flow-map endpoints, `templates/outline.md` amendment beyond initial copy), the
+frontend entirely (review/revise UI, the transparency animation, resume-by-code
+screen), the `full.*` pipeline stages, and a first live Gemini run (the seam is
+mockable; the live transport is written but only exercised in Actions with a key).
 
 **Exit test** ("threshold output for a known test case matches a hand-worked
 assessment's ratings exactly", brief §9): **met for the engine wiring.**
@@ -32,6 +39,86 @@ pipeline.
 
 ## Done
 
+- **Backend API + dispatch + status proxy, and the `governance.yml` Action that
+  makes the pipeline live-dispatchable (TECH_SPEC §7, §5.7, §14; this branch).**
+  21 new tests (`backend/tests/test_app.py`), all LLM-free and network-free
+  (`FakeGitHubClient`/`FakeDispatcher`, TECH_SPEC §15); ruff clean. The slice
+  built — deliberately narrower than the full §7 table, matching the prior
+  handoff's step 1 scope:
+  - **`backend/app.py`** — a FastAPI app factory (`create_app(github=, dispatcher=,
+    settings=)`, so the real GitHub/dispatch clients are swappable for fakes with
+    no network in tests). Endpoints: `GET /api/health`; `POST /api/runs` (draws +
+    collision-checks a run code via `runcode.generate_unique`, commits the initial
+    `run.json` + `status.json` + `brainstorm/outline.md` skeleton as **one** atomic
+    commit); `GET /api/runs/{id}/status` (the primary poll — proxies `status.json`
+    with `If-None-Match` → `304` passthrough); `GET /api/runs/{id}/artefact/{name}`
+    (download proxy, `name` allow-listed against exactly the four artefacts TECH_SPEC
+    §7 names — anything else refused before it ever becomes a repo path); `POST
+    /api/runs/{id}/submit` (BRAINSTORM → SUBMITTED, dispatches
+    `resume_from=THRESHOLD_DRAFTING`); `POST /api/runs/{id}/threshold/route` (`{outcome:
+    conclude|full}` — conclude finalises to CONCLUDED/complete, full dispatches
+    `resume_from=FULL_DRAFTING`, both refuse outside `THRESHOLD_REVIEW`+`awaiting_user`);
+    `POST /api/runs/{id}/resume` (validated-code rehydration for the SPA). **Not**
+    built: `/brainstorm/message`, `/edit-outline`, `/poc`, `/flow-map`, `/revise`,
+    `/answers` — Brainstorm-interview and full-assessment-checkpoint work, out of
+    this slice's scope (see handoff notes).
+  - **Statelessness by construction.** Every endpoint re-reads `run.json`/`status.json`
+    from the repo per call rather than trusting in-process memory — a cold Render
+    instance has none, and the repo is the only durable store (CLAUDE.md §3, §9).
+  - **Every `{run_id}` path param is validated through `runcode.validate` before it
+    ever becomes a Contents-API path** — closes a real path-traversal surface (an
+    unvalidated id could otherwise address arbitrary repo paths through the Contents
+    API), not just a format nicety; tested (`test_status_proxy_rejects_malformed_run_id`
+    et al.).
+  - **`backend/github_io.py`** — the commit helper (§14): `RestGitHubClient` over
+    stdlib `urllib` (no new HTTP-client dependency, matching `pipeline/llm.py`'s
+    `GeminiTransport` pattern) — Contents API reads with `If-None-Match` passthrough,
+    Git Data API writes (tree + commit + ref update) so a multi-file skeleton or
+    checkpoint lands as one atomic commit rather than sequential Contents-API PUTs.
+    A non-fast-forward ref update is retried by re-reading the tip and rebuilding the
+    tree — because every writer touches only its own disjoint `runs/<run-id>/...`
+    path, the retry always succeeds (§14's rebase-and-retry, expressed without a
+    working copy). `FakeGitHubClient` (in-memory, real-enough 404/304/ok semantics)
+    is the test double.
+  - **`backend/dispatch.py`** — `WorkflowDispatcher` (the one `workflow_dispatch`
+    POST, §5.7 — fire-and-forget, never waits on the run) + `FakeDispatcher` for
+    tests. Shares the fine-grained PAT's env var with `github_io.py`
+    (`WINDTUNNEL_PAT`), read lazily so construction never fails on an unconfigured
+    env (CLAUDE.md §6: neither ever reaches the SPA).
+  - **`backend/config.py`** — the Python owner of deployment identity (CLAUDE.md
+    §6): GitHub owner/repo/branch, the governance workflow filename, CORS origins.
+    Env-overridable, pinned defaults correct for this deployment. When
+    `frontend/config.ts` lands it mirrors these by hand (see Decisions — no
+    Python↔TS codegen exists or is planned).
+  - **`backend/outline.py`** — `render_initial_outline`: copies `templates/outline.md`
+    verbatim with `run_id`/`created_at`/`updated_at` filled into the front-matter
+    (§7.1). The only outline write in this slice; turn-by-turn amendment is
+    Brainstorm-interview work.
+  - **Packaging (resolves the prior handoff's open question): "thin shared import,"
+    not vendoring.** `backend/app.py` (and `backend/tests/conftest.py`) add
+    `pipeline/` to `sys.path` and import `runcode`/`statefile`/`status` directly —
+    both deployables share the one repo at runtime (TECH_SPEC §1), so this is a real
+    import of the one owner of the run-code/run.json/status.json facts, not a fork
+    of them (CLAUDE.md §3 "one owner per fact"). `backend/pyproject.toml` gained
+    `fastapi`, `uvicorn`, and `pyyaml` (the last because `status.py`'s
+    `load_expected_ranges()` needs it transitively).
+  - **`.github/workflows/governance.yml`** — `workflow_dispatch` with
+    `{run_id, resume_from}`, installs pipeline deps via `uv`, configures the
+    Actions-bot git identity, runs `python -m run <run_id> --resume-from <stage>`
+    with `GEMINI_API_KEY` from secrets. `concurrency: governance-<run_id>` so a
+    retried dispatch for the same run (the §5.7 "hasn't started yet — retry?" path)
+    queues rather than racing; different runs' disjoint paths run in parallel.
+  - **Durability fix to `pipeline/run.py`'s `GitCommitter` (a real gap found while
+    building the backend, not a spec contradiction — see Decisions).** It committed
+    locally but never pushed; without a push, every checkpoint the backend's status
+    proxy is supposed to see would stay invisible until the whole Actions job ended,
+    silently breaking §7's near-real-time polling and §5.6's "last checkpoint stays
+    intact" resume guarantee against a mid-job container death. Fixed: every commit
+    now pushes immediately, with fetch→rebase→retry on a non-fast-forward (§14),
+    injectable `sleep` for fast tests. 4 new tests (`pipeline/tests/test_git_committer.py`)
+    against real local bare-repo remotes (no network): push-on-commit, no-op-stays-
+    local, rebase-and-retry-past-another-writer's-race, and loud failure after
+    exhausting retries.
 - **Threshold governance slice — generalists → reconciler → engine → routing,
   driven end-to-end (TECH_SPEC §5.1, §9, §10; Stage 2).** 12 new tests
   (`tests/test_threshold_pipeline.py`), 89 total green; ruff clean. The pieces:
@@ -199,43 +286,51 @@ pipeline.
 
 ## In progress / handoff notes
 
-The former handoff steps 1–3 (commit/dispatch plumbing, prompts, threshold stage)
-are **done** this branch — see Done → *Threshold governance slice*. `pipeline/run.py`
-is the live driver, the threshold prompts are authored, and the two-generalists →
-reconciler → engine → routing path runs end-to-end to the `THRESHOLD_REVIEW` pause.
+The former handoff steps 1–2 (backend `POST /api/runs` + dispatch + status proxy,
+`governance.yml`) are **done** this branch — see Done → *Backend API + dispatch +
+status proxy*. The pipeline is now live-dispatchable end-to-end: `POST /api/runs`
+creates a run, `POST /api/runs/{id}/submit` dispatches `governance.yml`, the Action
+runs `pipeline/run.py` to the `THRESHOLD_REVIEW` pause and pushes every checkpoint,
+and `GET /api/runs/{id}/status` proxies the result with conditional-GET support.
+`POST /api/runs/{id}/threshold/route` closes the loop (conclude, or dispatch onward
+to `FULL_DRAFTING` — which the driver does not yet implement, see step 1 below).
 Next concrete steps, in rough dependency order:
 
-1. **Backend `POST /api/runs` + dispatch + status proxy (TECH_SPEC §7, §5.7, §14).**
-   The pipeline driver is ready to be *dispatched*; what's missing is the backend
-   that creates a run and triggers `governance.yml`. Needed: `backend/app.py`
-   (`POST /api/runs` → `runcode.generate_unique` with a Contents-API existence check
-   + `RunState.new().save()` + `StatusModel.initial().save()` + commit the skeleton
-   incl. `brainstorm/outline.md`; the status/artefact GET proxies; `POST
-   /api/runs/{id}/route` at the threshold pause → dispatch `resume_from=FULL_DRAFTING`
-   or set `CONCLUDED`); `backend/github_io.py` (Contents/Git-Data API commit helper,
-   serialise-per-run, §14); `backend/dispatch.py` (`workflow_dispatch` trigger, §5.7).
-   Packaging note still open: backend and pipeline share only the repo at runtime, and
-   the run-state + runcode modules live in `pipeline/` — vendor them into `backend/`
-   or add a thin shared import when `backend/` lands.
-2. **`.github/workflows/governance.yml`** — the `workflow_dispatch` workflow (inputs
-   `{run_id, resume_from}`) that installs `pipeline/` deps via `uv` and runs
-   `python -m run <run_id> --resume-from <stage>` with `GEMINI_API_KEY` + the built-in
-   `GITHUB_TOKEN` (the driver's `GitCommitter` uses the working-copy checkout). This
-   plus step 1 turns the built driver into a live, dispatchable run.
-3. **Full-assessment stages (`pipeline/stages/`, `FULL_DRAFTING` onward, §5.1).** The
-   driver stops at `THRESHOLD_REVIEW` and raises `StageNotImplemented` for `full.*`.
-   Build: specialist prompts (per-specialist owned sections, §9.3) + the specialist
-   retrieval loop (give each specialist its `kb/<specialist>.index.json` in-context +
-   the `KB.fetch`/`KB.search` tools — `retrieval.KB`, already built — enforcing
-   `config/retrieval.yml` caps and emitting `retrieval` events §6.3); the question
-   checkpoint (`FULL_CHECKPOINT` pause, already a pause-stage in the driver); the
-   architect appendix; the reviewer loop (§11, residual 12.3/12.4 reuse the engine);
-   and notebook + HTML assembly (§12). Register each in `run.py`'s `_HANDLERS`/`_NEXT`/
-   `_CHECKPOINT_OUTPUTS` maps — the driver is built to extend by table entry.
-4. **Frontend threshold review/revise UI + live-model wiring** — the remaining Stage 2
-   surface: the review screen at the pause (design §7.4), user revision (≤2) of the
-   threshold artefact, and a first live Gemini run to eval real generalist/reconciler
-   judgement (the seam is mockable and unit-tested; live quality is untested).
+1. **Full-assessment stages (`pipeline/stages/`, `FULL_DRAFTING` onward, §5.1).** The
+   driver stops at `THRESHOLD_REVIEW` and raises `StageNotImplemented` for `full.*` —
+   routing a run to "full" via the new endpoint dispatches it, but the Action will
+   fail calmly at `FULL_DRAFTING` until this is built. Build: specialist prompts
+   (per-specialist owned sections, §9.3) + the specialist retrieval loop (give each
+   specialist its `kb/<specialist>.index.json` in-context + the `KB.fetch`/`KB.search`
+   tools — `retrieval.KB`, already built — enforcing `config/retrieval.yml` caps and
+   emitting `retrieval` events §6.3); the question checkpoint (`FULL_CHECKPOINT`
+   pause, already a pause-stage in the driver, but nothing yet raises questions or
+   drives `POST /api/runs/{id}/answers`, which also doesn't exist yet — add it
+   alongside); the architect appendix; the reviewer loop (§11, residual 12.3/12.4
+   reuse the engine); and notebook + HTML assembly (§12). Register each in `run.py`'s
+   `_HANDLERS`/`_NEXT`/`_CHECKPOINT_OUTPUTS` maps — the driver is built to extend by
+   table entry.
+2. **Brainstorm interview + outline canvas (backend `brainstorm/` + frontend).**
+   `POST /api/runs` currently only *seeds* `brainstorm/outline.md` from the template
+   (`backend/outline.py`) — nothing yet amends it. Needed: the interviewer
+   (Flash-Lite, §7.1), the sufficiency judge, `POST /api/runs/{id}/brainstorm/message`
+   + `.../edit-outline`, the feasibility gate + PoC/flow-map generation
+   (`POST .../poc`, `.../flow-map`), and `POST .../revise` for the ≤2-per-artefact
+   brainstorm revisions (brief §7). This is what turns `Stage.BRAINSTORM` into
+   something a user actually drives, ahead of hitting `/submit`.
+3. **Frontend, entirely.** `frontend/` is still just a `README.md` + `.gitkeep`. Needed
+   before *any* of the above is usable end-to-end by a person: the ghosted-canvas
+   Brainstorm UI (design §6), the transparency animation driven by `status.json`
+   polling (design §7, this branch's status proxy is what it polls), the threshold
+   review/revise screen (design §7.4) talking to `/threshold/route`, the checkpoint
+   question UI, the resume-by-code screen (`/api/runs/{id}/resume`, built this
+   branch), and the report (design §8). `frontend/config.ts` also needs writing —
+   see Decisions below on keeping it in sync with `backend/config.py` by hand.
+4. **A first live Gemini run** to eval real generalist/reconciler judgement (the LLM
+   seam is mockable and unit-tested end-to-end; live quality is untested). Exercisable
+   now via `POST /api/runs` → `/submit` with `WINDTUNNEL_PAT` + `GEMINI_API_KEY` set,
+   once step 1 or a threshold-only run is dispatched — no frontend required to smoke
+   test this with a raw HTTP client.
 
 **Deferred within retrieval (not blocking):** the optional Flash-written one-line
 descriptions for uninformative index headings (§8.4) are not generated — the index
@@ -313,6 +408,56 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **`GitCommitter` now pushes every commit immediately, with fetch→rebase→retry
+  on non-fast-forward (this branch, `pipeline/run.py`).** Not a documents
+  contradiction — a real gap in the prior build: it committed locally only, which
+  is fine for `FakeCommitter`-driven tests but would have silently broken §7's
+  near-real-time status polling in real Actions runs (a checkpoint invisible to
+  the backend until the whole job ended) and weakened §5.6's "last checkpoint
+  stays intact" guarantee against a mid-job container death. Found and fixed while
+  building the backend that depends on checkpoints actually being visible
+  mid-run. Push uses `HEAD:<branch>` against `origin` with an injectable `sleep`
+  for fast tests; retries rebase onto the latest remote tip on a non-fast-forward
+  (§14) — safe because every writer's changes are confined to one run's disjoint
+  path. `pipeline/tests/test_git_committer.py` exercises this against real local
+  bare-repo remotes (push-on-commit, no-op stays local, rebase-past-another-
+  writer's-race, loud failure after exhausting retries) — no network needed.
+- **Backend↔pipeline packaging: a thin shared import, not vendoring (STATUS.md's
+  own prior open question, resolved this branch).** `backend/app.py` and
+  `backend/tests/conftest.py` add `pipeline/` to `sys.path` and import
+  `runcode`/`statefile`/`status` directly, rather than copying those modules into
+  `backend/`. Chosen over vendoring because both deployables check out the same
+  repo at runtime (TECH_SPEC §1) — a real import costs nothing and keeps CLAUDE.md
+  §3's "one owner per fact" literal (a vendored copy would silently drift the
+  moment either side changed independently). Cost: `backend/pyproject.toml` needs
+  `pyyaml` too, since `status.py`'s `load_expected_ranges()` reads
+  `config/budgets.yml` with it — a small, correctly-attributed transitive
+  dependency, not a new fact to own.
+- **Every `{run_id}` path param is validated through `runcode.validate` before
+  building any repo path (`backend/app.py::_valid_run_id`), on every endpoint —
+  not only the `/resume` endpoint TECH_SPEC §7 explicitly calls this out for.**
+  The spec's own text for the artefact proxy ("arbitrary repo paths are refused")
+  implies the same discipline is needed wherever a client-supplied string reaches
+  a GitHub Contents-API path; centralising it as a FastAPI dependency makes that
+  true structurally rather than per-endpoint-by-convention.
+- **`backend/config.py` is the one Python owner of deployment identity (repo
+  owner/name, branch, CORS origins), env-overridable with pinned correct
+  defaults.** CLAUDE.md §6 names "a pipeline constant" as the counterpart to
+  `frontend/config.ts`; since only the backend (not the pipeline proper) needs
+  these facts to make GitHub API calls, they live in `backend/config.py`, not a
+  new `pipeline/` module. There is no Python↔TypeScript codegen — when
+  `frontend/config.ts` is written it copies these values by hand; a mismatch
+  would be a same-day-fixable config bug, not a structural one, and codegen for
+  three constants would be over-engineering for this scale (CLAUDE.md's "don't
+  design for hypothetical future requirements").
+- **The commit helper's writes use the Git Data API (tree + commit + ref update)
+  rather than sequential Contents-API `PUT`s.** TECH_SPEC §14 says "commits via
+  the GitHub Contents / Git Data API" without picking one; Git Data API was
+  chosen because run creation and every checkpoint commit are inherently
+  multi-file (`run.json` + `status.json`, sometimes + an artefact), and the
+  Contents API has no multi-file atomic write — sequential PUTs would let a
+  crash between them land a run.json/status.json pair that disagree. One tree +
+  one commit + one ref update is atomic by construction.
 - **§3 tier resolution is done in code, not by the reconciler LLM.** §10.3 describes
   the reconciler "taking the higher tier"; since higher-wins is a mechanical rule and
   the invariant is "code computes," the *tier resolution* is deterministic
