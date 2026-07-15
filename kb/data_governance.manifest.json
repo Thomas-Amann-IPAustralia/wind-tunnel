@@ -1,7 +1,7 @@
 {
   "specialist": "data_governance",
-  "generated_at": "2026-07-14T22:47:24Z",
-  "git_sha": "8e724fff684ba2504c4db28a48e753633656c30f",
+  "generated_at": "2026-07-15T01:20:15Z",
+  "git_sha": "b8569aef37e88188b90c9b8f04d86198d9b97e3d",
   "chunker": {
     "target_tokens_min": 400,
     "target_tokens_max": 900,
@@ -11,11 +11,11 @@
   "retrieval_model": "index + fetch/search (FTS5 BM25); no embeddings (TECH_SPEC §8.8)",
   "sqlite": {
     "path": "data_governance.sqlite",
-    "sha256": "4174deffe0a37ee4a82b1aab55db6dda3a43d8195008cff856e0ae7fc8cd186f"
+    "sha256": "cadaa05339181c0c3f584f99e669bbb25c06e019728b40323d9ea112eff396e1"
   },
   "index": {
     "path": "data_governance.index.json",
-    "sha256": "ff6b235db061975814e7efe231114460f5722183f124644ab50380738422abfb"
+    "sha256": "8fb7c0c4efdd208b29eaac6fad0ddd1d49c6d2678cc9ea729eef9be215fb72d3"
   },
   "document_count": 4,
   "documents": [
