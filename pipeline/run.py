@@ -21,8 +21,9 @@ a terminal state, or a failure (§5.3). Four invariants live here:
 
 The driver routes the threshold path end-to-end to ``THRESHOLD_REVIEW``, and the
 full path through ``FULL_DRAFTING`` to whichever comes next: the ``FULL_CHECKPOINT``
-user pause if a specialist raised a question, or ``ARCHITECT`` otherwise. Stages
-from ``ARCHITECT`` onward are not built yet and raise ``StageNotImplemented``.
+user pause if a specialist raised a question, or ``ARCHITECT`` otherwise. ``ARCHITECT``
+then writes the implementation-plan appendix and advances to ``REVIEW``. Stages from
+``REVIEW`` onward are not built yet and raise ``StageNotImplemented``.
 """
 
 from __future__ import annotations
@@ -37,7 +38,14 @@ from typing import Callable, Protocol
 
 from llm import GeminiTransport, LLMClient
 from stages.context import StageContext
-from stages.full import QUESTIONS_RELPATH, SPECIALISTS, full_drafting
+from stages.full import (
+    ARCHITECT_MD_RELPATH,
+    ARCHITECT_NODE,
+    QUESTIONS_RELPATH,
+    SPECIALISTS,
+    architect,
+    full_drafting,
+)
 from stages.threshold import (
     NODE_A,
     NODE_RECONCILER,
@@ -53,6 +61,7 @@ _HANDLERS: dict[Stage, Callable[[StageContext], None]] = {
     Stage.THRESHOLD_DRAFTING: threshold_drafting,
     Stage.THRESHOLD_RECONCILING: threshold_reconciling,
     Stage.FULL_DRAFTING: full_drafting,
+    Stage.ARCHITECT: architect,
 }
 
 # Stage → the next stage on success. FULL_DRAFTING is conditional (see
@@ -62,6 +71,7 @@ _NEXT: dict[Stage, Stage] = {
     Stage.THRESHOLD_DRAFTING: Stage.THRESHOLD_RECONCILING,
     Stage.THRESHOLD_RECONCILING: Stage.THRESHOLD_REVIEW,
     Stage.FULL_DRAFTING: Stage.FULL_CHECKPOINT,
+    Stage.ARCHITECT: Stage.REVIEW,
 }
 
 
@@ -69,7 +79,7 @@ def _resolve_next(stage: Stage, run_dir: Path) -> Stage:
     """The stage after ``stage`` completes. Only FULL_DRAFTING branches at
     runtime (§5.1): if no specialist raised a question, FULL_CHECKPOINT (and
     FULL_REVISING, which exists only to act on answers) are skipped entirely —
-    the happy path goes straight to ARCHITECT (not yet built, §5.6 calm failure)."""
+    the happy path goes straight to ARCHITECT (skipping the checkpoint pause)."""
     if stage is Stage.FULL_DRAFTING and not (run_dir / QUESTIONS_RELPATH).is_file():
         return Stage.ARCHITECT
     return _NEXT[stage]
@@ -85,6 +95,7 @@ _CHECKPOINT_OUTPUTS: dict[Stage, tuple[str, ...]] = {
         "threshold/divergence.json",
     ),
     Stage.FULL_DRAFTING: tuple(f"full/specialists/{s}.json" for s in SPECIALISTS),
+    Stage.ARCHITECT: (ARCHITECT_MD_RELPATH,),
 }
 
 # Stage → a representative node for a failure with no single active node (§5.6).
@@ -92,6 +103,7 @@ _STAGE_FAIL_NODE: dict[Stage, str] = {
     Stage.THRESHOLD_DRAFTING: NODE_A,
     Stage.THRESHOLD_RECONCILING: NODE_RECONCILER,
     Stage.FULL_DRAFTING: f"full.specialist.{SPECIALISTS[0]}",
+    Stage.ARCHITECT: ARCHITECT_NODE,
 }
 
 # Human phrase per stage for the calm failure message (§5.6, design §7.2.4).
@@ -99,6 +111,7 @@ _STAGE_PHRASE: dict[Stage, str] = {
     Stage.THRESHOLD_DRAFTING: "drafting the threshold assessment",
     Stage.THRESHOLD_RECONCILING: "reconciling the threshold assessment",
     Stage.FULL_DRAFTING: "drafting the full assessment specialist sections",
+    Stage.ARCHITECT: "writing the implementation-plan appendix",
 }
 
 
