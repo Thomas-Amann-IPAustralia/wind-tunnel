@@ -1,7 +1,7 @@
 {
   "specialist": "ethics",
-  "generated_at": "2026-07-15T04:52:26Z",
-  "git_sha": "10d7c7debdcfb2c7dd030f7c7a559fee5545a5cf",
+  "generated_at": "2026-07-15T14:39:39Z",
+  "git_sha": "6e760a7f1e0ee83fe81ff9602239495b27e22519",
   "chunker": {
     "target_tokens_min": 400,
     "target_tokens_max": 900,
@@ -11,11 +11,11 @@
   "retrieval_model": "index + fetch/search (FTS5 BM25); no embeddings (TECH_SPEC §8.8)",
   "sqlite": {
     "path": "ethics.sqlite",
-    "sha256": "ee70c758f0c90352291f37a8380c3c104554a4385543a718506e7c33a379021f"
+    "sha256": "047bc044048df522e11893a32ba28d28724483a012a83bb2cd1052991cf99d90"
   },
   "index": {
     "path": "ethics.index.json",
-    "sha256": "26d259a249cdb603afcce0a11345bf883091e162cfbc8c534be4e7784e4a8295"
+    "sha256": "260e51029f0e9f9c36690861beb382798ca21b0145b7dec9b9c5376bfc7ad82c"
   },
   "document_count": 17,
   "documents": [
