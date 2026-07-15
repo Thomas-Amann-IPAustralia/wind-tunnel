@@ -17,6 +17,16 @@
 # feasibility_gate, outline_synth, poc_gen, map_gen, reviewer.
 
 prompts:
+  interviewer:
+    file: interviewer.v1.md
+    model_role: interviewer            # resolves via config/models.yml (Flash-Lite)
+                                        # one co-design Brainstorm turn: reply + write
+                                        # resolved outline sections (§7, §7.1)
+  sufficiency:
+    file: sufficiency.v1.md
+    model_role: sufficiency            # resolves via config/models.yml (Flash-Lite)
+                                        # the judged half of the sufficiency rubric —
+                                        # contradictions + happy-path narratability (§7.1)
   threshold_generalist:
     file: threshold_generalist.v1.md
     model_role: threshold_generalist   # resolves via config/models.yml (Flash)
@@ -39,3 +49,13 @@ prompts:
                                         # audits coverage + coherence, issues amend
                                         # directives, judges residual 12.3/12.4 (§5.1
                                         # REVIEW, §11); the engine computes the ratings
+  revision_triage:
+    file: revision_triage.v1.md
+    model_role: reviewer               # resolves via config/models.yml (Pro)
+                                        # USER_REVISION step 1 (§5.8): triages the user's
+                                        # revision request into amend directives + declines
+  revision_verify:
+    file: revision_verify.v1.md
+    model_role: reviewer               # resolves via config/models.yml (Pro)
+                                        # USER_REVISION step 3 (§5.8): one verification pass —
+                                        # confirms directives met, re-judges residual

@@ -313,6 +313,50 @@ def test_gather_inputs_orders_full_sections_and_gaps(tmp_path):
     assert data["title"] == "AI triage assistant for enquiries"
 
 
+def test_gather_inputs_revision_label(tmp_path):
+    # No label on the first assembly; "Revision N of 2" once a full revision has been recorded.
+    run_dir = _seed_assembly_run_dir(tmp_path, "WT-ASM-REV")
+    (tmp_path / "kb").mkdir()
+    run = RunState.new("WT-ASM-REV")
+    run.advance_to(Stage.ASSEMBLY)
+    ctx = StageContext(
+        run_dir=run_dir,
+        run=run,
+        status=StatusModel.initial(run),
+        llm=_noop_llm(),
+        kb_root=tmp_path / "kb",
+    )
+    assert gather_inputs(ctx)["revision_label"] == ""
+    run.revisions["full"] = 1
+    assert gather_inputs(ctx)["revision_label"] == "Revision 1 of 2"
+
+
+def test_archive_superseded_moves_outgoing_report(tmp_path):
+    from stages.assembly import archive_superseded
+
+    run_dir = _seed_assembly_run_dir(tmp_path, "WT-ASM-ARCH")
+    artefacts = run_dir / "artefacts"
+    artefacts.mkdir()
+    (artefacts / "assessment.ipynb").write_text('{"cells": []}', "utf-8")
+    (artefacts / "assessment.html").write_text("<html>old</html>", "utf-8")
+    run = RunState.new("WT-ASM-ARCH")
+    ctx = StageContext(
+        run_dir=run_dir,
+        run=run,
+        status=StatusModel.initial(run),
+        llm=_noop_llm(),
+        kb_root=tmp_path / "kb",
+    )
+    moved = archive_superseded(ctx, 1)
+    assert (
+        artefacts / "superseded" / "rev_1" / "assessment.html"
+    ).read_text() == "<html>old</html>"
+    assert not (artefacts / "assessment.html").exists()
+    assert len(moved) == 2
+    # Idempotent: a second call with the files already gone is a no-op.
+    assert archive_superseded(ctx, 1) == []
+
+
 def test_gather_inputs_surfaces_skipped_checkpoint_questions(tmp_path):
     # A run that paused at the checkpoint and had a question skipped: the skipped question
     # must reach the report's recommended-next-steps (§5.1 "skipped questions → gaps").

@@ -348,3 +348,84 @@ def test_answers_409s_when_no_questions_on_record(client, github):
     )
     resp = client.post("/api/runs/WT-ANSW-28/answers", json={"answers": [], "skips": []})
     assert resp.status_code == 409
+
+
+# -- full-assessment revision (§5.8) ----------------------------------------------
+
+
+def _seed_complete(github, run_id: str, *, revisions_full: int = 0) -> None:
+    """A run at COMPLETE, optionally with some full-assessment revisions already used."""
+    run = seed_run(
+        github, run_id, stage=statefile.Stage.COMPLETE, stage_status=statefile.StageStatus.COMPLETE
+    )
+    if revisions_full:
+        run.revisions["full"] = revisions_full
+        github.files[run_path(run_id, "run.json")] = dump_json(run.to_dict())
+
+
+def test_revise_commits_request_and_dispatches(client, github, dispatcher):
+    _seed_complete(github, "WT-REDA-22")
+    resp = client.post(
+        "/api/runs/WT-REDA-22/revise",
+        json={"artefact": "full", "instructions": "Tighten the privacy retention analysis."},
+    )
+    assert resp.status_code == 200
+    assert resp.json() == {"run_id": "WT-REDA-22", "revision": 1, "dispatched": True}
+
+    # rev_1/request.json committed with the instructions.
+    request = json.loads(
+        github.files[run_path("WT-REDA-22", "full", "revisions", "rev_1", "request.json")]
+    )
+    assert request["instructions"] == "Tighten the privacy retention analysis."
+
+    # run.json advanced to USER_REVISION with the count incremented, and governance dispatched.
+    run = statefile.RunState.from_dict(json.loads(github.files[run_path("WT-REDA-22", "run.json")]))
+    assert run.stage is statefile.Stage.USER_REVISION
+    assert run.revisions["full"] == 1
+    assert dispatcher.calls[0]["inputs"] == {"run_id": "WT-REDA-22", "resume_from": "USER_REVISION"}
+
+
+def test_revise_second_revision_increments_to_two(client, github):
+    _seed_complete(github, "WT-REDB-23", revisions_full=1)
+    resp = client.post(
+        "/api/runs/WT-REDB-23/revise", json={"artefact": "full", "instructions": "One more change."}
+    )
+    assert resp.status_code == 200
+    assert resp.json()["revision"] == 2
+    assert run_path("WT-REDB-23", "full", "revisions", "rev_2", "request.json") in github.files
+
+
+def test_revise_refuses_over_the_cap(client, github, dispatcher):
+    # Two revisions already used ⇒ the third is refused at the cap (§5.8), nothing dispatched.
+    _seed_complete(github, "WT-REDC-24", revisions_full=2)
+    resp = client.post(
+        "/api/runs/WT-REDC-24/revise", json={"artefact": "full", "instructions": "Again."}
+    )
+    assert resp.status_code == 409
+    assert "cap" in resp.json()["detail"].lower()
+    assert dispatcher.calls == []
+
+
+def test_revise_refuses_when_not_complete(client, github):
+    seed_run(github, "WT-REDD-25", stage=statefile.Stage.FULL_DRAFTING)
+    resp = client.post(
+        "/api/runs/WT-REDD-25/revise", json={"artefact": "full", "instructions": "Change it."}
+    )
+    assert resp.status_code == 409
+
+
+def test_revise_rejects_empty_instructions(client, github):
+    _seed_complete(github, "WT-REDE-26")
+    resp = client.post(
+        "/api/runs/WT-REDE-26/revise", json={"artefact": "full", "instructions": "   "}
+    )
+    assert resp.status_code == 400
+
+
+def test_revise_rejects_non_full_artefact(client, github):
+    # Only "full" is served here; other artefacts revise on their own paths (§7).
+    _seed_complete(github, "WT-REDF-27")
+    resp = client.post(
+        "/api/runs/WT-REDF-27/revise", json={"artefact": "threshold", "instructions": "x"}
+    )
+    assert resp.status_code == 422

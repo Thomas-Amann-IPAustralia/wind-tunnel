@@ -1,5 +1,9 @@
 """The reviewer agent: coverage + coherence audit, amend directives, residual risk
-(TECH_SPEC §5.1 REVIEW, §11, §12.3/§12.4).
+(TECH_SPEC §5.1 REVIEW, §11, §12.3/§12.4), plus the two USER_REVISION passes (§5.8):
+``run_revision_triage`` (a user revision request → amend directives + declined
+instructions) and ``run_revision_verification`` (one pass confirming the amendments and
+re-judging the residual). All three share the Pro model role and the same two boundaries
+below.
 
 The adjudicating reviewer (Pro) reads the assembled full draft plus the threshold
 assessment and returns four things: coherence findings, amend directives targeting
@@ -107,6 +111,151 @@ def run_reviewer(
     )
     data, resp = client.complete_json("reviewer", prompt.system, user)
     return _parse_result(data, valid_targets, resp, prompt)
+
+
+# -- USER_REVISION: triage + verification (§5.8) -------------------------------
+
+
+@dataclass
+class RevisionTriage:
+    """The reviewer's triage of a user revision request (§5.8 step 1,
+    ``full/revisions/rev_<N>/directives.json``). ``amend_directives`` are the §11.3
+    directives the request translates into; ``declined`` records each instruction the
+    reviewer refused to action, with a plain reason (rating-by-fiat, out of scope, or
+    ungroundable) — never silently dropped."""
+
+    amend_directives: list[dict]
+    declined: list[dict]
+    model: str = ""
+    prompt_version: str = ""
+
+    def to_dict(self) -> dict:
+        return {
+            "amend_directives": self.amend_directives,
+            "declined": self.declined,
+            "provenance": {"model": self.model, "prompt_version": self.prompt_version},
+        }
+
+
+def run_revision_triage(
+    client: LLMClient,
+    *,
+    instructions: str,
+    scope_context: str,
+    draft_context: str,
+    threshold_md: str,
+    outline_md: str,
+    valid_targets: dict[str, tuple[str, ...]],
+) -> RevisionTriage:
+    """Triage a user's full-assessment revision request into amend directives (§5.8 step 1).
+
+    The instructions are wrapped as untrusted content (§9.2) — a revision request is user
+    text, and a line in it that reads as a command to the model is a fact about what the
+    user wants, not an instruction that overrides the rules. Directives are validated for
+    write scope exactly as the review loop's are (§11.3); the reviewer asserts no rating
+    and issues no directive whose effect is to set one — enforced structurally (a directive
+    has no rating field) and by the prompt."""
+    prompt = load_prompt("revision_triage")
+    user = "\n\n".join(
+        [
+            scope_context,
+            wrap_untrusted(outline_md, label="## Use-case outline (the concept under assessment)"),
+            wrap_untrusted(
+                threshold_md,
+                label="## Threshold assessment (sections 1–4 — out of scope for this "
+                "revision; shown for context only)",
+            ),
+            wrap_untrusted(
+                draft_context,
+                label="## The completed full assessment (sections 5–12 — what the user is "
+                "asking to revise)",
+            ),
+            wrap_untrusted(
+                instructions,
+                label="## The user's revision instructions (what they want changed)",
+            ),
+            "## Your task\n\nTriage the request now and return the single JSON object your "
+            "instructions describe: amend directives (each within a specialist's own write "
+            "scope), and declined instructions with reasons. Issue no directive that sets a "
+            "rating, and none touching sections 1–4.",
+        ]
+    )
+    data, resp = client.complete_json(prompt.model_role, prompt.system, user)
+    valid = {spec: set(sections) for spec, sections in valid_targets.items()}
+    return RevisionTriage(
+        amend_directives=_parse_directives(data.get("amend_directives"), valid),
+        declined=_parse_declined(data.get("declined")),
+        model=resp.model,
+        prompt_version=prompt.version,
+    )
+
+
+def run_revision_verification(
+    client: LLMClient,
+    *,
+    directives_context: str,
+    instrument_context: str,
+    draft_context: str,
+    threshold_md: str,
+    outline_md: str,
+) -> ReviewerResult:
+    """The single verification pass closing a revision (§5.8 step 3). Confirms the issued
+    directives were met — anything unmet is returned as an ``unresolved`` point, not
+    re-directed — and re-judges the residual consequence/likelihood per §3 area (the engine
+    rates from these tiers, §12.4). Issues **no** new directives: a revision is one triage,
+    one amendment, one verification (``amend_directives`` is always empty). Returns a
+    :class:`ReviewerResult` so the residual flows through the same engine call the review
+    loop uses."""
+    prompt = load_prompt("revision_verify")
+    user = "\n\n".join(
+        [
+            instrument_context,
+            wrap_untrusted(outline_md, label="## Use-case outline (the concept under assessment)"),
+            wrap_untrusted(
+                threshold_md,
+                label="## Threshold assessment (sections 1–4 and the computed inherent "
+                "risk ratings — the residual you judge is measured against these)",
+            ),
+            directives_context,
+            wrap_untrusted(
+                draft_context,
+                label="## The amended full assessment (sections 5–12 — after this revision's "
+                "amendments)",
+            ),
+            "## Your task\n\nVerify the revision now and return the single JSON object your "
+            "instructions describe: coherence findings, unresolved points for any directive "
+            "not met, and your residual consequence/likelihood judgement for every area "
+            "3.1–3.8. Issue no new directives. Never state a rating — the engine computes it.",
+        ]
+    )
+    data, resp = client.complete_json(prompt.model_role, prompt.system, user)
+    return ReviewerResult(
+        coherence_findings=_parse_findings(data.get("coherence_findings")),
+        amend_directives=[],  # verification never re-directs (§5.8)
+        unresolved=_parse_unresolved(data.get("unresolved")),
+        residual=_parse_residual(data.get("residual")),
+        model=resp.model,
+        prompt_version=prompt.version,
+    )
+
+
+def _parse_declined(raw: object) -> list[dict]:
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise AgentError("reviewer: 'declined' must be a list if present.")
+    out: list[dict] = []
+    for i, d in enumerate(raw, start=1):
+        if not isinstance(d, dict):
+            raise AgentError(f"reviewer: declined item {i} must be an object.")
+        instruction = str(d.get("instruction", "")).strip()
+        reason = str(d.get("reason", "")).strip()
+        if not instruction or not reason:
+            raise AgentError(
+                f"reviewer: declined item {i} needs a non-empty 'instruction' and 'reason'."
+            )
+        out.append({"instruction": instruction, "reason": reason})
+    return out
 
 
 # -- validation (§11.3 write scope, §12.4 no asserted rating) -------------------

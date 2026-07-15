@@ -28,8 +28,10 @@ report and finalises the run at ``COMPLETE``. The full governance path now runs
 end-to-end. When a specialist raised a checkpoint question, the run pauses at
 ``FULL_CHECKPOINT``; a ``resume_from=FULL_REVISING`` dispatch (once the user submits
 answers) resumes into ``FULL_REVISING``, which revises the questioning specialists'
-sections before ``ARCHITECT``. ``USER_REVISION`` (§5.8) is not built yet and raises
-``StageNotImplemented``.
+sections before ``ARCHITECT``. After ``COMPLETE``, a ``resume_from=USER_REVISION``
+dispatch (from ``POST /revise``) runs the ≤2 full-assessment revision path — reviewer
+triage → targeted amendment → one verify pass → ``ASSEMBLY`` rebuilds and returns to
+``COMPLETE`` (§5.8).
 """
 
 from __future__ import annotations
@@ -62,6 +64,8 @@ from stages.full import (
     full_drafting,
     full_revising,
     review,
+    revision_verification_relpath,
+    user_revision,
 )
 from stages.threshold import (
     NODE_A,
@@ -82,6 +86,7 @@ _HANDLERS: dict[Stage, Callable[[StageContext], None]] = {
     Stage.ARCHITECT: architect,
     Stage.REVIEW: review,
     Stage.ASSEMBLY: assembly,
+    Stage.USER_REVISION: user_revision,
 }
 
 # Stage → the next stage on success. FULL_DRAFTING is conditional (see
@@ -95,6 +100,7 @@ _NEXT: dict[Stage, Stage] = {
     Stage.ARCHITECT: Stage.REVIEW,
     Stage.REVIEW: Stage.ASSEMBLY,
     Stage.ASSEMBLY: Stage.COMPLETE,
+    Stage.USER_REVISION: Stage.ASSEMBLY,
 }
 
 
@@ -109,6 +115,9 @@ def _resolve_next(stage: Stage, run_dir: Path) -> Stage:
 
 
 # Stage → the checkpoint output files whose existence means the stage is done (§5.3).
+# USER_REVISION is absent here on purpose: its checkpoint path carries the revision number
+# (rev_<N>/verification.json), which is resolved from run.json at check time — see
+# _checkpoint_outputs.
 _CHECKPOINT_OUTPUTS: dict[Stage, tuple[str, ...]] = {
     Stage.THRESHOLD_DRAFTING: ("threshold/generalist_a.json", "threshold/generalist_b.json"),
     Stage.THRESHOLD_RECONCILING: (
@@ -124,6 +133,16 @@ _CHECKPOINT_OUTPUTS: dict[Stage, tuple[str, ...]] = {
     Stage.ASSEMBLY: (NOTEBOOK_RELPATH, HTML_RELPATH),
 }
 
+
+def _checkpoint_outputs(run: RunState, stage: Stage) -> tuple[str, ...]:
+    """The checkpoint output files for ``stage`` (§5.3). Most are a fixed table entry;
+    USER_REVISION's is per-revision (rev_<N>/verification.json), so it is resolved from
+    ``run.json``'s ``revisions.full`` — the revision the dispatch is working on."""
+    if stage is Stage.USER_REVISION:
+        return (revision_verification_relpath(run.revisions.get("full", 0)),)
+    return _CHECKPOINT_OUTPUTS.get(stage, ())
+
+
 # Stage → a representative node for a failure with no single active node (§5.6).
 _STAGE_FAIL_NODE: dict[Stage, str] = {
     Stage.THRESHOLD_DRAFTING: NODE_A,
@@ -133,6 +152,7 @@ _STAGE_FAIL_NODE: dict[Stage, str] = {
     Stage.ARCHITECT: ARCHITECT_NODE,
     Stage.REVIEW: REVIEWER_NODE,
     Stage.ASSEMBLY: ASSEMBLY_NODE,
+    Stage.USER_REVISION: REVIEWER_NODE,
 }
 
 # Human phrase per stage for the calm failure message (§5.6, design §7.2.4).
@@ -144,6 +164,7 @@ _STAGE_PHRASE: dict[Stage, str] = {
     Stage.ARCHITECT: "writing the implementation-plan appendix",
     Stage.REVIEW: "reviewing the full assessment",
     Stage.ASSEMBLY: "assembling the notebook and report",
+    Stage.USER_REVISION: "revising the full assessment",
 }
 
 
@@ -370,11 +391,9 @@ def _drive(
 
         handler = _HANDLERS.get(stage)
         if handler is None:
-            raise StageNotImplemented(
-                f"No handler for stage {stage} (USER_REVISION not built yet)."
-            )
+            raise StageNotImplemented(f"No handler for stage {stage}.")
 
-        if _checkpoint_exists(run_dir, stage):
+        if _checkpoint_exists(run_dir, run, stage):
             run.advance_to(_resolve_next(stage, run_dir), now=now())
             continue
 
@@ -413,8 +432,8 @@ def _finalise_terminal(
     return _persist_and_commit(run, status, run_dir, committer, f"{stage} (complete)")
 
 
-def _checkpoint_exists(run_dir: Path, stage: Stage) -> bool:
-    outputs = _CHECKPOINT_OUTPUTS.get(stage, ())
+def _checkpoint_exists(run_dir: Path, run: RunState, stage: Stage) -> bool:
+    outputs = _checkpoint_outputs(run, stage)
     return bool(outputs) and all((run_dir / rel).is_file() for rel in outputs)
 
 

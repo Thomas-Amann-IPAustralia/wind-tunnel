@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Callable
 
 from agents.architect import ArchitectPlan, run_architect
 from agents.prompting import (
@@ -39,11 +40,18 @@ from agents.prompting import (
     specialist_owned_sections,
     threshold_instrument_context,
 )
-from agents.reviewer import ReviewerResult, run_reviewer
+from agents.reviewer import (
+    ReviewerResult,
+    run_reviewer,
+    run_revision_triage,
+    run_revision_verification,
+)
 from agents.specialist import SpecialistDraft, run_specialist, run_specialist_amendment
 from rating import overall_rating, rating
 from retrieval.retrieve import KB
+from stages.assembly import archive_superseded
 from stages.context import StageContext
+from statefile import REVISION_CAP
 from status import friendly_name
 
 # The six drafting specialists, in `instrument/sections.json` `specialists` order
@@ -66,6 +74,23 @@ ARCHITECT_NODE = "full.architect"
 ARCHITECT_MD_RELPATH = "full/architect.md"
 REVIEWER_NODE = "full.reviewer"
 RESIDUAL_RELPATH = "full/reviewer/ratings_residual.json"
+UNRESOLVED_RELPATH = "full/reviewer/unresolved.json"
+REVISIONS_RELDIR = "full/revisions"
+
+
+def revision_request_relpath(n: int) -> str:
+    """Where ``POST /revise`` commits the user's revision request (§5.8 entry)."""
+    return f"{REVISIONS_RELDIR}/rev_{n}/request.json"
+
+
+def revision_directives_relpath(n: int) -> str:
+    """The reviewer's triage of revision N (§5.8 step 1)."""
+    return f"{REVISIONS_RELDIR}/rev_{n}/directives.json"
+
+
+def revision_verification_relpath(n: int) -> str:
+    """The reviewer's verification of revision N — USER_REVISION's checkpoint output (§5.8 step 3)."""
+    return f"{REVISIONS_RELDIR}/rev_{n}/verification.json"
 
 
 def _section_sort_key(section_id: str) -> tuple[int, int]:
@@ -388,7 +413,7 @@ def review(ctx: StageContext) -> None:
             directives_unapplied = True  # cap reached with directives still live (§11.4)
             break
         drafts = _apply_amendments(
-            ctx, drafts, result.amend_directives, cycle, outline, threshold_md
+            ctx, drafts, result.amend_directives, outline, threshold_md, cycle=cycle
         )
 
     # Residual 12.3/12.4 — the engine computes from the last cycle's post-mitigation tiers.
@@ -470,13 +495,17 @@ def _apply_amendments(
     ctx: StageContext,
     drafts: dict[str, dict],
     directives: list[dict],
-    cycle: int,
     outline: str,
     threshold_md: str,
+    *,
+    cycle: int | None = None,
+    detail: Callable[[tuple[str, ...]], str] | None = None,
 ) -> dict[str, dict]:
-    """Apply one cycle's directives: each targeted specialist amends its own directed
+    """Apply a set of amend directives: each targeted specialist amends its own directed
     sections (§11.3), re-driving its KB. Directives are grouped per specialist so a
-    specialist amends all its directed sections in one pass."""
+    specialist amends all its directed sections in one pass. Shared by the REVIEW loop
+    (``cycle`` set, default narration) and USER_REVISION (``detail`` set, no cycle) — the
+    machinery is identical; only the ``revision``-event wording and the loop-counter differ."""
     kb_root = ctx.kb_root or _default_kb_root()
     by_spec: dict[str, list[dict]] = {}
     for d in directives:
@@ -487,14 +516,14 @@ def _apply_amendments(
         target_sections = tuple(
             sorted({s for d in dirs for s in d["target_sections"]}, key=_section_sort_key)
         )
+        detail_text = (
+            detail(target_sections)
+            if detail is not None
+            else f"amending {', '.join(target_sections)} per reviewer cycle {cycle}"
+        )
         prior = SpecialistDraft.from_dict(drafts[spec])
         ctx.status.start_node(node)
-        ctx.status.revision(
-            node,
-            f"amending {', '.join(target_sections)} per reviewer cycle {cycle}",
-            cycle=cycle,
-            target=spec,
-        )
+        ctx.status.revision(node, detail_text, cycle=cycle, target=spec)
         index_text = _load_index_text(kb_root, spec)
         with KB(kb_root / f"{spec}.sqlite") as kb:
             new_draft = run_specialist_amendment(
@@ -637,6 +666,128 @@ def render_review_markdown(
                 "",
             ]
     return "\n".join(lines)
+
+
+# -- USER_REVISION -------------------------------------------------------------
+
+
+def user_revision(ctx: StageContext) -> None:
+    """A post-COMPLETE user revision of the full assessment (§5.1 USER_REVISION, §5.8).
+
+    Three steps, in order: (1) the reviewer **triages** the user's instructions into amend
+    directives + declined instructions; (2) the targeted specialists **amend** their own
+    directed sections (the same ``run_specialist_amendment`` machinery REVIEW uses, no new
+    questions raised); (3) the reviewer **verifies** in a single pass and the engine —
+    never the reviewer — recomputes the residual §12.3/§12.4 ratings. Unmet directives are
+    recorded as unresolved rather than looped.
+
+    The whole stage re-runs from step 1 on resume: its only committed output is the
+    revision's ``verification.json`` (the checkpoint), and every input it reads
+    (``request.json``, the specialist drafts) is the last committed state — on a fresh
+    Actions disk an uncommitted partial run left nothing behind, so re-running is clean
+    (the same whole-stage-idempotence REVIEW relies on). The revision number ``N`` is
+    ``run.json``'s ``revisions.full``, already incremented by ``POST /revise`` before the
+    dispatch."""
+    n = ctx.run.revisions.get("full", 0)
+    request = ctx.read_json(revision_request_relpath(n))
+    instructions = str(request.get("instructions", ""))
+    outline = ctx.outline()
+    threshold_md = ctx.read_text("threshold/threshold_assessment.md")
+    drafts = {s: ctx.read_json(f"full/specialists/{s}.json") for s in SPECIALISTS}
+    valid_targets = {s: specialist_owned_sections(s) for s in SPECIALISTS}
+
+    # Archive the outgoing report before it is superseded (§5.8). Doing the move here — at
+    # the revision boundary, not inside ASSEMBLY — keeps ASSEMBLY's idempotent-skip honest:
+    # once the prior assessment.ipynb/.html are moved to superseded/rev_<N>/, ASSEMBLY's
+    # checkpoint files are absent, so the driver rebuilds them rather than mistaking the
+    # superseded report for a completed one. Idempotent (a no-op if already moved).
+    archive_superseded(ctx, n)
+
+    # Step 1 — triage (reviewer, Pro): instructions → amend directives + declines.
+    ctx.status.start_node(REVIEWER_NODE)
+    ctx.status.revision(REVIEWER_NODE, f"user revision {n} of {REVISION_CAP}", target="reviewer")
+    ctx.status.review_finding(
+        REVIEWER_NODE, "Triaging your revision request into amend directives."
+    )
+    triage = run_revision_triage(
+        ctx.llm,
+        instructions=instructions,
+        scope_context=reviewer_scope_context(),
+        draft_context=_render_specialist_context(drafts),
+        threshold_md=threshold_md,
+        outline_md=outline,
+        valid_targets=valid_targets,
+    )
+    ctx.write_json(revision_directives_relpath(n), triage.to_dict())
+    for d in triage.declined:
+        ctx.status.review_finding(REVIEWER_NODE, f"Declined: {d['instruction']} — {d['reason']}")
+    ctx.status.complete_node(REVIEWER_NODE)
+
+    # Step 2 — amendment (targeted specialists amend their own directed sections, §11.3).
+    if triage.amend_directives:
+        drafts = _apply_amendments(
+            ctx,
+            drafts,
+            triage.amend_directives,
+            outline,
+            threshold_md,
+            detail=lambda secs: f"amending {', '.join(secs)} for your revision request",
+        )
+
+    # Step 3 — verification (reviewer, one pass) + deterministic residual recompute (§12.4).
+    ctx.status.start_node(REVIEWER_NODE)
+    ctx.status.review_finding(
+        REVIEWER_NODE, "Verifying the revision and re-judging the residual risk."
+    )
+    verification = run_revision_verification(
+        ctx.llm,
+        directives_context=_render_revision_directives(triage.amend_directives),
+        instrument_context=threshold_instrument_context(),
+        draft_context=_render_specialist_context(drafts),
+        threshold_md=threshold_md,
+        outline_md=outline,
+    )
+    residual = _compute_residual(verification.residual)
+    ctx.write_json(RESIDUAL_RELPATH, residual)
+    ctx.status.review_finding(
+        REVIEWER_NODE,
+        f"Residual overall risk after your revision (highest-wins): {residual['overall_residual']}.",
+    )
+    ctx.status.complete_node(REVIEWER_NODE)
+
+    # The verification's unresolved set is authoritative for the revised report: it re-reads
+    # the whole amended draft, so it — not a stale pre-revision list — is what the report
+    # should show. Replace unresolved.json (removing it when the revision left nothing open).
+    unresolved = list(verification.unresolved)
+    if unresolved:
+        ctx.write_json(UNRESOLVED_RELPATH, unresolved)
+    else:
+        ctx.path(UNRESOLVED_RELPATH).unlink(missing_ok=True)
+
+    ctx.write_json(
+        revision_verification_relpath(n),
+        {
+            "revision": n,
+            "coherence_findings": verification.coherence_findings,
+            "unresolved": unresolved,
+            "declined": triage.declined,
+            "residual": residual,
+            "provenance": {
+                "model": verification.model,
+                "prompt_version": verification.prompt_version,
+            },
+        },
+    )
+
+
+def _render_revision_directives(directives: list[dict]) -> str:
+    """Render the triage directives for the verification pass — so the reviewer can confirm
+    each was addressed (§5.8 step 3). A revision that translated into no directives (every
+    instruction declined) says so plainly."""
+    heading = "## Directives issued in this revision (confirm each was addressed)"
+    if not directives:
+        return heading + "\n\nNo amend directives were issued — no actionable change was found."
+    return heading + "\n\n" + _render_directives(directives)
 
 
 def _build_questions_payload(raised: list[tuple[str, SpecialistDraft]]) -> dict:

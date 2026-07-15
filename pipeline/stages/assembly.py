@@ -21,10 +21,12 @@ from agents.prompting import (
 )
 from assembly import build_document_index, build_notebook, render_html, resolve_references
 from stages.context import StageContext
+from statefile import REVISION_CAP, RunState
 
 ASSEMBLY_NODE = "full.assembly"
 NOTEBOOK_RELPATH = "artefacts/assessment.ipynb"
 HTML_RELPATH = "artefacts/assessment.html"
+SUPERSEDED_RELDIR = "artefacts/superseded"
 
 SPECIALISTS: tuple[str, ...] = (
     "it_security",
@@ -52,6 +54,24 @@ def assembly(ctx: StageContext) -> None:
     ctx.status.complete_node(ASSEMBLY_NODE)
 
 
+def archive_superseded(ctx: StageContext, revision: int) -> list[str]:
+    """Move the outgoing report artefacts to ``artefacts/superseded/rev_<N>/`` before a
+    revision rebuilds them (§5.8). Called at the USER_REVISION boundary, not inside
+    ASSEMBLY, so ASSEMBLY's checkpoint files are absent for a revision and the driver
+    rebuilds rather than skipping. Idempotent: if the outgoing files are already gone (a
+    prior committed move on a re-entry), it is a no-op. Returns the destinations written."""
+    moved: list[str] = []
+    for rel in (NOTEBOOK_RELPATH, HTML_RELPATH):
+        src = ctx.path(rel)
+        if not src.is_file():
+            continue
+        dest_rel = f"{SUPERSEDED_RELDIR}/rev_{revision}/{Path(rel).name}"
+        ctx.write_text(dest_rel, src.read_text(encoding="utf-8"))
+        src.unlink()
+        moved.append(dest_rel)
+    return moved
+
+
 def gather_inputs(ctx: StageContext) -> dict:
     """Collect every artefact the report is built from into one bundle (§12.1). Reads
     only committed on-disk state, so ASSEMBLY re-runs identically on resume (§5.3)."""
@@ -65,6 +85,7 @@ def gather_inputs(ctx: StageContext) -> dict:
     return {
         "run_id": run.run_id,
         "title": _title_from_outline(outline),
+        "revision_label": _revision_label(run),
         "created_at": run.created_at,
         "generated_at": ctx.now(),
         "attested": run.attestation.get("attested", False),
@@ -210,6 +231,13 @@ def _read_optional(ctx: StageContext, relpath: str) -> str:
 
 def _read_json_optional(ctx: StageContext, relpath: str):
     return ctx.read_json(relpath) if _exists(ctx, relpath) else None
+
+
+def _revision_label(run: RunState) -> str:
+    """The honest "Revision N of 2" the report title carries after a user revision (§5.8,
+    design §8). Empty on the first, un-revised assembly."""
+    n = run.revisions.get("full", 0)
+    return f"Revision {n} of {REVISION_CAP}" if n >= 1 else ""
 
 
 def _title_from_outline(outline_md: str) -> str:
