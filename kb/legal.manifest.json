@@ -1,7 +1,7 @@
 {
   "specialist": "legal",
-  "generated_at": "2026-07-15T01:20:11Z",
-  "git_sha": "b8569aef37e88188b90c9b8f04d86198d9b97e3d",
+  "generated_at": "2026-07-15T02:04:05Z",
+  "git_sha": "d5aebf9d81f489b44e1daf0fb73529d36de40d41",
   "chunker": {
     "target_tokens_min": 400,
     "target_tokens_max": 900,
@@ -11,13 +11,13 @@
   "retrieval_model": "index + fetch/search (FTS5 BM25); no embeddings (TECH_SPEC §8.8)",
   "sqlite": {
     "path": "legal.sqlite",
-    "sha256": "14a0e3f317f811933d1814e5c63c6798cacb882f6c38c7e824b12f89a35e6abc"
+    "sha256": "bdcafb060628b6f7a73b24b8ee9b462afd7fdccafd6d0d7b4c5b5d21a4febd5e"
   },
   "index": {
     "path": "legal.index.json",
-    "sha256": "801deaa3186648a1ce46a7c252dacf26ae56491e500ae967b48f0f15ba9f20fb"
+    "sha256": "7ca7b019dda54ad334978f3039d7437529708e2aa46e2588e8968619d04bfe1a"
   },
-  "document_count": 10,
+  "document_count": 11,
   "documents": [
     {
       "doc_id": "2025-ai-task-force-year2-report",
@@ -102,6 +102,20 @@
       "sha256": "3ff275998b931bd0f86f8a5fc20645a166b897cf1c3a5be965c22d8047187942",
       "page_count": null,
       "chunk_count": 37
+    },
+    {
+      "doc_id": "policy-for-the-responsible-use-of-ai-in-government-2-0-0",
+      "short_name": "AI Use Policy v2.0",
+      "title": "Policy for the responsible use of AI in government",
+      "version": "2.0",
+      "publisher": "Digital Transformation Agency",
+      "source_url": "https://www.dta.gov.au/policies-and-guidance/policy-responsible-use-ai-government",
+      "licence": "CC-BY-4.0",
+      "redistributable": true,
+      "format": "pdf",
+      "sha256": "94beda4e6e9f61e0dd5d5f17b45b18cf6015b20fd9aabe41d20318f725273c11",
+      "page_count": 22,
+      "chunk_count": 56
     },
     {
       "doc_id": "the-legal-landscape-for-ai-in-australia",
