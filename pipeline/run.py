@@ -22,9 +22,11 @@ a terminal state, or a failure (§5.3). Four invariants live here:
 The driver routes the threshold path end-to-end to ``THRESHOLD_REVIEW``, and the
 full path through ``FULL_DRAFTING`` to whichever comes next: the ``FULL_CHECKPOINT``
 user pause if a specialist raised a question, or ``ARCHITECT`` otherwise. ``ARCHITECT``
-writes the implementation-plan appendix, then ``REVIEW`` runs the bounded reviewer loop
-(coverage + coherence + residual, §11) and advances to ``ASSEMBLY``. Stages from
-``ASSEMBLY`` onward are not built yet and raise ``StageNotImplemented``.
+writes the implementation-plan appendix, ``REVIEW`` runs the bounded reviewer loop
+(coverage + coherence + residual, §11), and ``ASSEMBLY`` builds the notebook + HTML
+report and finalises the run at ``COMPLETE``. The full governance path now runs
+end-to-end. The Brainstorm-side stages (``FULL_REVISING`` after a checkpoint answer,
+``USER_REVISION``) are not built yet and raise ``StageNotImplemented``.
 """
 
 from __future__ import annotations
@@ -38,6 +40,12 @@ from pathlib import Path
 from typing import Callable, Protocol
 
 from llm import GeminiTransport, LLMClient
+from stages.assembly import (
+    ASSEMBLY_NODE,
+    HTML_RELPATH,
+    NOTEBOOK_RELPATH,
+    assembly,
+)
 from stages.context import StageContext
 from stages.full import (
     ARCHITECT_MD_RELPATH,
@@ -67,6 +75,7 @@ _HANDLERS: dict[Stage, Callable[[StageContext], None]] = {
     Stage.FULL_DRAFTING: full_drafting,
     Stage.ARCHITECT: architect,
     Stage.REVIEW: review,
+    Stage.ASSEMBLY: assembly,
 }
 
 # Stage → the next stage on success. FULL_DRAFTING is conditional (see
@@ -78,6 +87,7 @@ _NEXT: dict[Stage, Stage] = {
     Stage.FULL_DRAFTING: Stage.FULL_CHECKPOINT,
     Stage.ARCHITECT: Stage.REVIEW,
     Stage.REVIEW: Stage.ASSEMBLY,
+    Stage.ASSEMBLY: Stage.COMPLETE,
 }
 
 
@@ -103,6 +113,7 @@ _CHECKPOINT_OUTPUTS: dict[Stage, tuple[str, ...]] = {
     Stage.FULL_DRAFTING: tuple(f"full/specialists/{s}.json" for s in SPECIALISTS),
     Stage.ARCHITECT: (ARCHITECT_MD_RELPATH,),
     Stage.REVIEW: (RESIDUAL_RELPATH,),
+    Stage.ASSEMBLY: (NOTEBOOK_RELPATH, HTML_RELPATH),
 }
 
 # Stage → a representative node for a failure with no single active node (§5.6).
@@ -112,6 +123,7 @@ _STAGE_FAIL_NODE: dict[Stage, str] = {
     Stage.FULL_DRAFTING: f"full.specialist.{SPECIALISTS[0]}",
     Stage.ARCHITECT: ARCHITECT_NODE,
     Stage.REVIEW: REVIEWER_NODE,
+    Stage.ASSEMBLY: ASSEMBLY_NODE,
 }
 
 # Human phrase per stage for the calm failure message (§5.6, design §7.2.4).
@@ -121,6 +133,7 @@ _STAGE_PHRASE: dict[Stage, str] = {
     Stage.FULL_DRAFTING: "drafting the full assessment specialist sections",
     Stage.ARCHITECT: "writing the implementation-plan appendix",
     Stage.REVIEW: "reviewing the full assessment",
+    Stage.ASSEMBLY: "assembling the notebook and report",
 }
 
 
@@ -326,6 +339,7 @@ def _drive(
         if run.stage_status is StageStatus.FAILED:
             return commits
         if stage in _TERMINAL_STAGES:
+            commits += _finalise_terminal(run, status, run_dir, committer, stage, now)
             return commits
 
         if stage in _PAUSE_STAGES:
@@ -365,6 +379,26 @@ def _drive(
         commits += 1
         run.set_checkpoint(stage, sha, now=now())
         run.advance_to(_resolve_next(stage, run_dir), now=now())
+
+
+def _finalise_terminal(
+    run: RunState,
+    status: StatusModel,
+    run_dir: Path,
+    committer: Committer,
+    stage: Stage,
+    now: Callable[[], str],
+) -> int:
+    """Mark a run terminal-complete when it first reaches COMPLETE/CONCLUDED (§5.1). The
+    ASSEMBLY→COMPLETE transition lands here: set ``stage_status=complete`` and
+    ``overall_state=complete`` and commit, so the SPA's poll sees the run finish. FAILED
+    is handled by ``_fail`` and never reaches this; a re-entry after completion is a
+    no-op (idempotent)."""
+    if stage is Stage.FAILED or status.overall_state == "complete":
+        return 0
+    run.advance_to(stage, StageStatus.COMPLETE, now=now())
+    status.set_complete(now=now())
+    return _persist_and_commit(run, status, run_dir, committer, f"{stage} (complete)")
 
 
 def _checkpoint_exists(run_dir: Path, stage: Stage) -> bool:

@@ -2,18 +2,31 @@
 
 ## Current stage
 
-**Stage 3 — Full assessment** (PROJECT_BRIEF.md §9) continues: the specialist
-bloom, the architect appendix, and now the **reviewer loop** are all built.
-**`FULL_DRAFTING`** (six specialists over their own KBs), **`ARCHITECT`** (the Pro
-appendix with machine-checked traceability), and now **`REVIEW`** (the bounded
-reviewer loop — coverage + coherence + amend directives + residual §12.3/§12.4)
-are wired end-to-end into `pipeline/run.py`. The full happy path now runs
-`FULL_DRAFTING → ARCHITECT → REVIEW` in one dispatch and stops cleanly at the
-not-yet-built `ASSEMBLY`; it still enters the `FULL_CHECKPOINT` pause only when a
-specialist raises a question. Stage 2 — Threshold remains met in full (record
-preserved below); Stage 0 — Foundations remains met.
+**Stage 3 — Full assessment** (PROJECT_BRIEF.md §9): **the full governance path now
+runs end-to-end to a `COMPLETE` run.** `FULL_DRAFTING → ARCHITECT → REVIEW → ASSEMBLY
+→ COMPLETE` all drive in one dispatch (still pausing at `FULL_CHECKPOINT` only when a
+specialist raises a question). This branch added the last two: **`REVIEW`** (the
+bounded reviewer loop — coverage + coherence + amend directives + residual §12.3/§12.4)
+and **`ASSEMBLY`** (the nbformat notebook + nbconvert HTML report, §12). Stage 2 —
+Threshold remains met in full (record preserved below); Stage 0 — Foundations remains
+met.
 
-**Built this branch (REVIEW — the reviewer protocol, §5.1, §5.5, §11,
+**Built this branch, part 2 (ASSEMBLY — the report, §5.1, §12; design §8):** the
+`pipeline/assembly/` package — `references.py` (citation dedup + manifest resolution),
+`notebook.py` (the §12.1 cell plan as a non-executable nbformat notebook), `render.py`
++ `templates/report.css` (the self-contained nbconvert HTML render in the Report
+register) — plus `pipeline/stages/assembly.py` (the I/O boundary: gathers every
+committed artefact, builds `artefacts/assessment.ipynb` + `assessment.html`), the
+`run.py` table entries + the **terminal-COMPLETE finalisation** (`_finalise_terminal`:
+the driver now sets `stage_status=complete`/`overall_state=complete` and commits when a
+run reaches COMPLETE), and `nbformat`/`nbconvert` pinned in `pipeline/pyproject.toml` +
+`uv.lock`. 12 new tests (`pipeline/tests/test_assembly.py`); the two REVIEW driver
+tests updated (the full path now completes rather than stopping at the once-unbuilt
+ASSEMBLY). **159 total pipeline tests green; ruff clean.** Verified once by rendering a
+worked sample report end-to-end (title block, DTA numbering, residual table with
+shape+label chips, unresolved panel, provenance, references), LLM-free.
+
+**Built this branch, part 1 (REVIEW — the reviewer protocol, §5.1, §5.5, §11,
 §12.3/§12.4):** `pipeline/agents/reviewer.py` (a single Pro call per cycle that
 validates directive write-scope and the no-asserted-rating rule at the boundary),
 `prompts/reviewer.v1.md` (registered under role `reviewer` → Pro), the `review`
@@ -22,10 +35,7 @@ in `pipeline/stages/full.py`, `run_specialist_amendment` + `SpecialistDraft.from
 + a shared retrieval-loop refactor in `pipeline/agents/specialist.py`, the
 `reset_review_cycles` invariant on `RunState`, the reviewer-scope/coverage accessors
 in `pipeline/agents/prompting.py`, and the `run.py` table entries that slot `REVIEW`
-between `ARCHITECT` and `ASSEMBLY`. 22 new tests (`pipeline/tests/test_review.py`),
-**147 total pipeline tests green; ruff clean.** Verified once against the real repo
-config/instrument driving the whole `FULL_DRAFTING → ARCHITECT → REVIEW` chain in one
-driver dispatch, LLM-free.
+between `ARCHITECT` and `ASSEMBLY`. 22 new tests (`pipeline/tests/test_review.py`).
 
 **Prior branch (ARCHITECT):** `pipeline/agents/architect.py` (a single-shot
 Pro agent — no retrieval loop — that validates the plan at the boundary),
@@ -43,11 +53,12 @@ resolution (`_resolve_next`) and a pause-setup hook (`_PAUSE_SETUP`), both
 general enough for the remaining `full.*` stages to reuse.
 
 **Not yet built:** `FULL_REVISING` (specialist re-draft after checkpoint answers —
-now mostly a thin wrapper over the `run_specialist_amendment` built this branch),
-`ASSEMBLY` (notebook + HTML), the Brainstorm interview (interviewer,
-sufficiency, PoC/flow-map endpoints), the backend `POST /api/runs/{id}/answers`
-endpoint (needed once a real user can answer a `FULL_CHECKPOINT` pause), the
-frontend entirely, and a first live Gemini run. See handoff notes below for the
+now mostly a thin wrapper over the `run_specialist_amendment` built this branch) and
+its backend `POST /api/runs/{id}/answers` endpoint; `USER_REVISION` (§5.8, the ≤2
+post-COMPLETE full-assessment revisions); the Brainstorm interview (interviewer,
+sufficiency, PoC/flow-map endpoints — note the PoC embed slot in ASSEMBLY (§12.3) is
+built and dormant, waiting on `brainstorm/poc.html`); the frontend entirely; and a
+first live Gemini run. See handoff notes below for the
 concrete next steps and how they build on this branch.
 
 **Exit test** ("threshold output for a known test case matches a hand-worked
@@ -67,6 +78,45 @@ pipeline.
 
 ## Done
 
+- **`ASSEMBLY` — the notebook + HTML report, and the full path to `COMPLETE`
+  (TECH_SPEC §5.1, §12; design §8; Stage 3; this branch).** The final deliverable
+  and the end of the governance pipeline. The pieces:
+  - **`pipeline/assembly/` — the report builder, pure and LLM-free.**
+    `references.py` collects every specialist citation, dedupes by `short_name`, and
+    resolves each against the KB **manifests** (§8.5) to title/publisher/version/URL —
+    a dangling citation is marked unresolved, not dropped. `notebook.py::build_notebook`
+    assembles the §12.1 cell plan as a **non-executable** nbformat notebook (asserted:
+    zero code cells): title block, threshold §1–4, full §5–12 in tool order with inline
+    citations (or a gap note), residual §12.3 table + §12.4 overall + the §12.5
+    human-action flag, the appendices (implementation plan, recommended next steps = the
+    aggregated gap register, unresolved disagreements, provenance), and the deduplicated
+    reference list. `render.py` + `templates/report.css` render it via nbconvert's
+    `basic` template wrapped in a **self-contained** HTML document (stylesheet inlined,
+    no external fonts/scripts) delivering the design §8 Report register — serif body,
+    DTA numbering, mono citations, risk chips carrying **shape + label** (greyscale-safe,
+    design §3.2), the calm bordered unresolved panel, a mono provenance record, and a
+    print stylesheet (running-footer disclaimer, risk tables never split).
+  - **`pipeline/stages/assembly.py` — the I/O boundary.** `gather_inputs` reads every
+    committed artefact (threshold, six specialists, architect, reviewer residual +
+    unresolved, KB manifests, run provenance) into one bundle; `assembly` builds and
+    writes `artefacts/assessment.ipynb` + `assessment.html`. Reads only committed state,
+    so it re-runs identically on resume. The §12.3 PoC embed slot is built (sandboxed
+    `<iframe srcdoc>`) and dormant until Brainstorm writes `brainstorm/poc.html`.
+  - **`run.py` — terminal-COMPLETE finalisation.** `ASSEMBLY` slots in via the five
+    stage→X maps (→ `COMPLETE`), and a new `_finalise_terminal` makes the driver set
+    `run.json` `stage_status=complete` + `status.json` `overall_state=complete` and
+    commit when a run first reaches COMPLETE/CONCLUDED — the signal the SPA's poll needs
+    to see the run finish. Idempotent (a re-entry after completion is a no-op).
+  - **Dependencies.** `nbformat` + `nbconvert` pinned in `pipeline/pyproject.toml` +
+    `uv.lock`; the `governance.yml` job's `uv sync` picks them up with no workflow
+    change. No execution stack is used (the notebook never runs a kernel).
+  - **12 new tests** (`pipeline/tests/test_assembly.py`): reference dedup/resolution/
+    unresolved-marking, the no-code-cells invariant, nbformat round-trip validity, the
+    cell-plan contents, unresolved-omitted-when-none, gap-rendering, the self-contained
+    HTML render (embedded HTML not escaped, chips, disclaimer inlined), the stage handler
+    writing both artefacts, `gather_inputs` ordering §5–12 and excluding reviewer/human
+    sections, and a driver end-to-end test (seed at ASSEMBLY → run → `COMPLETE`). Two
+    REVIEW driver tests updated to the new terminal boundary. LLM-free throughout (§15).
 - **`REVIEW` — the reviewer protocol, driven end-to-end (TECH_SPEC §5.1, §5.5,
   §11, §12.3/§12.4; Stage 3; this branch).** The heart-of-the-product audit
   stage. The pieces:
@@ -509,35 +559,29 @@ path, and `POST /api/runs/{id}/threshold/route` can dispatch onward to
 (this branch — see Done → *`ARCHITECT`* / *`FULL_DRAFTING`*). Next concrete
 steps, in rough dependency order:
 
-1. **The rest of the full-assessment stages (`ASSEMBLY` + `FULL_REVISING`, §5.1).**
-   The driver now runs `FULL_DRAFTING → ARCHITECT → REVIEW` on the happy path and
-   stops cleanly at `ASSEMBLY` (which raises `StageNotImplemented`, a calm failure),
-   or pauses at `FULL_CHECKPOINT` if a specialist raised a question. Still to build,
-   each registered in `run.py`'s `_HANDLERS`/`_NEXT`/`_CHECKPOINT_OUTPUTS`/
-   `_STAGE_FAIL_NODE`/`_STAGE_PHRASE` maps:
-   - **`ASSEMBLY`** (§12) — nbformat notebook + nbconvert HTML. Now the **only**
-     thing between the happy path and a `COMPLETE` run, and the largest remaining
-     unbuilt piece design-wise (custom nbconvert template/stylesheet, §12.5). Its
-     inputs are all now on disk: the threshold assessment, the specialist drafts,
-     `full/architect.md`, and this branch's `full/reviewer/ratings_residual.json` +
-     `review.md` + `unresolved.json`. The cell plan is §12.1; the reviewer's
-     `review.md` already renders the §12.3 residual table, coherence findings, and the
-     unresolved-disagreement block for direct inclusion. Next stage's checkpoint output
-     is `artefacts/assessment.ipynb` + `assessment.html`; `_NEXT[ASSEMBLY] = COMPLETE`.
-   - **`FULL_REVISING`** (only reachable once answers exist — see the backend
-     endpoint below). Each specialist that raised a question revises its own
+1. **The checkpoint-answer path (`FULL_REVISING` + `POST /api/runs/{id}/answers`,
+   §5.1, §7).** The happy path is complete end-to-end (`FULL_DRAFTING → ARCHITECT →
+   REVIEW → ASSEMBLY → COMPLETE`). What remains on the full-assessment side is the
+   branch a `FULL_CHECKPOINT` pause takes when a specialist raised a question:
+   - **`FULL_REVISING`** — each specialist that raised a question revises its own
      sections once in light of the answers; skipped questions become gaps. **Now a
      thin wrapper over `run_specialist_amendment` (built this branch)** — call it per
      specialist with the answers as the directive context (instead of a reviewer
-     ruling) and the raised question ids as the target sections. `_NEXT[FULL_REVISING]
-     = ARCHITECT`. Note the `_resolve_next` FULL_DRAFTING→FULL_CHECKPOINT branch and
-     the `_NEXT[FULL_CHECKPOINT]` entry still need wiring for this path.
+     ruling) and the raised question ids as the target sections. Register it in
+     `run.py`'s five stage→X maps with `_NEXT[FULL_REVISING] = ARCHITECT`; the
+     `_resolve_next` FULL_DRAFTING→FULL_CHECKPOINT branch and a `_NEXT[FULL_CHECKPOINT]`
+     entry still need wiring so the checkpoint resumes into `FULL_REVISING`.
    - The backend **`POST /api/runs/{id}/answers`** endpoint (TECH_SPEC §7)
      still doesn't exist — needed before a real user can act on a
      `FULL_CHECKPOINT` pause and dispatch `resume_from=FULL_REVISING`. Small:
      validate against `full/questions.json` question ids, commit
      `full/answers.json`, dispatch. Natural to build alongside `FULL_REVISING`
      rather than before it, since there's nothing to resume into yet without it.
+   - **`USER_REVISION`** (§5.8) — the ≤2 post-COMPLETE full-assessment revisions:
+     reviewer triage → targeted specialist amendment (again `run_specialist_amendment`)
+     → one reviewer verify pass → `ASSEMBLY` re-runs (archiving the superseded artefacts
+     to `artefacts/superseded/rev_<N>/` first). `RunState.record_revision("full")` and
+     the revision caps already exist; ASSEMBLY already rebuilds idempotently.
 2. **Brainstorm interview + outline canvas (backend `brainstorm/` + frontend).**
    `POST /api/runs` currently only *seeds* `brainstorm/outline.md` from the template
    (`backend/outline.py`) — nothing yet amends it. Needed: the interviewer
@@ -636,6 +680,46 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **ASSEMBLY renders via nbconvert's `basic` template wrapped in a hand-written
+  self-contained HTML document, not a full custom nbconvert template (this branch,
+  `assembly/render.py`).** §12.5 mandates "a custom template/stylesheet replacing the
+  default theme"; nbconvert's own template system (jinja template dirs, `--template`)
+  is fiddly and couples the render to nbconvert's internal template layout. Instead the
+  `basic` template emits just the rendered cell bodies (no Jupyter chrome), and this
+  module wraps them in a `<!doctype html>` document carrying the stylesheet **inlined**
+  — so the report is a single portable file with no external font/script/style fetch
+  (design §8's "a document taken seriously," and the artefact-embedded-elements contract,
+  design §10). Reversible: a true nbconvert template can replace the wrapper later
+  without changing the notebook or the CSS.
+- **Structured report blocks are HTML embedded in markdown cells, not nbformat raw
+  cells (this branch, `assembly/notebook.py`).** The notebook needs class-tagged blocks
+  (title, risk table, unresolved panel, provenance) for the stylesheet to target; raw
+  cells render inconsistently across nbconvert exporters, whereas a markdown cell's
+  block-level HTML passes through mistune reliably (verified: the risk `<table>` renders
+  unescaped). Prose stays plain markdown. The notebook has **zero code cells** — a test
+  asserts it, keeping the §12.1 "non-executable" guarantee structural.
+- **The residual §12.5 governance-review flag keys on the residual overall, not the
+  inherent (this branch, `assembly/notebook.py`).** §12.5 is a human action "where the
+  agency's governance policy requires it"; the report flags a mandatory referral when the
+  **post-mitigation** overall is High (the risk that actually remains), and otherwise
+  states 12.5 as a conditional human action. The threshold's inherent-High governance
+  flag (routing.json, §12.5) still stands at the threshold stage; this is the residual
+  counterpart, consistent with "the residual is what the reader acts on."
+- **Reaching COMPLETE is finalised by the driver, not the stage handler (this branch,
+  `run.py::_finalise_terminal`).** The §5.1 state table lists COMPLETE as a terminal
+  state but no handler; the driver previously just returned on any terminal stage without
+  setting `overall_state=complete`. `_finalise_terminal` now sets `stage_status=complete`
+  + `overall_state=complete` and commits the first time a run reaches COMPLETE/CONCLUDED
+  — the signal the SPA's poll needs to see the run finish (§7). Kept in the driver (not
+  the ASSEMBLY handler) because it is the generic terminal-transition concern, shared
+  with the threshold-CONCLUDED path, and idempotent (a re-entry after completion is a
+  no-op).
+- **A dangling citation (a `short_name` with no matching manifest document) is rendered
+  as an unresolved reference, not dropped (this branch, `assembly/references.py`).**
+  Citation integrity is never traded (CLAUDE.md §2); silently omitting a citation whose
+  source can't be resolved would hide a real problem. The reference list keeps the entry,
+  marked "(source not found in corpus manifest)", so the gap is visible to a human rather
+  than erased.
 - **REVIEW is one pipeline checkpoint that re-runs its whole bounded ≤2-cycle loop on
   resume — not a per-cycle checkpoint (this branch, `stages/full.py::review`,
   `RunState.reset_review_cycles`).** TECH_SPEC §5.5 says "each cycle commits so a death

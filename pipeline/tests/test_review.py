@@ -474,7 +474,7 @@ def test_render_review_markdown_shows_residual_table():
 # -- the driver end-to-end ------------------------------------------------------
 
 
-def test_pipeline_runs_review_then_stops_at_assembly(tmp_path):
+def test_pipeline_runs_review_then_assembles_to_complete(tmp_path):
     run_dir = _seed_review_run_dir(tmp_path, "WT-REV-E2E")
     run = RunState.new("WT-REV-E2E")
     run.advance_to(Stage.REVIEW)
@@ -485,21 +485,22 @@ def test_pipeline_runs_review_then_stops_at_assembly(tmp_path):
         run_dir,
         llm=_client(responses=_model_responses([_reviewer_payload()])),
         committer=FakeCommitter(),
+        kb_root=_kb_root(tmp_path),
     )
 
-    # REVIEW ran and committed; ASSEMBLY is not built, so the run stops there as a
-    # calm, resumable failure — the documented boundary.
-    assert result.ok is False
+    # REVIEW ran, then ASSEMBLY built the report and the run finalised at COMPLETE.
+    assert result.ok is True
     assert (run_dir / "full" / "reviewer" / "ratings_residual.json").is_file()
+    assert (run_dir / "artefacts" / "assessment.html").is_file()
     run = RunState.load(run_dir)
-    assert run.stage is Stage.ASSEMBLY
-    assert run.stage_status is StageStatus.FAILED
+    assert run.stage is Stage.COMPLETE
+    assert run.stage_status is StageStatus.COMPLETE
 
 
-def test_pipeline_runs_full_path_drafting_to_review(tmp_path):
+def test_pipeline_runs_full_path_drafting_to_complete(tmp_path):
     """The whole full-assessment happy path in one dispatch: six specialists draft,
-    the architect writes the appendix, and the reviewer audits — all composing through
-    the driver, stopping calmly at the unbuilt ASSEMBLY."""
+    the architect writes the appendix, the reviewer audits, and assembly builds the
+    report — all composing through the driver to a COMPLETE run."""
     run_dir = _seed_review_run_dir(tmp_path, "WT-FULL-CHAIN")
     # Remove the seeded specialist drafts so FULL_DRAFTING must produce them.
     for specialist in SPECIALISTS:
@@ -538,10 +539,11 @@ def test_pipeline_runs_full_path_drafting_to_review(tmp_path):
         kb_root=_kb_root(tmp_path),
     )
 
-    assert result.ok is False
+    assert result.ok is True
     assert all((run_dir / "full" / "specialists" / f"{s}.json").is_file() for s in SPECIALISTS)
     assert (run_dir / "full" / "architect.md").is_file()
     assert (run_dir / "full" / "reviewer" / "ratings_residual.json").is_file()
+    assert (run_dir / "artefacts" / "assessment.ipynb").is_file()
     run = RunState.load(run_dir)
-    assert run.stage is Stage.ASSEMBLY
-    assert run.stage_status is StageStatus.FAILED
+    assert run.stage is Stage.COMPLETE
+    assert run.stage_status is StageStatus.COMPLETE
