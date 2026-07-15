@@ -238,6 +238,19 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 - `solution_architect/f4a6c658-en.pdf` is an **OECD** paper, *The state of AI in
   public audit* — an odd fit for the solution-architect corpus; Tom to confirm
   it belongs there (kept as placed).
+- **Sidecar sweep (this session):** Tom uploaded *Policy for the responsible use
+  of AI in government* (v2.0, DTA) straight to GitHub into `data_governance/`
+  and `legal/` — two identical 645 355-byte copies, neither with a sidecar. Both
+  now have one (`short_name: "AI Use Policy v2.0"`); licence confirmed from the
+  document's own imprint page (page 2: "© Commonwealth of Australia (Digital
+  Transformation Agency) 2025", CC-BY-4.0), not inferred, so `CC-BY-4.0` needed
+  no allow-list change. A corpus-wide sweep after this fix confirms every
+  non-sidecar, non-README/placeholder file in all six specialist folders now
+  has a matching `.meta.yml` (108 documents total). Note: the request described
+  this as added to `data_governance` and `it_security`, but no such file exists
+  under `it_security` — only `data_governance` and `legal` copies were found on
+  disk. Flagging in case a third copy was intended for `it_security` and didn't
+  land.
 - `The-new-machinery-of-government…pdf.pdf` has a doubled extension; harmless
   (doc_id slugging normalizes it). `placeholder.md` files can now be deleted —
   every folder holds real documents with sidecars.
