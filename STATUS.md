@@ -244,6 +244,20 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **Cross-KB corpus duplication is retrieval-scoped and intentional.** A document
+  may live in more than one `corpus/<specialist>/` folder so it lands in multiple
+  specialist KBs. This affects only what a specialist can *retrieve and cite* — it
+  does **not** touch the specialist write-scope invariant (CLAUDE.md §3), which is
+  enforced separately by `instrument/sections.json` ownership. First applied: the
+  **ADM / human-oversight cluster** (*ADM Better Practice Guide*, *New Machinery of
+  Government*), Ombudsman-authored and administrative-law-framed (hence `legal/`),
+  duplicated into `ethics/` because their substance — transparency of automated
+  decisions, explanations to affected people, human oversight — maps onto ethics'
+  owned §8.1/8.2/8.4/8.5. Ethics previously reached only the *older* ADM guide
+  (`apo-nid306481.pdf`). Duplicate surgically, not broadly: each specialist index
+  has a 25 000-token budget (`config/retrieval.yml`) that duplicates compete for
+  (ethics after this change: 17 docs, index ~17.7k tokens — within budget), and
+  every duplicate widens the public double-publish surface (CLAUDE.md §3).
 - **Failure keeps `run.json.stage` pointing at the failing stage** (not a distinct
   `FAILED` stage value); `stage_status="failed"` + `last_error` is the failure
   marker. §5.1 lists FAILED as a state and §5.6 says "writes `stage_status=failed`",

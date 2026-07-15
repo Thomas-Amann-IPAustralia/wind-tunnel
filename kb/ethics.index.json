@@ -1,7 +1,7 @@
 {
   "specialist": "ethics",
-  "generated_at": "2026-07-14T22:47:08Z",
-  "document_count": 15,
+  "generated_at": "2026-07-15T01:17:53Z",
+  "document_count": 17,
   "retrieval": "Navigate this index, then fetch(refs) or search(query, k) (TECH_SPEC §8.1).",
   "documents": [
     {
@@ -790,6 +790,305 @@
       ]
     },
     {
+      "doc_id": "automated-decision-making-better-practice-guide-march-2025",
+      "short_name": "ADM Better Practice Guide",
+      "title": "Automated Decision-Making Better Practice Guide",
+      "version": "March 2025",
+      "publisher": "Commonwealth Ombudsman",
+      "source_url": "https://www.ombudsman.gov.au/__data/assets/pdf_file/0025/317437/Automated-Decision-Making-Better-Practice-Guide-March-2025.pdf",
+      "format": "pdf",
+      "page_count": 61,
+      "what_it_is": "Automated Decision-Making Better Practice Guide",
+      "chunk_count": 121,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 2
+        },
+        {
+          "section": "Making",
+          "chunk_count": 2,
+          "token_count": 14
+        },
+        {
+          "section": "Contents",
+          "chunk_count": 7,
+          "token_count": 4466
+        },
+        {
+          "section": "Introduction",
+          "chunk_count": 3,
+          "token_count": 386
+        },
+        {
+          "section": "Acknowledgements",
+          "chunk_count": 2,
+          "token_count": 189
+        },
+        {
+          "section": "What is an automated system?",
+          "chunk_count": 2,
+          "token_count": 228
+        },
+        {
+          "section": "systems",
+          "chunk_count": 5,
+          "token_count": 1141
+        },
+        {
+          "section": "Is an automated system suitable?",
+          "chunk_count": 4,
+          "token_count": 668
+        },
+        {
+          "section": "Legislative authority for automation",
+          "chunk_count": 1,
+          "token_count": 91
+        },
+        {
+          "section": "What is discretion?",
+          "chunk_count": 2,
+          "token_count": 191
+        },
+        {
+          "section": "Discretion and automated systems",
+          "chunk_count": 1,
+          "token_count": 180
+        },
+        {
+          "section": "Supporting decision-makers",
+          "chunk_count": 2,
+          "token_count": 135
+        },
+        {
+          "section": "Managing risks associated with discretions",
+          "chunk_count": 2,
+          "token_count": 70
+        },
+        {
+          "section": "Privacy",
+          "chunk_count": 2,
+          "token_count": 359
+        },
+        {
+          "section": "The Privacy Act 1988 (Cth)",
+          "chunk_count": 2,
+          "token_count": 321
+        },
+        {
+          "section": "What is personal information?",
+          "chunk_count": 2,
+          "token_count": 275
+        },
+        {
+          "section": "decision-making",
+          "chunk_count": 1,
+          "token_count": 54
+        },
+        {
+          "section": "Be open and transparent (APP 1)",
+          "chunk_count": 2,
+          "token_count": 391
+        },
+        {
+          "section": "Collect only what is reasonably necessary (APP 3)",
+          "chunk_count": 2,
+          "token_count": 330
+        },
+        {
+          "section": "be handled when you collect it (APP 5)",
+          "chunk_count": 2,
+          "token_count": 283
+        },
+        {
+          "section": "Use or disclosure for an authorised purpose (APP 6)",
+          "chunk_count": 2,
+          "token_count": 490
+        },
+        {
+          "section": "date and complete (APP 10)",
+          "chunk_count": 3,
+          "token_count": 694
+        },
+        {
+          "section": "Secure handling of personal information (APP 11)",
+          "chunk_count": 2,
+          "token_count": 361
+        },
+        {
+          "section": "Governance and design",
+          "chunk_count": 2,
+          "token_count": 352
+        },
+        {
+          "section": "Authorised decision-making",
+          "chunk_count": 1,
+          "token_count": 231
+        },
+        {
+          "section": "The importance of multidisciplinary teams",
+          "chunk_count": 2,
+          "token_count": 318
+        },
+        {
+          "section": "Application of the Digital Experience Policy",
+          "chunk_count": 2,
+          "token_count": 244
+        },
+        {
+          "section": "User needs",
+          "chunk_count": 2,
+          "token_count": 384
+        },
+        {
+          "section": "Testing",
+          "chunk_count": 2,
+          "token_count": 184
+        },
+        {
+          "section": "Data security",
+          "chunk_count": 2,
+          "token_count": 180
+        },
+        {
+          "section": "AI related frameworks, policies and guidance",
+          "chunk_count": 1,
+          "token_count": 108
+        },
+        {
+          "section": "Policy for the responsible use of AI in government",
+          "chunk_count": 2,
+          "token_count": 255
+        },
+        {
+          "section": "Modelling and approval of business rules",
+          "chunk_count": 1,
+          "token_count": 81
+        },
+        {
+          "section": "Modelling the business rules",
+          "chunk_count": 2,
+          "token_count": 427
+        },
+        {
+          "section": "Business process mapping between systems",
+          "chunk_count": 1,
+          "token_count": 87
+        },
+        {
+          "section": "Business rules update",
+          "chunk_count": 2,
+          "token_count": 78
+        },
+        {
+          "section": "Data mapping to terms and definitions",
+          "chunk_count": 1,
+          "token_count": 208
+        },
+        {
+          "section": "Implications for maintenance",
+          "chunk_count": 2,
+          "token_count": 163
+        },
+        {
+          "section": "Versioning",
+          "chunk_count": 1,
+          "token_count": 191
+        },
+        {
+          "section": "Quality assurance",
+          "chunk_count": 1,
+          "token_count": 112
+        },
+        {
+          "section": "System monitoring and testing",
+          "chunk_count": 2,
+          "token_count": 100
+        },
+        {
+          "section": "Accurate collection of information",
+          "chunk_count": 1,
+          "token_count": 164
+        },
+        {
+          "section": "Staff training",
+          "chunk_count": 2,
+          "token_count": 217
+        },
+        {
+          "section": "Data quality",
+          "chunk_count": 1,
+          "token_count": 266
+        },
+        {
+          "section": "Business continuity",
+          "chunk_count": 2,
+          "token_count": 151
+        },
+        {
+          "section": "Design principles for comprehensive audit trails",
+          "chunk_count": 2,
+          "token_count": 178
+        },
+        {
+          "section": "Transparency and accountability",
+          "chunk_count": 1,
+          "token_count": 61
+        },
+        {
+          "section": "Publicly available information",
+          "chunk_count": 2,
+          "token_count": 387
+        },
+        {
+          "section": "Rules to be verified",
+          "chunk_count": 1,
+          "token_count": 59
+        },
+        {
+          "section": "Automated systems should be understandable",
+          "chunk_count": 2,
+          "token_count": 101
+        },
+        {
+          "section": "Audit",
+          "chunk_count": 1,
+          "token_count": 129
+        },
+        {
+          "section": "Statement of reasons",
+          "chunk_count": 2,
+          "token_count": 403
+        },
+        {
+          "section": "Review of decisions",
+          "chunk_count": 2,
+          "token_count": 149
+        },
+        {
+          "section": "Remediation",
+          "chunk_count": 2,
+          "token_count": 235
+        },
+        {
+          "section": "Monitoring and evaluation",
+          "chunk_count": 2,
+          "token_count": 275
+        },
+        {
+          "section": "Appendix A: Better practice checklist",
+          "chunk_count": 12,
+          "token_count": 2840
+        },
+        {
+          "section": "Appendix B",
+          "chunk_count": 3,
+          "token_count": 715
+        }
+      ]
+    },
+    {
       "doc_id": "creative-australia-generative-ai-and-creative-work-paper",
       "short_name": "Creative Australia GenAI",
       "title": "Generative AI and creative work – Creative Australia Principles",
@@ -1440,6 +1739,525 @@
       ]
     },
     {
+      "doc_id": "the-new-machinery-of-government-special-report-front-section",
+      "short_name": "New Machinery of Government",
+      "title": "The new machinery of government: using machine technology in administrative decision-making (front section)",
+      "version": "November 2021",
+      "publisher": "NSW Ombudsman",
+      "source_url": "https://www.ombo.nsw.gov.au/news-and-publications/publications/reports/the-new-machinery-of-government-using-machine-technology-in-administrative-decision-making",
+      "format": "pdf",
+      "page_count": 105,
+      "what_it_is": "The new machinery of government: using machine technology in administrative decision-making (front section)",
+      "chunk_count": 220,
+      "structure": [
+        {
+          "section": "(document root)",
+          "chunk_count": 1,
+          "token_count": 15
+        },
+        {
+          "section": "The new machinery of government: \nusing machine technology in administrative decision-making",
+          "chunk_count": 3,
+          "token_count": 400
+        },
+        {
+          "section": "Contents",
+          "chunk_count": 11,
+          "token_count": 7344
+        },
+        {
+          "section": "Foreword from the NSW Ombudsman",
+          "chunk_count": 3,
+          "token_count": 704
+        },
+        {
+          "section": "Executive \nsummary",
+          "chunk_count": 1,
+          "token_count": 279
+        },
+        {
+          "section": "1.1 \nMachine technology is on the rise, and offers many potential \nbenefits",
+          "chunk_count": 1,
+          "token_count": 134
+        },
+        {
+          "section": "1.2 \nWhy we have written this report",
+          "chunk_count": 2,
+          "token_count": 258
+        },
+        {
+          "section": "1.3 \nAdministrative law and practice must be given central attention",
+          "chunk_count": 1,
+          "token_count": 118
+        },
+        {
+          "section": "1.4 \nAdministrative law requirements for good decision-making",
+          "chunk_count": 3,
+          "token_count": 860
+        },
+        {
+          "section": "1.5 \nGood practice for designing and implementing machine technology",
+          "chunk_count": 1,
+          "token_count": 203
+        },
+        {
+          "section": "1.6 \nThe role of Parliament in authorising machine technology",
+          "chunk_count": 3,
+          "token_count": 706
+        },
+        {
+          "section": "1.7 \nThe way forward – starting with increased visibility",
+          "chunk_count": 2,
+          "token_count": 436
+        },
+        {
+          "section": "Machine technology",
+          "chunk_count": 1,
+          "token_count": 17
+        },
+        {
+          "section": "2.1 \nThe rise of machine technology",
+          "chunk_count": 1,
+          "token_count": 120
+        },
+        {
+          "section": "2.2 \nWhy is the Ombudsman interested in machine technology?",
+          "chunk_count": 2,
+          "token_count": 347
+        },
+        {
+          "section": "Reviewing ‘decisions’ versus investigating ‘conduct’",
+          "chunk_count": 2,
+          "token_count": 516
+        },
+        {
+          "section": "2.3 \nWhat has prompted this report?",
+          "chunk_count": 1,
+          "token_count": 19
+        },
+        {
+          "section": "Revenue NSW’s garnishee machine",
+          "chunk_count": 2,
+          "token_count": 717
+        },
+        {
+          "section": "2.4 \nThe purpose and structure of this report",
+          "chunk_count": 2,
+          "token_count": 433
+        },
+        {
+          "section": "2.5 \nWhat we will do next",
+          "chunk_count": 1,
+          "token_count": 24
+        },
+        {
+          "section": "no Australian jurisdiction appeared to be working \non creating a registry of automated decision-making \nsystems.16",
+          "chunk_count": 2,
+          "token_count": 259
+        },
+        {
+          "section": "3.1 \nWhat we mean by ‘machine technology’",
+          "chunk_count": 1,
+          "token_count": 244
+        },
+        {
+          "section": "3.2 \nMachine technology is not just one thing",
+          "chunk_count": 2,
+          "token_count": 523
+        },
+        {
+          "section": "3.3 \nThe need to design machine technology for particular applications",
+          "chunk_count": 2,
+          "token_count": 298
+        },
+        {
+          "section": "4.1 \nMachine technology within a decision-making system",
+          "chunk_count": 1,
+          "token_count": 242
+        },
+        {
+          "section": "Mobile phone detection cameras",
+          "chunk_count": 3,
+          "token_count": 805
+        },
+        {
+          "section": "4.2 \nHow are governments using machine technology?",
+          "chunk_count": 1,
+          "token_count": 382
+        },
+        {
+          "section": "Automating procedural court rules",
+          "chunk_count": 2,
+          "token_count": 257
+        },
+        {
+          "section": "There are many potential positive benefits of machine \ntechnology for public sector agencies and citizens.50",
+          "chunk_count": 3,
+          "token_count": 720
+        },
+        {
+          "section": "Administrative law \nand machine technology",
+          "chunk_count": 1,
+          "token_count": 17
+        },
+        {
+          "section": "5.1 \nPublic sector decision-making is different",
+          "chunk_count": 1,
+          "token_count": 350
+        },
+        {
+          "section": "5.2 \nGood government according to law",
+          "chunk_count": 2,
+          "token_count": 288
+        },
+        {
+          "section": "5.3 \nExisting laws apply to new technologies",
+          "chunk_count": 1,
+          "token_count": 15
+        },
+        {
+          "section": "No technology is ever introduced into a complete \nlegal vacuum.",
+          "chunk_count": 1,
+          "token_count": 223
+        },
+        {
+          "section": "5.4 \nHow administrative law applies to new machine technologies",
+          "chunk_count": 3,
+          "token_count": 379
+        },
+        {
+          "section": "6. Key administrative law issues for machine technology",
+          "chunk_count": 1,
+          "token_count": 32
+        },
+        {
+          "section": "6.1 \nThe essential requirements for good (and lawful) administrative \ndecision-making",
+          "chunk_count": 2,
+          "token_count": 394
+        },
+        {
+          "section": "Some machine technology use by government will be \n‘legally unexceptional’",
+          "chunk_count": 2,
+          "token_count": 248
+        },
+        {
+          "section": "7.1 \nLegal power to make the decision",
+          "chunk_count": 1,
+          "token_count": 274
+        },
+        {
+          "section": "Services Australia Centrelink’s automated income \ncompliance program (Robodebt)",
+          "chunk_count": 2,
+          "token_count": 456
+        },
+        {
+          "section": "7.2 \nLegal authority of the person making the decision",
+          "chunk_count": 1,
+          "token_count": 299
+        },
+        {
+          "section": "Administrative assistance (the Carltona principle)",
+          "chunk_count": 2,
+          "token_count": 453
+        },
+        {
+          "section": "Relevant inputs in decision-making",
+          "chunk_count": 2,
+          "token_count": 406
+        },
+        {
+          "section": "7.3 \nThe scope of the decision-making power – including the extent of \nany discretion",
+          "chunk_count": 1,
+          "token_count": 52
+        },
+        {
+          "section": "What is discretion?",
+          "chunk_count": 2,
+          "token_count": 633
+        },
+        {
+          "section": "The imperative to preserve discretion",
+          "chunk_count": 1,
+          "token_count": 131
+        },
+        {
+          "section": "Potential issues with using machines in the exercise of discretionary decisions",
+          "chunk_count": 1,
+          "token_count": 41
+        },
+        {
+          "section": "Machine technology and the ‘rule against dictation’",
+          "chunk_count": 2,
+          "token_count": 329
+        },
+        {
+          "section": "Machine technology as a means of delivering \n‘guidance’ to administrators",
+          "chunk_count": 3,
+          "token_count": 879
+        },
+        {
+          "section": "8.1 \nThe decision has followed a fair process",
+          "chunk_count": 1,
+          "token_count": 207
+        },
+        {
+          "section": "Bias",
+          "chunk_count": 2,
+          "token_count": 314
+        },
+        {
+          "section": "Algorithmic bias",
+          "chunk_count": 2,
+          "token_count": 1177
+        },
+        {
+          "section": "A right to be heard",
+          "chunk_count": 2,
+          "token_count": 455
+        },
+        {
+          "section": "8.2 \nOther legal and ethical obligations",
+          "chunk_count": 3,
+          "token_count": 1479
+        },
+        {
+          "section": "8.3 \nReasons are given for the decision (particularly decisions that affect \nthe rights or interests of individuals)",
+          "chunk_count": 2,
+          "token_count": 574
+        },
+        {
+          "section": "Using machine technology to administer \nCommonwealth child support payments",
+          "chunk_count": 3,
+          "token_count": 703
+        },
+        {
+          "section": "9.1 \nThe decision answers the right question (which necessitates asking \nthe right question)",
+          "chunk_count": 2,
+          "token_count": 757
+        },
+        {
+          "section": "Lost in translation – a simple error converting \nlegislation into code",
+          "chunk_count": 2,
+          "token_count": 779
+        },
+        {
+          "section": "9.2 \nThe decision is based on a proper analysis of relevant material",
+          "chunk_count": 2,
+          "token_count": 349
+        },
+        {
+          "section": "9.3 \nThe decision is based on the merits and is reasonable in the \ncircumstances",
+          "chunk_count": 2,
+          "token_count": 847
+        },
+        {
+          "section": "Machine technology in sentencing – COMPAS",
+          "chunk_count": 3,
+          "token_count": 570
+        },
+        {
+          "section": "10.1 The circumstances surrounding the making of decisions is adequately \ndocumented and records kept",
+          "chunk_count": 2,
+          "token_count": 378
+        },
+        {
+          "section": "Designing machine \ntechnology to comply \nwith the law and \nfundamental principles \nof good government",
+          "chunk_count": 1,
+          "token_count": 17
+        },
+        {
+          "section": "11. Putting in place the right team",
+          "chunk_count": 1,
+          "token_count": 247
+        },
+        {
+          "section": "11.1 It’s not an IT project",
+          "chunk_count": 2,
+          "token_count": 234
+        },
+        {
+          "section": "11.2 Having lawyers on the design team is essential",
+          "chunk_count": 1,
+          "token_count": 514
+        },
+        {
+          "section": "11.3 Ensuring policy choices are made by the right people, at the right \nlevel of authority",
+          "chunk_count": 2,
+          "token_count": 552
+        },
+        {
+          "section": "Lessons from legislative drafting?",
+          "chunk_count": 2,
+          "token_count": 274
+        },
+        {
+          "section": "12. Determining the necessary degree of human involvement",
+          "chunk_count": 1,
+          "token_count": 33
+        },
+        {
+          "section": "Discretionary decision-making requires some degree of \nhuman involvement – it can never be fully automated.",
+          "chunk_count": 1,
+          "token_count": 202
+        },
+        {
+          "section": "12.1 The administrator must engage in an active mental process",
+          "chunk_count": 2,
+          "token_count": 579
+        },
+        {
+          "section": "12.2 The division of tasks between machine and human",
+          "chunk_count": 2,
+          "token_count": 509
+        },
+        {
+          "section": "12.3 The risk of technology complacency and ‘creeping control’",
+          "chunk_count": 2,
+          "token_count": 680
+        },
+        {
+          "section": "12.4 Practical indications of active human involvement",
+          "chunk_count": 3,
+          "token_count": 777
+        },
+        {
+          "section": "13.1 Reasons and the right to an explanation",
+          "chunk_count": 1,
+          "token_count": 186
+        },
+        {
+          "section": "Providing explanations for decisions that are \n‘instructive, informative and enlightening’",
+          "chunk_count": 2,
+          "token_count": 306
+        },
+        {
+          "section": "How can reasons be provided when machine technology is used?",
+          "chunk_count": 1,
+          "token_count": 584
+        },
+        {
+          "section": "The risk of automating reason-giving",
+          "chunk_count": 2,
+          "token_count": 371
+        },
+        {
+          "section": "13.2 Accountability and reviewability",
+          "chunk_count": 2,
+          "token_count": 640
+        },
+        {
+          "section": "Recordkeeping policies and practices",
+          "chunk_count": 2,
+          "token_count": 150
+        },
+        {
+          "section": "13.3 Publishing source code",
+          "chunk_count": 1,
+          "token_count": 211
+        },
+        {
+          "section": "Trade secrets and commercial-in-confidence arrangements",
+          "chunk_count": 2,
+          "token_count": 417
+        },
+        {
+          "section": "14.1 Testing before adoption",
+          "chunk_count": 1,
+          "token_count": 71
+        },
+        {
+          "section": "Legal audit of the correctness of legal interpretation",
+          "chunk_count": 1,
+          "token_count": 158
+        },
+        {
+          "section": "Validation and accuracy testing",
+          "chunk_count": 1,
+          "token_count": 207
+        },
+        {
+          "section": "Testing for algorithmic bias and other unintended consequences",
+          "chunk_count": 2,
+          "token_count": 194
+        },
+        {
+          "section": "Establishment of quality assurance process and audit trail",
+          "chunk_count": 1,
+          "token_count": 51
+        },
+        {
+          "section": "14.2 Undertake monitoring, review and periodic evaluation",
+          "chunk_count": 2,
+          "token_count": 552
+        },
+        {
+          "section": "Use of the ‘Structured Decision-Making’ tool in the \nNSW child protection system",
+          "chunk_count": 5,
+          "token_count": 1748
+        },
+        {
+          "section": "Cost implications",
+          "chunk_count": 2,
+          "token_count": 251
+        },
+        {
+          "section": "15. Statutory provisions that authorise machine technology",
+          "chunk_count": 1,
+          "token_count": 118
+        },
+        {
+          "section": "15.1 Stating, in simple terms, that an administrator is authorised to use \na machine",
+          "chunk_count": 2,
+          "token_count": 932
+        },
+        {
+          "section": "15.2 Attributing machine outputs to an administrator",
+          "chunk_count": 2,
+          "token_count": 166
+        },
+        {
+          "section": "‘Nearly identical’ under the Commonwealth Business \nNames Registration Act 2011",
+          "chunk_count": 2,
+          "token_count": 749
+        },
+        {
+          "section": "15.3 More sophisticated authorisation provisions",
+          "chunk_count": 4,
+          "token_count": 1590
+        },
+        {
+          "section": "15.4 Transforming the substantive statutory function",
+          "chunk_count": 2,
+          "token_count": 992
+        },
+        {
+          "section": "15.5 Mandating properties of machine technology",
+          "chunk_count": 4,
+          "token_count": 938
+        },
+        {
+          "section": "16. Coda – new laws for new technology?",
+          "chunk_count": 1,
+          "token_count": 32
+        },
+        {
+          "section": "Uncertainties and gaps in the existing legal framework",
+          "chunk_count": 1,
+          "token_count": 451
+        },
+        {
+          "section": "Modernising administrative law for the new machinery of government",
+          "chunk_count": 3,
+          "token_count": 637
+        },
+        {
+          "section": "Endnotes",
+          "chunk_count": 29,
+          "token_count": 16544
+        }
+      ]
+    },
+    {
       "doc_id": "voluntary-ai-safety-standard",
       "short_name": "VAISS",
       "title": "Voluntary AI Safety Standard",
@@ -2066,5 +2884,5 @@
     }
   ],
   "_coarsened": "collapse_to_top=True, detail=lean to fit index.max_tokens=25000; records remain fetchable by key.",
-  "index_tokens_estimate": 12745
+  "index_tokens_estimate": 17664
 }
