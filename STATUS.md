@@ -3,7 +3,9 @@
 ## Current stage
 
 **Stage 3 — Full assessment** (PROJECT_BRIEF.md §9): **the full governance path runs
-end-to-end to a `COMPLETE` run, and the checkpoint-answer branch is now wired.**
+end-to-end to a `COMPLETE` run, the checkpoint-answer branch is wired, and the ≤2
+post-COMPLETE user-revision path (`USER_REVISION`, §5.8) is now built — every governance
+stage exists and is driven.**
 `FULL_DRAFTING → ARCHITECT → REVIEW → ASSEMBLY → COMPLETE` drives in one dispatch; when
 a specialist raises a question the run pauses at `FULL_CHECKPOINT`, and a
 `resume_from=FULL_REVISING` dispatch (from the new `POST /api/runs/{id}/answers`) resumes
@@ -56,12 +58,19 @@ owned-section instrument text. `pipeline/run.py` gained conditional stage
 resolution (`_resolve_next`) and a pause-setup hook (`_PAUSE_SETUP`), both
 general enough for the remaining `full.*` stages to reuse.
 
-**Not yet built:** `USER_REVISION` (§5.8, the ≤2 post-COMPLETE full-assessment
-revisions); the Brainstorm interview (interviewer, sufficiency, PoC/flow-map endpoints —
-note the PoC embed slot in ASSEMBLY (§12.3) is built and dormant, waiting on
-`brainstorm/poc.html`); the frontend entirely; and a first live Gemini run. The
-checkpoint-answer path (`FULL_REVISING` + `POST /api/runs/{id}/answers`) is **built this
-branch** — see Done below. See handoff notes for the concrete next steps.
+**Built this branch: `USER_REVISION` (§5.8) + `POST /api/runs/{id}/revise`** — the last
+governance stage, closing the pipeline. A COMPLETE run can now be revised up to twice: the
+reviewer triages the user's instructions into amend directives (declining rating-by-fiat
+or out-of-scope asks), the targeted specialists amend their own sections, one reviewer
+verify pass confirms + re-judges residual (engine recomputes), and ASSEMBLY rebuilds with a
+"Revision N of 2" label after archiving the superseded report. See Done below.
+
+**Not yet built:** the Brainstorm interview (interviewer, sufficiency, PoC/flow-map
+endpoints — note the PoC embed slot in ASSEMBLY (§12.3) is built and dormant, waiting on
+`brainstorm/poc.html`); the frontend entirely; and a first live Gemini run. With
+USER_REVISION done, **every governance stage in the §5.1 state machine is now built and
+driven end-to-end** — what remains is the Brainstorm front half and the SPA. See handoff
+notes for the concrete next steps.
 
 **Exit test** ("threshold output for a known test case matches a hand-worked
 assessment's ratings exactly", brief §9): **met for the engine wiring.**
@@ -80,6 +89,60 @@ pipeline.
 
 ## Done
 
+- **`USER_REVISION` + `POST /api/runs/{id}/revise` — the ≤2 post-COMPLETE full-assessment
+  revision path (TECH_SPEC §5.1 USER_REVISION, §5.8, §7; Stage 3; this branch).** The last
+  governance stage; with it, every §5.1 stage is built. The pieces:
+  - **`pipeline/agents/reviewer.py` — two new Pro passes, boundary-validated like the
+    existing reviewer.** `run_revision_triage` reads the user's revision instructions
+    (untrusted-wrapped, §9.2) against the completed assessment and returns
+    `{amend_directives, declined}` — directives in the §11.3 format (validated for write
+    scope by the *same* `_parse_directives` the review loop uses; a directive out of a
+    specialist's ownership is rejected) and declined instructions each with a plain reason
+    (`_parse_declined`). `run_revision_verification` is one pass (never the ≤2 loop): it
+    returns a `ReviewerResult` with `amend_directives` **always empty** (a revision is one
+    triage, one amendment, one verify), plus coherence findings, unresolved points for any
+    unmet directive, and post-mitigation residual tiers — no asserted rating (the engine
+    rates). Prompts `prompts/revision_triage.v1.md` + `revision_verify.v1.md`, both
+    registered under model role `reviewer` (Pro).
+  - **`pipeline/stages/full.py::user_revision` — the three §5.8 steps.** (1) triage →
+    `full/revisions/rev_<N>/directives.json`; (2) targeted specialists amend their own
+    directed sections via `run_specialist_amendment` (the reviewer-directive framing is
+    apt — the reviewer *did* issue directives — so `_apply_amendments` is reused, now
+    parameterised with a `detail` narration builder so REVIEW and USER_REVISION share it);
+    (3) verify + deterministic residual recompute → `full/reviewer/ratings_residual.json`,
+    with the verify pass's unresolved set written to (or clearing) `unresolved.json` and a
+    `rev_<N>/verification.json` record. The whole stage re-runs from step 1 on resume
+    (checkpoint = `rev_<N>/verification.json`), the same whole-stage idempotence REVIEW
+    relies on; `N` is `run.json`'s `revisions.full`, incremented by `/revise` before dispatch.
+  - **Archiving the superseded report (§5.8) is done at the USER_REVISION boundary, not
+    inside ASSEMBLY** (`stages/assembly.py::archive_superseded`): the outgoing
+    `assessment.ipynb/.html` are **moved** to `artefacts/superseded/rev_<N>/` before the
+    rebuild. Doing the move here (rather than in ASSEMBLY, as §5.8's prose reads) keeps
+    ASSEMBLY's idempotent-skip honest — see Decisions. ASSEMBLY otherwise unchanged except
+    `gather_inputs` now sets the `revision_label` the notebook title block already renders
+    ("Revision N of 2", design §8).
+  - **`pipeline/run.py` — table entries + a dynamic checkpoint.** `USER_REVISION` slots
+    into `_HANDLERS`/`_NEXT` (→ `ASSEMBLY`)/`_STAGE_FAIL_NODE` (`full.reviewer`)/
+    `_STAGE_PHRASE`; its checkpoint output carries the revision number, so
+    `_checkpoint_outputs(run, stage)` resolves `rev_<N>/verification.json` from `run.json`
+    (the first stage whose checkpoint path is run-state-dependent). `StageNotImplemented`
+    is no longer reachable for any §5.1 stage.
+  - **`backend/app.py::POST /api/runs/{id}/revise`.** Body `{artefact:"full", instructions}`;
+    valid only at `COMPLETE` (409 otherwise), empty instructions → 400, non-`full` artefact
+    → 422 (the other artefacts revise on their own paths, §7). Enforces the ≤2 cap via
+    `record_revision("full")` (raises at the cap → 409), commits `rev_<N>/request.json`
+    alongside the advanced `run.json`/`status.json` as one atomic commit, dispatches
+    `resume_from=USER_REVISION`. Mirrors `/answers`.
+  - **20 new tests** (`pipeline/tests/test_user_revision.py` (12): triage returns/rejects
+    (write-scope, missing-reason, untrusted-wrap), verification residual + never-directs +
+    no-asserted-rating, the handler (triage→amend→verify→recompute, archive-the-outgoing,
+    no-directives-still-recomputes, write-and-clear-unresolved), and the driver end-to-end
+    — COMPLETE → `resume_from=USER_REVISION` → COMPLETE with the "Revision 1 of 2" label +
+    the archived report, and idempotent-skip-on-resume; `test_assembly.py` (2):
+    revision-label + `archive_superseded` move/idempotence; `backend/tests/test_app.py`
+    (6): commit+dispatch, second-revision-increments, cap→409, off-COMPLETE→409,
+    empty→400, non-full→422). LLM-free (§15); ruff clean. **184 pipeline + 33 backend
+    tests green.**
 - **`FULL_REVISING` + `POST /api/runs/{id}/answers` — the checkpoint-answer branch,
   driven end-to-end (TECH_SPEC §5.1 FULL_REVISING, §5.8, §7; Stage 3; this branch).**
   The path a `FULL_CHECKPOINT` pause takes once the user answers. The pieces:
@@ -599,23 +662,14 @@ pipeline.
 
 ## In progress / handoff notes
 
-The former handoff steps 1–2 (backend `POST /api/runs` + dispatch + status proxy,
-`governance.yml`) are **done**, and the whole full-assessment pipeline — including the
-**checkpoint-answer branch** (`FULL_REVISING` + `POST /api/runs/{id}/answers`, this
-branch) — now drives end-to-end. `POST /api/runs/{id}/threshold/route` dispatches onward
-to `FULL_DRAFTING`; a `FULL_CHECKPOINT` pause is now actionable via `/answers`. Next
-concrete steps, in rough dependency order:
+The whole **governance half** of the pipeline is now complete and driven end-to-end: the
+former handoff steps 1–2 (backend `POST /api/runs` + dispatch + status proxy,
+`governance.yml`), the checkpoint-answer branch (`FULL_REVISING` + `/answers`), and — this
+branch — the post-COMPLETE revision path (`USER_REVISION` + `/revise`). Every stage in the
+§5.1 state machine has a handler. What remains is the **Brainstorm front half** and the
+**frontend**. Next concrete steps, in rough dependency order:
 
-1. **`USER_REVISION` (§5.8) — the ≤2 post-COMPLETE full-assessment revisions.** The last
-   unbuilt governance stage. Reviewer triage → targeted specialist amendment (again
-   `run_specialist_amendment`, whose framing is now parameterised — pass a
-   revision-request heading/intro) → one reviewer verify pass → `ASSEMBLY` re-runs
-   (archiving the superseded artefacts to `artefacts/superseded/rev_<N>/` first).
-   `RunState.record_revision("full")` and the revision caps already exist; ASSEMBLY already
-   rebuilds idempotently. The backend entry point is `POST /api/runs/{id}/revise` with
-   `{artefact:"full", instructions}` (valid only at `COMPLETE`), which dispatches
-   `resume_from=USER_REVISION` — mirror the `/answers` endpoint built this branch.
-2. **Brainstorm interview + outline canvas (backend `brainstorm/` + frontend).**
+1. **Brainstorm interview + outline canvas (backend `brainstorm/` + frontend).**
    `POST /api/runs` currently only *seeds* `brainstorm/outline.md` from the template
    (`backend/outline.py`) — nothing yet amends it. Needed: the interviewer
    (Flash-Lite, §7.1), the sufficiency judge, `POST /api/runs/{id}/brainstorm/message`
@@ -623,7 +677,7 @@ concrete steps, in rough dependency order:
    (`POST .../poc`, `.../flow-map`), and `POST .../revise` for the ≤2-per-artefact
    brainstorm revisions (brief §7). This is what turns `Stage.BRAINSTORM` into
    something a user actually drives, ahead of hitting `/submit`.
-3. **Frontend, entirely.** `frontend/` is still just a `README.md` + `.gitkeep`. Needed
+2. **Frontend, entirely.** `frontend/` is still just a `README.md` + `.gitkeep`. Needed
    before *any* of the above is usable end-to-end by a person: the ghosted-canvas
    Brainstorm UI (design §6), the transparency animation driven by `status.json`
    polling (design §7, this branch's status proxy is what it polls), the threshold
@@ -631,11 +685,12 @@ concrete steps, in rough dependency order:
    question UI, the resume-by-code screen (`/api/runs/{id}/resume`, built this
    branch), and the report (design §8). `frontend/config.ts` also needs writing —
    see Decisions below on keeping it in sync with `backend/config.py` by hand.
-4. **A first live Gemini run** to eval real generalist/reconciler judgement (the LLM
-   seam is mockable and unit-tested end-to-end; live quality is untested). Exercisable
-   now via `POST /api/runs` → `/submit` with `WINDTUNNEL_PAT` + `GEMINI_API_KEY` set,
-   once step 1 or a threshold-only run is dispatched — no frontend required to smoke
-   test this with a raw HTTP client.
+3. **A first live Gemini run** to eval real generalist/reconciler/specialist/reviewer
+   judgement (the LLM seam is mockable and unit-tested end-to-end, now across the whole
+   governance path including revision; live quality is untested). Exercisable now via
+   `POST /api/runs` → `/submit` with `WINDTUNNEL_PAT` + `GEMINI_API_KEY` set, then
+   `/threshold/route {full}` and, once COMPLETE, `/revise` — no frontend required to smoke
+   test with a raw HTTP client.
 
 **Deferred within retrieval (not blocking):** the optional Flash-written one-line
 descriptions for uninformative index headings (§8.4) are not generated — the index
@@ -713,6 +768,32 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **The superseded report is archived at the USER_REVISION boundary, not inside ASSEMBLY
+  (this branch, `stages/full.py::user_revision` → `stages/assembly.py::archive_superseded`).**
+  §5.8's prose reads "advances to ASSEMBLY, which first archives the outgoing
+  `assessment.ipynb/.html`". But ASSEMBLY's idempotent-skip (§5.3) keys on the existence of
+  those very files, so if ASSEMBLY archived them, the driver would first check "assessment.*
+  exist? → skip ASSEMBLY" and the archive+rebuild would never run on a revision (the old
+  report always exists). Resolved by **moving** the outgoing files to
+  `artefacts/superseded/rev_<N>/` as USER_REVISION's first action: ASSEMBLY's checkpoint
+  files are then absent for a revision, so the driver rebuilds. The observable §5.8 contract
+  (outgoing archived, then rebuilt with the "Revision N of 2" label) is preserved exactly;
+  only *which stage does the move* differs, and it is committed atomically with the rest of
+  USER_REVISION's checkpoint so the move and the marker never drift.
+- **USER_REVISION's verification `unresolved.json` replaces, rather than appends to, any
+  prior `unresolved.json` (this branch).** The verify pass re-reads the whole amended
+  assessment, so its unresolved set is the authoritative post-revision picture; keeping a
+  stale pre-revision list beside it (or accreting across revisions) would misreport the
+  report's "Points of unresolved disagreement". A genuinely persisting disagreement is still
+  visible to the verify reviewer (same drafts) and re-recorded. One owner for the report's
+  unresolved list; a clean verification removes the file.
+- **USER_REVISION's checkpoint path is resolved from `run.json` at check time, not a static
+  `_CHECKPOINT_OUTPUTS` table entry (this branch, `run.py::_checkpoint_outputs`).** It is
+  `full/revisions/rev_<N>/verification.json`, and `N` is `revisions.full` — the first stage
+  whose idempotence marker depends on run state. Every other stage keeps its static tuple;
+  only USER_REVISION routes through the resolver. (The whole stage re-runs from step 1 on
+  resume, like REVIEW — on a fresh Actions disk an uncommitted partial left nothing, so
+  re-running triage→amend→verify is clean.)
 - **FULL_REVISING re-drafts each questioning specialist's *whole* owned set, not a
   question-scoped subset (this branch, `stages/full.py::full_revising`).** A checkpoint
   `question_id` is `<specialist>-N` (specialist.v1.md) and is **not** tied to a specific

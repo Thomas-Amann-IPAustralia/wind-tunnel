@@ -2,10 +2,13 @@
 
 Run creation, the status proxy, the artefact download proxy, submission into
 Governance, threshold routing, checkpoint answers (``/answers`` →
-``FULL_REVISING``), and resume-by-code. **Not** in this slice: the Brainstorm
+``FULL_REVISING``), full-assessment revision (``/revise {artefact:"full"}`` →
+``USER_REVISION``), and resume-by-code. **Not** in this slice: the Brainstorm
 interview endpoints (``/brainstorm/message``, ``/edit-outline``, ``/poc``,
-``/flow-map``, ``/revise``) — those belong to the interviewer/PoC build (STATUS.md
-"Brainstorm interview + outline canvas"), which this backend does not implement yet.
+``/flow-map``) and the non-``full`` branches of ``/revise`` (outline/poc/flow_map
+regenerate from the amended outline; ``threshold`` revises at ``THRESHOLD_REVIEW``) —
+those belong to the interviewer/PoC build (STATUS.md "Brainstorm interview + outline
+canvas"), which this backend does not implement yet.
 
 **Statelessness (§14).** Render's disk is ephemeral and a cold instance has no
 memory of any run, so every endpoint re-reads ``run.json``/``status.json``
@@ -67,6 +70,13 @@ class AnswerItem(BaseModel):
 class AnswersBody(BaseModel):
     answers: list[AnswerItem] = []
     skips: list[str] = []
+
+
+class ReviseBody(BaseModel):
+    # Only "full" is served here — the other revisable artefacts (§7) revise through the
+    # Brainstorm/threshold paths, not this endpoint. A non-"full" value is a 422.
+    artefact: Literal["full"]
+    instructions: str
 
 
 def create_app(
@@ -327,6 +337,52 @@ def create_app(
             for spec in payload.get("specialists", [])
             for item in spec.get("items", [])
         }
+
+    @app.post("/api/runs/{run_id}/revise")
+    def revise_run(body: ReviseBody, run_id: str = Depends(_valid_run_id)) -> dict:
+        """Full-assessment revision (§7, §5.1 USER_REVISION, §5.8). Valid only at
+        ``COMPLETE``; enforces the ≤2 per-artefact cap (``run.json.revisions.full``).
+        Increments the count, commits ``full/revisions/rev_<N>/request.json`` alongside the
+        advanced ``run.json``/``status.json``, and dispatches Governance with
+        ``resume_from=USER_REVISION``."""
+        instructions = body.instructions.strip()
+        if not instructions:
+            raise HTTPException(
+                http_status.HTTP_400_BAD_REQUEST, "Revision instructions must not be empty."
+            )
+        run = _load_run(run_id)
+        if run.stage is not statefile.Stage.COMPLETE:
+            raise HTTPException(
+                http_status.HTTP_409_CONFLICT,
+                f"Run {run_id} is not COMPLETE (currently {run.stage}); a full-assessment "
+                "revision is only possible on a completed assessment.",
+            )
+        now = statefile.utc_now_iso()
+        try:
+            revision = run.record_revision("full", now=now)  # raises at the cap (§5.8)
+        except statefile.StateError as exc:
+            raise HTTPException(http_status.HTTP_409_CONFLICT, str(exc)) from exc
+
+        run.advance_to(statefile.Stage.USER_REVISION, now=now)
+        st = _load_status(run_id, run)
+        st.set_running(now=now)
+        st.heartbeat(agent="backend", now=now)
+        request_doc = {"instructions": instructions, "requested_at": now}
+        files = {
+            _run_path(run_id, "full", "revisions", f"rev_{revision}", "request.json"): _dump_json(
+                request_doc
+            ),
+            _run_path(run_id, "run.json"): _dump_json(run.to_dict()),
+            _run_path(run_id, "status.json"): _dump_json(st.to_dict()),
+        }
+        try:
+            github.commit_files(
+                files, f"run {run_id}: full-assessment revision {revision} requested"
+            )
+        except GitHubError as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+        _dispatch(settings.governance_workflow, run_id, "USER_REVISION")
+        return {"run_id": run_id, "revision": revision, "dispatched": True}
 
     @app.post("/api/runs/{run_id}/resume")
     def resume_run(run_id: str = Depends(_valid_run_id)) -> dict:

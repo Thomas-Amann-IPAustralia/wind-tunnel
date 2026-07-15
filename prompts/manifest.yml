@@ -39,3 +39,13 @@ prompts:
                                         # audits coverage + coherence, issues amend
                                         # directives, judges residual 12.3/12.4 (§5.1
                                         # REVIEW, §11); the engine computes the ratings
+  revision_triage:
+    file: revision_triage.v1.md
+    model_role: reviewer               # resolves via config/models.yml (Pro)
+                                        # USER_REVISION step 1 (§5.8): triages the user's
+                                        # revision request into amend directives + declines
+  revision_verify:
+    file: revision_verify.v1.md
+    model_role: reviewer               # resolves via config/models.yml (Pro)
+                                        # USER_REVISION step 3 (§5.8): one verification pass —
+                                        # confirms directives met, re-judges residual
