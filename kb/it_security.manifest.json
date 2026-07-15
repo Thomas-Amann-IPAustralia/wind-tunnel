@@ -1,7 +1,7 @@
 {
   "specialist": "it_security",
-  "generated_at": "2026-07-15T02:03:28Z",
-  "git_sha": "d5aebf9d81f489b44e1daf0fb73529d36de40d41",
+  "generated_at": "2026-07-15T04:52:02Z",
+  "git_sha": "10d7c7debdcfb2c7dd030f7c7a559fee5545a5cf",
   "chunker": {
     "target_tokens_min": 400,
     "target_tokens_max": 900,
@@ -11,11 +11,11 @@
   "retrieval_model": "index + fetch/search (FTS5 BM25); no embeddings (TECH_SPEC §8.8)",
   "sqlite": {
     "path": "it_security.sqlite",
-    "sha256": "f7c8646d2a8b0f73e289f7a8dbf79a36c60543275bcd7e37de5b4e2dd3bb1178"
+    "sha256": "c47648a56c33bb0768824c2031c12442a3d6b1d9feff3158b773138f9f8a3209"
   },
   "index": {
     "path": "it_security.index.json",
-    "sha256": "99185406464e65892abf2c0023d8a6396500b9f43cd63cfe2fda0f0ad82740c2"
+    "sha256": "818aa0005bdccf78e6ac7af0670bd53a4e156887f7f29df260487ec028aab9e4"
   },
   "document_count": 13,
   "documents": [

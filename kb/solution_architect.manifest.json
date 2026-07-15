@@ -1,7 +1,7 @@
 {
   "specialist": "solution_architect",
-  "generated_at": "2026-07-15T02:04:10Z",
-  "git_sha": "d5aebf9d81f489b44e1daf0fb73529d36de40d41",
+  "generated_at": "2026-07-15T04:52:44Z",
+  "git_sha": "10d7c7debdcfb2c7dd030f7c7a559fee5545a5cf",
   "chunker": {
     "target_tokens_min": 400,
     "target_tokens_max": 900,
@@ -11,11 +11,11 @@
   "retrieval_model": "index + fetch/search (FTS5 BM25); no embeddings (TECH_SPEC §8.8)",
   "sqlite": {
     "path": "solution_architect.sqlite",
-    "sha256": "32ac9e8c76025bd8c9f95330876ae05bf289fb3dbf8f3eb264192ddc6bb64d1d"
+    "sha256": "5fa6b8ce2e53af12a48463baed7dd74d05cfcc24d994c9a0247d1ec8c9c388b8"
   },
   "index": {
     "path": "solution_architect.index.json",
-    "sha256": "0aa42cc69a4afc126db673f5e41888ea240d609e9d1aff644c799e53669eeeb7"
+    "sha256": "9149f4384371a95a953edfb6709d9ae9946e89ad36350ff829ff3349a7b5f266"
   },
   "document_count": 56,
   "documents": [
