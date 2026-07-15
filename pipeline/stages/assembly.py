@@ -75,6 +75,7 @@ def gather_inputs(ctx: StageContext) -> dict:
         "high_risk_governance_review_required": residual.get("overall_residual") == "High",
         "architect_md": _read_optional(ctx, "full/architect.md"),
         "gaps": _aggregate_gaps(specialists),
+        "skipped_questions": _skipped_questions(ctx),
         "unresolved": _read_json_optional(ctx, "full/reviewer/unresolved.json") or [],
         "references": [r.to_dict() for r in _build_references(ctx, specialists)],
         "provenance": _build_provenance(ctx, specialists),
@@ -118,6 +119,25 @@ def _aggregate_gaps(specialists: dict[str, dict]) -> list[dict]:
         for gap in specialists[spec].get("gaps") or []:
             out.append({"section": gap["section"], "reason": gap["reason"], "friendly": friendly})
     out.sort(key=_section_sort_key)
+    return out
+
+
+def _skipped_questions(ctx: StageContext) -> list[dict]:
+    """Checkpoint questions the user left unanswered (§5.1 "skipped questions → gaps"),
+    surfaced in the report's recommended-next-steps appendix (§12.1). A question is skipped
+    if it carries no answer — an explicit skip or one simply not addressed. Empty when the
+    run had no checkpoint (``full/answers.json`` absent)."""
+    answers = _read_json_optional(ctx, "full/answers.json")
+    questions = _read_json_optional(ctx, "full/questions.json")
+    if not answers or not questions:
+        return []
+    answered = {a.get("question_id") for a in (answers.get("answers") or [])}
+    out: list[dict] = []
+    for spec in questions.get("specialists") or []:
+        for item in spec.get("items") or []:
+            qid = item.get("question_id")
+            if qid not in answered:
+                out.append({"question_id": qid, "text": item.get("text", "")})
     return out
 
 

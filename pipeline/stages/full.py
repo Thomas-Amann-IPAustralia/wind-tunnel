@@ -1,4 +1,5 @@
-"""The full-assessment stages (TECH_SPEC §5.1): FULL_DRAFTING, ARCHITECT, REVIEW.
+"""The full-assessment stages (TECH_SPEC §5.1): FULL_DRAFTING, FULL_REVISING,
+ARCHITECT, REVIEW.
 
 ``full_drafting`` — six specialists each draft their own owned §5–12 sections
 independently, driving their own KB through the bounded fetch/search tool loop
@@ -6,6 +7,10 @@ independently, driving their own KB through the bounded fetch/search tool loop
 does, ``full/questions.json`` is written and the next stage is the ``FULL_CHECKPOINT``
 user pause (§6.4). If none do, the checkpoint (and ``FULL_REVISING``) is skipped — the
 §5.1 happy path straight to ``architect``.
+
+``full_revising`` — after a ``FULL_CHECKPOINT`` pause, each specialist that raised a
+question revises its own sections once in light of the user's answers (§5.1, §5.8), a
+thin orchestration over ``run_specialist_amendment``. Skipped questions become gaps.
 
 ``architect`` — a single Pro call writes the Implementation Plan appendix, every step
 traceable to a mitigation a specialist actually drafted (§5.5, §12.1).
@@ -54,6 +59,9 @@ SPECIALISTS: tuple[str, ...] = (
 )
 
 QUESTIONS_RELPATH = "full/questions.json"
+ANSWERS_RELPATH = "full/answers.json"
+REVISED_RELPATH = "full/revised.json"
+_SPECIALIST_NODE_PREFIX = "full.specialist."
 ARCHITECT_NODE = "full.architect"
 ARCHITECT_MD_RELPATH = "full/architect.md"
 REVIEWER_NODE = "full.reviewer"
@@ -116,6 +124,133 @@ def full_drafting(ctx: StageContext) -> None:
         for node, draft in raised:
             for item in draft.questions:
                 ctx.status.question_raised(node, item["question_id"], item["text"])
+
+
+# -- FULL_REVISING -------------------------------------------------------------
+
+_REVISION_HEADING = "Your checkpoint questions — now answered"
+_REVISION_INTRO = (
+    "The person running this assessment has answered the checkpoint questions you raised. "
+    "Revise your own sections ({targets}) in light of their answers. Where a question was "
+    "left unanswered, treat that fact as unavailable — re-affirm any section that still "
+    "holds, and record any section you cannot ground from the evidence as a gap rather "
+    "than inventing detail. Raise no new questions."
+)
+
+
+def full_revising(ctx: StageContext) -> None:
+    """Each specialist that raised a checkpoint question revises its own sections once in
+    light of the user's answers (§5.1 FULL_REVISING, §5.8). This is a thin orchestration
+    over ``run_specialist_amendment`` (§11.3): the answers are the directive, and the
+    specialist's whole owned set is the target (a question is not tied to one section, so
+    the specialist re-drafts its slice with the new facts in hand). A skipped question is
+    presented as an unavailable fact, so a section it still cannot ground becomes a gap
+    (§5.1 "skipped questions → gaps"). Specialists that raised no question are untouched.
+    Writes updated ``full/specialists/*`` and ``full/revised.json`` (the checkpoint marker
+    + a record of what was revised)."""
+    questions = ctx.read_json(QUESTIONS_RELPATH)
+    answers = ctx.read_json(ANSWERS_RELPATH)
+    outline = ctx.outline()
+    threshold_md = ctx.read_text("threshold/threshold_assessment.md")
+    kb_root = ctx.kb_root or _default_kb_root()
+
+    answer_by_id = {a["question_id"]: a.get("value", "") for a in (answers.get("answers") or [])}
+    skipped_ids = set(answers.get("skips") or [])
+
+    revised: list[str] = []
+    answered_count = 0
+    skipped_count = 0
+    for entry in questions.get("specialists") or []:
+        specialist = _specialist_from_node(entry["node_id"])
+        node = f"{_SPECIALIST_NODE_PREFIX}{specialist}"
+        items = entry.get("items") or []
+        directive_context, n_ans, n_skip = _render_answers_directive(
+            items, answer_by_id, skipped_ids
+        )
+        answered_count += n_ans
+        skipped_count += n_skip
+
+        targets = specialist_owned_sections(specialist)
+        prior = SpecialistDraft.from_dict(ctx.read_json(f"full/specialists/{specialist}.json"))
+        ctx.status.start_node(node)
+        ctx.status.revision(
+            node, f"revising {specialist}'s sections in light of your answers", target=specialist
+        )
+        index_text = _load_index_text(kb_root, specialist)
+        with KB(kb_root / f"{specialist}.sqlite") as kb:
+            new_draft = run_specialist_amendment(
+                ctx.llm,
+                specialist,
+                prior,
+                targets,
+                directive_context,
+                _revision_seed_terms(items, answer_by_id),
+                outline,
+                threshold_md,
+                kb,
+                index_text,
+                directive_heading=_REVISION_HEADING,
+                directive_intro=_REVISION_INTRO,
+                status=ctx.status,
+                node_id=node,
+            )
+        ctx.write_json(f"full/specialists/{specialist}.json", new_draft.to_dict())
+        ctx.write_text(f"full/specialists/{specialist}.md", render_specialist_markdown(new_draft))
+        ctx.status.complete_node(node)
+        revised.append(specialist)
+
+    ctx.write_json(
+        REVISED_RELPATH,
+        {"revised": revised, "counts": {"answered": answered_count, "skipped": skipped_count}},
+    )
+
+
+def _specialist_from_node(node_id: str) -> str:
+    """The specialist id inside a ``full.specialist.<id>`` node id (§6.2)."""
+    if not node_id.startswith(_SPECIALIST_NODE_PREFIX):
+        raise ValueError(f"Not a specialist node id: {node_id!r}.")
+    specialist = node_id[len(_SPECIALIST_NODE_PREFIX) :]
+    if specialist not in SPECIALISTS:
+        raise ValueError(f"Unknown specialist {specialist!r} in node id {node_id!r}.")
+    return specialist
+
+
+def _render_answers_directive(
+    items: list[dict], answer_by_id: dict[str, str], skipped_ids: set[str]
+) -> tuple[str, int, int]:
+    """Render one specialist's checkpoint questions with the user's answers, marking any it
+    left unanswered. Returns the block plus (answered, skipped) counts. A question with no
+    answer and no explicit skip is treated as skipped — the honest default (§5.1)."""
+    lines: list[str] = []
+    answered = 0
+    skipped = 0
+    for item in items:
+        qid = item["question_id"]
+        lines.append(f"### {qid}: {item['text']}")
+        value = answer_by_id.get(qid)
+        if qid in skipped_ids or value is None or not str(value).strip():
+            lines.append(
+                "**The user chose not to answer this question.** Treat the fact it asked "
+                "about as unavailable."
+            )
+            skipped += 1
+        else:
+            lines.append(f"**Answer:** {value}")
+            answered += 1
+        lines.append("")
+    return "\n".join(lines), answered, skipped
+
+
+def _revision_seed_terms(items: list[dict], answer_by_id: dict[str, str]) -> str:
+    """Seed the amendment's pre-fetch search with the question text and the user's answers,
+    so re-grounding starts from the newly supplied facts rather than an empty query."""
+    terms: list[str] = []
+    for item in items:
+        terms.append(str(item.get("text", "")))
+        value = answer_by_id.get(item["question_id"])
+        if value:
+            terms.append(str(value))
+    return " ".join(t for t in terms if t.strip())
 
 
 # -- ARCHITECT -----------------------------------------------------------------

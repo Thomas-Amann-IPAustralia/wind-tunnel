@@ -25,8 +25,11 @@ user pause if a specialist raised a question, or ``ARCHITECT`` otherwise. ``ARCH
 writes the implementation-plan appendix, ``REVIEW`` runs the bounded reviewer loop
 (coverage + coherence + residual, §11), and ``ASSEMBLY`` builds the notebook + HTML
 report and finalises the run at ``COMPLETE``. The full governance path now runs
-end-to-end. The Brainstorm-side stages (``FULL_REVISING`` after a checkpoint answer,
-``USER_REVISION``) are not built yet and raise ``StageNotImplemented``.
+end-to-end. When a specialist raised a checkpoint question, the run pauses at
+``FULL_CHECKPOINT``; a ``resume_from=FULL_REVISING`` dispatch (once the user submits
+answers) resumes into ``FULL_REVISING``, which revises the questioning specialists'
+sections before ``ARCHITECT``. ``USER_REVISION`` (§5.8) is not built yet and raises
+``StageNotImplemented``.
 """
 
 from __future__ import annotations
@@ -53,9 +56,11 @@ from stages.full import (
     QUESTIONS_RELPATH,
     RESIDUAL_RELPATH,
     REVIEWER_NODE,
+    REVISED_RELPATH,
     SPECIALISTS,
     architect,
     full_drafting,
+    full_revising,
     review,
 )
 from stages.threshold import (
@@ -68,11 +73,12 @@ from statefile import RunState, Stage, StageStatus, utc_now_iso
 from status import StatusModel
 
 # Stage → its handler. Stages absent here are either boundary/pause/terminal states
-# handled inline, or not yet implemented (full.* beyond drafting).
+# handled inline, or not yet implemented (USER_REVISION).
 _HANDLERS: dict[Stage, Callable[[StageContext], None]] = {
     Stage.THRESHOLD_DRAFTING: threshold_drafting,
     Stage.THRESHOLD_RECONCILING: threshold_reconciling,
     Stage.FULL_DRAFTING: full_drafting,
+    Stage.FULL_REVISING: full_revising,
     Stage.ARCHITECT: architect,
     Stage.REVIEW: review,
     Stage.ASSEMBLY: assembly,
@@ -85,6 +91,7 @@ _NEXT: dict[Stage, Stage] = {
     Stage.THRESHOLD_DRAFTING: Stage.THRESHOLD_RECONCILING,
     Stage.THRESHOLD_RECONCILING: Stage.THRESHOLD_REVIEW,
     Stage.FULL_DRAFTING: Stage.FULL_CHECKPOINT,
+    Stage.FULL_REVISING: Stage.ARCHITECT,
     Stage.ARCHITECT: Stage.REVIEW,
     Stage.REVIEW: Stage.ASSEMBLY,
     Stage.ASSEMBLY: Stage.COMPLETE,
@@ -111,6 +118,7 @@ _CHECKPOINT_OUTPUTS: dict[Stage, tuple[str, ...]] = {
         "threshold/divergence.json",
     ),
     Stage.FULL_DRAFTING: tuple(f"full/specialists/{s}.json" for s in SPECIALISTS),
+    Stage.FULL_REVISING: (REVISED_RELPATH,),
     Stage.ARCHITECT: (ARCHITECT_MD_RELPATH,),
     Stage.REVIEW: (RESIDUAL_RELPATH,),
     Stage.ASSEMBLY: (NOTEBOOK_RELPATH, HTML_RELPATH),
@@ -121,6 +129,7 @@ _STAGE_FAIL_NODE: dict[Stage, str] = {
     Stage.THRESHOLD_DRAFTING: NODE_A,
     Stage.THRESHOLD_RECONCILING: NODE_RECONCILER,
     Stage.FULL_DRAFTING: f"full.specialist.{SPECIALISTS[0]}",
+    Stage.FULL_REVISING: f"full.specialist.{SPECIALISTS[0]}",
     Stage.ARCHITECT: ARCHITECT_NODE,
     Stage.REVIEW: REVIEWER_NODE,
     Stage.ASSEMBLY: ASSEMBLY_NODE,
@@ -131,6 +140,7 @@ _STAGE_PHRASE: dict[Stage, str] = {
     Stage.THRESHOLD_DRAFTING: "drafting the threshold assessment",
     Stage.THRESHOLD_RECONCILING: "reconciling the threshold assessment",
     Stage.FULL_DRAFTING: "drafting the full assessment specialist sections",
+    Stage.FULL_REVISING: "revising the full assessment in light of your answers",
     Stage.ARCHITECT: "writing the implementation-plan appendix",
     Stage.REVIEW: "reviewing the full assessment",
     Stage.ASSEMBLY: "assembling the notebook and report",
@@ -360,7 +370,9 @@ def _drive(
 
         handler = _HANDLERS.get(stage)
         if handler is None:
-            raise StageNotImplemented(f"No handler for stage {stage} (full.* not built yet).")
+            raise StageNotImplemented(
+                f"No handler for stage {stage} (USER_REVISION not built yet)."
+            )
 
         if _checkpoint_exists(run_dir, stage):
             run.advance_to(_resolve_next(stage, run_dir), now=now())

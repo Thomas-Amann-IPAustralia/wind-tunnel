@@ -38,6 +38,15 @@ from retrieval.tokens import estimate_tokens
 MAX_QUESTIONS_PER_SPECIALIST = 3  # CLAUDE.md §3 "specialist questions ≤3 each"
 _YES_NO_NA = ("yes", "no", "not applicable")
 
+# The default framing for an amendment — a reviewer ruling (§11.3). FULL_REVISING passes
+# its own heading/intro (a checkpoint answer, §5.1) instead. ``{targets}`` is filled with
+# the comma-joined directed section ids.
+_REVIEWER_HEADING = "Reviewer directive — amend your own sections"
+_REVIEWER_INTRO = (
+    "The adjudicating reviewer has ruled on your assessment. Amend **only** the sections "
+    "named below ({targets}); you may not touch any other section."
+)
+
 
 class AgentError(RuntimeError):
     """A specialist's answer violated the output contract — an out-of-scope
@@ -164,6 +173,8 @@ def run_specialist_amendment(
     kb: KB,
     index_text: str,
     *,
+    directive_heading: str = _REVIEWER_HEADING,
+    directive_intro: str = _REVIEWER_INTRO,
     status: object | None = None,
     node_id: str | None = None,
     max_rounds: int | None = None,
@@ -171,12 +182,16 @@ def run_specialist_amendment(
     seed_top_k: int | None = None,
     max_total_tokens: int | None = None,
 ) -> SpecialistDraft:
-    """Amend a subset of a specialist's own sections in light of a reviewer directive
-    (§11.3, and the §5.8 revision path). The amendment may touch **only** the directed
-    sections (a subset of the specialist's owned sections) — its output is scoped to
-    ``target_sections`` and merged over ``prior_draft``, so a directive cannot reach any
-    section the reviewer did not name. No new checkpoint questions are raised in an
-    amendment; anything the specialist cannot determine becomes a gap (§5.8)."""
+    """Amend a subset of a specialist's own sections in light of a directive (§11.3
+    reviewer ruling, and the §5.1 FULL_REVISING / §5.8 revision paths). The amendment may
+    touch **only** the directed sections (a subset of the specialist's owned sections) — its
+    output is scoped to ``target_sections`` and merged over ``prior_draft``, so a directive
+    cannot reach any section it did not name. No new checkpoint questions are raised in an
+    amendment; anything the specialist cannot determine becomes a gap (§5.8).
+
+    ``directive_heading``/``directive_intro`` frame the directive block: the defaults read
+    as a reviewer ruling; FULL_REVISING overrides them to read as answered checkpoint
+    questions. ``{targets}`` in the intro is filled with the directed section ids."""
     unknown = set(target_sections) - set(specialist_owned_sections(specialist_id))
     if unknown:
         raise AgentError(
@@ -187,6 +202,7 @@ def run_specialist_amendment(
     prompt = load_prompt("specialist")
     context = specialist_instrument_context(specialist_id)
     targets = tuple(target_sections)
+    intro = directive_intro.format(targets=", ".join(targets))
 
     def build_user(history: list[str], round_no: int, max_rounds: int, final: bool) -> str:
         return _build_amendment_user(
@@ -196,6 +212,8 @@ def run_specialist_amendment(
             threshold_md,
             prior_draft,
             targets,
+            directive_heading,
+            intro,
             directive_context,
             history,
             round_no,
@@ -367,6 +385,8 @@ def _build_amendment_user(
     threshold_md: str,
     prior_draft: SpecialistDraft,
     targets: tuple[str, ...],
+    heading: str,
+    intro: str,
     directive_context: str,
     history: list[str],
     round_no: int,
@@ -374,8 +394,9 @@ def _build_amendment_user(
     *,
     final: bool = False,
 ) -> str:
-    """The amendment turn: the reviewer's directive plus the specialist's current draft
-    of the directed sections, scoped to those sections only (§11.3)."""
+    """The amendment turn: the directive (a reviewer ruling, §11.3, or answered checkpoint
+    questions, §5.1) plus the specialist's current draft of the directed sections, scoped
+    to those sections only."""
     target_list = ", ".join(targets)
     parts = [
         context,
@@ -386,10 +407,7 @@ def _build_amendment_user(
             label="## Threshold assessment (already completed — sections 1–4 and the "
             "computed inherent risk ratings)",
         ),
-        "## Reviewer directive — amend your own sections\n\n"
-        "The adjudicating reviewer has ruled on your assessment. Amend **only** the "
-        f"sections named below ({target_list}); you may not touch any other section.\n\n"
-        + directive_context,
+        f"## {heading}\n\n{intro}\n\n" + directive_context,
         "## Your current draft of the sections to amend\n\n" + _render_prior(prior_draft, targets),
     ]
     if history:
