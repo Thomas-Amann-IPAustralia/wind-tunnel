@@ -2,25 +2,35 @@
 
 ## Current stage
 
-**Stage 2 — Threshold** (PROJECT_BRIEF.md §9) — **governance slice built and tested;
-exit test MET for the deterministic wiring. The backend is now live-dispatchable
-end-to-end** (run creation → submit → Governance Action → checkpoint pushes →
-status proxy → threshold routing), still with the LLM seam mockable and the
-frontend not yet built. (Stage 0 — Foundations remains met; its record is
-preserved below under Done.)
+**Stage 3 — Full assessment** (PROJECT_BRIEF.md §9) is now underway: the first
+`full.*` pipeline stage is built. **`FULL_DRAFTING`** — all six specialists,
+each driving its own KB through the bounded fetch/search retrieval loop and
+drafting only its owned §5–12 sections — is wired end-to-end into
+`pipeline/run.py`, with the `FULL_CHECKPOINT` user pause correctly entered when
+a specialist raises a question, and correctly *skipped* (straight to the
+not-yet-built `ARCHITECT`) when none do. Stage 2 — Threshold remains met in
+full (record preserved below); Stage 0 — Foundations remains met.
 
-Scope of Stage 2: generalists, reconciler, deterministic rating engine, review/revise
-UI, markdown export. **Built previously:** the whole pipeline-side threshold path —
-two generalists → code higher-wins resolution → the deterministic engine → routing →
-the `THRESHOLD_REVIEW` pause — driven end-to-end by `pipeline/run.py`, plus markdown
-export. **Built this branch:** the backend that dispatches it (`backend/app.py`,
-`github_io.py`, `dispatch.py`, `config.py`, `outline.py`) and the `governance.yml`
-Action that runs it, plus a durability fix to the pipeline's own commit helper (see
-Done, below). **Not yet built:** the Brainstorm interview (interviewer, sufficiency,
-PoC/flow-map endpoints, `templates/outline.md` amendment beyond initial copy), the
-frontend entirely (review/revise UI, the transparency animation, resume-by-code
-screen), the `full.*` pipeline stages, and a first live Gemini run (the seam is
-mockable; the live transport is written but only exercised in Actions with a key).
+**Built this branch:** `pipeline/agents/specialist.py` (the retrieval tool loop
++ output validation), `pipeline/stages/full.py` (the `FULL_DRAFTING` handler +
+questions payload + markdown render), `prompts/specialist.v1.md` (one shared
+prompt for all six specialists — the instrument context, KB index, and KB
+differ per call, not the prompt), and the `agents/prompting.py` additions that
+give every specialist call its owned-section instrument text. `pipeline/run.py`
+gained conditional stage resolution (`_resolve_next`) and a pause-setup hook
+(`_PAUSE_SETUP`) — the first two places the driver needed runtime branching
+beyond the fixed `_NEXT` table, both now general enough for the remaining
+`full.*` stages to reuse. 19 new tests (`pipeline/tests/test_full_drafting.py`),
+112 total pipeline tests green; ruff clean. Verified once against a **real**
+committed KB (`kb/ethics.sqlite`, not a test fixture) driving an actual
+search → draft round-trip, LLM-free.
+
+**Not yet built:** `ARCHITECT`, `REVIEW` (the reviewer loop), `FULL_REVISING`,
+`ASSEMBLY` (notebook + HTML), the Brainstorm interview (interviewer,
+sufficiency, PoC/flow-map endpoints), the backend `POST /api/runs/{id}/answers`
+endpoint (needed once a real user can answer a `FULL_CHECKPOINT` pause), the
+frontend entirely, and a first live Gemini run. See handoff notes below for the
+concrete next steps and how they build on this branch.
 
 **Exit test** ("threshold output for a known test case matches a hand-worked
 assessment's ratings exactly", brief §9): **met for the engine wiring.**
@@ -39,6 +49,91 @@ pipeline.
 
 ## Done
 
+- **`FULL_DRAFTING` — the six-specialist retrieval + draft stage, driven
+  end-to-end (TECH_SPEC §5.1, §8.1, §9.3; Stage 3; this branch).** The pieces:
+  - **`pipeline/agents/specialist.py` — the retrieval tool loop + output
+    validation.** `run_specialist(...)` gives the model its owned-section
+    instrument context, its KB index, the outline, and the completed threshold
+    assessment, then loops: each round the model returns exactly one JSON
+    object — `{"action":"fetch"|"search",...}` or `{"action":"draft",...}` —
+    resolved against the real KB (`retrieval.KB`, no native LLM tool-calling
+    used; the protocol is a plain JSON turn since `llm.py`'s seam is
+    system+user→text). Bounded by `config/retrieval.yml` (`fetch.max_rounds`,
+    `fetch.max_total_tokens`); on cap, one **forced final round** demands a
+    draft from whatever was fetched (§8.1's literal rule) rather than looping.
+    A pre-fetch **seed search** (owned section titles + prompts, §8.1 step 2)
+    runs before round 1 so grounding never starts empty. Every fetch/search
+    emits a `retrieval` status event when a `StatusModel`+`node_id` are given.
+    Validation enforces write-scope structurally (§9.3): `sections`/
+    `citations`/`gaps` keys outside the specialist's owned set are **rejected**,
+    every owned section must be either drafted or gapped (never both, never
+    neither), a `yes_no_na` section must open with Yes/No/Not applicable, and
+    the ≤3-questions cap (CLAUDE.md §3) is enforced with a required batch-level
+    `why` whenever any question is raised.
+  - **`prompts/specialist.v1.md`** — one prompt shared by all six specialists
+    (registered in `prompts/manifest.yml` under role `specialist`, resolving to
+    Flash per `config/models.yml`); what differs per call is the instrument
+    context, KB index, and KB, all assembled by `specialist.py`, not the
+    prompt text. Encodes the fetch/search/draft JSON protocol, the
+    draft-or-gap discipline, the untrusted-content wrapping for the outline
+    *and* the threshold assessment (§9.2 — the threshold text is
+    pipeline-authored but still derived from user content, so it is wrapped
+    too, not treated as trusted), and the structural write-scope rule.
+  - **`agents/prompting.py` additions.** `specialists()`, `specialist_owned_sections()`,
+    `specialist_friendly_name()`, `specialist_instrument_context()` (the DTA
+    question text for one specialist's owned sections, grouped by containing
+    §5–12 section — the tool's own wording, verbatim, mirroring how
+    `threshold_instrument_context()` already worked for the generalists), and
+    `specialist_seed_terms()`. All derive from `instrument/sections.json` +
+    `instrument/questions.json` — no new encoding of the ownership fact.
+  - **`pipeline/stages/full.py` — the `FULL_DRAFTING` handler.** Runs all six
+    specialists (sequentially, matching the existing `threshold_drafting`
+    precedent — TECH_SPEC §5.4's "concurrent within a job" is aspirational and
+    not yet true of either drafting stage), writes
+    `full/specialists/<id>.json` + a readable `.md` per specialist, and — iff
+    at least one specialist raised a question — assembles and writes
+    `full/questions.json` in the exact §6.4 batched shape (`batch_id`,
+    per-specialist `{node_id, friendly, why, items}`, `counts`), narrating each
+    with a `question_raised` event. `SPECIALISTS` is a hardcoded tuple (the
+    established pattern in this codebase for section-id constants derived
+    from, but not re-loaded from, `instrument/sections.json` at import time —
+    see `stages/threshold.py`'s `_RISK_TITLES`); a test asserts it matches
+    `sections.json` exactly.
+  - **`pipeline/run.py` — two new pieces of general driver machinery, not
+    FULL_DRAFTING-specific.** (1) `_resolve_next(stage, run_dir)`: the first
+    place the driver needed a *runtime-conditional* next stage rather than a
+    fixed `_NEXT` table entry — after `FULL_DRAFTING`, the next stage is
+    `FULL_CHECKPOINT` if `full/questions.json` was written, or `ARCHITECT`
+    (skipping both the checkpoint pause and `FULL_REVISING`, which exists only
+    to act on answers) if not — used at both the "just ran the handler" and
+    the "checkpoint already exists, resuming" call sites, so idempotent resume
+    branches the same way a fresh run would. (2) `_PAUSE_SETUP`: a stage→setup
+    hook run once when a pause stage is first entered, needed because
+    `FULL_CHECKPOINT` (unlike `THRESHOLD_REVIEW`, which pauses via
+    `overall_state` alone) must additionally set its node to `waiting_user` and
+    attach the `questions` payload (§6.4) — `_setup_full_checkpoint` reads back
+    the `full/questions.json` `FULL_DRAFTING` already wrote. `StageContext`
+    gained a `kb_root: Path | None` field (default `None` ⇒ resolve the real
+    repo `kb/`) so tests can inject fixture KBs without touching production
+    resolution; `run_pipeline()`/`_drive()` thread it through.
+  - **19 new tests** (`pipeline/tests/test_full_drafting.py`): the retrieval
+    tool loop (search-then-draft, forced-final-round, and the "still no draft
+    after forcing" loud failure), every write-scope/gap/yes-no-prefix/question-cap
+    validation rejection, the stage handler writing all six specialists with
+    and without a raised question, and driver-level tests — the
+    `FULL_CHECKPOINT` pause payload, the no-questions path correctly *skipping*
+    the checkpoint (landing at `ARCHITECT`, which fails calmly since it isn't
+    built yet — the point of the test is the skip, not the failure), idempotent
+    resume (re-dispatch does not re-call the model once all six specialist
+    files exist), and calm-failure node attribution when one specialist errors
+    mid-bloom (the generic active-node scan in `run.py`'s `_failing_node`
+    correctly identifies the failing specialist, not a fallback default).
+    Fixture KBs are schema-only (`retrieval.db.write_kb([], ...)`) — real
+    SQLite/FTS5, zero documents, so the seed-search path runs for real without
+    needing corpus content in the test; separately verified once by hand
+    against a real committed KB (`kb/ethics.sqlite`) to confirm the loop also
+    works against actual corpus data. 112 pipeline tests total green; ruff
+    clean.
 - **Backend API + dispatch + status proxy, and the `governance.yml` Action that
   makes the pipeline live-dispatchable (TECH_SPEC §7, §5.7, §14; this branch).**
   21 new tests (`backend/tests/test_app.py`), all LLM-free and network-free
@@ -287,29 +382,48 @@ pipeline.
 ## In progress / handoff notes
 
 The former handoff steps 1–2 (backend `POST /api/runs` + dispatch + status proxy,
-`governance.yml`) are **done** this branch — see Done → *Backend API + dispatch +
-status proxy*. The pipeline is now live-dispatchable end-to-end: `POST /api/runs`
-creates a run, `POST /api/runs/{id}/submit` dispatches `governance.yml`, the Action
-runs `pipeline/run.py` to the `THRESHOLD_REVIEW` pause and pushes every checkpoint,
-and `GET /api/runs/{id}/status` proxies the result with conditional-GET support.
-`POST /api/runs/{id}/threshold/route` closes the loop (conclude, or dispatch onward
-to `FULL_DRAFTING` — which the driver does not yet implement, see step 1 below).
-Next concrete steps, in rough dependency order:
+`governance.yml`) are **done** — see Done → *Backend API + dispatch + status
+proxy*. The pipeline is live-dispatchable end-to-end through the threshold
+path, and `POST /api/runs/{id}/threshold/route` can dispatch onward to
+`FULL_DRAFTING`, which the driver **now implements** (this branch — see Done →
+*`FULL_DRAFTING`*). Next concrete steps, in rough dependency order:
 
-1. **Full-assessment stages (`pipeline/stages/`, `FULL_DRAFTING` onward, §5.1).** The
-   driver stops at `THRESHOLD_REVIEW` and raises `StageNotImplemented` for `full.*` —
-   routing a run to "full" via the new endpoint dispatches it, but the Action will
-   fail calmly at `FULL_DRAFTING` until this is built. Build: specialist prompts
-   (per-specialist owned sections, §9.3) + the specialist retrieval loop (give each
-   specialist its `kb/<specialist>.index.json` in-context + the `KB.fetch`/`KB.search`
-   tools — `retrieval.KB`, already built — enforcing `config/retrieval.yml` caps and
-   emitting `retrieval` events §6.3); the question checkpoint (`FULL_CHECKPOINT`
-   pause, already a pause-stage in the driver, but nothing yet raises questions or
-   drives `POST /api/runs/{id}/answers`, which also doesn't exist yet — add it
-   alongside); the architect appendix; the reviewer loop (§11, residual 12.3/12.4
-   reuse the engine); and notebook + HTML assembly (§12). Register each in `run.py`'s
-   `_HANDLERS`/`_NEXT`/`_CHECKPOINT_OUTPUTS` maps — the driver is built to extend by
-   table entry.
+1. **The rest of the full-assessment stages (`ARCHITECT` onward, §5.1).** The
+   driver now stops cleanly past `FULL_DRAFTING` — at the `FULL_CHECKPOINT`
+   pause if a specialist raised a question, or at `ARCHITECT` (which raises
+   `StageNotImplemented`, a calm failure) if not. Still to build, each
+   registered in `run.py`'s `_HANDLERS`/`_CHECKPOINT_OUTPUTS`/`_STAGE_FAIL_NODE`/
+   `_STAGE_PHRASE` maps (and `_NEXT`, now that `_resolve_next` exists for any
+   stage needing runtime branching):
+   - **`ARCHITECT`.** One Pro call reading the complete specialist draft +
+     threshold assessment + brainstorm outline, writing `full/architect.md`
+     (the Implementation Plan appendix) with explicit traceability to
+     specialists' mitigations. A new prompt (`prompts/architect.v1.md`) and
+     likely a new `agents/architect.py`, structurally simpler than
+     `agents/specialist.py` (no tool loop — it reads what's already drafted,
+     not a KB).
+   - **`FULL_REVISING`** (only reachable once answers exist — see the backend
+     endpoint below). Each specialist that raised a question revises its own
+     sections once in light of the answers; skipped questions become gaps
+     (`draft.gaps`, already the right shape). Likely reuses most of
+     `agents/specialist.py`'s validation, called with the prior draft +
+     answers appended to context rather than a fresh outline read.
+   - **`REVIEW`** (§11) — the reviewer loop: coverage checklist mechanically
+     from `instrument/questions.json` (every question id addressed or gapped),
+     coherence pass, amend-directive format (§11.3), capped at 2 internal
+     cycles (`run.can_review_again()`/`record_review_cycle()` already exist on
+     `RunState`), `unresolved.json` after cap, and 12.3/12.4 residual rating —
+     reusing `pipeline/rating/` on post-mitigation inputs, same pattern as the
+     threshold engine call in `stages/threshold.py`.
+   - **`ASSEMBLY`** (§12) — nbformat notebook + nbconvert HTML. The largest
+     remaining unbuilt piece design-wise (custom nbconvert template/stylesheet,
+     §12.5); not started.
+   - The backend **`POST /api/runs/{id}/answers`** endpoint (TECH_SPEC §7)
+     still doesn't exist — needed before a real user can act on a
+     `FULL_CHECKPOINT` pause and dispatch `resume_from=FULL_REVISING`. Small:
+     validate against `full/questions.json` question ids, commit
+     `full/answers.json`, dispatch. Natural to build alongside `FULL_REVISING`
+     rather than before it, since there's nothing to resume into yet without it.
 2. **Brainstorm interview + outline canvas (backend `brainstorm/` + frontend).**
    `POST /api/runs` currently only *seeds* `brainstorm/outline.md` from the template
    (`backend/outline.py`) — nothing yet amends it. Needed: the interviewer
@@ -408,6 +522,80 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **The specialist retrieval tool loop is a plain JSON action protocol, not
+  native LLM function-calling (this branch, `agents/specialist.py`).**
+  TECH_SPEC §8.1 describes "the model calls two deterministic tools" without
+  specifying the mechanism; `llm.py`'s seam (`Transport.generate(system, user)
+  → text`) has no function-calling support and adding one would mean a second,
+  provider-specific protocol on top of the already-working `complete_json`
+  path. Instead each round the model returns one JSON object —
+  `{"action":"fetch"|"search",...}` or `{"action":"draft",...}` — which the
+  wrapper resolves and feeds back as history text. Simpler, provider-agnostic,
+  and consistent with how the threshold agents already work (§10's "models
+  argue, code computes" pattern extends naturally to "models request, code
+  fetches"). Reversible: if Gemini function-calling is wanted later, only
+  `agents/specialist.py`'s loop changes — the KB/index/prompt content does not.
+- **A specialist's owned section must be either drafted or gapped — never
+  both, never neither — enforced at the validation boundary
+  (`agents/specialist.py::_parse_draft`).** TECH_SPEC §11.1's coverage rule
+  ("every question id... substantively addressed... OR present in gaps.json")
+  is stated as a reviewer-time check; applying the same either/or discipline
+  at *draft* time (not just at review time) closes the gap earlier and gives
+  the reviewer a clean invariant to build on rather than a free-for-all it has
+  to reconstruct.
+- **`yes_no_na` sections must open with "Yes"/"No"/"Not applicable"
+  (`agents/specialist.py`), enforced by string-prefix check, not a separate
+  structured field.** The instrument's own `response_types` note
+  (`questions.json`) says these sections are "select one of Yes/No/Not
+  applicable, plus an explanation" — CLAUDE.md's "citation quality and
+  instrument fidelity are never traded for polish or speed" reads as covering
+  this too: an unprefixed answer that reads as evasive fails the tool's own
+  contract. Kept as a markdown-text convention rather than a
+  `{answer, explanation}` structured field to stay consistent with the
+  generalists' section format (free markdown, §5.1) and avoid a second
+  section-content shape in the codebase.
+- **The `questions.why` field sits once per specialist batch, not once per
+  question item (`agents/specialist.py`, `stages/full.py`).** TECH_SPEC §6.4's
+  worked example shows `why` at the per-specialist level in the *runtime*
+  `status.json` questions payload; the specialist's own draft JSON schema
+  mirrors that shape directly (`{"questions": {"why": "...", "items": [...]}}`)
+  so `stages/full.py`'s payload assembly is a straight copy, not a
+  restructuring — one shape, not two.
+- **`FULL_DRAFTING`'s specialists run sequentially, not concurrently
+  (`stages/full.py`), matching `threshold_drafting`'s existing precedent.**
+  TECH_SPEC §5.4 describes "async fan-out... within a single Actions job" as
+  the target, but the codebase's one existing multi-agent stage
+  (`THRESHOLD_DRAFTING`'s two generalists) is already a plain sequential loop,
+  not async — introducing concurrency only for the new six-specialist stage
+  would leave two different concurrency models for the same kind of fan-out.
+  Deferred as a genuine follow-up (not a silent shortfall): both stages are
+  candidates for the same async treatment together, and neither's tests assume
+  sequential execution.
+- **`stages.full.SPECIALISTS` is a hardcoded tuple, asserted against
+  `instrument/sections.json` by a test, not loaded from it at import time.**
+  Follows the precedent already set by `stages/threshold.py`'s `_RISK_TITLES`
+  and `_SECTION_TITLES` (hardcoded, not re-derived from `instrument/
+  questions.json` at import time) — avoids file I/O as a module-import-time
+  side effect, at the cost of one more place that must agree with the JSON
+  source; closed by `test_specialists_tuple_matches_sections_json`.
+- **`run.py` gained `_resolve_next()` (runtime-conditional next stage) and
+  `_PAUSE_SETUP` (per-pause-stage entry hook) as general driver machinery, not
+  `FULL_DRAFTING`-specific helpers.** Both were needed the first time a stage's
+  successor depends on what the stage actually produced (`FULL_DRAFTING` →
+  `FULL_CHECKPOINT` or `ARCHITECT`, depending on whether any specialist raised
+  a question) and the first time a pause needs more than the generic
+  "AWAITING_USER + overall_state=paused" treatment (`FULL_CHECKPOINT` also
+  sets its node `waiting_user` and attaches the `questions` payload). Built as
+  small stage→callable maps, the same shape as the existing `_HANDLERS`/
+  `_STAGE_PHRASE` tables, so `REVIEW`'s internal cycles or `USER_REVISION`'s
+  three-step resume (§5.5, §5.8) can reuse the same mechanism rather than
+  inventing a third.
+- **`StageContext` gained an optional `kb_root: Path | None` field** so tests
+  can inject a fixture KB directory without monkeypatching a module-level
+  path-resolution function. `None` (the production default) resolves the real
+  repo `kb/` the same way every other `_repo_root()`-style helper in this
+  codebase does (walk up from the calling module's file until a marker
+  directory is found).
 - **`GitCommitter` now pushes every commit immediately, with fetch→rebase→retry
   on non-fast-forward (this branch, `pipeline/run.py`).** Not a documents
   contradiction — a real gap in the prior build: it committed locally only, which

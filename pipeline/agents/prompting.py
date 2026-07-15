@@ -62,6 +62,120 @@ def _instrument() -> dict[str, dict]:
     return out
 
 
+@lru_cache(maxsize=1)
+def _sections() -> dict:
+    """instrument/sections.json — the specialist write-scope ownership contract
+    (§6.2, §9.3). The one place both the status graph and the specialist agents
+    read the specialist↔section map from (CLAUDE.md §3, "one owner per fact")."""
+    with (_repo_root() / "instrument" / "sections.json").open(encoding="utf-8") as fh:
+        return json.load(fh)
+
+
+def _section_sort_key(section_id: str) -> tuple[int, int]:
+    major, _, minor = section_id.partition(".")
+    return (int(major), int(minor) if minor else 0)
+
+
+@lru_cache(maxsize=1)
+def _full_question_index() -> dict[str, dict]:
+    """Flatten questions.json's full-assessment (§5–12) subsections into
+    ``subsection_id -> {section_id, section_title, title, response_type, prompt,
+    questions}`` for fast per-section lookup."""
+    out: dict[str, dict] = {}
+    for section in _instrument()["questions.json"]["sections"]:
+        if section.get("phase") != "full":
+            continue
+        for sub in section["subsections"]:
+            out[sub["id"]] = {
+                "section_id": section["id"],
+                "section_title": section["title"],
+                "title": sub["title"],
+                "response_type": sub.get("response_type"),
+                "prompt": sub.get("prompt"),
+                "questions": sub.get("questions") or [],
+            }
+    return out
+
+
+def specialists() -> tuple[str, ...]:
+    """The six drafting specialist ids, in `instrument/sections.json` order."""
+    return tuple(_sections()["specialists"])
+
+
+def specialist_friendly_name(specialist_id: str) -> str:
+    """The human-facing specialist name (§6.2 "Friendly name" column)."""
+    friendly = _sections()["specialist_friendly"]
+    if specialist_id not in friendly:
+        raise PromptError(f"Unknown specialist id: {specialist_id!r}.")
+    return friendly[specialist_id]
+
+
+@lru_cache(maxsize=None)
+def specialist_owned_sections(specialist_id: str) -> tuple[str, ...]:
+    """The full-assessment subsection ids this specialist owns (§6.2, §9.3),
+    ascending. Raises if the specialist owns nothing — a hole in the ownership
+    map must fail loudly, never silently draft an empty specialist (CLAUDE.md §8)."""
+    ownership = _sections()["full_assessment_ownership"]
+    owned = [sid for sid, owner in ownership.items() if owner == specialist_id]
+    if not owned:
+        raise PromptError(
+            f"No sections owned by specialist {specialist_id!r} in instrument/sections.json."
+        )
+    return tuple(sorted(owned, key=_section_sort_key))
+
+
+def response_type_of(section_id: str) -> str:
+    """The questions.json ``response_type`` for a full-assessment subsection."""
+    entry = _full_question_index().get(section_id)
+    if entry is None:
+        raise PromptError(f"No question entry for full-assessment section {section_id!r}.")
+    return entry["response_type"]
+
+
+def specialist_instrument_context(specialist_id: str) -> str:
+    """The DTA question text for one specialist's owned sections (§9.3) — the
+    tool's own wording, not a paraphrase, grouped by containing section."""
+    owned = specialist_owned_sections(specialist_id)
+    index = _full_question_index()
+    lines = [
+        f"# Instrument context — sections owned by {specialist_friendly_name(specialist_id)}\n",
+        "You own EXACTLY the subsections below. Do not draft, cite, or flag a gap for "
+        "any other section id — that is another specialist's or the reviewer's scope "
+        "(§9.3, structural write-scope).\n",
+    ]
+    current_section = None
+    for sid in owned:
+        entry = index.get(sid)
+        if entry is None:
+            raise PromptError(
+                f"No question entry for owned section {sid!r} (specialist {specialist_id!r})."
+            )
+        if entry["section_id"] != current_section:
+            current_section = entry["section_id"]
+            lines.append(f"## Section {current_section} — {entry['section_title']}\n")
+        lines.append(f"### {sid} — {entry['title']} (`response_type: {entry['response_type']}`)")
+        if entry["prompt"]:
+            lines.append(f"*{entry['prompt']}*")
+        for q in entry["questions"]:
+            rt = f" (`{q['response_type']}`)" if q.get("response_type") else ""
+            lines.append(f"- {q['question_id']}{rt}: {q['prompt']}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def specialist_seed_terms(specialist_id: str) -> str:
+    """Short keyword text (owned section titles + question prompts) used to seed
+    the pre-fetch search before the specialist's tool loop starts (§8.1 step 2)."""
+    index = _full_question_index()
+    terms: list[str] = []
+    for sid in specialist_owned_sections(specialist_id):
+        entry = index[sid]
+        terms.append(entry["title"])
+        if entry["prompt"]:
+            terms.append(entry["prompt"])
+    return " ".join(terms)
+
+
 @dataclass(frozen=True)
 class LoadedPrompt:
     """A role's system prompt plus the provenance a run records (§9.1, §13)."""

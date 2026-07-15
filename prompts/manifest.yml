@@ -14,8 +14,7 @@
 #     model_role: interviewer        # resolves via config/models.yml
 #
 # Roles still to author (from config/models.yml): interviewer, sufficiency,
-# feasibility_gate, outline_synth, poc_gen, map_gen,
-# specialist (per-specialist owned DTA sections — §9.3), architect, reviewer.
+# feasibility_gate, outline_synth, poc_gen, map_gen, architect, reviewer.
 
 prompts:
   threshold_generalist:
@@ -24,3 +23,8 @@ prompts:
   threshold_reconciler:
     file: threshold_reconciler.v1.md
     model_role: threshold_reconciler   # resolves via config/models.yml (Pro)
+  specialist:
+    file: specialist.v1.md
+    model_role: specialist             # resolves via config/models.yml (Flash)
+                                        # shared by all six full-assessment specialists
+                                        # (owned sections + KB vary per call, not the prompt)
