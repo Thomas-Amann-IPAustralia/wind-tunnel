@@ -1,14 +1,15 @@
 """FastAPI endpoints (TECH_SPEC §7) — the slice this build covers.
 
 Run creation, the Brainstorm interview (``/brainstorm/message`` →
-interviewer + sufficiency; ``/brainstorm/edit-outline`` → canvas edit), the status
-proxy, the artefact download proxy, submission into Governance, threshold routing,
-checkpoint answers (``/answers`` → ``FULL_REVISING``), full-assessment revision
+interviewer + sufficiency; ``/brainstorm/edit-outline`` → canvas edit), the PoC and
+flow-map synthesis (``/poc`` → feasibility gate then PoC or map; ``/flow-map`` →
+Mermaid; ``/flow-map/svg`` → the SPA posts back the client-rendered SVG, CLAUDE.md §9),
+the status proxy, the artefact download proxy, submission into Governance, threshold
+routing, checkpoint answers (``/answers`` → ``FULL_REVISING``), full-assessment revision
 (``/revise {artefact:"full"}`` → ``USER_REVISION``), and resume-by-code. **Not** in
-this slice: the PoC / flow-map endpoints (``/poc``, ``/flow-map`` — feasibility gate +
-Mermaid, the rest of the ``brainstorm/`` run directory) and the non-``full`` branches
-of ``/revise`` (outline/poc/flow_map regenerate from the amended outline; ``threshold``
-revises at ``THRESHOLD_REVIEW``) — a following slice (STATUS.md).
+this slice: the non-``full`` branches of ``/revise`` (outline/poc/flow_map regenerate
+from the amended outline with the ≤2 cap; ``threshold`` revises at ``THRESHOLD_REVIEW``)
+— a following slice (STATUS.md).
 
 **Statelessness (§14).** Render's disk is ephemeral and a cold instance has no
 memory of any run, so every endpoint re-reads ``run.json``/``status.json``
@@ -44,8 +45,18 @@ from fastapi.responses import Response  # noqa: E402
 from llm import GeminiTransport, LLMClient, LLMError  # noqa: E402
 from pydantic import BaseModel  # noqa: E402
 
-from brainstorm import Transcript, assess_sufficiency, run_interviewer  # noqa: E402
+from brainstorm import (  # noqa: E402
+    Transcript,
+    assess_feasibility,
+    assess_sufficiency,
+    generate_flow_map,
+    generate_poc,
+    run_interviewer,
+)
+from brainstorm.feasibility import FeasibilityError  # noqa: E402
 from brainstorm.interviewer import BrainstormError  # noqa: E402
+from brainstorm.mapgen import MapError  # noqa: E402
+from brainstorm.poc import PocError  # noqa: E402
 from config import Settings, load_settings  # noqa: E402
 from dispatch import Dispatcher, DispatchError, WorkflowDispatcher  # noqa: E402
 from github_io import GitHubClient, GitHubError, RestGitHubClient  # noqa: E402
@@ -92,6 +103,12 @@ class EditOutlineBody(BaseModel):
     sections: dict[str, str] = {}
     title: str | None = None
     summary: str | None = None
+
+
+class FlowMapSvgBody(BaseModel):
+    # The SPA renders the committed flow-map.mmd to SVG in-browser (mermaid.js) and posts it
+    # back here to commit (CLAUDE.md §9 — Render's free tier can't run headless Chromium).
+    svg: str
 
 
 def create_app(
@@ -177,6 +194,15 @@ def create_app(
             _run_path(run_id, "run.json"): _dump_json(run.to_dict()),
             _run_path(run_id, "status.json"): _dump_json(st.to_dict()),
         }
+        try:
+            return github.commit_files(files, f"run {run_id}: {message}")
+        except GitHubError as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+
+    def _commit_brainstorm(run_id: str, files: dict[str, bytes], message: str) -> str:
+        """Commit brainstorm artefacts (outline/poc/map/svg). Brainstorm runs on Render, not
+        Actions, and does not touch run.json/status.json — it only writes ``brainstorm/*`` files
+        (a GitHubError becomes a 502)."""
         try:
             return github.commit_files(files, f"run {run_id}: {message}")
         except GitHubError as exc:
@@ -327,6 +353,116 @@ def create_app(
             "outline_delta": update.delta,
             **_brainstorm_response(run_id, outline, make_llm()),
         }
+
+    @app.post("/api/runs/{run_id}/poc")
+    def generate_poc_endpoint(run_id: str = Depends(_valid_run_id)) -> dict:
+        """Generate the PoC (§7, §12.3/§12.4). Runs the feasibility gate first; if a static HTML
+        PoC would help, generates and commits ``brainstorm/poc.html``; if not, generates the flow
+        map instead (``brainstorm/flow-map.mmd``) and says why. Either way writes
+        ``brainstorm/feasibility.json`` and returns ``{produced: "poc"|"map", reason}`` (plus the
+        Mermaid source on the map branch, for the SPA to render). Valid only at ``BRAINSTORM``."""
+        _require_brainstorm(run_id)
+        outline = _load_outline(run_id)
+        now = statefile.utc_now_iso()
+        client = make_llm()  # one fresh call budget for the gate + the synthesis (§13)
+        try:
+            feasibility = assess_feasibility(
+                client,
+                ux_ui=outline.section_body("ux_ui"),
+                happy_path=outline.section_body("happy_path"),
+            )
+        except (LLMError, FeasibilityError) as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+
+        feasibility_doc = {
+            "feasible": feasibility.feasible,
+            "reason": feasibility.reason,
+            "model": feasibility.model,
+            "prompt_version": feasibility.prompt_version,
+            "assessed_at": now,
+        }
+        feasibility_path = _run_path(run_id, "brainstorm", "feasibility.json")
+
+        if feasibility.feasible:
+            try:
+                poc = generate_poc(client, outline_md=outline.render())
+            except (LLMError, PocError) as exc:
+                raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+            _commit_brainstorm(
+                run_id,
+                {
+                    _run_path(run_id, "brainstorm", "poc.html"): poc.html.encode("utf-8"),
+                    feasibility_path: _dump_json(feasibility_doc),
+                },
+                "proof of concept generated",
+            )
+            return {"produced": "poc", "reason": feasibility.reason}
+
+        # Not a fit for a PoC → produce the flow map instead (§7), and say why.
+        try:
+            flow_map = generate_flow_map(client, outline_md=outline.render())
+        except (LLMError, MapError) as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+        _commit_brainstorm(
+            run_id,
+            {
+                _run_path(run_id, "brainstorm", "flow-map.mmd"): flow_map.mermaid.encode("utf-8"),
+                feasibility_path: _dump_json(feasibility_doc),
+            },
+            "PoC not a fit — flow map generated instead",
+        )
+        return {"produced": "map", "reason": feasibility.reason, "mermaid": flow_map.mermaid}
+
+    @app.post("/api/runs/{run_id}/flow-map")
+    def flow_map_endpoint(run_id: str = Depends(_valid_run_id)) -> dict:
+        """Generate the information-flow map (§7, §12.3). Produces Mermaid source from the whole
+        outline (informed by the PoC if one exists), commits ``brainstorm/flow-map.mmd``, and
+        returns the source for the SPA to render to SVG (posted back via ``/flow-map/svg``,
+        CLAUDE.md §9). Valid only at ``BRAINSTORM``."""
+        _require_brainstorm(run_id)
+        outline = _load_outline(run_id)
+        poc_bytes = _get_bytes_optional(run_id, "brainstorm", "poc.html")
+        poc_html = poc_bytes.decode("utf-8") if poc_bytes else None
+        try:
+            flow_map = generate_flow_map(make_llm(), outline_md=outline.render(), poc_html=poc_html)
+        except (LLMError, MapError) as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+        _commit_brainstorm(
+            run_id,
+            {_run_path(run_id, "brainstorm", "flow-map.mmd"): flow_map.mermaid.encode("utf-8")},
+            "flow map generated",
+        )
+        return {"produced": "map", "mermaid": flow_map.mermaid}
+
+    @app.post("/api/runs/{run_id}/flow-map/svg")
+    def flow_map_svg_endpoint(body: FlowMapSvgBody, run_id: str = Depends(_valid_run_id)) -> dict:
+        """Accept the SPA's client-rendered SVG and commit ``brainstorm/flow-map.svg`` (CLAUDE.md
+        §9 — Render's free tier can't render Mermaid). The map must already have been generated
+        (``flow-map.mmd`` present), the payload must be an SVG, and it must carry no ``<script>``
+        (defence-in-depth, though it is later embedded sandboxed). Valid only at ``BRAINSTORM``."""
+        _require_brainstorm(run_id)
+        svg = body.svg.strip()
+        low = svg.lower()
+        if "<svg" not in low:
+            raise HTTPException(
+                http_status.HTTP_400_BAD_REQUEST, "Body 'svg' is not an SVG document."
+            )
+        if "<script" in low:
+            raise HTTPException(
+                http_status.HTTP_400_BAD_REQUEST, "SVG must not contain a <script> element."
+            )
+        if _get_bytes_optional(run_id, "brainstorm", "flow-map.mmd") is None:
+            raise HTTPException(
+                http_status.HTTP_409_CONFLICT,
+                f"Run {run_id} has no flow-map.mmd on record; generate the map before posting "
+                "its SVG.",
+            )
+        _commit_brainstorm(
+            run_id,
+            {_run_path(run_id, "brainstorm", "flow-map.svg"): svg.encode("utf-8")},
+            "flow map SVG rendered",
+        )
+        return {"run_id": run_id, "committed": True}
 
     @app.get("/api/runs/{run_id}/status")
     def get_run_status(

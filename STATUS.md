@@ -68,14 +68,20 @@ or out-of-scope asks), the targeted specialists amend their own sections, one re
 verify pass confirms + re-judges residual (engine recomputes), and ASSEMBLY rebuilds with a
 "Revision N of 2" label after archiving the superseded report. See Done below.
 
-**Not yet built:** the rest of Brainstorm — PoC / flow-map generation + the feasibility
-gate (the PoC embed slot in ASSEMBLY (§12.3) is built and dormant, waiting on
-`brainstorm/poc.html`) and the non-`full` `/revise` branches; the frontend entirely; and a
-first live Gemini run. With USER_REVISION done **every governance stage in the §5.1 state
-machine is built and driven end-to-end**, and — this branch — the **Brainstorm interview
-core** (`/brainstorm/message` + `/edit-outline`, interviewer + sufficiency + the `Outline`
-model) makes `Stage.BRAINSTORM` user-drivable. What remains is PoC/flow-map and the SPA. See
-handoff notes for the concrete next steps.
+**Built this branch: the rest of Brainstorm generation — the feasibility gate, the PoC, and
+the flow map (§7, §12.3/§12.4).** `POST /poc` (feasibility gate first → PoC if it helps, else
+the flow map, `{produced, reason}`), `POST /flow-map` (Mermaid source), and `POST
+/flow-map/svg` (the SPA posts back its client-rendered SVG, CLAUDE.md §9). The PoC embed slot
+in ASSEMBLY (§12.3) is no longer dormant-with-no-producer — `brainstorm/poc.html` now gets
+written. See Done below.
+
+**Not yet built:** the non-`full` `/revise` branches (outline/poc/flow_map regenerate from
+the amended outline with the ≤2 cap — the generators built this branch are the reusable core
+they'll call); the frontend entirely; and a first live Gemini run. With USER_REVISION done
+**every governance stage in the §5.1 state machine is built and driven end-to-end**, the
+**Brainstorm interview core** makes `Stage.BRAINSTORM` user-drivable, and — this branch — the
+**PoC/flow-map generators** complete the Brainstorm *backend*. What remains is the `/revise`
+brainstorm branches and the SPA. See handoff notes for the concrete next steps.
 
 **Exit test** ("threshold output for a known test case matches a hand-worked
 assessment's ratings exactly", brief §9): **met for the engine wiring.**
@@ -94,6 +100,44 @@ pipeline.
 
 ## Done
 
+- **PoC / flow-map / feasibility — the rest of the Brainstorm backend (TECH_SPEC §7,
+  §12.3/§12.4; PROJECT_BRIEF §4; DESIGN §6.3/§6.4; Stage 1; this branch).** Completes the
+  Brainstorm *backend*: the optional PoC and flow-map artefacts a user can produce before
+  submitting. LLM-free (§15); ruff clean. **90 backend + 184 pipeline tests green.** The pieces:
+  - **`backend/brainstorm/feasibility.py` — the feasibility gate (Flash-Lite).**
+    `assess_feasibility(client, *, ux_ui, happy_path)` reads the two outline sections §7 names,
+    both untrusted-wrapped (§9.2), and returns `{feasible, reason}` — the `reason` is the honest
+    "not a fit; you'll get a flow map instead" line shown to the user (DESIGN conditional-stage
+    rule). A malformed verdict (no boolean `feasible` / no `reason`) is a loud `FeasibilityError`.
+  - **`backend/brainstorm/poc.py` — the PoC generator (Flash).** `generate_poc(client, *,
+    outline_md)` produces one **self-contained** HTML document. Validation is the "reject, don't
+    repair" discipline the governance agents use: the output must be an HTML document **carrying
+    the §12.4 limitations banner** (validated via the `poc-limitations` marker class the prompt
+    mandates) — a PoC without the banner violates a first-class design requirement (DESIGN §6.3)
+    and is rejected loudly (`PocError`), never committed. Strips a stray ```` ```html ```` fence.
+  - **`backend/brainstorm/mapgen.py` — the flow-map generator (Flash).** `generate_flow_map(
+    client, *, outline_md, poc_html=None)` returns **Mermaid flowchart source** (node/flow
+    grammar, DESIGN §3.5) — validated as `flowchart`/`graph`, tolerating leading `%%` comments;
+    prose is rejected (`MapError`). The map is **not** rasterised on the backend (Render can't run
+    headless Chromium): the SPA renders the SVG client-side and posts it back (CLAUDE.md §9). A
+    small `synthesis.py` holds the shared code-fence stripper.
+  - **`backend/app.py` — three endpoints.** `POST /poc` runs the gate, then commits either
+    `brainstorm/poc.html` (feasible) or `brainstorm/flow-map.mmd` (not — with the map source
+    returned for the SPA), always alongside `brainstorm/feasibility.json`; returns `{produced:
+    "poc"|"map", reason}`. `POST /flow-map` generates + commits the `.mmd` directly (informed by
+    `poc.html` if present) and returns the source. `POST /flow-map/svg` accepts the SPA's rendered
+    SVG (validated SVG, `<script>`-free, requires the `.mmd` first) and commits `flow-map.svg`.
+    All three are valid only at `BRAINSTORM` (409 after submission), touch no run.json/status.json
+    (Brainstorm runs on Render, not Actions), and share one call budget per request (§13).
+  - **Prompts `feasibility_gate.v1.md`, `poc_gen.v1.md`, `map_gen.v1.md`** — registered in
+    `prompts/manifest.yml` under their model roles (Flash-Lite / Flash / Flash per
+    `config/models.yml`); each untrusted-wraps the user-derived outline text (§9.2).
+  - **27 new tests** (`backend/tests/test_poc_map.py`): the three agents in isolation (verdict
+    parse + rejections; PoC fence-strip / non-HTML / missing-banner / empty rejections; map
+    fence-strip / leading-comment / prose-reject / PoC-reaches-prompt) and the three endpoints
+    end-to-end (feasible→PoC, not-feasible→map, missing-banner→502, 409-after-brainstorm;
+    map commit + PoC-informs-map; SVG commit, requires-mmd→409, non-SVG/`<script>`→400,
+    off-brainstorm→409).
 - **Brainstorm interview core — the co-design loop that fills the outline (TECH_SPEC §7,
   §7.1; PROJECT_BRIEF §4; Stage 1; this branch).** Turns `Stage.BRAINSTORM` from a seeded
   template into something a user drives. The pieces:
@@ -712,15 +756,19 @@ now drive `Stage.BRAINSTORM` (converse, watch the outline resolve, see the suffi
 banner) up to `/submit`. What remains is the rest of Brainstorm (PoC / flow-map) and the
 **frontend**. Next concrete steps, in rough dependency order:
 
-1. **PoC / flow-map generation (the rest of `brainstorm/`).** `POST /api/runs/{id}/poc`
-   (feasibility gate first — `feasibility_gate`, Flash-Lite, reads `ux_ui` + `happy_path`,
-   §7; writes `brainstorm/feasibility.json`; if not feasible, produce the map instead and
-   return `{produced, reason}`), `POST .../flow-map` (Flash `map_gen` → Mermaid; the SPA
-   renders the SVG client-side and posts it back to commit, per CLAUDE.md §9 — so this one
-   is co-designed with the frontend), and extending `POST .../revise` to the brainstorm
-   artefacts (`outline`/`poc`/`flow_map` — outline revisions re-run the interviewer with a
-   revision framing; the ≤2 cap + `record_revision` already exist). The PoC embed slot in
-   ASSEMBLY (§12.3) is built and dormant, waiting on `brainstorm/poc.html`.
+1. **The `/revise` brainstorm branches (`outline`/`poc`/`flow_map`) — all that remains of
+   the Brainstorm *backend*.** PoC / flow-map / feasibility **generation is now built** (this
+   branch: `POST /poc`, `/flow-map`, `/flow-map/svg`; the `poc.py`/`mapgen.py`/`feasibility.py`
+   generators; the PoC embed slot in ASSEMBLY (§12.3) now has a real producer). What is left is
+   extending `POST .../revise` to the brainstorm artefacts: `outline` revisions re-run the
+   interviewer with a revision framing; `poc`/`flow_map` revisions **regenerate from the amended
+   outline** (§7 "regenerate not patch") by calling the generators built this branch with the
+   revision instructions in context; the ≤2 cap + `record_revision("outline"|"poc"|"flow_map")`
+   already exist in `statefile.py`. The open design question deferred this branch (see Decisions):
+   an `outline` "revision" is nearly a `/brainstorm/message` turn — decide whether it is a
+   distinct capped path or the same turn, and when the cap is consumed. Lower value than
+   generation (a user already refines the outline unboundedly via `/brainstorm/message`), and it
+   is entangled with the not-yet-built frontend, which is why it was split off.
 2. **Frontend, entirely.** `frontend/` is still just a `README.md` + `.gitkeep`. Needed
    before *any* of the above is usable end-to-end by a person: the ghosted-canvas
    Brainstorm UI (design §6), the transparency animation driven by `status.json`
@@ -812,6 +860,31 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **The flow-map SVG is rendered client-side and posted back, not rasterised at generation
+  time — resolving a §7 ↔ CLAUDE.md §9 contradiction (this branch).** TECH_SPEC §7's row read
+  "Mermaid → SVG at generation time; both committed", but CLAUDE.md §9 (which governs deploy
+  decisions, §2 precedence) pins that the SPA renders Mermaid with `mermaid.js` and posts the
+  SVG back, because Render's free tier can't run headless Chromium. Resolved in favour of
+  CLAUDE.md §9: `POST /flow-map` commits `flow-map.mmd` and returns the source; a new `POST
+  /flow-map/svg` accepts the SPA's rendered SVG and commits `flow-map.svg`. The losing document
+  was fixed — TECH_SPEC §7 now describes the two-step flow and cites CLAUDE.md §9. (The
+  pipeline's *report* diagrams, run in Actions where Chromium is available, may still use the
+  Mermaid CLI — a different context, no contradiction.)
+- **The PoC limitations banner is validated as present (reject if absent), not injected by the
+  backend (this branch, `backend/brainstorm/poc.py`).** DESIGN §6.3/§12.4 require the banner to
+  be a first-class element *authored into* `poc.html`, "not chrome the app wraps around it". So
+  the backend does not add it; it requires the model to, and validates via the `poc-limitations`
+  marker class the prompt mandates — a PoC missing the banner is a loud `PocError` (→ 502, the
+  user regenerates), not a silently-shipped artefact. This is the "reject, don't repair"
+  discipline the governance agents use, applied where a design invariant is at stake (unlike the
+  interviewer, which *drops* stray ids because nothing integrity-critical rides on a re-prompt).
+- **`/poc` and `/flow-map` regenerate freely; the ≤2 cap is a `/revise`-path concern, not
+  enforced here (this branch).** Calling `/poc` or `/flow-map` again overwrites the prior
+  artefact — the honest behaviour for brainstorm artefacts, which "regenerate from the amended
+  outline" (§7). The per-artefact revision cap (`run.json.revisions.poc`/`.flow_map`) is consumed
+  by the `/revise` branches (deferred, handoff step 1), which will call these same generators.
+  Keeping generation uncapped and revision capped mirrors how governance artefacts work (initial
+  generation in the pipeline is uncapped; changes go through `/revise`).
 - **A canvas edit (`/brainstorm/edit-outline`) is a per-section patch, not raw markdown
   (this branch, `backend/app.py::EditOutlineBody`).** §7 says the endpoint "accepts a patch
   to outline.md"; the shape is left open. Chosen: `{sections:{id:body}, title?, summary?}`,
