@@ -5,14 +5,23 @@ name = "windtunnel-backend"
 version = "0.0.0"
 description = "Windtunnel Brainstorm backend: interview, outline, PoC, dispatch."
 requires-python = "==3.11.*"
-# Pinned as the app is built. Expected: fastapi, uvicorn, a Gemini client,
-# a GitHub API client for the Contents/Git-Data commit helper (github_io.py §14).
-dependencies = []
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    # No GitHub API client dependency: github_io.py/dispatch.py talk to the
+    # REST API over stdlib urllib, matching pipeline/llm.py's no-new-HTTP-dep
+    # pattern. pyyaml is needed transitively — status.py (imported from
+    # pipeline/, see app.py's sys.path shim) reads config/budgets.yml with it.
+    "pyyaml>=6",
+]
+# Still expected as Brainstorm lands: a Gemini client (or stdlib urllib, per
+# pipeline/llm.py's GeminiTransport pattern) for the interviewer.
 
 [dependency-groups]
 dev = [
     "pytest>=8",
     "ruff>=0.6",
+    "httpx>=0.27",  # FastAPI TestClient's transport
 ]
 
 [tool.ruff]
@@ -21,3 +30,10 @@ line-length = 100
 
 [tool.ruff.lint]
 extend-select = ["I"]  # import sorting
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Flat-module imports (config, github_io, dispatch, app, outline), matching
+# pipeline/'s convention; ../pipeline makes statefile/status/runcode
+# importable the same way app.py's runtime sys.path shim does.
+pythonpath = [".", "../pipeline"]
