@@ -2,31 +2,47 @@
 
 ## Current stage
 
-**Stage 3 — Full assessment** (PROJECT_BRIEF.md §9) continues: the specialist
-bloom and the architect appendix are both built. **`FULL_DRAFTING`** (all six
-specialists, each driving its own KB through the bounded fetch/search retrieval
-loop, drafting only its owned §5–12 sections) and now **`ARCHITECT`** (the Pro
-call that reads the finalised specialist drafts + threshold + outline and writes
-the Implementation Plan appendix with machine-checked traceability to the
-mitigations specialists actually drafted) are wired end-to-end into
-`pipeline/run.py`. The happy path drives `FULL_DRAFTING → ARCHITECT` in one
-dispatch, entering the `FULL_CHECKPOINT` pause only when a specialist raises a
-question; the driver now stops cleanly at the not-yet-built `REVIEW`. Stage 2 —
-Threshold remains met in full (record preserved below); Stage 0 — Foundations
-remains met.
+**Stage 3 — Full assessment** (PROJECT_BRIEF.md §9): **the full governance path now
+runs end-to-end to a `COMPLETE` run.** `FULL_DRAFTING → ARCHITECT → REVIEW → ASSEMBLY
+→ COMPLETE` all drive in one dispatch (still pausing at `FULL_CHECKPOINT` only when a
+specialist raises a question). This branch added the last two: **`REVIEW`** (the
+bounded reviewer loop — coverage + coherence + amend directives + residual §12.3/§12.4)
+and **`ASSEMBLY`** (the nbformat notebook + nbconvert HTML report, §12). Stage 2 —
+Threshold remains met in full (record preserved below); Stage 0 — Foundations remains
+met.
 
-**Built this branch (ARCHITECT):** `pipeline/agents/architect.py` (a single-shot
+**Built this branch, part 2 (ASSEMBLY — the report, §5.1, §12; design §8):** the
+`pipeline/assembly/` package — `references.py` (citation dedup + manifest resolution),
+`notebook.py` (the §12.1 cell plan as a non-executable nbformat notebook), `render.py`
++ `templates/report.css` (the self-contained nbconvert HTML render in the Report
+register) — plus `pipeline/stages/assembly.py` (the I/O boundary: gathers every
+committed artefact, builds `artefacts/assessment.ipynb` + `assessment.html`), the
+`run.py` table entries + the **terminal-COMPLETE finalisation** (`_finalise_terminal`:
+the driver now sets `stage_status=complete`/`overall_state=complete` and commits when a
+run reaches COMPLETE), and `nbformat`/`nbconvert` pinned in `pipeline/pyproject.toml` +
+`uv.lock`. 12 new tests (`pipeline/tests/test_assembly.py`); the two REVIEW driver
+tests updated (the full path now completes rather than stopping at the once-unbuilt
+ASSEMBLY). **159 total pipeline tests green; ruff clean.** Verified once by rendering a
+worked sample report end-to-end (title block, DTA numbering, residual table with
+shape+label chips, unresolved panel, provenance, references), LLM-free.
+
+**Built this branch, part 1 (REVIEW — the reviewer protocol, §5.1, §5.5, §11,
+§12.3/§12.4):** `pipeline/agents/reviewer.py` (a single Pro call per cycle that
+validates directive write-scope and the no-asserted-rating rule at the boundary),
+`prompts/reviewer.v1.md` (registered under role `reviewer` → Pro), the `review`
+handler + coverage checklist + amend loop + residual-engine call + `render_review_markdown`
+in `pipeline/stages/full.py`, `run_specialist_amendment` + `SpecialistDraft.from_dict`
++ a shared retrieval-loop refactor in `pipeline/agents/specialist.py`, the
+`reset_review_cycles` invariant on `RunState`, the reviewer-scope/coverage accessors
+in `pipeline/agents/prompting.py`, and the `run.py` table entries that slot `REVIEW`
+between `ARCHITECT` and `ASSEMBLY`. 22 new tests (`pipeline/tests/test_review.py`).
+
+**Prior branch (ARCHITECT):** `pipeline/agents/architect.py` (a single-shot
 Pro agent — no retrieval loop — that validates the plan at the boundary),
 `prompts/architect.v1.md` (registered in `prompts/manifest.yml` under role
 `architect` → Pro), the `architect` handler + `render_architect_markdown` +
 specialist-context renderer in `pipeline/stages/full.py`, and the `run.py` table
-entries (`_HANDLERS`/`_NEXT`/`_CHECKPOINT_OUTPUTS`/`_STAGE_FAIL_NODE`/
-`_STAGE_PHRASE`) that slot `ARCHITECT` between `FULL_DRAFTING` and `REVIEW`. 13
-new tests (`pipeline/tests/test_architect.py`) + two updated `test_full_drafting`
-driver tests (they now assert the no-questions path runs the architect and stops
-at `REVIEW`, rather than at `ARCHITECT`). 125 total pipeline tests green; ruff
-clean. Verified once against the real repo config/instrument driving the stage +
-the traceability rejection, LLM-free.
+entries that slot `ARCHITECT` between `FULL_DRAFTING` and `REVIEW`.
 
 **Prior branch (FULL_DRAFTING):** `pipeline/agents/specialist.py` (the retrieval
 tool loop + output validation), `pipeline/stages/full.py` (the `FULL_DRAFTING`
@@ -36,11 +52,13 @@ owned-section instrument text. `pipeline/run.py` gained conditional stage
 resolution (`_resolve_next`) and a pause-setup hook (`_PAUSE_SETUP`), both
 general enough for the remaining `full.*` stages to reuse.
 
-**Not yet built:** `REVIEW` (the reviewer loop), `FULL_REVISING`,
-`ASSEMBLY` (notebook + HTML), the Brainstorm interview (interviewer,
-sufficiency, PoC/flow-map endpoints), the backend `POST /api/runs/{id}/answers`
-endpoint (needed once a real user can answer a `FULL_CHECKPOINT` pause), the
-frontend entirely, and a first live Gemini run. See handoff notes below for the
+**Not yet built:** `FULL_REVISING` (specialist re-draft after checkpoint answers —
+now mostly a thin wrapper over the `run_specialist_amendment` built this branch) and
+its backend `POST /api/runs/{id}/answers` endpoint; `USER_REVISION` (§5.8, the ≤2
+post-COMPLETE full-assessment revisions); the Brainstorm interview (interviewer,
+sufficiency, PoC/flow-map endpoints — note the PoC embed slot in ASSEMBLY (§12.3) is
+built and dormant, waiting on `brainstorm/poc.html`); the frontend entirely; and a
+first live Gemini run. See handoff notes below for the
 concrete next steps and how they build on this branch.
 
 **Exit test** ("threshold output for a known test case matches a hand-worked
@@ -60,6 +78,100 @@ pipeline.
 
 ## Done
 
+- **`ASSEMBLY` — the notebook + HTML report, and the full path to `COMPLETE`
+  (TECH_SPEC §5.1, §12; design §8; Stage 3; this branch).** The final deliverable
+  and the end of the governance pipeline. The pieces:
+  - **`pipeline/assembly/` — the report builder, pure and LLM-free.**
+    `references.py` collects every specialist citation, dedupes by `short_name`, and
+    resolves each against the KB **manifests** (§8.5) to title/publisher/version/URL —
+    a dangling citation is marked unresolved, not dropped. `notebook.py::build_notebook`
+    assembles the §12.1 cell plan as a **non-executable** nbformat notebook (asserted:
+    zero code cells): title block, threshold §1–4, full §5–12 in tool order with inline
+    citations (or a gap note), residual §12.3 table + §12.4 overall + the §12.5
+    human-action flag, the appendices (implementation plan, recommended next steps = the
+    aggregated gap register, unresolved disagreements, provenance), and the deduplicated
+    reference list. `render.py` + `templates/report.css` render it via nbconvert's
+    `basic` template wrapped in a **self-contained** HTML document (stylesheet inlined,
+    no external fonts/scripts) delivering the design §8 Report register — serif body,
+    DTA numbering, mono citations, risk chips carrying **shape + label** (greyscale-safe,
+    design §3.2), the calm bordered unresolved panel, a mono provenance record, and a
+    print stylesheet (running-footer disclaimer, risk tables never split).
+  - **`pipeline/stages/assembly.py` — the I/O boundary.** `gather_inputs` reads every
+    committed artefact (threshold, six specialists, architect, reviewer residual +
+    unresolved, KB manifests, run provenance) into one bundle; `assembly` builds and
+    writes `artefacts/assessment.ipynb` + `assessment.html`. Reads only committed state,
+    so it re-runs identically on resume. The §12.3 PoC embed slot is built (sandboxed
+    `<iframe srcdoc>`) and dormant until Brainstorm writes `brainstorm/poc.html`.
+  - **`run.py` — terminal-COMPLETE finalisation.** `ASSEMBLY` slots in via the five
+    stage→X maps (→ `COMPLETE`), and a new `_finalise_terminal` makes the driver set
+    `run.json` `stage_status=complete` + `status.json` `overall_state=complete` and
+    commit when a run first reaches COMPLETE/CONCLUDED — the signal the SPA's poll needs
+    to see the run finish. Idempotent (a re-entry after completion is a no-op).
+  - **Dependencies.** `nbformat` + `nbconvert` pinned in `pipeline/pyproject.toml` +
+    `uv.lock`; the `governance.yml` job's `uv sync` picks them up with no workflow
+    change. No execution stack is used (the notebook never runs a kernel).
+  - **12 new tests** (`pipeline/tests/test_assembly.py`): reference dedup/resolution/
+    unresolved-marking, the no-code-cells invariant, nbformat round-trip validity, the
+    cell-plan contents, unresolved-omitted-when-none, gap-rendering, the self-contained
+    HTML render (embedded HTML not escaped, chips, disclaimer inlined), the stage handler
+    writing both artefacts, `gather_inputs` ordering §5–12 and excluding reviewer/human
+    sections, and a driver end-to-end test (seed at ASSEMBLY → run → `COMPLETE`). Two
+    REVIEW driver tests updated to the new terminal boundary. LLM-free throughout (§15).
+- **`REVIEW` — the reviewer protocol, driven end-to-end (TECH_SPEC §5.1, §5.5,
+  §11, §12.3/§12.4; Stage 3; this branch).** The heart-of-the-product audit
+  stage. The pieces:
+  - **`pipeline/agents/reviewer.py` — one Pro call per cycle, boundary-validated.**
+    `run_reviewer(...)` gives the model the residual instrument tiers, the valid
+    directive-target scope, the computed coverage checklist, the assembled specialist
+    drafts (untrusted-wrapped, §9.2), the threshold and the outline, and returns
+    `{coherence_findings, amend_directives, unresolved, residual}`. Two invariants are
+    enforced at the boundary, the same "reject, don't repair" discipline the other
+    agents use: (1) **a directive may only name a section its specialist owns** — an
+    unknown specialist or an out-of-scope/wrong-owner section is rejected (§11.3
+    structural write-scope); (2) **the reviewer never asserts a rating** — a `rating`
+    key anywhere in `residual` is rejected, and each area's consequence/likelihood must
+    be a valid instrument tier (§12.4). Accepts the §11.3 node-id form
+    (`full.specialist.privacy`) or a bare id and normalises to the bare id used
+    everywhere else.
+  - **`prompts/reviewer.v1.md`** — registered under role `reviewer` → Pro. Encodes the
+    coherence/contradiction brief, the amend-directive and unresolved-disagreement
+    formats (§11.3/§11.4), the residual §12.3/§12.4 task, the untrusted-content
+    discipline, and the two hard rules (never re-draft a section, never state a rating).
+  - **`pipeline/stages/full.py` — the `review` handler.** Builds the **deterministic
+    coverage checklist** (§11.1 — every §5–12 subsection is addressed/gapped/missing/
+    human-action, a checklist walk not a judgement), then runs the **bounded ≤2-cycle
+    loop** (§5.5): each cycle runs the reviewer, writes `full/reviewer/cycle_N.json`,
+    and — if it emitted directives and a cycle remains — the targeted specialists amend
+    their own directed sections via `run_specialist_amendment`. Conflicts still live at
+    the cap become `unresolved.json` (§11.4). The **deterministic engine computes the
+    residual** ratings + §12.4 overall from the reviewer's post-mitigation tiers
+    (`full/reviewer/ratings_residual.json`) — the one place a residual rating comes into
+    being (§10, §12.4). Also writes `coverage.json` and a readable `review.md` (the
+    §12.3 table + coherence findings + unresolved block for ASSEMBLY).
+  - **`pipeline/agents/specialist.py` — `run_specialist_amendment` + a shared loop.**
+    The retrieval loop was refactored into `_drive_retrieval` (parameterised by a
+    user-builder and a parse fn) so drafting and amendment share it. An amendment is
+    **scoped to the directed sections only** (a subset of owned): its output may touch
+    no other section, and it is merged over the prior draft so a directive cannot drop
+    a specialist's other work (§11.3). Raises no new questions (§5.8). `SpecialistDraft.from_dict`
+    rehydrates a committed draft for the merge. This capability is the reusable core
+    `FULL_REVISING`/`USER_REVISION` will call next.
+  - **`RunState.reset_review_cycles` + `run.py` table entries.** REVIEW is one
+    checkpoint that re-runs its whole bounded loop on resume; the cycle counter is reset
+    at entry so a failed prior attempt (whose increments §5.6 committed) cannot shorten
+    the fresh loop or trip the cap. `REVIEW` slots into `_HANDLERS`/`_NEXT` (→ `ASSEMBLY`)/
+    `_CHECKPOINT_OUTPUTS` (`ratings_residual.json`)/`_STAGE_FAIL_NODE` (`full.reviewer`)/
+    `_STAGE_PHRASE` — a mostly table-entry addition (the loop lives in the handler, §5.5).
+  - **22 new tests** (`pipeline/tests/test_review.py`): reviewer happy path + provenance,
+    every directive write-scope rejection, the no-asserted-rating + missing-area +
+    invalid-tier residual rejections, unresolved-shape validation, the deterministic
+    coverage classification, `_compute_residual` hand-worked against the engine, the
+    scoped amendment merge + out-of-scope/non-owned rejections, the stage handler
+    (no-directives, amend-then-settle, cap-reached-→-unresolved, cycle-reset-on-entry),
+    the review markdown, and two driver end-to-end tests — REVIEW alone and the whole
+    `FULL_DRAFTING → ARCHITECT → REVIEW` chain in one dispatch, both stopping calmly at
+    the unbuilt `ASSEMBLY`. LLM-free throughout (§15). 147 pipeline tests total green;
+    ruff clean.
 - **`ARCHITECT` — the Implementation Plan appendix stage, driven end-to-end
   (TECH_SPEC §5.1, §12.1; PROJECT_BRIEF §5.5; Stage 3; this branch).** The pieces:
   - **`pipeline/agents/architect.py` — a single Pro call, no retrieval loop.**
@@ -447,35 +559,29 @@ path, and `POST /api/runs/{id}/threshold/route` can dispatch onward to
 (this branch — see Done → *`ARCHITECT`* / *`FULL_DRAFTING`*). Next concrete
 steps, in rough dependency order:
 
-1. **The rest of the full-assessment stages (`REVIEW` onward, §5.1).** The
-   driver now runs `FULL_DRAFTING → ARCHITECT` on the happy path and stops
-   cleanly at `REVIEW` (which raises `StageNotImplemented`, a calm failure), or
-   pauses at `FULL_CHECKPOINT` if a specialist raised a question. Still to build,
-   each registered in `run.py`'s `_HANDLERS`/`_NEXT`/`_CHECKPOINT_OUTPUTS`/
-   `_STAGE_FAIL_NODE`/`_STAGE_PHRASE` maps (`ARCHITECT` is the worked example of a
-   pure table-entry addition — no new driver machinery was needed):
-   - **`FULL_REVISING`** (only reachable once answers exist — see the backend
-     endpoint below). Each specialist that raised a question revises its own
-     sections once in light of the answers; skipped questions become gaps
-     (`draft.gaps`, already the right shape). Likely reuses most of
-     `agents/specialist.py`'s validation, called with the prior draft +
-     answers appended to context rather than a fresh outline read.
-   - **`REVIEW`** (§11) — the reviewer loop: coverage checklist mechanically
-     from `instrument/questions.json` (every question id addressed or gapped),
-     coherence pass, amend-directive format (§11.3), capped at 2 internal
-     cycles (`run.can_review_again()`/`record_review_cycle()` already exist on
-     `RunState`), `unresolved.json` after cap, and 12.3/12.4 residual rating —
-     reusing `pipeline/rating/` on post-mitigation inputs, same pattern as the
-     threshold engine call in `stages/threshold.py`.
-   - **`ASSEMBLY`** (§12) — nbformat notebook + nbconvert HTML. The largest
-     remaining unbuilt piece design-wise (custom nbconvert template/stylesheet,
-     §12.5); not started.
+1. **The checkpoint-answer path (`FULL_REVISING` + `POST /api/runs/{id}/answers`,
+   §5.1, §7).** The happy path is complete end-to-end (`FULL_DRAFTING → ARCHITECT →
+   REVIEW → ASSEMBLY → COMPLETE`). What remains on the full-assessment side is the
+   branch a `FULL_CHECKPOINT` pause takes when a specialist raised a question:
+   - **`FULL_REVISING`** — each specialist that raised a question revises its own
+     sections once in light of the answers; skipped questions become gaps. **Now a
+     thin wrapper over `run_specialist_amendment` (built this branch)** — call it per
+     specialist with the answers as the directive context (instead of a reviewer
+     ruling) and the raised question ids as the target sections. Register it in
+     `run.py`'s five stage→X maps with `_NEXT[FULL_REVISING] = ARCHITECT`; the
+     `_resolve_next` FULL_DRAFTING→FULL_CHECKPOINT branch and a `_NEXT[FULL_CHECKPOINT]`
+     entry still need wiring so the checkpoint resumes into `FULL_REVISING`.
    - The backend **`POST /api/runs/{id}/answers`** endpoint (TECH_SPEC §7)
      still doesn't exist — needed before a real user can act on a
      `FULL_CHECKPOINT` pause and dispatch `resume_from=FULL_REVISING`. Small:
      validate against `full/questions.json` question ids, commit
      `full/answers.json`, dispatch. Natural to build alongside `FULL_REVISING`
      rather than before it, since there's nothing to resume into yet without it.
+   - **`USER_REVISION`** (§5.8) — the ≤2 post-COMPLETE full-assessment revisions:
+     reviewer triage → targeted specialist amendment (again `run_specialist_amendment`)
+     → one reviewer verify pass → `ASSEMBLY` re-runs (archiving the superseded artefacts
+     to `artefacts/superseded/rev_<N>/` first). `RunState.record_revision("full")` and
+     the revision caps already exist; ASSEMBLY already rebuilds idempotently.
 2. **Brainstorm interview + outline canvas (backend `brainstorm/` + frontend).**
    `POST /api/runs` currently only *seeds* `brainstorm/outline.md` from the template
    (`backend/outline.py`) — nothing yet amends it. Needed: the interviewer
@@ -574,6 +680,97 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **ASSEMBLY renders via nbconvert's `basic` template wrapped in a hand-written
+  self-contained HTML document, not a full custom nbconvert template (this branch,
+  `assembly/render.py`).** §12.5 mandates "a custom template/stylesheet replacing the
+  default theme"; nbconvert's own template system (jinja template dirs, `--template`)
+  is fiddly and couples the render to nbconvert's internal template layout. Instead the
+  `basic` template emits just the rendered cell bodies (no Jupyter chrome), and this
+  module wraps them in a `<!doctype html>` document carrying the stylesheet **inlined**
+  — so the report is a single portable file with no external font/script/style fetch
+  (design §8's "a document taken seriously," and the artefact-embedded-elements contract,
+  design §10). Reversible: a true nbconvert template can replace the wrapper later
+  without changing the notebook or the CSS.
+- **Structured report blocks are HTML embedded in markdown cells, not nbformat raw
+  cells (this branch, `assembly/notebook.py`).** The notebook needs class-tagged blocks
+  (title, risk table, unresolved panel, provenance) for the stylesheet to target; raw
+  cells render inconsistently across nbconvert exporters, whereas a markdown cell's
+  block-level HTML passes through mistune reliably (verified: the risk `<table>` renders
+  unescaped). Prose stays plain markdown. The notebook has **zero code cells** — a test
+  asserts it, keeping the §12.1 "non-executable" guarantee structural.
+- **The residual §12.5 governance-review flag keys on the residual overall, not the
+  inherent (this branch, `assembly/notebook.py`).** §12.5 is a human action "where the
+  agency's governance policy requires it"; the report flags a mandatory referral when the
+  **post-mitigation** overall is High (the risk that actually remains), and otherwise
+  states 12.5 as a conditional human action. The threshold's inherent-High governance
+  flag (routing.json, §12.5) still stands at the threshold stage; this is the residual
+  counterpart, consistent with "the residual is what the reader acts on."
+- **Reaching COMPLETE is finalised by the driver, not the stage handler (this branch,
+  `run.py::_finalise_terminal`).** The §5.1 state table lists COMPLETE as a terminal
+  state but no handler; the driver previously just returned on any terminal stage without
+  setting `overall_state=complete`. `_finalise_terminal` now sets `stage_status=complete`
+  + `overall_state=complete` and commits the first time a run reaches COMPLETE/CONCLUDED
+  — the signal the SPA's poll needs to see the run finish (§7). Kept in the driver (not
+  the ASSEMBLY handler) because it is the generic terminal-transition concern, shared
+  with the threshold-CONCLUDED path, and idempotent (a re-entry after completion is a
+  no-op).
+- **A dangling citation (a `short_name` with no matching manifest document) is rendered
+  as an unresolved reference, not dropped (this branch, `assembly/references.py`).**
+  Citation integrity is never traded (CLAUDE.md §2); silently omitting a citation whose
+  source can't be resolved would hide a real problem. The reference list keeps the entry,
+  marked "(source not found in corpus manifest)", so the gap is visible to a human rather
+  than erased.
+- **REVIEW is one pipeline checkpoint that re-runs its whole bounded ≤2-cycle loop on
+  resume — not a per-cycle checkpoint (this branch, `stages/full.py::review`,
+  `RunState.reset_review_cycles`).** TECH_SPEC §5.5 says "each cycle commits so a death
+  mid-review resumes at the right cycle," but the `run.py` driver's model is one commit
+  per stage (extend-by-table-entry, §5.3 keyed on output-file existence), and REVIEW's
+  in-loop `review_cycles` increments are not committed until the stage's checkpoint. So
+  a death mid-REVIEW discards the uncommitted loop state and re-runs REVIEW from scratch
+  — safe because the loop is bounded and idempotent (it overwrites its own `cycle_N.json`
+  and, in a fresh Actions container, the specialist drafts revert to their
+  FULL_DRAFTING-committed state). The one hazard: §5.6's `fail()` **does** commit
+  `run.json` (with any increment) on a mid-loop error, which on resume would shorten the
+  fresh loop or trip the cap. Closed by `reset_review_cycles()` at REVIEW entry — the cap
+  is per-REVIEW-execution, and only the execution that checkpoints ever "counts."
+  Reversible: if per-cycle durability is later wanted, the driver would need a
+  sub-stage checkpoint mechanism, which `REVIEW`/`USER_REVISION` could share.
+- **Coverage is computed deterministically in the stage and handed to the reviewer as
+  context; the reviewer does not compute it (this branch, `_build_coverage`).** §11.1 is
+  explicit that "a missing question is a deterministic finding" and coverage "is a
+  checklist walk, not a judgement call." So the stage walks the full-assessment
+  subsection inventory (`instrument/sections.json` ownership × the specialist drafts) and
+  classifies each as addressed/gapped/missing/human-action in code; the reviewer receives
+  the result so it does not paper over a gap, but the finding itself is code's, not the
+  model's. 12.3/12.4 (reviewer-owned) count as addressed because REVIEW produces the
+  residual; 12.5 (human_action) is flagged, never drafted.
+- **The residual §12.3/§12.4 rating is a provable code output of the reviewer's tiers,
+  exactly like the threshold path (this branch, `_compute_residual` + `agents/reviewer.py`).**
+  §5.1 REVIEW says "residual 12.3/12.4 computed by the engine" without a mechanism. The
+  reviewer emits post-mitigation consequence + likelihood + rationale per §3 area (its
+  argument); `pipeline/rating/` computes every residual rating and the §12.4 highest-wins
+  overall (`overall_residual`). The reviewer schema **forbids a `rating` key** and the
+  boundary rejects one — the same "models argue, code computes" invariant as the threshold
+  reconciler (§10). Residual is taken from the **last** reviewer cycle's tiers (which read
+  the settled draft), so it always reflects the assessment as it finally stands.
+- **A reviewer amend directive is scoped to the sections it names, and the specialist
+  amendment output is scoped to those sections and merged over the prior draft (this
+  branch, `run_specialist_amendment` + `_merge_amendment`).** §11.3 says "only the named
+  specialist may act, and only on its own sections." Enforced twice: (1) the reviewer
+  boundary rejects a directive naming a non-owned section; (2) the amendment's own output
+  may contain **only** the directed sections (a subset of owned) — any other key is
+  rejected — and the merge replaces exactly those, leaving every other section, citation
+  and gap untouched. So an amendment cannot silently drop or rewrite a specialist's other
+  work. Amendments raise no new questions (skips → gaps, §5.8). The bounded retrieval loop
+  is shared with fresh drafting via `_drive_retrieval` (one loop, two entry points) rather
+  than duplicated.
+- **Directives still live when the ≤2 cap is reached become unresolved disagreements, not
+  forced amendments (this branch, `_directives_as_unresolved`).** §11.4 says conflicts
+  after cycle 2 "are written to `unresolved.json` rather than forced." When the second
+  reviewer cycle still emits directives, they are not applied — they are converted into the
+  §11.4 unresolved shape (the ruling as the topic, the conflicting claims as the two
+  positions) alongside any the reviewer itself flagged as unresolved. Honest disagreement
+  over manufactured consensus (design §8).
 - **The architect emits structured `{overview, steps[]}` JSON (→ rendered to
   `full/architect.md`), and its traceability is validated against the real
   ownership map — not free-form prose (this branch, `agents/architect.py`).**

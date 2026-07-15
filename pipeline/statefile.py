@@ -225,6 +225,15 @@ class RunState:
         """Whether the reviewer internal loop may run another cycle (< cap, §11)."""
         return self.review_cycles < REVIEW_CYCLE_CAP
 
+    def reset_review_cycles(self, *, now: str | None = None) -> None:
+        """Reset the reviewer cycle counter to zero at REVIEW entry. REVIEW is a single
+        pipeline checkpoint that re-runs its whole bounded ≤2-cycle loop on resume
+        (§5.3), so the counter must reflect the current execution — a failed prior
+        attempt (whose increments were committed by §5.6) must not shorten the fresh
+        loop or trip the cap immediately."""
+        self.review_cycles = 0
+        self.touch(now)
+
     def record_review_cycle(self, *, now: str | None = None) -> int:
         """Consume one reviewer cycle; return the new count. Raises at the cap —
         unresolved conflicts after cycle 2 are recorded, not looped (§5.5, §11)."""

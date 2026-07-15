@@ -10,10 +10,12 @@ requires-python = "==3.11.*"
 # a Gemini client (gemini.py §13). Retrieval (§8) uses stdlib sqlite3 + FTS5;
 # no embedding stack (TECH_SPEC §8.8).
 dependencies = [
-    "pyyaml>=6",       # instrument/config + corpus sidecars
-    "pymupdf>=1.24",   # PDF structure-aware extraction (TECH_SPEC §8.6)
-    "python-docx>=1.1",# DOCX style-tree extraction (guidance + legislation)
-    "openpyxl>=3.1",   # XLSX normalization (TECH_SPEC §8.7)
+    "pyyaml>=6", # instrument/config + corpus sidecars
+    "pymupdf>=1.24", # PDF structure-aware extraction (TECH_SPEC §8.6)
+    "python-docx>=1.1", # DOCX style-tree extraction (guidance + legislation)
+    "openpyxl>=3.1", # XLSX normalization (TECH_SPEC §8.7)
+    "nbformat>=5.10.4",
+    "nbconvert>=7.17.1",
 ]
 
 [dependency-groups]
