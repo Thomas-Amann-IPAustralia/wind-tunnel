@@ -2,6 +2,14 @@
 
 ## Current stage
 
+**This branch: the Brainstorm co-design canvas — the frontend's first interactive screen
+(DESIGN §6).** The `Brainstorm` route is now the real two-pane surface (conversation + live
+outline canvas + sufficiency banner + click-to-edit + Submit), backed by a new
+`GET /api/runs/{id}/brainstorm` load/resume endpoint. A public servant can now drive a run
+from creation through the interview to submission *in the browser*. The optional PoC/flow-map
+canvas actions, the Chamber animation, the pause screens, and the report view remain (handoff
+step 2). See Done + handoff notes.
+
 **Stage 3 — Full assessment** (PROJECT_BRIEF.md §9): **the full governance path runs
 end-to-end to a `COMPLETE` run, the checkpoint-answer branch is wired, the ≤2
 post-COMPLETE user-revision path (`USER_REVISION`, §5.8) is built, and — this branch —
@@ -117,6 +125,45 @@ pipeline.
 
 ## Done
 
+- **Brainstorm co-design canvas — the first interactive screen, driven end-to-end (DESIGN §6,
+  §6.2, §3.6, §3.7; TECH_SPEC §7, §7.1; Stage 1; this branch).** The `Brainstorm` route was a
+  shell; it is now the real two-pane co-design surface a public servant drives from a fresh run
+  to Submit. LLM-free on the SPA side (the backend does the thinking); the SPA never holds a
+  secret. **`npm run build` (strict `tsc -b` + vite), `npm run lint`, `npm run format:check` all
+  clean; 19 frontend tests green (8 prior + 7 parser + 4 canvas). Backend: 93 tests green, ruff
+  clean.** The pieces:
+  - **`GET /api/runs/{id}/brainstorm` (backend, `app.py`) — the load/resume endpoint the canvas
+    needed and the family lacked.** Returns `{outline_md, transcript, sufficiency, stage}` by
+    re-reading the committed outline + transcript (the stateless backend holds nothing, CLAUDE.md
+    §3); read-only, no commit. `sufficiency` is computed only while the run is at `BRAINSTORM`
+    (a submitted run's outline is frozen), and the returned `stage` lets the SPA redirect a stale
+    link on to the Chamber. 3 new tests (`backend/tests/test_brainstorm.py`): outline+transcript+
+    sufficiency, empty-transcript-on-fresh-run, post-submission-reports-stage-and-skips-the-judge.
+  - **`frontend/src/lib/outline.ts` + `outline.test.ts` — the outline parser.** Parses
+    `outline_md` into `{title, summary, resolved[], sections[{id, n, title, body, resolved}]}`.
+    `SECTION_REGISTRY` is the frontend copy of `backend/outline.py`'s registry (the one
+    hand-mirrored fact, like `runCode.ts` mirrors `runcode.py`); `resolved` is read from the
+    front-matter — the single deterministic completeness record (§7.1), never inferred from body
+    text. Tolerant of both the canonical rendered form (front-matter values are JSON — what the
+    backend always serves) and the raw template form, and of a missing anchor (that section falls
+    back to empty/unresolved rather than vanishing). 7 tests pin the parse, the resolved gating,
+    id sanitisation, the template-form fallback, and the 9-section registry order.
+  - **The canvas components (`src/components/`, `src/routes/Brainstorm.tsx`).** `Conversation`
+    (the left pane — dialogue bubbles, a warm empty-state invitation on a fresh run, a
+    thinking indicator, Enter-to-send composer); `OutlineCanvas` (the right pane — the nine
+    sections, each resolved-with-the-user's-words or open-with-ghosted-guidance, a settle
+    highlight on newly-resolved/amended sections §3.6, click-to-edit with an inline editor and
+    the `you` provenance tag §3.7, a live `n/9` resolved count); `SufficiencyBanner` (the §6.2
+    unlocking-not-gate — encouraging when ready, a gentle "these would sharpen it" checklist
+    otherwise, never blocking). `Brainstorm.tsx` orchestrates: loads via `getBrainstorm`
+    (redirecting a non-`BRAINSTORM` run to the Chamber), sends turns via `brainstormMessage`,
+    saves canvas edits via `editOutline`, and Submits via `submitRun` → the Chamber. Submit is
+    always enabled (the backend gates only on stage, §6.2), emphasised (primary) when ready.
+  - **API client + types.** `getBrainstorm` added to `src/lib/api.ts`; `BrainstormState` +
+    `TranscriptTurn` added to `src/lib/types.ts`.
+  - **4 canvas tests** (`src/routes/Brainstorm.test.tsx`, jsdom, mocked api): load-and-render
+    (resolved bodies + restored transcript + banner), send-a-turn (reply + newly-resolved
+    section fold into the canvas), submit-hands-off-to-the-Chamber, and redirect-a-submitted-run.
 - **Frontend foundations — the app's front door + the design system (DESIGN §3–§5, §7.5;
   CLAUDE.md §4, §9; this branch).** The first executable frontend: everything the two big
   interactive phases (Brainstorm canvas, Chamber animation) will build on. LLM-free; the SPA
@@ -841,15 +888,16 @@ banner) up to `/submit`. What remains is the rest of Brainstorm (PoC / flow-map)
    API client (with cold-start), the usage-warning gate (§4), the landing/empty states (§5),
    and the resume-by-code screen (§7.5) are built, verified, and clean (see Done). What
    remains — in rough dependency order, each now standing on real foundations:
-   - **The Brainstorm co-design canvas + conversation (design §6.2).** The `Brainstorm` route
-     is a shell; fill it with the two-pane conversation + live outline canvas. The backend is
-     ready: `POST /brainstorm/message` (returns `assistant_message`, `outline_md`,
-     `outline_delta`, `sufficiency`) and `/edit-outline` — both already typed in
-     `src/lib/api.ts`. Render the outline from `outline_md` (parse the 9 anchored §7.1
-     sections), animate the `outline_delta` (`updated`/`newly_resolved`), the sufficiency
-     banner (§6.2 unlocking-not-gate), click-to-edit sections with the `you` provenance tag
-     (§3.7), and the PoC/flow-map/submit actions (`/poc`, `/flow-map` + in-browser `mermaid.js`
-     → `/flow-map/svg`, `/submit`). The `FocusTrack` component (§6.1) is built.
+   - **The Brainstorm co-design canvas + conversation (design §6.2) — DONE (this branch).**
+     The `Brainstorm` route is now the real two-pane canvas: the conversation, the live outline
+     canvas (parses `outline_md`, animates `outline_delta`), the sufficiency banner (§6.2
+     unlocking-not-gate), click-to-edit sections with the `you` provenance tag (§3.7), and
+     Submit → Chamber. Backed by a new `GET /api/runs/{id}/brainstorm` so a page load / resume
+     restores the state. See Done. **Still to build on this canvas: the optional PoC/flow-map
+     actions** (`POST /poc`, `/flow-map` + in-browser `mermaid.js` → `/flow-map/svg`), which the
+     focus track shows as the two optional stages 2/3. The generators are built backend-side;
+     the SPA side needs the buttons, a sandboxed PoC preview, and `mermaid.js` (a new dep) to
+     render the map SVG client-side and post it back (CLAUDE.md §9).
    - **The Chamber transparency animation (design §7.2) — the flagship.** The `Chamber` route
      is a shell. Poll `getStatus` (built, ETag-aware), render the fixed node topology as the
      node/flow graph + the append-only activity log (the accessibility backbone, §7.2.1),
@@ -946,6 +994,26 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **Added `GET /api/runs/{id}/brainstorm` for canvas load/resume (this branch).** §7 names
+  `POST /brainstorm/message` + `/edit-outline` but no *read* endpoint; without one the SPA
+  could not restore the outline + transcript on a page reload or a resume-by-code (§7.5) — a
+  genuine gap the frontend surfaced, so filling it was part of the task (CLAUDE.md §2, "fixing
+  the contradiction is part of your task"). It re-reads committed state only and makes no
+  commit; it reuses the existing `_brainstorm_response` tail so the sufficiency shape matches
+  the POST endpoints exactly.
+- **The `you` provenance tag marks sections *edited via the canvas this session*, tracked
+  client-side (this branch).** `outline.md` records completeness (`resolved`) but not *who*
+  wrote each section (interviewer vs. user), so the wire can't distinguish provenance. Rather
+  than invent a backend field, the canvas tags a section `you` when the user saves an edit to
+  it in the current session — an honest "you touched this", the affordance §3.7 asks for,
+  without a new persisted contract. Revisit if per-section provenance ever needs to survive a
+  reload.
+- **PoC/flow-map deferred to a follow-up, not bundled into the canvas commit (this branch).**
+  The mandatory co-design loop (interview → sufficiency → submit) is a complete, testable
+  vertical; the optional PoC/flow-map (focus-track stages 2/3) need `mermaid.js` (a new
+  dependency) and a sandboxed PoC preview, enough surface to warrant their own coherent commit
+  (CLAUDE.md §4 "small, coherent commits"). The focus track already shows them as optional and
+  upcoming, so the deferral reads honestly on screen.
 - **Frontend router: `react-router-dom` with `HashRouter` (this branch).** CLAUDE.md §9
   mandates hash routing (Pages has no rewrites) but names no library. Chose react-router over
   a hand-rolled router — the app will grow many routes (Brainstorm, Chamber, threshold,

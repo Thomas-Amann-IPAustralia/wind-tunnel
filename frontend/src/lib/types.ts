@@ -103,6 +103,23 @@ export interface CreateRunResponse {
   run_code: string;
 }
 
+/** One line of the interview transcript (`backend/brainstorm/transcript.py`). */
+export interface TranscriptTurn {
+  role: "user" | "assistant";
+  text: string;
+  ts: string;
+}
+
+/** GET /brainstorm — the co-design state a page load / resume restores (§7.1).
+ * `sufficiency` is null once the run has left BRAINSTORM (the outline is frozen);
+ * `stage` then tells the SPA to redirect the stale link on to the Chamber. */
+export interface BrainstormState {
+  outline_md: string;
+  transcript: TranscriptTurn[];
+  sufficiency: Sufficiency | null;
+  stage: string;
+}
+
 export interface BrainstormMessageResponse {
   assistant_message: string;
   outline_md: string;

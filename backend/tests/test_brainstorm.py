@@ -306,3 +306,50 @@ def test_edit_outline_409_after_brainstorm(github):
         "/api/runs/WT-EDTX-32/brainstorm/edit-outline", json={"sections": {"problem": "x"}}
     )
     assert resp.status_code == 409
+
+
+# -- GET /brainstorm (load / resume the canvas) ---------------------------------
+
+
+def test_get_brainstorm_returns_outline_transcript_and_sufficiency(github):
+    _seed_brainstorm(github, "WT-GETB-43")
+    github.files[run_path("WT-GETB-43", "brainstorm", "transcript.jsonl")] = (
+        b'{"role": "user", "text": "hello", "ts": "t1"}\n'
+        b'{"role": "assistant", "text": "what problem?", "ts": "t2"}\n'
+    )
+    client = _app_client(github, _make_llm({"issues": []}))  # only the sufficiency judge runs
+    resp = client.get("/api/runs/WT-GETB-43/brainstorm")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["stage"] == "BRAINSTORM"
+    assert "<!-- section: problem -->" in body["outline_md"]
+    assert [t["role"] for t in body["transcript"]] == ["user", "assistant"]
+    assert body["transcript"][1]["text"] == "what problem?"
+    assert body["sufficiency"]["ready"] is False  # a fresh outline is never ready
+
+
+def test_get_brainstorm_empty_transcript_on_fresh_run(github):
+    _seed_brainstorm(github, "WT-GETF-44")  # no transcript committed yet
+    # A fresh outline has nothing resolved, so the sufficiency judge is skipped entirely.
+    client = _app_client(github, _make_llm())
+    resp = client.get("/api/runs/WT-GETF-44/brainstorm")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["transcript"] == []
+    assert body["sufficiency"]["ready"] is False
+
+
+def test_get_brainstorm_after_submission_reports_stage_and_skips_sufficiency(github):
+    # A submitted run's outline is frozen; the GET still serves it (read-only) with the
+    # advanced stage so a stale link can redirect to the Chamber, and does not run the judge.
+    seed_run(github, "WT-GETX-42", stage=statefile.Stage.THRESHOLD_DRAFTING)
+    github.files[run_path("WT-GETX-42", "brainstorm", "outline.md")] = render_initial_outline(
+        "WT-GETX-42", NOW
+    ).encode("utf-8")
+    client = _app_client(github, _make_llm())  # judge must not be called
+    resp = client.get("/api/runs/WT-GETX-42/brainstorm")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["stage"] == "THRESHOLD_DRAFTING"
+    assert body["sufficiency"] is None
+    assert "<!-- section: problem -->" in body["outline_md"]
