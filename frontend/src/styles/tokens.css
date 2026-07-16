@@ -1,0 +1,79 @@
+/*
+ * Windtunnel design tokens — the "Instrument" aesthetic (DESIGN_BRIEF §3).
+ * CSS custom properties are the single owner of the palette, type roles and
+ * scale (CLAUDE.md §4: "implement the tokens as CSS custom properties"). Every
+ * component reads these; no component hard-codes a hex or a family.
+ */
+
+:root {
+  /* -- Colour (§3.2) -------------------------------------------------------- */
+  --ink: #161a1d; /* primary text — graphite, not pure black */
+  --paper: #f6f7f8; /* app ground, the light "Console" */
+  --slate: #5b6670; /* secondary text, borders, ghosted placeholders */
+  --chamber: #0f151a; /* the deep dark governance surface */
+  --focus: #0e7c74; /* the single accent — active/live/resolved/in-focus */
+  --focus-glow: #39c9bc; /* brighter sibling, glows/pulses on the chamber only */
+  --vapour: #8fb9c4; /* airflow in the animation only — never text */
+
+  /* Surface derivatives (tuned to sit against paper/chamber at AA) */
+  --paper-raised: #ffffff; /* cards/panels lifted off the ground */
+  --paper-sunken: #eceef0; /* inset wells, code blocks */
+  --hairline: #d7dbde; /* 1px structure on the Console */
+  --ink-muted: #454d54; /* dimmer body text, still AA on paper */
+
+  /* Chamber (dark) surface derivatives */
+  --chamber-raised: #171f27;
+  --chamber-hairline: #2a343d;
+  --chamber-ink: #e7edf0; /* body text on the dark surface — AA-checked */
+  --chamber-slate: #93a1ab; /* secondary text on the dark surface */
+
+  /* -- Risk scale (§3.2) — colour + label + shape, never colour alone ------- */
+  --risk-low: #2e7d5b;
+  --risk-medium: #b7791f;
+  --risk-high: #c05621;
+  --risk-extreme: #9b2c2c;
+
+  /* Semantic state colours (§3.2): amber = waiting/pause, clay = failure. */
+  --amber: #b7791f; /* waiting / pause — calm, never a blaring alert */
+  --clay: #9b2c2c; /* failure — muted, calm */
+
+  /* -- Type roles (§3.3) — one superfamily, three registers + a signage face */
+  --font-display: "Archivo", "Archivo Expanded", system-ui, sans-serif;
+  --font-ui: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* -- Type scale (§3.3, 1.25 ratio) ---------------------------------------- */
+  --text-xs: 0.75rem; /* 12px — captions/data floor; never carries lone meaning */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px — body floor */
+  --text-lg: 1.25rem; /* 20px */
+  --text-xl: 1.5625rem; /* 25px */
+  --text-2xl: 1.9375rem; /* 31px */
+  --text-3xl: 2.4375rem; /* 39px */
+
+  /* -- Spacing scale -------------------------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+  --space-10: 4rem;
+
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+
+  --shadow-panel: 0 1px 2px rgba(22, 26, 29, 0.06), 0 4px 16px rgba(22, 26, 29, 0.06);
+
+  /* -- Motion (§3.6) — deliberate and scarce -------------------------------- */
+  --motion-resolve: 250ms;
+  --motion-settle: 1200ms;
+  --motion-pulse: 2s;
+  --motion-chamber: 600ms; /* the Console→Chamber deepening (§7.1) */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --footer-h: 2.5rem;
+}

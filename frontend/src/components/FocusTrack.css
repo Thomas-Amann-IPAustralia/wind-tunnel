@@ -1,0 +1,75 @@
+.wt-track {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.wt-track__stage {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  flex: 1 1 12rem;
+  min-width: 12rem;
+}
+
+.wt-track__marker {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-top: 4px;
+  border: 2px solid var(--slate);
+  background: transparent;
+}
+
+.wt-track__body {
+  display: flex;
+  flex-direction: column;
+}
+
+.wt-track__label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text-sm);
+  color: var(--ink);
+}
+
+.wt-track__artefact {
+  font-size: var(--text-xs);
+  color: var(--slate);
+}
+
+.wt-track__optional {
+  font-family: var(--font-ui);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--slate);
+}
+
+/* Current: crisp and forward — full ink, focus marker. */
+.wt-track__stage--current .wt-track__marker {
+  border-color: var(--focus);
+  background: var(--focus);
+}
+.wt-track__stage--current .wt-track__label {
+  color: var(--ink);
+}
+
+/* Done: settled with a filled focus ring. */
+.wt-track__stage--done .wt-track__marker {
+  border-color: var(--focus);
+  background: color-mix(in srgb, var(--focus) 30%, transparent);
+}
+
+/* Upcoming / unavailable: quiet (slate) but at AA — low emphasis, not illegible. */
+.wt-track__stage--upcoming .wt-track__label,
+.wt-track__stage--unavailable .wt-track__label {
+  color: var(--slate);
+}
+.wt-track__stage--unavailable .wt-track__marker {
+  border-style: dashed;
+}

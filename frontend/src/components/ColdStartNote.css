@@ -1,0 +1,33 @@
+.wt-coldstart {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--slate);
+}
+
+.wt-coldstart--error {
+  color: var(--clay);
+}
+
+/* An honest, indeterminate liveness pip in `focus` — not a progress bar that
+ * lies (design §5). Slow breathing; static under reduced motion (base.css). */
+.wt-coldstart__pip {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--focus);
+  animation: wt-coldstart-pulse var(--motion-pulse) var(--ease) infinite;
+}
+
+@keyframes wt-coldstart-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

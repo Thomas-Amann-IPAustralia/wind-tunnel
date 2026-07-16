@@ -1,0 +1,22 @@
+.wt-disclaimer {
+  position: fixed;
+  inset: auto 0 0 0;
+  height: var(--footer-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--slate);
+  background: var(--paper);
+  border-top: 1px solid var(--hairline);
+  text-align: center;
+  z-index: 5;
+}
+
+.wt-surface--chamber .wt-disclaimer,
+.wt-surface--chamber ~ .wt-disclaimer {
+  color: var(--chamber-slate);
+  background: var(--chamber);
+  border-top-color: var(--chamber-hairline);
+}

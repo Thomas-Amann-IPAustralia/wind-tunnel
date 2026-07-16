@@ -1,0 +1,72 @@
+.wt-gate {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: var(--paper);
+  z-index: 20;
+  overflow-y: auto;
+}
+
+.wt-gate__card {
+  width: min(40rem, 100%);
+  padding: var(--space-8);
+}
+
+.wt-gate__brand {
+  margin-bottom: var(--space-6);
+}
+
+.wt-gate__heading {
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-5);
+}
+
+.wt-gate__heading:focus {
+  outline: none;
+}
+
+.wt-gate__points {
+  list-style: none;
+  margin: 0 0 var(--space-8);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.wt-gate__points li {
+  display: flex;
+  gap: var(--space-3);
+  font-size: var(--text-base);
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+
+.wt-gate__points strong {
+  color: var(--ink);
+}
+
+.wt-gate__mark {
+  color: var(--focus);
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  flex: 0 0 auto;
+}
+
+.wt-gate__accept {
+  width: 100%;
+  font-size: var(--text-lg);
+  padding: var(--space-4);
+}
+
+@media (max-width: 640px) {
+  .wt-gate__card {
+    padding: var(--space-5);
+  }
+  .wt-gate__heading {
+    font-size: var(--text-xl);
+  }
+}
