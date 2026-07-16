@@ -13,8 +13,8 @@
 #     file: interviewer.v1.md
 #     model_role: interviewer        # resolves via config/models.yml
 #
-# Roles still to author (from config/models.yml): interviewer, sufficiency,
-# feasibility_gate, outline_synth, poc_gen, map_gen, reviewer.
+# Roles still to author (from config/models.yml): outline_synth (deferred — the
+# interviewer writes outline sections directly, so no separate synthesis role is used yet).
 
 prompts:
   interviewer:
@@ -27,6 +27,21 @@ prompts:
     model_role: sufficiency            # resolves via config/models.yml (Flash-Lite)
                                         # the judged half of the sufficiency rubric —
                                         # contradictions + happy-path narratability (§7.1)
+  feasibility_gate:
+    file: feasibility_gate.v1.md
+    model_role: feasibility_gate       # resolves via config/models.yml (Flash-Lite)
+                                        # POST /poc runs this first: would a static HTML PoC
+                                        # meaningfully visualise this solution? (§7, brief §6.1)
+  poc_gen:
+    file: poc_gen.v1.md
+    model_role: poc_gen                # resolves via config/models.yml (Flash)
+                                        # a single self-contained HTML PoC with the limitations
+                                        # banner authored into the file (§7, §12.3/§12.4)
+  map_gen:
+    file: map_gen.v1.md
+    model_role: map_gen                # resolves via config/models.yml (Flash)
+                                        # the information-flow map as Mermaid; the SPA renders
+                                        # SVG client-side (§7, §12.3; CLAUDE.md §9)
   threshold_generalist:
     file: threshold_generalist.v1.md
     model_role: threshold_generalist   # resolves via config/models.yml (Flash)
