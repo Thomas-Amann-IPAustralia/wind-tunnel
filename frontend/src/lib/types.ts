@@ -119,14 +119,54 @@ export interface TranscriptTurn {
   ts: string;
 }
 
+/** The feasibility verdict (backend/brainstorm/feasibility.py) — whether a static
+ * PoC would help, and the honest reason shown either way (§6.1 conditional stage). */
+export interface FeasibilityVerdict {
+  feasible: boolean;
+  reason: string;
+}
+
+/** GET /brainstorm `artefacts` — which optional artefacts (§6.3/§6.4) already exist,
+ * so a page load / resume restores the focus track and re-displays them (§7.5). Only
+ * present while the run is still at BRAINSTORM (a submitted run redirects). */
+export interface BrainstormArtefacts {
+  poc: boolean;
+  flow_map: boolean;
+  flow_map_svg: boolean;
+  feasibility: FeasibilityVerdict | null;
+}
+
 /** GET /brainstorm — the co-design state a page load / resume restores (§7.1).
  * `sufficiency` is null once the run has left BRAINSTORM (the outline is frozen);
- * `stage` then tells the SPA to redirect the stale link on to the Chamber. */
+ * `stage` then tells the SPA to redirect the stale link on to the Chamber.
+ * `artefacts` is absent on that frozen branch (the SPA redirects before reading it). */
 export interface BrainstormState {
   outline_md: string;
   transcript: TranscriptTurn[];
   sufficiency: Sufficiency | null;
   stage: string;
+  artefacts?: BrainstormArtefacts;
+}
+
+/** POST /poc — the feasibility gate, then either a PoC (`produced: "poc"`) or, if a
+ * static mock is not a fit, the flow map instead (`produced: "map"`, with `mermaid`
+ * source to render). Either way `reason` is the honest one-line why (§6.1). */
+export interface PocResponse {
+  produced: "poc" | "map";
+  reason: string;
+  mermaid?: string;
+}
+
+/** POST /flow-map — Mermaid source for the SPA to render client-side (CLAUDE.md §9). */
+export interface FlowMapResponse {
+  produced: "map";
+  mermaid: string;
+}
+
+/** POST /flow-map/svg — the SPA's client-rendered SVG, committed for the report. */
+export interface FlowMapSvgResponse {
+  run_id: string;
+  committed: boolean;
 }
 
 export interface BrainstormMessageResponse {

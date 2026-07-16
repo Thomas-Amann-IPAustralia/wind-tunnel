@@ -69,6 +69,11 @@ _ARTEFACTS: dict[str, tuple[str, str]] = {
     "threshold.md": ("artefacts/threshold.md", "text/markdown; charset=utf-8"),
     "assessment.ipynb": ("artefacts/assessment.ipynb", "application/x-ipynb+json"),
     "assessment.html": ("artefacts/assessment.html", "text/html; charset=utf-8"),
+    # Brainstorm optional artefacts (§6.3/§6.4). The SPA displays the PoC in a
+    # sandboxed iframe and re-renders the flow map from its Mermaid source on
+    # resume; both are served here so the canvas can restore them (CLAUDE.md §9).
+    "poc.html": ("brainstorm/poc.html", "text/html; charset=utf-8"),
+    "flow-map.mmd": ("brainstorm/flow-map.mmd", "text/plain; charset=utf-8"),
 }
 
 
@@ -268,6 +273,30 @@ def create_app(
             )
         return run
 
+    def _brainstorm_artefacts(run_id: str) -> dict:
+        """Which optional Brainstorm artefacts (§6.3/§6.4) already exist, so the SPA can
+        restore the focus track and re-display them on load/resume (§7.5). Read-only
+        existence checks plus the feasibility verdict (feasible + the honest reason the
+        conditional-stage note shows). A malformed feasibility.json is reported as absent
+        rather than raised — this is a display hint, not an integrity-critical read."""
+        feasibility = None
+        raw = _get_bytes_optional(run_id, "brainstorm", "feasibility.json")
+        if raw is not None:
+            try:
+                doc = json.loads(raw)
+                feasibility = {
+                    "feasible": bool(doc["feasible"]),
+                    "reason": str(doc["reason"]),
+                }
+            except (ValueError, KeyError, TypeError):
+                feasibility = None
+        return {
+            "poc": _get_bytes_optional(run_id, "brainstorm", "poc.html") is not None,
+            "flow_map": _get_bytes_optional(run_id, "brainstorm", "flow-map.mmd") is not None,
+            "flow_map_svg": _get_bytes_optional(run_id, "brainstorm", "flow-map.svg") is not None,
+            "feasibility": feasibility,
+        }
+
     def _brainstorm_response(run_id: str, outline: Outline, client: LLMClient) -> dict:
         """The shared tail of both Brainstorm endpoints: render the outline and run the
         sufficiency check (§7.1) for the banner. Never raises for a healthy outline."""
@@ -374,7 +403,11 @@ def create_app(
                 "sufficiency": None,
                 "stage": str(run.stage),
             }
-        return {"transcript": turns, **_brainstorm_response(run_id, outline, make_llm())}
+        return {
+            "transcript": turns,
+            "artefacts": _brainstorm_artefacts(run_id),
+            **_brainstorm_response(run_id, outline, make_llm()),
+        }
 
     @app.post("/api/runs/{run_id}/poc")
     def generate_poc_endpoint(run_id: str = Depends(_valid_run_id)) -> dict:

@@ -2,7 +2,30 @@
 
 ## Current stage
 
-**This branch: the Governance frontend — the flagship Chamber transparency animation
+**This branch: the Brainstorm PoC / flow-map canvas actions — the last remaining
+*frontend* piece (DESIGN §6.2–6.4; CLAUDE.md §9).** The Brainstorm canvas could drive
+the mandatory co-design loop (interview → sufficiency → submit) but not the two optional
+focus-track stages. Now it can: a `BrainstormSynthesis` block under the outline offers
+**"Build a proof of concept"** and **"Generate a flow map"**, honestly encouraged and
+never nagged (§6.5). *Build a PoC* runs the backend feasibility gate; if a static mock
+fits, the committed `poc.html` previews in a **`sandbox=""` iframe** (display only — it is
+untrusted-user-derived, §9.2) with open-in-tab; if not, the honest **"not a fit — you'll
+get a flow map instead"** conditional-stage note shows (§6.1) and the flow map is produced
+instead. *Generate a flow map* returns Mermaid source, which the SPA **renders to SVG
+in-browser with `mermaid.js` and posts back** for commit (CLAUDE.md §9 — Render can't run
+headless Chromium). The focus track's stages 2/3 now light up from real state, and a
+reload/resume **restores** a committed PoC + flow map (a new `GET /brainstorm` `artefacts`
+block + the download proxy now serving `poc.html`/`flow-map.mmd`). With this, **every
+DESIGN screen is built and driven** — a public servant can run the whole product in the
+browser, brainstorm through PoC/map through governance to the report. `mermaid.js` is
+**lazy-loaded** (a 635 kB chunk fetched only when the user draws a map — first paint stays
+~210 kB). **`npm run build` (strict `tsc -b` + vite), `npm run lint` (0 errors, 1
+pre-existing accepted warning), `npm run format:check` clean; 38 frontend tests green (34
+prior + 4 synthesis). Backend: 98 tests green, ruff clean.** See Done. **What remains:**
+the `/revise` brainstorm branches (backend, an open design question — see handoff step 1)
+and a first live Gemini run.
+
+**Prior branch: the Governance frontend — the flagship Chamber transparency animation
 and every screen the run breaks out to (DESIGN §7, §8).** The `Chamber` route was an
 honest shell; it is now the live poll host that renders the whole Governance phase in the
 browser. One status poll fully determines the visible face (CLAUDE.md §3): the **pipeline
@@ -145,6 +168,46 @@ threshold stage — this is the first place `pipeline/rating/` is consumed by a 
 pipeline.
 
 ## Done
+
+- **Brainstorm PoC / flow-map canvas actions — the last remaining *frontend* piece
+  (DESIGN §6.2–6.4; CLAUDE.md §9; Stage 1; this branch).** The optional focus-track stages
+  2/3, driven end-to-end. LLM-free on the SPA (the backend generators do the thinking, built
+  a prior branch). The pieces:
+  - **`frontend/src/components/BrainstormSynthesis.tsx` + `.css` — the presentational block.**
+    The two "enrich the assessment — optional" actions (§6.2), the honest §6.5 encouragement
+    (outline alone is enough; a PoC/map just gives the specialists more), the §6.1 conditional-
+    stage "not a fit" note (amber-marked aside, not an error — never colour alone, §9), and the
+    two produced artefacts each in a **`sandbox=""` iframe** (display only; the artefacts derive
+    from untrusted user text, §9.2): the PoC via `src=` the download proxy (like `ReportView`),
+    the flow map via `srcDoc` of the client-rendered SVG (no `innerHTML` for untrusted-derived
+    markup). All state lives in the route; the component is pure.
+  - **`frontend/src/lib/mermaid.ts` — the one place `mermaid.js` is touched.** `renderMermaid`
+    renders Mermaid source to an SVG string with `securityLevel: "strict"` (scripts/click-
+    handlers stripped, labels escaped — the source is untrusted-derived, §9.2). **Lazy-imported**
+    from the route (`await import("../lib/mermaid")`) so the 635 kB engine is a separate chunk
+    fetched only when the user actually draws a map — the first-paint bundle stays ~210 kB
+    (67 kB gzip). `mermaid@^11` added to `package.json`.
+  - **`frontend/src/routes/Brainstorm.tsx` — wired in.** `buildPoc` (`POST /poc` → gate; feasible
+    → preview `poc.html`; not-a-fit → render + post the map the backend produced instead),
+    `generateMap` (`POST /flow-map` → `renderMermaid` → `POST /flow-map/svg`), the focus-track
+    stages 2/3 lit from real state (`done`/`unavailable`+note/`upcoming`), and a **resume restore**
+    (a committed PoC re-previews, a committed map re-renders from its `.mmd`; the SVG is re-posted
+    only if it was never committed — an interrupted post is healed).
+  - **API + types.** `generatePoc`/`generateFlowMap`/`postFlowMapSvg` added to `api.ts`;
+    `PocResponse`/`FlowMapResponse`/`FlowMapSvgResponse`/`FeasibilityVerdict`/`BrainstormArtefacts`
+    added and `BrainstormState` extended with the optional `artefacts` block.
+  - **Backend gap-fixes (CLAUDE.md §2 — the frontend surfaced them).** The download proxy
+    (`_ARTEFACTS`) now serves `poc.html` (`text/html`) and `flow-map.mmd` (`text/plain`) so the
+    SPA can preview the PoC and re-render the map on resume; `GET /brainstorm` gained an
+    `artefacts` block (`{poc, flow_map, flow_map_svg, feasibility}`) so a reload restores the
+    focus track + re-displays the optional artefacts (existence checks + the feasibility verdict;
+    a malformed `feasibility.json` reports absent, not raised — it's a display hint).
+  - **9 new tests.** `Brainstorm.test.tsx` (4: build-a-PoC-and-preview-sandboxed, not-a-fit→
+    honest-note+map-drawn-and-posted, generate-a-map→render+commit, resume-restores-both-without-
+    re-posting — `mermaid.js` mocked, jsdom can't lay out an SVG), `test_app.py` (2: the proxy
+    serves poc.html + flow-map.mmd), `test_brainstorm.py` (3: the `artefacts` block — none on a
+    fresh run, a generated PoC + verdict, a rendered flow map). `npm run build`/`lint`/
+    `format:check` clean; **38 frontend + 98 backend tests green; ruff clean.**
 
 - **Governance frontend — the flagship Chamber animation + every screen the run breaks out
   to, driven end-to-end (DESIGN §7, §8; TECH_SPEC §6, §7; Stage 3; this branch).** The
@@ -986,11 +1049,10 @@ banner) up to `/submit`. What remains is the rest of Brainstorm (PoC / flow-map)
      canvas (parses `outline_md`, animates `outline_delta`), the sufficiency banner (§6.2
      unlocking-not-gate), click-to-edit sections with the `you` provenance tag (§3.7), and
      Submit → Chamber. Backed by a new `GET /api/runs/{id}/brainstorm` so a page load / resume
-     restores the state. See Done. **Still to build on this canvas: the optional PoC/flow-map
-     actions** (`POST /poc`, `/flow-map` + in-browser `mermaid.js` → `/flow-map/svg`), which the
-     focus track shows as the two optional stages 2/3. The generators are built backend-side;
-     the SPA side needs the buttons, a sandboxed PoC preview, and `mermaid.js` (a new dep) to
-     render the map SVG client-side and post it back (CLAUDE.md §9).
+     restores the state. See Done. **The optional PoC/flow-map actions — DONE (this branch):**
+     the `BrainstormSynthesis` block, the sandboxed PoC preview, `mermaid.js` (lazy-loaded)
+     rendering the map SVG client-side and posting it back (CLAUDE.md §9), the honest §6.1
+     conditional-stage note, and resume-restore of both. See Done.
    - **The Chamber transparency animation (design §7.2) — the flagship — DONE (this branch).**
      The `Chamber` route now polls `getStatus` (via the new `useStatusPoll` hook, ETag-aware),
      renders the fixed node topology (`lib/topology.ts`, mirrored from `status.py`) as the
@@ -1013,11 +1075,11 @@ banner) up to `/submit`. What remains is the rest of Brainstorm (PoC / flow-map)
      Adding `revisions` to the `status.json` projection (a small `status.py` change, set from
      `run.state.revisions`) would let the count show live — the "one poll determines visible
      state" way. Left for whoever next touches the status schema.
-   - **Still to build on the Brainstorm canvas: the optional PoC/flow-map actions** (`POST /poc`,
-     `/flow-map` + in-browser `mermaid.js` → `/flow-map/svg`), the two optional focus-track
-     stages 2/3. The generators are built backend-side; the SPA needs the buttons, a sandboxed
-     PoC preview, and `mermaid.js` (a new dep) to render the map SVG client-side and post it back
-     (CLAUDE.md §9). This is the last remaining *frontend* piece.
+   - **The optional PoC/flow-map actions — DONE (this branch).** The `BrainstormSynthesis`
+     block, the sandboxed PoC preview, lazy-loaded `mermaid.js` rendering the map SVG client-side
+     and posting it back (CLAUDE.md §9), the honest §6.1 conditional-stage note, focus-track
+     stages 2/3 lit from real state, and resume-restore. **With this the frontend is complete —
+     every DESIGN screen is built and driven.** See Done.
 3. **A first live Gemini run** to eval real generalist/reconciler/specialist/reviewer
    judgement (the LLM seam is mockable and unit-tested end-to-end, now across the whole
    governance path including revision; live quality is untested). Exercisable now via
@@ -1101,7 +1163,34 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
-- **The Chamber is a state machine, not a router hand-off (this branch).** The design (§7.2–8)
+- **`mermaid.js` is lazy-loaded, not in the first-paint bundle (this branch).** CLAUDE.md §9
+  mandates in-browser Mermaid rendering, but the engine is ~635 kB — statically importing it put
+  it in the main chunk (844 kB). The flow map is optional and reached only mid-session, so the
+  route dynamic-imports the wrapper (`await import("../lib/mermaid")`); mermaid becomes its own
+  chunk fetched on first use and first paint drops to ~210 kB (67 kB gzip). No behaviour change,
+  just deferral.
+- **Both optional artefacts display in a `sandbox=""` iframe; the flow map via `srcDoc`, not
+  `innerHTML` (this branch).** The PoC and flow map both derive from untrusted user text (§9.2),
+  so both are displayed sandboxed (scripts + same-origin denied — display only), matching
+  `ReportView`. The PoC points `src=` at the download proxy (a committed file); the client-
+  rendered flow-map SVG goes in via `srcDoc` — never `innerHTML`, so untrusted-derived SVG markup
+  is never injected into the app DOM (the same discipline as `lib/markdown.tsx`). `mermaid`'s
+  `securityLevel: "strict"` and the backend's `<script>` refusal are the belt-and-braces around it.
+- **The download proxy serves `poc.html`/`flow-map.mmd`; `GET /brainstorm` reports optional-
+  artefact existence — resolving a frontend-surfaced gap (this branch, CLAUDE.md §2).** `POST /poc`
+  returns only `{produced, reason}` (not the HTML), and the proxy allow-list omitted the brainstorm
+  artefacts, so the SPA had no way to *display* a generated PoC or restore either artefact on
+  reload. Both were genuine gaps the frontend surfaced, so filling them was part of the task:
+  `_ARTEFACTS` now serves `poc.html`/`flow-map.mmd`, and `GET /brainstorm` grew an `artefacts`
+  block (existence + the feasibility verdict) so a resume re-lights the focus track and re-shows
+  the artefacts. Existence is read only on the load endpoint (not on every message turn — those
+  don't change PoC/map state), keeping the hot path cheap.
+- **On resume the flow map is re-rendered from its committed `.mmd`, not fetched as SVG (this
+  branch).** The `.svg` is committed for the report; the SPA could fetch it, but re-rendering from
+  the `.mmd` gives one display path (always `renderMermaid` → `srcDoc`) and heals a map whose SVG
+  post was interrupted (the `flow_map_svg` flag says whether we still owe the backend one). Costs
+  one extra client render on resume; avoids a second allow-list entry and a two-path display.
+- **The Chamber is a state machine, not a router hand-off (prior branch).** The design (§7.2–8)
   describes the run "breaking out to the Console" for the threshold review / checkpoint and
   "settling into" the report. Rather than add routes and extend `routeForStage` to send paused
   runs to separate screens, the `Chamber` route is a single poll host that renders the right

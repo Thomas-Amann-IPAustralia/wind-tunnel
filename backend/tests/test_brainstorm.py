@@ -328,6 +328,50 @@ def test_get_brainstorm_returns_outline_transcript_and_sufficiency(github):
     assert body["sufficiency"]["ready"] is False  # a fresh outline is never ready
 
 
+def test_get_brainstorm_reports_no_optional_artefacts_on_a_fresh_run(github):
+    # Before the user generates anything, the focus track's stages 2/3 are untouched.
+    _seed_brainstorm(github, "WT-ARTA-AA")
+    client = _app_client(github, _make_llm())  # fresh outline → judge skipped
+    body = client.get("/api/runs/WT-ARTA-AA/brainstorm").json()
+    assert body["artefacts"] == {
+        "poc": False,
+        "flow_map": False,
+        "flow_map_svg": False,
+        "feasibility": None,
+    }
+
+
+def test_get_brainstorm_reports_a_generated_poc_and_verdict(github):
+    # A user who generated a PoC then reloaded must find it restored (§6.3, §7.5).
+    _seed_brainstorm(github, "WT-ARTB-BB")
+    github.files[run_path("WT-ARTB-BB", "brainstorm", "poc.html")] = b"<!doctype html><p>PoC</p>"
+    github.files[run_path("WT-ARTB-BB", "brainstorm", "feasibility.json")] = json.dumps(
+        {"feasible": True, "reason": "A clickable mock helps here.", "model": "x"}
+    ).encode("utf-8")
+    client = _app_client(github, _make_llm())
+    body = client.get("/api/runs/WT-ARTB-BB/brainstorm").json()
+    assert body["artefacts"]["poc"] is True
+    assert body["artefacts"]["flow_map"] is False
+    assert body["artefacts"]["feasibility"] == {
+        "feasible": True,
+        "reason": "A clickable mock helps here.",
+    }
+
+
+def test_get_brainstorm_reports_a_rendered_flow_map(github):
+    _seed_brainstorm(github, "WT-ART2-22")
+    github.files[run_path("WT-ART2-22", "brainstorm", "flow-map.mmd")] = b"flowchart TD\n A-->B\n"
+    github.files[run_path("WT-ART2-22", "brainstorm", "flow-map.svg")] = b"<svg></svg>"
+    github.files[run_path("WT-ART2-22", "brainstorm", "feasibility.json")] = json.dumps(
+        {"feasible": False, "reason": "Not a fit for a mock.", "model": "x"}
+    ).encode("utf-8")
+    client = _app_client(github, _make_llm())
+    body = client.get("/api/runs/WT-ART2-22/brainstorm").json()
+    assert body["artefacts"]["flow_map"] is True
+    assert body["artefacts"]["flow_map_svg"] is True
+    assert body["artefacts"]["feasibility"]["feasible"] is False
+
+
 def test_get_brainstorm_empty_transcript_on_fresh_run(github):
     _seed_brainstorm(github, "WT-GETF-44")  # no transcript committed yet
     # A fresh outline has nothing resolved, so the sufficiency judge is skipped entirely.
