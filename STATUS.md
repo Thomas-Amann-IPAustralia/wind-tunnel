@@ -2,7 +2,28 @@
 
 ## Current stage
 
-**This branch: the Brainstorm co-design canvas — the frontend's first interactive screen
+**This branch: the Governance frontend — the flagship Chamber transparency animation
+and every screen the run breaks out to (DESIGN §7, §8).** The `Chamber` route was an
+honest shell; it is now the live poll host that renders the whole Governance phase in the
+browser. One status poll fully determines the visible face (CLAUDE.md §3): the **pipeline
+graph + activity log** (§7.2, the flagship) while running/created; the **threshold review**
+(§7.4, computed risk chips + routing) and the **question checkpoint** (§7.3, batched by
+specialist, answer-or-skip) on the Console when paused; the **report** (§8, the sandboxed
+`assessment.html` + the ≤2-revision affordance) or the **concluded** view on completion;
+and the **calm, resumable failure state** (§7.2.4) on error. The resume-by-code flow lands
+here and the same state logic drops the user at the exact right face (§7.5). With this, a
+public servant can drive a run **from creation through Brainstorm, submission, the whole
+governance pipeline, the pauses, and the report — entirely in the browser.** LLM-free on the
+SPA side; the SPA never holds a secret. **`npm run build` (strict `tsc -b` + vite), `npm run
+lint` (0 errors), `npm run format:check` all clean; 34 frontend tests green (19 prior + 5
+topology + 4 markdown + 6 Chamber state-routing).** Contract fix (CLAUDE.md §2): `types.ts`'s
+`QuestionsPayload` had the wrong keys (`groups`/`prompt`) — corrected to the `specialists`/
+`text` shape the pipeline actually writes and the backend reads. See Done. **Remaining
+frontend:** the optional PoC/flow-map *canvas actions* on the Brainstorm screen (the
+generators are built backend-side; the SPA needs the buttons + `mermaid.js`), the `/revise`
+brainstorm branches (backend), and a first live Gemini run. See handoff notes.
+
+**Prior branch: the Brainstorm co-design canvas — the frontend's first interactive screen
 (DESIGN §6).** The `Brainstorm` route is now the real two-pane surface (conversation + live
 outline canvas + sufficiency banner + click-to-edit + Submit), backed by a new
 `GET /api/runs/{id}/brainstorm` load/resume endpoint. A public servant can now drive a run
@@ -125,8 +146,80 @@ pipeline.
 
 ## Done
 
+- **Governance frontend — the flagship Chamber animation + every screen the run breaks out
+  to, driven end-to-end (DESIGN §7, §8; TECH_SPEC §6, §7; Stage 3; this branch).** The
+  `Chamber` route was a shell; it is now the poll host that renders the whole Governance phase
+  from `status.json`, one poll fully determining the visible face (CLAUDE.md §3). LLM-free on
+  the SPA side; the SPA never holds a secret. **`npm run build` (strict `tsc -b` + vite), `npm
+  run lint` (0 errors, 1 pre-existing accepted warning), `npm run format:check` all clean; 34
+  frontend tests green.** The pieces:
+  - **`src/lib/topology.ts` + `topology.test.ts` — the fixed pipeline topology (§7.2.6).** The
+    node ids + friendly names + graph layout (two-generalist parallel + reconciler + rating
+    engine; the six-specialist bloom + checkpoint + architect + reviewer + assembly),
+    **mirrored by hand from `pipeline/status.py` `_node_specs()`** exactly as `runCode.ts`
+    mirrors `runcode.py`. 5 tests pin the id set/order to that owner so it can't drift silently,
+    plus the parallel-cluster captions, the friendly-name lookup+fallback, and the
+    compute/pause/llm kinds.
+  - **`src/hooks/useStatusPoll.ts` — the ETag-aware poll.** Holds the latest whole-graph doc
+    (nothing to accumulate — one poll determines all), threads `If-None-Match` for cheap 304s,
+    tracks seconds-since-last-change (the honest-staleness backbone, §7.2.5), rides out a
+    network blip (keeps the last good doc, flags `offline`) vs a hard `ApiError` (stops), and
+    stops polling once terminal (`complete`/`failed`).
+  - **`src/components/PipelineGraph.tsx` + `.css` — the graph (§7.2.1), the spectacle.** The
+    fixed topology lit by the `nodes` map: state carried by **label + shape + position, never
+    colour alone** (§9 — the dot is a circle/square/triangle per state, the state word is always
+    printed), active LLM nodes pulse with a genuine sub-activity line (the document being read
+    now, from real `retrieval`/`drafting` events, §7.2.5), and the compute nodes (rating engine,
+    assembly) read "computed, not judged" — the quiet "models argue, code computes" cue.
+  - **`src/components/ActivityLog.tsx` + `.css` — the accessibility + honesty backbone
+    (§7.2.1).** An ARIA live region: the same events as words, timestamped, agent-attributed
+    (node id → friendly), heartbeats filtered to liveness only, and the "still working — last
+    update Ns ago" / "reconnecting" honest-staleness line. It alone tells the whole story under
+    reduced motion or a washed-out projector.
+  - **`src/lib/markdown.tsx` + `markdown.test.tsx` — a minimal *safe* renderer.** Builds React
+    elements (never `dangerouslySetInnerHTML`, so artefact text derived from untrusted user
+    content can't inject markup, §9.2): ATX headings, pipe tables, lists, hr, paragraphs, and
+    inline bold/italic/code — exactly the subset `threshold.md` uses. Risk-rating table cells
+    become the §3.2 chip (colour + label + shape). 4 tests incl. the raw-`<script>`-stays-text
+    safety case.
+  - **`src/components/ThresholdReview.tsx` + `.css` (§7.4).** Fetches + renders `threshold.md`
+    (the risk table with computed chips + the reconciler's divergence notes — divergence
+    surfaced, not buried), the routing decision (`POST /threshold/route` conclude|full following
+    the tool's own logic), the markdown download, and the honest "rating is calculated, not a
+    model's opinion" framing.
+  - **`src/components/Checkpoint.tsx` + `.css` (§7.3).** The batched questions grouped by
+    specialist with attribution + the one-line *why* (the trust moment), MC + free-text escape
+    mirroring the interview, an explicit "Skip this — note it as a gap" per question, a live
+    answered/skipped tally, and one "Resume the run" → `POST /answers`. A standard
+    keyboard-navigable form; nothing depends on the amber colour (§9).
+  - **`src/components/FailureState.tsx` + `.css` (§7.2.4).** Calm, never blaring: progress
+    saved, the run code surfaced prominently with resume instructions (a paused and a failed run
+    resume identically, §7.5), and the technical detail behind a "Show technical detail"
+    disclosure, collapsed by default.
+  - **`src/components/ReportView.tsx` + `.css` (§8).** The self-contained `assessment.html` in a
+    **`sandbox=""` iframe** (scripts + same-origin denied — it can only display), open-in-tab +
+    notebook download, and the ≤2-revision affordance (`POST /revise`, server-enforced cap).
+  - **`src/routes/Chamber.tsx` (rewritten) + `Chamber.css`.** The state machine: `overall_state`
+    + `phase` + `questions` pick the face (running/created → graph+log on the dark Chamber;
+    paused+no-questions → threshold review; paused+questions → checkpoint; complete+full →
+    report; complete+threshold → concluded view; failed → failure state), the Console pauses/
+    report on the light surface and the run watch/failure on the dark one, the run-code chip
+    grown prominent on pause/failure (§7.5), and honest connecting/cold-start + hard-error
+    notices.
+  - **API + types.** `submitAnswers`, `reviseRun`, `fetchArtefactText` added to `api.ts`;
+    `AnswerItem`/`AnswersResponse`/`ReviseResponse` added and — the CLAUDE.md §2 contract fix —
+    `QuestionsPayload`/`CheckpointQuestion` corrected from the wrong `groups`/`prompt` keys to
+    the `specialists`/`text` shape the pipeline writes (`stages/full.py`) and the backend reads
+    (`app.py`), plus `expected_ranges` typed as the per-phase `[low, high]` it actually is.
+  - **15 new tests.** `topology.test.ts` (5), `markdown.test.tsx` (4), `Chamber.test.tsx` (6:
+    running → graph+log with the event mirrored in both; paused → threshold review with a
+    computed chip; paused+questions → checkpoint grouped by specialist; failed → calm resumable
+    failure with collapsed technical detail; complete+full → report + revision affordance;
+    complete+threshold → concluded, not the full report). LLM-free, network-free (mocked
+    `getStatus`/`fetchArtefactText`). The old `PhasePlaceholder.css` (only the Chamber shell
+    used it) was removed.
 - **Brainstorm co-design canvas — the first interactive screen, driven end-to-end (DESIGN §6,
-  §6.2, §3.6, §3.7; TECH_SPEC §7, §7.1; Stage 1; this branch).** The `Brainstorm` route was a
+  §6.2, §3.6, §3.7; TECH_SPEC §7, §7.1; Stage 1; prior branch).** The `Brainstorm` route was a
   shell; it is now the real two-pane co-design surface a public servant drives from a fresh run
   to Submit. LLM-free on the SPA side (the backend does the thinking); the SPA never holds a
   secret. **`npm run build` (strict `tsc -b` + vite), `npm run lint`, `npm run format:check` all
@@ -898,19 +991,33 @@ banner) up to `/submit`. What remains is the rest of Brainstorm (PoC / flow-map)
      focus track shows as the two optional stages 2/3. The generators are built backend-side;
      the SPA side needs the buttons, a sandboxed PoC preview, and `mermaid.js` (a new dep) to
      render the map SVG client-side and post it back (CLAUDE.md §9).
-   - **The Chamber transparency animation (design §7.2) — the flagship.** The `Chamber` route
-     is a shell. Poll `getStatus` (built, ETag-aware), render the fixed node topology as the
-     node/flow graph + the append-only activity log (the accessibility backbone, §7.2.1),
-     drive it from the whole-graph `nodes` map + the controlled event vocabulary (both typed
-     in `types.ts`), and honour reduced motion. One poll fully determines visible state
-     (CLAUDE.md §3).
-   - **The two Console pause screens the run breaks out to:** the threshold review/route
-     screen (§7.4 — risk chips, divergence, `POST /threshold/route`) and the question
-     checkpoint (§7.3 — batched questions from the `questions` payload, `POST /answers`).
-     `routeForStage` currently sends every post-Brainstorm stage to the Chamber; extend it (or
-     the Chamber) to hand off to these screens on the paused stages.
-   - **The report view (design §8)** — render/download `assessment.html` via `artefactUrl`,
-     with the in-app ≤2 revision affordance (`POST /revise`).
+   - **The Chamber transparency animation (design §7.2) — the flagship — DONE (this branch).**
+     The `Chamber` route now polls `getStatus` (via the new `useStatusPoll` hook, ETag-aware),
+     renders the fixed node topology (`lib/topology.ts`, mirrored from `status.py`) as the
+     node/flow graph + the append-only activity log (the accessibility backbone), driven by the
+     whole-graph `nodes` map + the controlled event vocabulary, honouring reduced motion. One
+     poll fully determines the visible state. See Done.
+   - **The two Console pause screens the run breaks out to — DONE (this branch).** The threshold
+     review/route screen (§7.4 — computed risk chips, divergence surfaced, `POST /threshold/
+     route`) and the question checkpoint (§7.3 — batched questions from the `questions` payload,
+     answer-or-skip, `POST /answers`) are built and driven by the Chamber's state machine
+     directly (the Chamber renders the right face from `overall_state`+`phase`+`questions`, so
+     `routeForStage` didn't need extending — everything post-Brainstorm lands on `/chamber` and
+     the Chamber sub-routes internally). See Done.
+   - **The report view (design §8) — DONE (this branch).** Renders `assessment.html` in a
+     sandboxed iframe, open-in-tab + notebook download, and the in-app ≤2 revision affordance
+     (`POST /revise`). See Done. **Deferred (a small backend follow-up):** the *exact*
+     revisions-used count is not in `status.json` (it lives in `run.json`, which the SPA can't
+     read), so the report states the cap ("up to 2 rounds") and the server enforces it (a spent
+     cap surfaces as a plain 409 message) rather than showing "(N used.)" as §8 ideally wants.
+     Adding `revisions` to the `status.json` projection (a small `status.py` change, set from
+     `run.state.revisions`) would let the count show live — the "one poll determines visible
+     state" way. Left for whoever next touches the status schema.
+   - **Still to build on the Brainstorm canvas: the optional PoC/flow-map actions** (`POST /poc`,
+     `/flow-map` + in-browser `mermaid.js` → `/flow-map/svg`), the two optional focus-track
+     stages 2/3. The generators are built backend-side; the SPA needs the buttons, a sandboxed
+     PoC preview, and `mermaid.js` (a new dep) to render the map SVG client-side and post it back
+     (CLAUDE.md §9). This is the last remaining *frontend* piece.
 3. **A first live Gemini run** to eval real generalist/reconciler/specialist/reviewer
    judgement (the LLM seam is mockable and unit-tested end-to-end, now across the whole
    governance path including revision; live quality is untested). Exercisable now via
@@ -994,7 +1101,30 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
-- **Added `GET /api/runs/{id}/brainstorm` for canvas load/resume (this branch).** §7 names
+- **The Chamber is a state machine, not a router hand-off (this branch).** The design (§7.2–8)
+  describes the run "breaking out to the Console" for the threshold review / checkpoint and
+  "settling into" the report. Rather than add routes and extend `routeForStage` to send paused
+  runs to separate screens, the `Chamber` route is a single poll host that renders the right
+  face inline from `overall_state`+`phase`+`questions` (graph/log, threshold review, checkpoint,
+  report, concluded, failure). Why: one poll already fully determines the visible state
+  (CLAUDE.md §3), so a run's face is a pure function of its status doc — a `<Navigate>` on top
+  would just re-derive the same thing from the same poll, and resume-by-code already lands every
+  post-Brainstorm run on `/chamber`. It also keeps the run-code chip and surface transition in
+  one place. `routeForStage` therefore stayed as-is (Brainstorm vs everything-else).
+- **A hand-rolled *safe* markdown renderer (`lib/markdown.tsx`), not a markdown dependency
+  (this branch).** The threshold review (§7.4) renders `threshold.md`. Rather than add `marked`/
+  `react-markdown` (and their sanitiser surface) for a document whose text derives from
+  untrusted user content (§9.2), a ~160-line renderer builds React elements directly — raw HTML
+  in the source is structurally impossible to inject (there is no `dangerouslySetInnerHTML`),
+  and it covers exactly the subset the artefact uses. Risk-rating cells become the §3.2 chip.
+  Revisit only if a later artefact needs a wider markdown subset than the pipeline emits.
+- **The report's revision count is stated as a cap, not a live "(N used.)" (this branch).** §8
+  wants the used-count visible up front, but the count lives in `run.json` (not the proxied
+  `status.json`), so the SPA can't cheaply know it without a schema change. Rather than fabricate
+  "(0 used.)", the report states the ≤2 cap and lets the server's honest 409 enforce it; adding
+  `revisions` to the `status.json` projection is the clean fix, deferred to whoever next touches
+  the status schema (noted in handoff). Honesty over a fabricated precise number.
+- **Added `GET /api/runs/{id}/brainstorm` for canvas load/resume (prior branch).** §7 names
   `POST /brainstorm/message` + `/edit-outline` but no *read* endpoint; without one the SPA
   could not restore the outline + transcript on a page reload or a resume-by-code (§7.5) — a
   genuine gap the frontend surfaced, so filling it was part of the task (CLAUDE.md §2, "fixing

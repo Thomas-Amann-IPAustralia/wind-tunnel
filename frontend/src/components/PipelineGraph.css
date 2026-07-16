@@ -1,0 +1,190 @@
+/* The pipeline graph (design §7.2.1) on the dark Chamber surface. State reads from
+ * label + shape + position, never colour alone (§9): the dot shape and the state
+ * word carry the meaning; the glow is an enhancement, not the signal. */
+
+.wt-graph {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.wt-graph__band {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.wt-graph__band-title {
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--chamber-slate);
+  font-family: var(--font-display);
+}
+
+.wt-graph__clusters {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  position: relative;
+}
+
+/* The connecting flow-line down the band (node/flow grammar, §3.5). */
+.wt-graph__clusters::before {
+  content: "";
+  position: absolute;
+  left: 0.6rem;
+  top: 1rem;
+  bottom: 1rem;
+  width: 2px;
+  background: var(--chamber-hairline);
+}
+
+.wt-graph__cluster {
+  position: relative;
+  padding-left: var(--space-5);
+}
+
+.wt-graph__cluster-label {
+  font-size: var(--text-sm);
+  color: var(--chamber-slate);
+  margin-bottom: var(--space-2);
+}
+
+.wt-graph__nodes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* The specialist bloom + the two generalists fan across the row (§7.2.2). */
+.wt-graph__cluster--parallel .wt-graph__nodes {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.wt-node {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  border: 1px solid var(--chamber-hairline);
+  background: var(--chamber-raised);
+  min-width: 12rem;
+  flex: 1 1 12rem;
+  transition:
+    border-color var(--motion-resolve) var(--ease),
+    background var(--motion-resolve) var(--ease);
+}
+
+.wt-node__dot {
+  flex: 0 0 auto;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-top: 0.35rem;
+  border-radius: 50%;
+  border: 2px solid var(--chamber-slate);
+  background: transparent;
+}
+
+.wt-node__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.wt-node__name {
+  color: var(--chamber-ink);
+  font-weight: 600;
+  font-size: var(--text-sm);
+}
+
+.wt-node__state {
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--chamber-slate);
+}
+
+.wt-node__sub {
+  font-size: var(--text-sm);
+  color: var(--vapour);
+  margin-top: var(--space-1);
+  overflow-wrap: anywhere;
+}
+
+.wt-node__kind {
+  font-size: var(--text-xs);
+  color: var(--chamber-slate);
+  font-style: italic;
+}
+
+/* -- States ---------------------------------------------------------------- */
+
+.wt-node--active {
+  border-color: var(--focus);
+  background: color-mix(in srgb, var(--focus) 14%, var(--chamber-raised));
+}
+.wt-node--active .wt-node__dot {
+  border-color: var(--focus-glow);
+  background: var(--focus-glow);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--focus-glow) 60%, transparent);
+  animation: wt-node-pulse var(--motion-pulse) var(--ease) infinite;
+}
+.wt-node--active .wt-node__state {
+  color: var(--focus-glow);
+}
+
+.wt-node--complete .wt-node__dot {
+  border-color: var(--focus);
+  background: var(--focus);
+}
+.wt-node--complete .wt-node__name {
+  color: var(--chamber-slate);
+}
+
+.wt-node--waiting_user {
+  border-color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 16%, var(--chamber-raised));
+}
+.wt-node--waiting_user .wt-node__dot {
+  border-color: var(--amber);
+  background: var(--amber);
+  border-radius: 2px; /* square = waiting-on-you, a shape cue beyond colour */
+}
+.wt-node--waiting_user .wt-node__state {
+  color: var(--amber);
+}
+
+.wt-node--failed {
+  border-color: var(--clay);
+  background: color-mix(in srgb, var(--clay) 16%, var(--chamber-raised));
+}
+.wt-node--failed .wt-node__dot {
+  border-color: var(--clay);
+  background: var(--clay);
+  /* triangle = stopped, a shape cue beyond colour */
+  border-radius: 0;
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+.wt-node--failed .wt-node__state {
+  color: var(--clay);
+}
+
+@keyframes wt-node-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--focus-glow) 55%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 0.5rem color-mix(in srgb, var(--focus-glow) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--focus-glow) 0%, transparent);
+  }
+}

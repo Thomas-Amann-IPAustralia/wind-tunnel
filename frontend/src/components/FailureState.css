@@ -1,0 +1,59 @@
+/* The failure state (design §7.2.4) — calm and actionable, never blaring. Sits
+ * below the graph on the dark Chamber surface (completed nodes stay visibly
+ * saved above it). */
+
+.wt-failure {
+  margin-top: var(--space-4);
+  padding: var(--space-5);
+  border: 1px solid var(--clay);
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--clay) 12%, var(--chamber-raised));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.wt-failure__title {
+  font-size: var(--text-xl);
+  color: var(--chamber-ink);
+}
+
+.wt-failure__lead {
+  color: var(--chamber-ink);
+  max-width: 44rem;
+}
+
+.wt-failure__resume {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+
+.wt-failure__resume-lead {
+  color: var(--chamber-slate);
+  font-size: var(--text-sm);
+}
+
+.wt-failure__resume-note {
+  color: var(--chamber-slate);
+  font-size: var(--text-sm);
+}
+
+.wt-failure__technical {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.wt-failure__detail {
+  background: var(--chamber);
+  border: 1px solid var(--chamber-hairline);
+  border-radius: var(--radius-sm);
+  padding: var(--space-3);
+  color: var(--chamber-slate);
+  font-size: var(--text-xs);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,97 @@
+/* The report view (design §8) — the completed draft on the light Console. The
+ * self-contained assessment.html renders in a sandboxed iframe; the revision
+ * affordance sits beside it, not inside the document. */
+
+.wt-report {
+  width: 100%;
+  max-width: 60rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.wt-report__head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.wt-report__title {
+  font-size: var(--text-2xl);
+}
+
+.wt-report__actions {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.wt-report__frame {
+  width: 100%;
+  height: 70vh;
+  min-height: 32rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--paper-raised);
+}
+
+.wt-report__revise {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.wt-report__revise-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.wt-report__revise-title {
+  font-size: var(--text-lg);
+}
+
+.wt-report__revise-cap {
+  color: var(--slate);
+  font-size: var(--text-sm);
+}
+
+.wt-report__revise-done {
+  color: var(--focus);
+}
+
+.wt-report__revise-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.wt-report__revise-label {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+.wt-report__revise-input {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: var(--text-base);
+  resize: vertical;
+}
+
+.wt-report__revise-error {
+  color: var(--clay);
+  font-size: var(--text-sm);
+}
+
+.wt-report__revise-buttons {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}

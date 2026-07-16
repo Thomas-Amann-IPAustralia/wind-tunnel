@@ -1,0 +1,80 @@
+/* The activity log (design §7.2.1) — the accessibility + honesty backbone. High
+ * contrast on the dark surface, since this is the reading-heavy part of the
+ * Chamber (§9). It stands alone when motion is off or the glow washes out. */
+
+.wt-log {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  background: var(--chamber-raised);
+  border: 1px solid var(--chamber-hairline);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  max-height: 32rem;
+}
+
+.wt-log__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.wt-log__title {
+  font-size: var(--text-xs);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--chamber-slate);
+  font-family: var(--font-display);
+}
+
+.wt-log__feed {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  overflow-y: auto;
+  min-height: 8rem;
+}
+
+.wt-log__empty {
+  color: var(--chamber-slate);
+  font-size: var(--text-sm);
+}
+
+.wt-log__line {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.15rem var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.wt-log__time {
+  grid-row: 1 / span 2;
+  color: var(--chamber-slate);
+  font-size: var(--text-xs);
+  padding-top: 0.1rem;
+}
+
+.wt-log__agent {
+  color: var(--focus-glow);
+  font-weight: 600;
+}
+
+.wt-log__detail {
+  color: var(--chamber-ink);
+}
+
+/* An error line reads in the clay tone but stays legible (§9). */
+.wt-log__line--error .wt-log__agent {
+  color: var(--clay);
+}
+
+.wt-log__stale {
+  color: var(--chamber-slate);
+  font-size: var(--text-xs);
+  border-top: 1px solid var(--chamber-hairline);
+  padding-top: var(--space-2);
+}

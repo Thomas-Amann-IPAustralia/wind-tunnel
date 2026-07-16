@@ -1,0 +1,109 @@
+/* The question checkpoint (design §7.3) on the light Console. A standard,
+ * keyboard-navigable form; each specialist group is a labelled region; nothing
+ * depends on the amber pause colour to be understood (§9). */
+
+.wt-checkpoint {
+  width: 100%;
+  max-width: 48rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.wt-checkpoint__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.wt-checkpoint__title {
+  font-size: var(--text-2xl);
+}
+
+.wt-checkpoint__lead {
+  color: var(--ink-muted);
+  max-width: 40rem;
+}
+
+.wt-checkpoint__group {
+  border-left: 3px solid var(--amber);
+  padding-left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.wt-checkpoint__specialist {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.wt-checkpoint__why {
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+.wt-checkpoint__questions {
+  list-style: none;
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.wt-checkpoint__prompt {
+  font-weight: 600;
+  margin-bottom: var(--space-3);
+}
+
+.wt-checkpoint__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.wt-checkpoint__opt {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.wt-checkpoint__opt--skip {
+  color: var(--slate);
+  margin-top: var(--space-1);
+}
+
+.wt-checkpoint__free {
+  margin-left: 1.4rem;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: var(--text-base);
+  max-width: 28rem;
+}
+
+.wt-checkpoint__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: flex-start;
+  border-top: 1px solid var(--hairline);
+  padding-top: var(--space-4);
+}
+
+.wt-checkpoint__tally {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+}
+
+.wt-checkpoint__error {
+  color: var(--clay);
+  font-size: var(--text-sm);
+}
