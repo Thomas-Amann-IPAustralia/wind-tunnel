@@ -1,0 +1,52 @@
+.wt-surface {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* Keep content clear of the fixed standing-disclaimer footer (§4.2). */
+  padding-bottom: var(--footer-h);
+}
+
+.wt-surface--console {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.wt-surface--chamber {
+  background: var(--chamber);
+  color: var(--chamber-ink);
+}
+
+.wt-surface__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.wt-surface--chamber .wt-surface__bar {
+  border-bottom-color: var(--chamber-hairline);
+}
+
+.wt-surface__header-slot {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.wt-surface__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6);
+}
+
+@media (max-width: 640px) {
+  .wt-surface__bar {
+    padding: var(--space-3) var(--space-4);
+  }
+  .wt-surface__body {
+    padding: var(--space-4);
+  }
+}

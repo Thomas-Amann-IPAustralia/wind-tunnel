@@ -1,0 +1,29 @@
+.wt-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.wt-wordmark__name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-lg);
+  letter-spacing: 0.04em;
+  color: var(--ink);
+}
+
+.wt-wordmark__subtitle {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--slate);
+}
+
+/* On the dark Chamber surface the wordmark inverts. */
+.wt-surface--chamber .wt-wordmark__name {
+  color: var(--chamber-ink);
+}
+.wt-surface--chamber .wt-wordmark__subtitle {
+  color: var(--chamber-slate);
+}

@@ -9,6 +9,23 @@ the Brainstorm interview core (`POST /brainstorm/message` + `/edit-outline`) tur
 `Stage.BRAINSTORM` into something a user actually drives.** Every governance stage exists
 and is driven; the front half (Brainstorm) now has its interview loop, with PoC/flow-map
 still to come.
+**Built this branch: the frontend foundations — the app's front door and the design
+system every later screen builds on (DESIGN §3, §4, §5, §7.5; CLAUDE.md §4, §9).** The
+`frontend/` was just a `README.md` + `.gitkeep`; it is now a real Vite + React + TS app.
+Landed: the scaffold + tooling (strict `tsc`, ESLint, Prettier, Vitest), the "Instrument"
+design system as CSS custom properties (`src/styles/tokens.css` — the §3.2 palette, §3.3
+type roles/scale, §3.6 motion), `src/config.ts` (the TS mirror of `backend/config.py`),
+`src/lib/runCode.ts` (the one unavoidable TS copy of `pipeline/runcode.py`, pinned to the
+Python owner by a test), the typed API client `src/lib/api.ts` (every §7 endpoint + the
+honest Render cold-start warm-up, §5) with `src/lib/types.ts` (the status.json/§7.2.6 wire
+shapes), the app shell (hash routing, the Console/Chamber surfaces §3.4, the standing
+disclaimer §4.2, the run-code chip §7.5), the usage-warning gate (§4.1), the landing/empty
+states (§5), and the resume-by-code flow (§7.5). The two big interactive pieces — the
+Brainstorm canvas (§6.2) and the Chamber transparency animation (§7.2) — are the next
+phase; their routes exist as honest shells that establish both surfaces. **Build + strict
+typecheck + lint clean; 8 frontend tests green (run-code mirror + a jsdom render smoke of
+the gate → landing → resume flow).** See Done below.
+
 `FULL_DRAFTING → ARCHITECT → REVIEW → ASSEMBLY → COMPLETE` drives in one dispatch; when
 a specialist raises a question the run pauses at `FULL_CHECKPOINT`, and a
 `resume_from=FULL_REVISING` dispatch (from the new `POST /api/runs/{id}/answers`) resumes
@@ -100,6 +117,56 @@ pipeline.
 
 ## Done
 
+- **Frontend foundations — the app's front door + the design system (DESIGN §3–§5, §7.5;
+  CLAUDE.md §4, §9; this branch).** The first executable frontend: everything the two big
+  interactive phases (Brainstorm canvas, Chamber animation) will build on. LLM-free; the SPA
+  never holds a secret (CLAUDE.md §6). **`npm run build` (strict `tsc -b` + vite), `npm run
+  lint`, `npm run format:check` all clean; 8 tests green (`npm test`).** The pieces:
+  - **Scaffold + tooling.** `package.json`/`tsconfig*.json`/`vite.config.ts`/`index.html`,
+    ESLint (flat config, typescript-eslint + react-hooks), Prettier, Vitest. Vite `base` is
+    `/wind-tunnel/` and routing is hash-based (CLAUDE.md §9 — Pages has no rewrites). Pinned
+    to **Vite 5** to share one vite with Vitest 2 (a dual-vite install broke the plugin types
+    — see Decisions). Node 22.
+  - **The "Instrument" design system as CSS custom properties (§3).** `src/styles/tokens.css`
+    is the single owner of the §3.2 palette (cool neutrals, the one `focus` teal accent, the
+    risk scale with shape+label redundancy), the §3.3 type roles (Archivo / IBM Plex
+    Sans·Serif·Mono, loaded from Google Fonts with system fallbacks) + 1.25 scale, spacing,
+    and §3.6 motion tokens; `base.css` carries the reset, the shared buttons/panels, visible
+    keyboard focus (§9), and a global `prefers-reduced-motion` guard (§3.6). No CSS framework
+    (CLAUDE.md §4); components read tokens, never hard-code a hex/family.
+  - **`src/config.ts` — the TS owner of deployment identity (CLAUDE.md §6),** mirrored by hand
+    from `backend/config.py` (no Python↔TS codegen — see Decisions), kept in sync with Vite
+    `base`. Nothing secret; `VITE_BACKEND_URL` selects the backend at build time.
+  - **`src/lib/runCode.ts` — the one unavoidable TS copy of `pipeline/runcode.py`** (CLAUDE.md
+    §6): the `WT-XXXX-XX` format over the confusable-free alphabet, `normalize`/`isValid`/
+    `validate`. `runCode.test.ts` pins the shape (4 tests) so it can't drift from the Python
+    owner — the resume path (§7.5) relies on them agreeing.
+  - **`src/lib/api.ts` + `types.ts` — the typed §7 client.** Every backend endpoint
+    (create/resume/status-poll-with-ETag/brainstorm/threshold/route/artefact), an `ApiError`
+    vs `NetworkError` split, and `warmUp` — the honest Render cold-start (§5): pings
+    `/api/health` with backoff, fires `onSlow` at ~45s so the copy adds "still warming up".
+    `types.ts` is the frontend's read of the status.json/§7.2.6 wire shapes (node states, the
+    controlled event vocabulary, questions/failure payloads, sufficiency, outline delta).
+  - **The app shell + shared components.** `App.tsx` (the once-per-session gate + hash
+    routes + the permanent standing disclaimer), the Console/Chamber surfaces (§3.4), the
+    `BackendStatus` context (warm state shared so any screen shows the cold start honestly),
+    and the reusable `Wordmark` / `StandingDisclaimer` (§4.2) / `RunCodeChip` (§3.7, §7.5 —
+    one-tap copy, "it's a locator not a secret" tooltip) / `FocusTrack` (§6.1) pieces.
+  - **The screens built.** `UsageWarningGate` (§4.1 — the three points, focus-marked, focus
+    lands on the heading, keyboard-operable, shown once before any input); `Landing` (§5 —
+    Start a new idea / quiet Resume a run, empty state as invitation, cold-start note);
+    `ResumeScreen` (§7.5 — mono input, local validation first, plain error on a bad/unknown
+    code, drops the user back at the right screen via `routeForStage`). `Brainstorm` (§6) and
+    `Chamber` (§7) are honest shells that establish both surfaces + the run-code chip for the
+    next phase to fill in.
+  - **`.github/workflows/pages.yml`** — the path-filtered (`frontend/**`) Pages deploy
+    (CLAUDE.md §9), actioning a pinned deploy reminder now that the SPA exists. Builds with
+    `VITE_BACKEND_URL` from the `WINDTUNNEL_BACKEND_URL` repo variable.
+  - **8 tests** — `runCode.test.ts` (4: accepts well-formed, normalises, rejects the excluded
+    glyphs + wrong shapes) and `App.test.tsx` (4, jsdom: the gate shows before anything, the
+    gate passes once to the landing, the ack persists for the session, a malformed code is
+    rejected locally on the resume screen). fetch is stubbed so the render smoke never touches
+    the network.
 - **PoC / flow-map / feasibility — the rest of the Brainstorm backend (TECH_SPEC §7,
   §12.3/§12.4; PROJECT_BRIEF §4; DESIGN §6.3/§6.4; Stage 1; this branch).** Completes the
   Brainstorm *backend*: the optional PoC and flow-map artefacts a user can produce before
@@ -769,14 +836,33 @@ banner) up to `/submit`. What remains is the rest of Brainstorm (PoC / flow-map)
    distinct capped path or the same turn, and when the cap is consumed. Lower value than
    generation (a user already refines the outline unboundedly via `/brainstorm/message`), and it
    is entangled with the not-yet-built frontend, which is why it was split off.
-2. **Frontend, entirely.** `frontend/` is still just a `README.md` + `.gitkeep`. Needed
-   before *any* of the above is usable end-to-end by a person: the ghosted-canvas
-   Brainstorm UI (design §6), the transparency animation driven by `status.json`
-   polling (design §7, this branch's status proxy is what it polls), the threshold
-   review/revise screen (design §7.4) talking to `/threshold/route`, the checkpoint
-   question UI, the resume-by-code screen (`/api/runs/{id}/resume`, built this
-   branch), and the report (design §8). `frontend/config.ts` also needs writing —
-   see Decisions below on keeping it in sync with `backend/config.py` by hand.
+2. **Frontend — foundations DONE (this branch); the interactive screens remain.** The
+   scaffold, the "Instrument" design system, `src/config.ts`, the run-code mirror, the typed
+   API client (with cold-start), the usage-warning gate (§4), the landing/empty states (§5),
+   and the resume-by-code screen (§7.5) are built, verified, and clean (see Done). What
+   remains — in rough dependency order, each now standing on real foundations:
+   - **The Brainstorm co-design canvas + conversation (design §6.2).** The `Brainstorm` route
+     is a shell; fill it with the two-pane conversation + live outline canvas. The backend is
+     ready: `POST /brainstorm/message` (returns `assistant_message`, `outline_md`,
+     `outline_delta`, `sufficiency`) and `/edit-outline` — both already typed in
+     `src/lib/api.ts`. Render the outline from `outline_md` (parse the 9 anchored §7.1
+     sections), animate the `outline_delta` (`updated`/`newly_resolved`), the sufficiency
+     banner (§6.2 unlocking-not-gate), click-to-edit sections with the `you` provenance tag
+     (§3.7), and the PoC/flow-map/submit actions (`/poc`, `/flow-map` + in-browser `mermaid.js`
+     → `/flow-map/svg`, `/submit`). The `FocusTrack` component (§6.1) is built.
+   - **The Chamber transparency animation (design §7.2) — the flagship.** The `Chamber` route
+     is a shell. Poll `getStatus` (built, ETag-aware), render the fixed node topology as the
+     node/flow graph + the append-only activity log (the accessibility backbone, §7.2.1),
+     drive it from the whole-graph `nodes` map + the controlled event vocabulary (both typed
+     in `types.ts`), and honour reduced motion. One poll fully determines visible state
+     (CLAUDE.md §3).
+   - **The two Console pause screens the run breaks out to:** the threshold review/route
+     screen (§7.4 — risk chips, divergence, `POST /threshold/route`) and the question
+     checkpoint (§7.3 — batched questions from the `questions` payload, `POST /answers`).
+     `routeForStage` currently sends every post-Brainstorm stage to the Chamber; extend it (or
+     the Chamber) to hand off to these screens on the paused stages.
+   - **The report view (design §8)** — render/download `assessment.html` via `artefactUrl`,
+     with the in-app ≤2 revision affordance (`POST /revise`).
 3. **A first live Gemini run** to eval real generalist/reconciler/specialist/reviewer
    judgement (the LLM seam is mockable and unit-tested end-to-end, now across the whole
    governance path including revision; live quality is untested). Exercisable now via
@@ -860,6 +946,28 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **Frontend router: `react-router-dom` with `HashRouter` (this branch).** CLAUDE.md §9
+  mandates hash routing (Pages has no rewrites) but names no library. Chose react-router over
+  a hand-rolled router — the app will grow many routes (Brainstorm, Chamber, threshold,
+  checkpoint, report) and react-router is the maintained, idiomatic choice; `HashRouter`
+  satisfies the constraint with zero server config.
+- **Vite pinned to 5, not 6 (this branch).** Vitest 2 pulls its own nested Vite 5; with the
+  app on Vite 6 the two vite copies' plugin types conflict at `tsc` build time. Aligning on a
+  single Vite 5 removes the dual install. Revisit when Vitest ships a Vite-6-native line.
+- **The usage-warning gate is acknowledged once per *session* (`sessionStorage`), not
+  persisted (this branch).** Design §4.1: "shown once per session before input; not nagged
+  thereafter." A new tab / new session re-shows it — the honest reading of "per session", and
+  it means the public-repo warning is never permanently dismissed-and-forgotten.
+- **Resume routing keys on the run.json `Stage` value, not `phase` (this branch).**
+  `BRAINSTORM`'s phase is `threshold` (statefile `_STAGE_PHASE`), so phase can't distinguish
+  "still in Brainstorm" from "in the threshold pipeline". `routeForStage` therefore branches on
+  the stage string (`BRAINSTORM` → the canvas; everything else → the Chamber), which the
+  next-phase pause screens extend.
+- **`src/config.ts` mirrors `backend/config.py` by hand; no Python↔TS codegen (this branch,
+  confirming the prior handoff's note).** Two deployment-identity facts (owner/repo/branch,
+  the run-code alphabet) live in both languages because neither runtime can import the other.
+  Each file names itself the owner-to-copy-from; a change touches both in one commit. A
+  generator would be more machinery than two rarely-changing constants justify.
 - **The flow-map SVG is rendered client-side and posted back, not rasterised at generation
   time — resolving a §7 ↔ CLAUDE.md §9 contradiction (this branch).** TECH_SPEC §7's row read
   "Mermaid → SVG at generation time; both committed", but CLAUDE.md §9 (which governs deploy
@@ -1366,6 +1474,13 @@ source and Table 1/Table 2 landed July 2026 (see Done) and are no longer here:
 ## Deploy-layer reminders (pinned in CLAUDE.md §9, not yet actioned)
 
 Not blocking now, but they bite the moment anyone deploys: Render auto-deploy
-OFF or watch-scoped to `backend/**`; SPA path-aware with hash routing and a
-path-filtered `pages.yml`; backend commits via the GitHub Contents/Git-Data API,
-not `git push`.
+OFF or watch-scoped to `backend/**`; backend commits via the GitHub Contents/Git-Data
+API, not `git push`.
+
+- **SPA path-awareness + `pages.yml` — DONE (this branch).** Vite `base` is
+  `/wind-tunnel/`, routing is hash-based, and `.github/workflows/pages.yml` deploys
+  `frontend/**` to Pages. Two things Tom still needs to do for the deploy to work end to
+  end: (1) set **Pages → Build and deployment → Source = GitHub Actions** in repo settings;
+  (2) set the **`WINDTUNNEL_BACKEND_URL` repo variable** to the Render backend URL so the
+  built SPA points at it (falls back to `http://localhost:8000` for local dev). The backend
+  `cors_origins` already allow the Pages origin (`backend/config.py`).

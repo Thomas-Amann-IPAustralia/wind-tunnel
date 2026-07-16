@@ -1,0 +1,62 @@
+.wt-resume {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 34rem;
+  margin: 0 auto;
+  gap: var(--space-4);
+  padding: var(--space-8) 0;
+}
+
+.wt-resume__title {
+  font-size: var(--text-2xl);
+}
+
+.wt-resume__sub {
+  color: var(--ink-muted);
+}
+
+.wt-resume__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.wt-resume__label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--slate);
+}
+
+.wt-resume__input {
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-xl);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
+.wt-resume__input:focus-visible {
+  border-color: var(--focus);
+}
+
+.wt-resume__actions {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.wt-resume__status {
+  min-height: 1.5rem;
+}
+
+.wt-resume__error {
+  color: var(--clay);
+  font-size: var(--text-sm);
+}
