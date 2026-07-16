@@ -11,8 +11,8 @@ run_id: "WT-ASYN-FT"
 title: ""
 summary: ""
 created_at: "2026-07-16T17:10:27Z"
-updated_at: "2026-07-16T17:12:08Z"
-resolved: ["problem"]
+updated_at: "2026-07-16T17:12:15Z"
+resolved: ["problem", "solution"]
 ---
 
 <!-- section: problem -->
@@ -23,7 +23,7 @@ vsv
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+vdsvds
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
