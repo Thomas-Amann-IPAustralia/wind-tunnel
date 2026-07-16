@@ -33,13 +33,17 @@ export interface StatusEvent {
 export type OverallState = "created" | "running" | "paused" | "failed" | "complete";
 export type Phase = "brainstorm" | "threshold" | "full";
 
-/** One batched checkpoint question, grouped by specialist (§6.4, design §7.3). */
+/** One batched checkpoint question (§6.4, design §7.3). Faithful to what the
+ * pipeline writes (stages/full.py `_build_questions_payload`, specialist.py): the
+ * field is `text`, and `options` may be null (a free-text-only question). */
 export interface CheckpointQuestion {
   question_id: string;
-  prompt: string;
-  options?: string[];
+  text: string;
+  options?: string[] | null;
 }
 
+/** A specialist's batch of questions — grouped by the asking node, with its
+ * friendly name and the one-line *why* the design surfaces as the trust moment. */
 export interface CheckpointGroup {
   node_id: string;
   friendly: string;
@@ -47,9 +51,12 @@ export interface CheckpointGroup {
   items: CheckpointQuestion[];
 }
 
+/** The `questions` payload the pipeline attaches while paused at the checkpoint.
+ * Grouping key is `specialists` (status.py / stages/full.py — the owners); this
+ * mirrors them, it is not a second source of truth (CLAUDE.md §3). */
 export interface QuestionsPayload {
   batch_id?: string;
-  groups?: CheckpointGroup[];
+  specialists?: CheckpointGroup[];
   counts?: Record<string, number>;
 }
 
@@ -73,7 +80,9 @@ export interface StatusDoc {
   log_cursor?: number;
   questions: QuestionsPayload | null;
   failure: FailurePayload | null;
-  expected_ranges: Record<string, unknown> | null;
+  /** Per-phase `[low, high]` second ranges (status.py `load_expected_ranges`),
+   * keyed by phase (`threshold` | `full`) — the honest wait copy (§7.2.5). */
+  expected_ranges: Record<string, [number, number]> | null;
 }
 
 // -- Brainstorm / outline (§7.1) ----------------------------------------------
@@ -148,4 +157,24 @@ export interface RouteResponse {
   outcome: "conclude" | "full";
   stage: string;
   dispatched?: boolean;
+}
+
+/** One answered checkpoint question — the shape POST /answers expects
+ * (backend AnswerItem: `question_id` + free-text/MC `value`). */
+export interface AnswerItem {
+  question_id: string;
+  value: string;
+}
+
+export interface AnswersResponse {
+  run_id: string;
+  answered: number;
+  skipped: number;
+  dispatched: boolean;
+}
+
+export interface ReviseResponse {
+  run_id: string;
+  revision: number;
+  dispatched: boolean;
 }

@@ -11,11 +11,14 @@
 
 import { BACKEND_URL } from "../config";
 import type {
+  AnswerItem,
+  AnswersResponse,
   BrainstormMessageResponse,
   BrainstormState,
   CreateRunResponse,
   EditOutlineResponse,
   ResumeResponse,
+  ReviseResponse,
   RouteResponse,
   StatusDoc,
 } from "./types";
@@ -187,7 +190,43 @@ export function thresholdRoute(
   return request<RouteResponse>("POST", `/api/runs/${runCode}/threshold/route`, { outcome });
 }
 
+/**
+ * Submit checkpoint answers (§7.3, §5.1 FULL_CHECKPOINT → FULL_REVISING). Answered
+ * questions carry a free-text/MC `value`; every other question the user chose to
+ * skip is listed in `skips` (→ a noted gap downstream). Only valid while paused at
+ * the checkpoint; the pipeline resumes on success.
+ */
+export function submitAnswers(
+  runCode: string,
+  answers: AnswerItem[],
+  skips: string[],
+): Promise<AnswersResponse> {
+  return request<AnswersResponse>("POST", `/api/runs/${runCode}/answers`, { answers, skips });
+}
+
+/** Request a full-assessment revision (§7.4/§8, §5.8) — valid only at COMPLETE,
+ * capped at ≤2 (a 409 surfaces the cap honestly). */
+export function reviseRun(runCode: string, instructions: string): Promise<ReviseResponse> {
+  return request<ReviseResponse>("POST", `/api/runs/${runCode}/revise`, {
+    artefact: "full",
+    instructions,
+  });
+}
+
 /** The download proxy URL for an allow-listed artefact (§7). */
 export function artefactUrl(runCode: string, name: string): string {
   return `${BACKEND_URL}/api/runs/${runCode}/artefact/${name}`;
+}
+
+/** Fetch an artefact's text (threshold.md / assessment.html) for in-app rendering
+ * (§7.4, §8). A missing artefact surfaces a plain ApiError, not a raw failure. */
+export async function fetchArtefactText(runCode: string, name: string): Promise<string> {
+  let res: Response;
+  try {
+    res = await fetch(artefactUrl(runCode, name));
+  } catch {
+    throw new NetworkError();
+  }
+  if (!res.ok) throw new ApiError(res.status, await errorDetail(res));
+  return res.text();
 }

@@ -1,0 +1,170 @@
+/* The threshold review (design §7.4) on the light Console, in the Report register
+ * (§3.3) — serif body, exact numbering, computed risk chips. */
+
+.wt-review {
+  width: 100%;
+  max-width: 52rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.wt-review__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.wt-review__title {
+  font-size: var(--text-2xl);
+}
+
+.wt-review__lead {
+  color: var(--ink-muted);
+  max-width: 44rem;
+}
+
+.wt-review__doc {
+  padding: var(--space-6);
+}
+
+.wt-review__loading,
+.wt-review__error {
+  color: var(--ink-muted);
+}
+.wt-review__error {
+  color: var(--clay);
+}
+
+.wt-review__foot {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.wt-review__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.wt-review__note {
+  color: var(--slate);
+  font-size: var(--text-sm);
+  max-width: 44rem;
+}
+
+/* -- Rendered markdown (lib/markdown.tsx) — the Report register ------------- */
+
+.wt-md {
+  font-family: var(--font-serif);
+  color: var(--ink);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.wt-md__h {
+  font-family: var(--font-display);
+}
+.wt-md__h--1 {
+  font-size: var(--text-xl);
+}
+.wt-md__h--2 {
+  font-size: var(--text-lg);
+  margin-top: var(--space-3);
+}
+.wt-md__h--3 {
+  font-size: var(--text-base);
+  color: var(--ink-muted);
+}
+
+.wt-md__ul {
+  margin: 0;
+  padding-left: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.wt-md__hr {
+  border: none;
+  border-top: 1px solid var(--hairline);
+  width: 100%;
+}
+
+.wt-md__table-wrap {
+  overflow-x: auto;
+}
+
+.wt-md__table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+}
+
+.wt-md__table th,
+.wt-md__table td {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: top;
+}
+
+.wt-md__table th {
+  font-family: var(--font-display);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+/* -- Risk chips (§3.2) — colour + label + shape ---------------------------- */
+
+.wt-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0.1rem var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  font-family: var(--font-ui);
+  color: #fff;
+}
+
+.wt-chip::before {
+  content: "";
+  width: 0.55rem;
+  height: 0.55rem;
+  display: inline-block;
+}
+
+.wt-chip--low {
+  background: var(--risk-low);
+}
+.wt-chip--low::before {
+  border-radius: 50%; /* circle */
+}
+.wt-chip--medium {
+  background: var(--risk-medium);
+}
+.wt-chip--medium::before {
+  border-radius: 1px; /* square */
+}
+.wt-chip--high {
+  background: var(--risk-high);
+}
+.wt-chip--high::before {
+  clip-path: polygon(50% 0, 100% 100%, 0 100%); /* triangle */
+}
+.wt-chip--extreme {
+  background: var(--risk-extreme);
+}
+.wt-chip--extreme::before {
+  clip-path: polygon(50% 0, 100% 38%, 82% 100%, 18% 100%, 0 38%); /* pentagon */
+}

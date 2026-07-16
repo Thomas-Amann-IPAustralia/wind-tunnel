@@ -1,0 +1,78 @@
+.wt-chamber {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: 100%;
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.wt-chamber__orient {
+  color: var(--chamber-slate);
+  font-size: var(--text-lg);
+  max-width: 48rem;
+}
+
+.wt-chamber__panes {
+  display: grid;
+  grid-template-columns: 1fr minmax(18rem, 24rem);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.wt-chamber__graph {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.wt-chamber__range {
+  color: var(--chamber-slate);
+  font-size: var(--text-sm);
+  max-width: 40rem;
+}
+
+.wt-chamber__side {
+  position: sticky;
+  top: var(--space-4);
+  min-width: 0;
+}
+
+/* Notices (connecting / hard error / concluded) — centred, calm. */
+.wt-chamber__notice {
+  max-width: 44rem;
+  margin: var(--space-8) auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  text-align: left;
+  color: var(--chamber-slate);
+}
+
+.wt-chamber__notice h2 {
+  font-size: var(--text-xl);
+  color: var(--chamber-ink);
+}
+
+.wt-chamber__notice--light {
+  color: var(--ink-muted);
+  align-items: flex-start;
+}
+
+.wt-chamber__notice--light h2 {
+  color: var(--ink);
+}
+
+.wt-chamber__notice--light .wt-btn {
+  margin-top: var(--space-2);
+}
+
+@media (max-width: 860px) {
+  .wt-chamber__panes {
+    grid-template-columns: 1fr;
+  }
+  .wt-chamber__side {
+    position: static;
+  }
+}

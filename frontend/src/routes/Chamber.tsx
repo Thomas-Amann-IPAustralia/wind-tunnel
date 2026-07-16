@@ -1,39 +1,186 @@
+import { useMemo } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
+import { ActivityLog } from "../components/ActivityLog";
+import { Checkpoint } from "../components/Checkpoint";
+import { FailureState } from "../components/FailureState";
+import { PipelineGraph } from "../components/PipelineGraph";
+import { ReportView } from "../components/ReportView";
 import { RunCodeChip } from "../components/RunCodeChip";
 import { Surface } from "../components/Surface";
+import { ThresholdReview } from "../components/ThresholdReview";
+import { useStatusPoll } from "../hooks/useStatusPoll";
+import { artefactUrl } from "../lib/api";
 import { isValid } from "../lib/runCode";
-import "./PhasePlaceholder.css";
+import { TOPOLOGY } from "../lib/topology";
+import type { StatusDoc } from "../lib/types";
+import "./Chamber.css";
 
 /**
- * The Chamber shell (design §7). This phase establishes the dark governance
- * surface and the persistent run-code chip (§7.5). The flagship transparency
- * animation (§7.2) — the pipeline graph + activity log driven by status.json
- * polling — is the next phase and lands in the marked region below, along with
- * the threshold-review (§7.4) and question-checkpoint (§7.3) Console screens the
- * run pauses out to.
+ * The Chamber (design §7) — the governance surface where the user watches their
+ * idea go through the tunnel. This route is the poll host: one status poll fully
+ * determines the visible state (CLAUDE.md §3), and the run's `overall_state` +
+ * `questions` pick which face to show. The flagship transparency animation (the
+ * graph + activity log, §7.2) is the running/created face; the run breaks out to
+ * the Console for the threshold review (§7.4) and the question checkpoint (§7.3),
+ * settles into the report on completion (§8), and rests in a calm, resumable
+ * failure state on error (§7.2.4). The resume-by-code flow lands here and the same
+ * state logic drops the user at the exact right face (§7.5).
  */
 export function Chamber() {
   const { code } = useParams();
-  if (!code || !isValid(code)) return <Navigate to="/" replace />;
+  const valid = Boolean(code && isValid(code));
+  const { doc, error, staleSeconds, offline } = useStatusPoll(code, valid);
+
+  if (!valid || !code) return <Navigate to="/" replace />;
+
+  // Hard error (e.g. an unknown code) — a plain message, never a raw failure.
+  if (error) {
+    return (
+      <Surface kind="chamber" subtitle="Governance" header={<RunCodeChip code={code} />}>
+        <div className="wt-chamber__notice" role="alert">
+          <h2>We couldn&rsquo;t load this run</h2>
+          <p>{error}</p>
+        </div>
+      </Surface>
+    );
+  }
+
+  // First load / cold start — honest connecting copy.
+  if (!doc) {
+    return (
+      <Surface kind="chamber" subtitle="Governance" header={<RunCodeChip code={code} />}>
+        <div className="wt-chamber__notice" role="status">
+          <h2>Opening the tunnel…</h2>
+          <p>
+            {offline
+              ? "The backend may be warming up — this can take up to a minute on a cold start."
+              : "Loading your run."}
+          </p>
+        </div>
+      </Surface>
+    );
+  }
+
+  const paused = doc.overall_state === "paused";
+  const failed = doc.overall_state === "failed";
+  const complete = doc.overall_state === "complete";
+  const atCheckpoint = paused && hasQuestions(doc);
+  const atThreshold = paused && !hasQuestions(doc);
+  const concluded = complete && doc.phase === "threshold";
+
+  // The Console pauses + the report render on the light surface (design §7.4/§7.3/§8);
+  // watching the run and the calm failure state live on the dark Chamber.
+  const onConsole = atCheckpoint || atThreshold || complete;
+  const prominent = paused || failed;
 
   return (
-    <Surface kind="chamber" subtitle="Governance" header={<RunCodeChip code={code} />}>
-      <div className="wt-phase">
-        <section
-          className="wt-phase__placeholder wt-phase__placeholder--chamber"
-          aria-label="Pipeline"
-        >
-          <h2 className="wt-phase__title">The test chamber</h2>
-          <p className="wt-phase__lead">
-            Your idea goes through the tunnel here — a live graph of the specialist college at work,
-            beside a plain-language activity log (design §7.2). The whole governance pipeline is
-            built and driven end-to-end on the backend; the animation that renders its status.json
-            is the next phase of work.
-          </p>
-          <p className="wt-phase__meta wt-mono">governance · run {code}</p>
-        </section>
-      </div>
+    <Surface
+      kind={onConsole ? "console" : "chamber"}
+      subtitle="Governance"
+      header={<RunCodeChip code={code} prominent={prominent} />}
+    >
+      {atThreshold ? (
+        <ThresholdReview runCode={code} />
+      ) : atCheckpoint && doc.questions ? (
+        <Checkpoint runCode={code} questions={doc.questions} />
+      ) : concluded ? (
+        <ConcludedView runCode={code} />
+      ) : complete ? (
+        <ReportView runCode={code} />
+      ) : (
+        <RunningView doc={doc} failed={failed} staleSeconds={staleSeconds} offline={offline} />
+      )}
     </Surface>
   );
+}
+
+function RunningView({
+  doc,
+  failed,
+  staleSeconds,
+  offline,
+}: {
+  doc: StatusDoc;
+  failed: boolean;
+  staleSeconds: number | null;
+  offline: boolean;
+}) {
+  const subActivity = useMemo(() => buildSubActivity(doc), [doc]);
+  const range = doc.expected_ranges?.[doc.phase];
+
+  return (
+    <div className="wt-chamber">
+      <p className="wt-chamber__orient">
+        Your idea is going through the tunnel. Here&rsquo;s every stage — watch it work.
+      </p>
+      <div className="wt-chamber__panes">
+        <div className="wt-chamber__graph">
+          <PipelineGraph nodes={doc.nodes} subActivity={subActivity} />
+          {range && !failed ? (
+            <p className="wt-chamber__range">
+              This phase usually takes {minutes(range[0])}–{minutes(range[1])} minutes. You can
+              safely close the tab and come back with your run code.
+            </p>
+          ) : null}
+        </div>
+        <aside className="wt-chamber__side">
+          {failed ? null : (
+            <ActivityLog
+              events={doc.log}
+              staleSeconds={staleSeconds}
+              offline={offline}
+              running={doc.overall_state === "running" || doc.overall_state === "created"}
+            />
+          )}
+        </aside>
+      </div>
+      {failed ? <FailureState runCode={doc.run_code} failure={doc.failure} /> : null}
+    </div>
+  );
+}
+
+/** A threshold run the user chose to conclude — no full report, just the
+ * threshold artefact and a plain, non-overclaiming close (§7.4). */
+function ConcludedView({ runCode }: { runCode: string }) {
+  return (
+    <div className="wt-chamber__notice wt-chamber__notice--light">
+      <h2>Your threshold assessment is complete</h2>
+      <p>
+        This threshold assessment is ready for an approving officer to consider. You chose to
+        conclude here rather than run the full assessment.
+      </p>
+      <a className="wt-btn wt-btn--secondary" href={artefactUrl(runCode, "threshold.md")} download>
+        Download the assessment (Markdown)
+      </a>
+    </div>
+  );
+}
+
+function hasQuestions(doc: StatusDoc): boolean {
+  return Boolean(doc.questions && (doc.questions.specialists?.length ?? 0) > 0);
+}
+
+/** The genuine current sub-activity per node — the latest retrieval/drafting
+ * detail, keyed by node id (the log's `agent` may be a node id or its friendly
+ * name, §7.2.6), so the active node shows what it is *actually* doing (§7.2.5). */
+function buildSubActivity(doc: StatusDoc): Record<string, string> {
+  const byAgent: Record<string, string> = {};
+  for (const e of doc.log) {
+    if (e.type === "retrieval" || e.type === "drafting") byAgent[e.agent] = e.detail;
+  }
+  const out: Record<string, string> = {};
+  for (const band of TOPOLOGY) {
+    for (const cluster of band.clusters) {
+      for (const node of cluster.nodes) {
+        const detail = byAgent[node.id] ?? byAgent[node.friendly];
+        if (detail) out[node.id] = detail;
+      }
+    }
+  }
+  return out;
+}
+
+function minutes(seconds: number): number {
+  return Math.max(1, Math.round(seconds / 60));
 }
