@@ -42,11 +42,20 @@ class MapResult:
 
 
 def generate_flow_map(
-    client: LLMClient, *, outline_md: str, poc_html: str | None = None
+    client: LLMClient,
+    *,
+    outline_md: str,
+    poc_html: str | None = None,
+    revision_instructions: str | None = None,
 ) -> MapResult:
     """Generate the flow map's Mermaid source from the outline, optionally informed by the PoC
     (§7, §12.3). Both inputs are user-derived and wrapped as untrusted content (§9.2). Raises
-    ``MapError`` if the output is not Mermaid flowchart source."""
+    ``MapError`` if the output is not Mermaid flowchart source.
+
+    When ``revision_instructions`` is given (the ``/revise`` path, brief §7), the map is
+    **regenerated from the amended outline** with those instructions as extra steering — a fresh
+    build, not a patch (brief §4). The instructions are user-derived and wrapped as untrusted
+    content too (§9.2)."""
     prompt = load_prompt("map_gen")
     parts = [wrap_untrusted(outline_md, label="## The project outline to map")]
     if poc_html and poc_html.strip():
@@ -56,10 +65,23 @@ def generate_flow_map(
                 label="## The proof-of-concept prototype (already produced; informs the interface)",
             )
         )
-    parts.append(
-        "## Your task\n\nReturn only the Mermaid flowchart source your instructions describe — "
-        "beginning with `flowchart TD` (or `flowchart LR`). No prose, no code fences."
-    )
+    if revision_instructions and revision_instructions.strip():
+        parts.append(
+            wrap_untrusted(
+                revision_instructions,
+                label="## Changes the user has asked for in this revision",
+            )
+        )
+        parts.append(
+            "## Your task\n\nRebuild the Mermaid flowchart source from the outline above, applying "
+            "the requested changes. Regenerate it whole — do not patch a previous version. Begin "
+            "with `flowchart TD` (or `flowchart LR`). No prose, no code fences."
+        )
+    else:
+        parts.append(
+            "## Your task\n\nReturn only the Mermaid flowchart source your instructions describe — "
+            "beginning with `flowchart TD` (or `flowchart LR`). No prose, no code fences."
+        )
     resp = client.complete_text(prompt.model_role, prompt.system, "\n\n".join(parts))
     mermaid = strip_code_fence(resp.text)
     _validate(mermaid)

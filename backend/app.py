@@ -5,11 +5,11 @@ interviewer + sufficiency; ``/brainstorm/edit-outline`` → canvas edit), the Po
 flow-map synthesis (``/poc`` → feasibility gate then PoC or map; ``/flow-map`` →
 Mermaid; ``/flow-map/svg`` → the SPA posts back the client-rendered SVG, CLAUDE.md §9),
 the status proxy, the artefact download proxy, submission into Governance, threshold
-routing, checkpoint answers (``/answers`` → ``FULL_REVISING``), full-assessment revision
-(``/revise {artefact:"full"}`` → ``USER_REVISION``), and resume-by-code. **Not** in
-this slice: the non-``full`` branches of ``/revise`` (outline/poc/flow_map regenerate
-from the amended outline with the ≤2 cap; ``threshold`` revises at ``THRESHOLD_REVIEW``)
-— a following slice (STATUS.md).
+routing, checkpoint answers (``/answers`` → ``FULL_REVISING``), and revision
+(``/revise``: ``poc``/``flow_map`` regenerate from the amended outline while at
+``BRAINSTORM`` with the ≤2 cap; ``full`` dispatches ``USER_REVISION`` post-``COMPLETE``),
+and resume-by-code. The outline is unbounded and has no ``/revise`` branch (brief §4/§7);
+``threshold`` revisions run on their own ``THRESHOLD_REVIEW`` path, not this endpoint.
 
 **Statelessness (§14).** Render's disk is ephemeral and a cold instance has no
 memory of any run, so every endpoint re-reads ``run.json``/``status.json``
@@ -92,9 +92,12 @@ class AnswersBody(BaseModel):
 
 
 class ReviseBody(BaseModel):
-    # Only "full" is served here — the other revisable artefacts (§7) revise through the
-    # Brainstorm/threshold paths, not this endpoint. A non-"full" value is a 422.
-    artefact: Literal["full"]
+    # The brainstorm artefacts ("poc"/"flow_map") regenerate from the amended outline on the
+    # backend while at BRAINSTORM; "full" dispatches USER_REVISION post-COMPLETE (§5.8, §7).
+    # "threshold" revises on its own THRESHOLD_REVIEW path (not this endpoint), so it is not
+    # accepted here — a "threshold" value is a 422. The outline is unbounded and has no /revise
+    # branch (brief §4, §7 — see statefile.REVISION_ARTEFACTS).
+    artefact: Literal["poc", "flow_map", "full"]
     instructions: str
 
 
@@ -665,18 +668,84 @@ def create_app(
             for item in spec.get("items", [])
         }
 
+    def _revise_brainstorm_artefact(run_id: str, artefact: str, instructions: str) -> dict:
+        """Revise a brainstorm artefact (``poc``/``flow_map``, §7, brief §4/§7). Valid only at
+        ``BRAINSTORM`` — the outline must still be live to regenerate from. Enforces the ≤2 cap
+        (``run.json.revisions[artefact]``) and requires the artefact to already exist (a revision
+        presupposes an initial generation, brief §7). Regenerates the artefact **whole from the
+        amended outline** with the instructions in context — never a patch (brief §4) — and
+        commits it alongside the advanced ``run.json`` (the cap counter's one owner, §7.1).
+        No dispatch: brainstorm runs on Render, not Actions."""
+        run = _require_brainstorm(run_id)
+        source = "poc.html" if artefact == "poc" else "flow-map.mmd"
+        if _get_bytes_optional(run_id, "brainstorm", source) is None:
+            raise HTTPException(
+                http_status.HTTP_409_CONFLICT,
+                f"Run {run_id} has no {artefact.replace('_', ' ')} to revise yet — generate it "
+                "first.",
+            )
+        now = statefile.utc_now_iso()
+        try:
+            revision = run.record_revision(artefact, now=now)  # raises at the cap (brief §7)
+        except statefile.StateError as exc:
+            raise HTTPException(http_status.HTTP_409_CONFLICT, str(exc)) from exc
+
+        outline = _load_outline(run_id)
+        client = make_llm()
+        if artefact == "poc":
+            try:
+                poc = generate_poc(
+                    client, outline_md=outline.render(), revision_instructions=instructions
+                )
+            except (LLMError, PocError) as exc:
+                raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+            artefact_file = {_run_path(run_id, "brainstorm", "poc.html"): poc.html.encode("utf-8")}
+            extra: dict = {}
+        else:  # flow_map
+            poc_bytes = _get_bytes_optional(run_id, "brainstorm", "poc.html")
+            poc_html = poc_bytes.decode("utf-8") if poc_bytes else None
+            try:
+                flow_map = generate_flow_map(
+                    client,
+                    outline_md=outline.render(),
+                    poc_html=poc_html,
+                    revision_instructions=instructions,
+                )
+            except (LLMError, MapError) as exc:
+                raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+            # The committed flow-map.svg is now stale; the SPA re-renders the returned source and
+            # re-posts it via /flow-map/svg, the same round-trip as the initial /flow-map.
+            artefact_file = {
+                _run_path(run_id, "brainstorm", "flow-map.mmd"): flow_map.mermaid.encode("utf-8")
+            }
+            extra = {"mermaid": flow_map.mermaid}
+
+        _commit_brainstorm(
+            run_id,
+            {
+                **artefact_file,
+                _run_path(run_id, "run.json"): _dump_json(run.to_dict()),
+            },
+            f"{artefact.replace('_', ' ')} revision {revision}",
+        )
+        return {"run_id": run_id, "artefact": artefact, "revision": revision, **extra}
+
     @app.post("/api/runs/{run_id}/revise")
     def revise_run(body: ReviseBody, run_id: str = Depends(_valid_run_id)) -> dict:
-        """Full-assessment revision (§7, §5.1 USER_REVISION, §5.8). Valid only at
-        ``COMPLETE``; enforces the ≤2 per-artefact cap (``run.json.revisions.full``).
-        Increments the count, commits ``full/revisions/rev_<N>/request.json`` alongside the
-        advanced ``run.json``/``status.json``, and dispatches Governance with
-        ``resume_from=USER_REVISION``."""
+        """Revise an artefact (§7). ``poc``/``flow_map`` regenerate from the amended outline
+        while at ``BRAINSTORM`` (brief §4/§7). ``full`` is the full-assessment revision (§5.1
+        USER_REVISION, §5.8): valid only at ``COMPLETE``, it enforces the ≤2 cap
+        (``run.json.revisions.full``), commits ``full/revisions/rev_<N>/request.json`` alongside
+        the advanced ``run.json``/``status.json``, and dispatches Governance with
+        ``resume_from=USER_REVISION``. All branches share the ≤2 per-artefact cap."""
         instructions = body.instructions.strip()
         if not instructions:
             raise HTTPException(
                 http_status.HTTP_400_BAD_REQUEST, "Revision instructions must not be empty."
             )
+        if body.artefact in ("poc", "flow_map"):
+            return _revise_brainstorm_artefact(run_id, body.artefact, instructions)
+
         run = _load_run(run_id)
         if run.stage is not statefile.Stage.COMPLETE:
             raise HTTPException(

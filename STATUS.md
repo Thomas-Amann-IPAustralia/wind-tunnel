@@ -2,7 +2,28 @@
 
 ## Current stage
 
-**This branch: the Brainstorm PoC / flow-map canvas actions — the last remaining
+**This branch: the `/revise` brainstorm branches (`poc`/`flow_map`) — the last remaining
+piece of the Brainstorm *backend* (TECH_SPEC §7; PROJECT_BRIEF §4/§7; CLAUDE.md §2).** The
+`/revise` endpoint served only `full` (→ `USER_REVISION`); it now also serves the two
+brainstorm artefacts. `POST /revise {artefact:"poc"|"flow_map", instructions}` is valid only
+at `BRAINSTORM` and only once the artefact exists (a revision presupposes an initial
+generation, brief §7); it **regenerates the artefact whole from the amended outline** with the
+instructions in context — never a patch (brief §4) — via the same `generate_poc`/
+`generate_flow_map` generators, now taking an optional `revision_instructions`, and commits the
+regenerated artefact alongside the incremented `run.json` count (the cap's one owner, §7.1).
+The ≤2 cap is enforced by `record_revision`; the `flow_map` branch returns the new Mermaid for
+the SPA to re-render + re-post its SVG (the same round-trip as `/flow-map`). **The deferred
+"open design question" is resolved by the brief, not deferred again:** the outline is *not* a
+capped `/revise` artefact — the interview conversation is unbounded (brief §4) and the cap list
+is map/PoC/threshold/full only (brief §7). That was a genuine document contradiction (the tech
+spec §7 enum and `statefile.REVISION_ARTEFACTS` both listed `outline`); per CLAUDE.md §2 the
+brief governs intent, so `outline` is removed from both and the tech spec is corrected to match.
+**With this the Brainstorm backend is complete.** What remains: the `threshold` `/revise` branch
+(its own `THRESHOLD_REVIEW` path, not a brainstorm artefact — the last unbuilt `/revise` value)
+and a first live Gemini run. **Backend: 106 tests green (98 prior + 8 revise), ruff clean;
+pipeline: 184 tests green (the `REVISION_ARTEFACTS` change is covered), ruff clean.** See Done.
+
+**Prior branch: the Brainstorm PoC / flow-map canvas actions — the last remaining
 *frontend* piece (DESIGN §6.2–6.4; CLAUDE.md §9).** The Brainstorm canvas could drive
 the mandatory co-design loop (interview → sufficiency → submit) but not the two optional
 focus-track stages. Now it can: a `BrainstormSynthesis` block under the outline offers
@@ -168,6 +189,50 @@ threshold stage — this is the first place `pipeline/rating/` is consumed by a 
 pipeline.
 
 ## Done
+
+- **`/revise` brainstorm branches (`poc`/`flow_map`) — the Brainstorm backend, completed
+  (TECH_SPEC §7; PROJECT_BRIEF §4/§7; CLAUDE.md §2; Stage 1; this branch).** The last
+  Brainstorm backend piece, plus the document-contradiction fix it surfaced. LLM-free tested
+  (§15); ruff clean. **106 backend + 184 pipeline tests green.** The pieces:
+  - **Contradiction resolved: the outline is not a capped `/revise` artefact (CLAUDE.md §2).**
+    The brief settles it — "The interview conversation itself is unbounded" (§4) and the ≤2
+    cap applies only to "the information-flow map, the PoC, the threshold assessment and the
+    full impact assessment" (§7); the outline is conspicuously absent. But `statefile.REVISION_
+    ARTEFACTS` and TECH_SPEC §7's `/revise` enum both listed `outline` — a genuine contradiction.
+    Per §2 the brief governs intent, so `outline` is **removed** from `REVISION_ARTEFACTS`
+    (now `("poc", "flow_map", "threshold", "full")`) and both TECH_SPEC §7 rows (the `/revise`
+    enum and the `run.json.revisions` example) are corrected to match. Back-compat is safe:
+    `RunState.from_dict` reads only keys in `REVISION_ARTEFACTS`, so any legacy `run.json` with
+    `revisions.outline` still loads (the extra key is ignored). This resolves the "open design
+    question" the prior handoff deferred ("is an outline revision a distinct capped path?") — the
+    answer, from the brief, is that there is no outline revision path at all; the outline is
+    refined unboundedly through `/brainstorm/message` + `/brainstorm/edit-outline`.
+  - **`backend/brainstorm/poc.py` + `mapgen.py` — an optional `revision_instructions`.**
+    `generate_poc`/`generate_flow_map` gained an optional `revision_instructions` param. When
+    present, the user's instructions are added as an **untrusted-wrapped** block (§9.2 — they
+    steer the build but never license dropping the PoC limitations banner or reaching the
+    network) and the task framing switches to "rebuild whole from the outline, applying the
+    changes — do not patch a previous version" (brief §4 "regenerate not patch"). No behaviour
+    change on the initial-generation path (the param defaults to `None`).
+  - **`backend/app.py` — the `poc`/`flow_map` branches of `POST /revise`.** `ReviseBody.artefact`
+    widened to `Literal["poc", "flow_map", "full"]` (`threshold`/`outline` → 422). A new
+    `_revise_brainstorm_artefact` helper: valid only at `BRAINSTORM` (409 after submission — the
+    outline is frozen), requires the artefact to already exist (409 otherwise — a revision
+    presupposes an initial generation, and this avoids consuming a cap on nothing), enforces the
+    ≤2 cap via `record_revision` (409 at cap), regenerates from the current outline with the
+    instructions, and commits the artefact **alongside the incremented `run.json`** (a new commit
+    shape for Brainstorm — normally brainstorm commits don't touch `run.json`, but the cap
+    counter lives there, §7.1). No dispatch (Brainstorm runs on Render). The `flow_map` branch
+    returns the new Mermaid so the SPA re-renders + re-posts the SVG via `/flow-map/svg` (the
+    committed `.svg` goes momentarily stale, healed by the re-post — the same round-trip as the
+    initial `/flow-map`). The module docstring's "not in this slice" note is updated.
+  - **8 new tests** (`backend/tests/test_poc_map.py`): the two generators carry
+    `revision_instructions` into the prompt with the regenerate-whole framing (2); the endpoint
+    regenerates + increments the `poc` count and commits the new HTML (1); caps `poc` at 2 with a
+    409 on the third (1); refuses a `poc` revise with no PoC yet, cap untouched (1); regenerates
+    the `flow_map` and returns the new source (1); refuses after submission (1) and on empty
+    instructions (1). The stale `test_revise_rejects_non_full_artefact` is now
+    `test_revise_rejects_threshold_artefact` (both `threshold` and `outline` → 422). LLM-free.
 
 - **Brainstorm PoC / flow-map canvas actions — the last remaining *frontend* piece
   (DESIGN §6.2–6.4; CLAUDE.md §9; Stage 1; this branch).** The optional focus-track stages
@@ -1026,19 +1091,21 @@ now drive `Stage.BRAINSTORM` (converse, watch the outline resolve, see the suffi
 banner) up to `/submit`. What remains is the rest of Brainstorm (PoC / flow-map) and the
 **frontend**. Next concrete steps, in rough dependency order:
 
-1. **The `/revise` brainstorm branches (`outline`/`poc`/`flow_map`) — all that remains of
-   the Brainstorm *backend*.** PoC / flow-map / feasibility **generation is now built** (this
-   branch: `POST /poc`, `/flow-map`, `/flow-map/svg`; the `poc.py`/`mapgen.py`/`feasibility.py`
-   generators; the PoC embed slot in ASSEMBLY (§12.3) now has a real producer). What is left is
-   extending `POST .../revise` to the brainstorm artefacts: `outline` revisions re-run the
-   interviewer with a revision framing; `poc`/`flow_map` revisions **regenerate from the amended
-   outline** (§7 "regenerate not patch") by calling the generators built this branch with the
-   revision instructions in context; the ≤2 cap + `record_revision("outline"|"poc"|"flow_map")`
-   already exist in `statefile.py`. The open design question deferred this branch (see Decisions):
-   an `outline` "revision" is nearly a `/brainstorm/message` turn — decide whether it is a
-   distinct capped path or the same turn, and when the cap is consumed. Lower value than
-   generation (a user already refines the outline unboundedly via `/brainstorm/message`), and it
-   is entangled with the not-yet-built frontend, which is why it was split off.
+1. **The `/revise` brainstorm branches — DONE (this branch): `poc`/`flow_map` regenerate from
+   the amended outline with the ≤2 cap.** The Brainstorm *backend* is now complete. The prior
+   "open design question" (is an `outline` revision a distinct capped path?) is **resolved by the
+   brief, not deferred:** the outline is unbounded (brief §4) and is not in the cap list (brief
+   §7), so it has no `/revise` branch — the contradiction with `REVISION_ARTEFACTS`/TECH_SPEC §7
+   was fixed per CLAUDE.md §2 (see Done + Decisions). **What remains of `/revise`:** the
+   `threshold` branch — *not* a brainstorm artefact. Per TECH_SPEC §7 it is valid only while
+   paused at `THRESHOLD_REVIEW` and **re-runs `THRESHOLD_RECONCILING`** with the instructions in
+   context (the two generalist drafts stand untouched, preserving independence; the engine
+   recomputes). It dispatches Governance (like `full`/`answers`), so it belongs with the
+   threshold-routing path, not the Render-side brainstorm endpoints. `record_revision("threshold")`
+   and the cap already exist; what's needed is the `/revise` `threshold` branch in `app.py`
+   (409 unless paused at `THRESHOLD_REVIEW`) and a `resume_from=THRESHOLD_RECONCILING` dispatch
+   that threads the instructions into the reconciler (a small prompt-context addition). A
+   following slice.
 2. **Frontend — foundations DONE (this branch); the interactive screens remain.** The
    scaffold, the "Instrument" design system, `src/config.ts`, the run-code mirror, the typed
    API client (with cold-start), the usage-warning gate (§4), the landing/empty states (§5),
@@ -1162,6 +1229,26 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
   every folder holds real documents with sidecars.
 
 ## Decisions made (that the documents were silent on)
+
+- **The outline is not a capped `/revise` artefact — contradiction resolved in the brief's
+  favour (this branch, CLAUDE.md §2).** `statefile.REVISION_ARTEFACTS` and TECH_SPEC §7 both
+  listed `outline` among the ≤2-cap revisable artefacts, but PROJECT_BRIEF §4 ("the interview
+  conversation itself is unbounded") and §7 (the cap list is map/PoC/threshold/full only) say
+  otherwise. This was a genuine document contradiction, not silence, so §2 applies: the brief
+  governs intent and the losing documents are fixed. `outline` is removed from
+  `REVISION_ARTEFACTS` and both TECH_SPEC §7 rows; the outline is refined unboundedly via
+  `/brainstorm/message` + `/brainstorm/edit-outline`. This also answers the prior handoff's
+  deferred question (distinct capped outline path, or same as a brainstorm turn?) — neither:
+  there is no capped outline path.
+- **A brainstorm `/revise` requires the artefact to already exist, and skips the feasibility
+  gate (this branch).** `/revise {poc}` / `{flow_map}` 409 if the artefact was never generated
+  — a revision presupposes an initial generation (brief §7), and refusing early avoids consuming
+  a cap on nothing. And unlike `POST /poc` (which runs the feasibility gate and may produce a map
+  *instead* of a PoC), `/revise {poc}` regenerates the **PoC** directly with no gate: the user
+  asked to revise the PoC, so silently switching them to a flow map would be surprising. Each
+  `/revise {artefact}` revises exactly that artefact. The initial-generation endpoints (`/poc`,
+  `/flow-map`) stay uncapped (they *are* the initial generation, brief §7 "after initial
+  generation"); the cap governs directed, instruction-driven revisions through `/revise`.
 
 - **`mermaid.js` is lazy-loaded, not in the first-paint bundle (this branch).** CLAUDE.md §9
   mandates in-browser Mermaid rendering, but the engine is ~635 kB — statically importing it put
