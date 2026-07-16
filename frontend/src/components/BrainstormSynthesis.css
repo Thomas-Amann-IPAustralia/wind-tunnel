@@ -1,0 +1,90 @@
+.wt-synth {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.wt-synth__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.wt-synth__title {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--ink);
+}
+
+.wt-synth__lead {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+  max-width: 46rem;
+}
+
+.wt-synth__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* The conditional-stage note (§6.1): honest, not an error. Amber marks it as a
+ * bounded aside, distinct from the app's own voice — never colour alone (§9), the
+ * word "not a fit" carries the meaning. */
+.wt-synth__not-a-fit {
+  border-left: 3px solid var(--amber);
+  padding: var(--space-2) var(--space-3);
+  background: var(--paper-sunken);
+  border-radius: var(--radius-sm);
+  color: var(--ink);
+  font-size: var(--text-sm);
+}
+
+.wt-synth__not-a-fit-label {
+  font-weight: 600;
+}
+
+.wt-synth__error {
+  color: var(--clay);
+  font-size: var(--text-sm);
+}
+
+.wt-synth__artefact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.wt-synth__artefact-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.wt-synth__artefact-title {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  color: var(--ink);
+}
+
+.wt-synth__frame {
+  width: 100%;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: var(--paper);
+}
+
+.wt-synth__frame--poc {
+  height: 30rem;
+}
+
+.wt-synth__frame--map {
+  height: 22rem;
+}
+
+.wt-synth__caveat {
+  color: var(--ink-muted);
+  font-size: var(--text-xs);
+}

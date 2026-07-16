@@ -17,10 +17,30 @@ vi.mock("../lib/api", async (importActual) => {
     brainstormMessage: vi.fn(),
     editOutline: vi.fn(),
     submitRun: vi.fn(),
+    generatePoc: vi.fn(),
+    generateFlowMap: vi.fn(),
+    postFlowMapSvg: vi.fn(),
+    fetchArtefactText: vi.fn(),
   };
 });
 
-import { brainstormMessage, getBrainstorm, submitRun } from "../lib/api";
+// mermaid.js can't lay out an SVG in jsdom; the wrapper is mocked to a stable stub so
+// the canvas's render-and-post flow is exercised without the real engine. The route
+// dynamic-imports this module, which vi.mock intercepts too.
+vi.mock("../lib/mermaid", () => ({
+  renderMermaid: vi.fn(async (src: string) => `<svg data-len="${src.length}"><g /></svg>`),
+}));
+
+import {
+  brainstormMessage,
+  fetchArtefactText,
+  generateFlowMap,
+  generatePoc,
+  getBrainstorm,
+  postFlowMapSvg,
+  submitRun,
+} from "../lib/api";
+import { renderMermaid } from "../lib/mermaid";
 
 const CODE = "WT-ABCD-EF";
 
@@ -63,6 +83,11 @@ beforeEach(() => {
   vi.mocked(getBrainstorm).mockReset();
   vi.mocked(brainstormMessage).mockReset();
   vi.mocked(submitRun).mockReset();
+  vi.mocked(generatePoc).mockReset();
+  vi.mocked(generateFlowMap).mockReset();
+  vi.mocked(postFlowMapSvg).mockReset();
+  vi.mocked(fetchArtefactText).mockReset();
+  vi.mocked(renderMermaid).mockClear();
 });
 
 afterEach(() => {
@@ -150,5 +175,100 @@ describe("Brainstorm canvas", () => {
 
     renderBrainstorm();
     expect(await screen.findByText("THE CHAMBER")).toBeTruthy();
+  });
+});
+
+describe("Brainstorm synthesis — PoC and flow map (§6.3/§6.4)", () => {
+  function loadReady() {
+    vi.mocked(getBrainstorm).mockResolvedValue({
+      outline_md: outlineMd(["problem"], { problem: "A resolved problem." }),
+      transcript: [],
+      sufficiency: { ready: true, missing: [] },
+      stage: "BRAINSTORM",
+    });
+  }
+
+  it("builds a proof of concept and previews it in a sandboxed frame", async () => {
+    loadReady();
+    vi.mocked(generatePoc).mockResolvedValue({
+      produced: "poc",
+      reason: "A clickable mock will help here.",
+    });
+
+    renderBrainstorm();
+    fireEvent.click(await screen.findByRole("button", { name: /build a proof of concept/i }));
+
+    const frame = (await screen.findByTitle("Proof-of-concept preview")) as HTMLIFrameElement;
+    expect(frame.getAttribute("src")).toContain(`/artefact/poc.html`);
+    expect(frame.getAttribute("sandbox")).toBe(""); // display only — the artefact can't act
+    expect(vi.mocked(generatePoc)).toHaveBeenCalledWith(CODE);
+    // The action becomes a "rebuild" once a PoC exists, never a dead button.
+    expect(screen.getByRole("button", { name: /rebuild the proof of concept/i })).toBeTruthy();
+  });
+
+  it("when a PoC is not a fit, says so honestly and draws the flow map instead", async () => {
+    loadReady();
+    vi.mocked(generatePoc).mockResolvedValue({
+      produced: "map",
+      reason: "This idea is a data pipeline, not an interface.",
+      mermaid: "flowchart TD\n  A-->B",
+    });
+    vi.mocked(postFlowMapSvg).mockResolvedValue({ run_id: CODE, committed: true });
+
+    renderBrainstorm();
+    fireEvent.click(await screen.findByRole("button", { name: /build a proof of concept/i }));
+
+    // The honest conditional-stage note (§6.1), not an error.
+    expect(await screen.findByText(/not a fit for this idea/i)).toBeTruthy();
+    expect(screen.getByText(/data pipeline, not an interface/i)).toBeTruthy();
+    // The flow map was rendered client-side and posted back (CLAUDE.md §9).
+    expect(await screen.findByTitle("Information-flow map")).toBeTruthy();
+    expect(vi.mocked(renderMermaid)).toHaveBeenCalledWith("flowchart TD\n  A-->B");
+    expect(vi.mocked(postFlowMapSvg)).toHaveBeenCalledWith(CODE, expect.stringContaining("<svg"));
+    // The PoC action is gone (the gate already ruled it out); no dead button.
+    expect(screen.queryByRole("button", { name: /proof of concept/i })).toBeNull();
+  });
+
+  it("generates a flow map on demand, renders it, and commits the SVG", async () => {
+    loadReady();
+    vi.mocked(generateFlowMap).mockResolvedValue({
+      produced: "map",
+      mermaid: "flowchart LR\n  User-->System",
+    });
+    vi.mocked(postFlowMapSvg).mockResolvedValue({ run_id: CODE, committed: true });
+
+    renderBrainstorm();
+    fireEvent.click(await screen.findByRole("button", { name: /generate a flow map/i }));
+
+    expect(await screen.findByTitle("Information-flow map")).toBeTruthy();
+    expect(vi.mocked(generateFlowMap)).toHaveBeenCalledWith(CODE);
+    expect(vi.mocked(renderMermaid)).toHaveBeenCalledWith("flowchart LR\n  User-->System");
+    expect(vi.mocked(postFlowMapSvg)).toHaveBeenCalledWith(CODE, expect.stringContaining("<svg"));
+    // Now offered as a regenerate.
+    expect(screen.getByRole("button", { name: /regenerate the flow map/i })).toBeTruthy();
+  });
+
+  it("restores a committed PoC and flow map on resume without re-posting the SVG", async () => {
+    vi.mocked(getBrainstorm).mockResolvedValue({
+      outline_md: outlineMd(["problem"], { problem: "A resolved problem." }),
+      transcript: [],
+      sufficiency: { ready: true, missing: [] },
+      stage: "BRAINSTORM",
+      artefacts: {
+        poc: true,
+        flow_map: true,
+        flow_map_svg: true, // already committed — the resume must not re-post it
+        feasibility: { feasible: true, reason: "A mock helps." },
+      },
+    });
+    vi.mocked(fetchArtefactText).mockResolvedValue("flowchart TD\n  A-->B");
+
+    renderBrainstorm();
+
+    // Both artefacts come back from committed state (§7.5).
+    expect(await screen.findByTitle("Proof-of-concept preview")).toBeTruthy();
+    expect(await screen.findByTitle("Information-flow map")).toBeTruthy();
+    expect(vi.mocked(fetchArtefactText)).toHaveBeenCalledWith(CODE, "flow-map.mmd");
+    expect(vi.mocked(postFlowMapSvg)).not.toHaveBeenCalled();
   });
 });

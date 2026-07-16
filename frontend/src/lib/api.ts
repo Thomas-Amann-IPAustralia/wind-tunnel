@@ -17,6 +17,9 @@ import type {
   BrainstormState,
   CreateRunResponse,
   EditOutlineResponse,
+  FlowMapResponse,
+  FlowMapSvgResponse,
+  PocResponse,
   ResumeResponse,
   ReviseResponse,
   RouteResponse,
@@ -181,6 +184,32 @@ export function editOutline(
 
 export function submitRun(runCode: string): Promise<{ run_id: string; dispatched: boolean }> {
   return request("POST", `/api/runs/${runCode}/submit`);
+}
+
+// -- Optional synthesis: PoC + flow map (§6.3/§6.4) ---------------------------
+
+/**
+ * Build a proof of concept (§6.3). The backend runs the feasibility gate first: if a
+ * static single-file HTML mock would genuinely help it commits `brainstorm/poc.html`
+ * (`produced: "poc"`); if not it produces the flow map instead (`produced: "map"`,
+ * with the Mermaid source to render), and either way returns the honest reason. Valid
+ * only at BRAINSTORM.
+ */
+export function generatePoc(runCode: string): Promise<PocResponse> {
+  return request<PocResponse>("POST", `/api/runs/${runCode}/poc`);
+}
+
+/** Generate the information-flow map (§6.4). Returns Mermaid source; the SPA renders
+ * it to SVG in-browser and posts it back via `postFlowMapSvg` (CLAUDE.md §9). */
+export function generateFlowMap(runCode: string): Promise<FlowMapResponse> {
+  return request<FlowMapResponse>("POST", `/api/runs/${runCode}/flow-map`);
+}
+
+/** Commit the SPA's client-rendered flow-map SVG (CLAUDE.md §9 — Render's free tier
+ * can't render Mermaid). The backend requires the `.mmd` first and rejects any
+ * `<script>`; the map is later embedded sandboxed in the report. */
+export function postFlowMapSvg(runCode: string, svg: string): Promise<FlowMapSvgResponse> {
+  return request<FlowMapSvgResponse>("POST", `/api/runs/${runCode}/flow-map/svg`, { svg });
 }
 
 export function thresholdRoute(

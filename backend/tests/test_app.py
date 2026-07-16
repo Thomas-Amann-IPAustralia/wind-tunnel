@@ -125,6 +125,25 @@ def test_artefact_proxy_streams_a_produced_artefact(client, github):
     assert "markdown" in resp.headers["content-type"]
 
 
+def test_artefact_proxy_serves_the_poc(client, github):
+    # The SPA previews the generated PoC in a sandboxed iframe pointed at this URL (§6.3).
+    seed_run(github, "WT-PQCF-FF")
+    github.files[run_path("WT-PQCF-FF", "brainstorm", "poc.html")] = b"<!doctype html><p>PoC</p>"
+    resp = client.get("/api/runs/WT-PQCF-FF/artefact/poc.html")
+    assert resp.status_code == 200
+    assert resp.content == b"<!doctype html><p>PoC</p>"
+    assert "text/html" in resp.headers["content-type"]
+
+
+def test_artefact_proxy_serves_the_flow_map_source(client, github):
+    # The SPA re-renders the flow map from its Mermaid source on resume (CLAUDE.md §9).
+    seed_run(github, "WT-MMDF-FF")
+    github.files[run_path("WT-MMDF-FF", "brainstorm", "flow-map.mmd")] = b"flowchart TD\n  A-->B\n"
+    resp = client.get("/api/runs/WT-MMDF-FF/artefact/flow-map.mmd")
+    assert resp.status_code == 200
+    assert resp.content == b"flowchart TD\n  A-->B\n"
+
+
 # -- submit -----------------------------------------------------------
 
 
