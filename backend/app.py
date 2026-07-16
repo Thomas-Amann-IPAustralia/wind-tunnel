@@ -354,6 +354,28 @@ def create_app(
             **_brainstorm_response(run_id, outline, make_llm()),
         }
 
+    @app.get("/api/runs/{run_id}/brainstorm")
+    def get_brainstorm(run_id: str = Depends(_valid_run_id)) -> dict:
+        """Load the co-design state for the SPA (§7, §7.1) — the outline, the conversation
+        transcript, and the sufficiency banner. This is how a fresh page load or a resume
+        (§7.5) restores the Brainstorm canvas: the stateless backend re-reads the committed
+        outline + transcript (CLAUDE.md §3), so the SPA never has to hold them. Read-only;
+        it makes no commit. ``sufficiency`` is computed only while the run is still at
+        ``BRAINSTORM`` (a submitted run's outline is frozen); the ``stage`` lets the SPA
+        redirect a stale link on to the Chamber."""
+        run = _load_run(run_id)
+        outline = _load_outline(run_id)
+        transcript = Transcript.parse(_get_bytes_optional(run_id, "brainstorm", "transcript.jsonl"))
+        turns = [t.to_dict() for t in transcript.turns]
+        if run.stage is not statefile.Stage.BRAINSTORM:
+            return {
+                "outline_md": outline.render(),
+                "transcript": turns,
+                "sufficiency": None,
+                "stage": str(run.stage),
+            }
+        return {"transcript": turns, **_brainstorm_response(run_id, outline, make_llm())}
+
     @app.post("/api/runs/{run_id}/poc")
     def generate_poc_endpoint(run_id: str = Depends(_valid_run_id)) -> dict:
         """Generate the PoC (§7, §12.3/§12.4). Runs the feasibility gate first; if a static HTML

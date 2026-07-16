@@ -1,0 +1,68 @@
+.wt-brainstorm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  max-width: 76rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.wt-brainstorm__status {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--ink-muted);
+}
+
+.wt-brainstorm__status--error {
+  color: var(--clay);
+}
+
+/* Two panes side by side on the Console; stacked on narrow screens. The
+ * conversation and the outline are equal partners in the co-design (§6.2). */
+.wt-brainstorm__panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  align-items: stretch;
+  min-height: 32rem;
+}
+
+.wt-brainstorm__panes > * {
+  max-height: 44rem;
+}
+
+.wt-brainstorm__footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.wt-brainstorm__submit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-2);
+}
+
+.wt-brainstorm__submit-error {
+  color: var(--clay);
+  font-size: var(--text-sm);
+}
+
+.wt-brainstorm__submit-btn {
+  min-width: 14rem;
+}
+
+@media (max-width: 52rem) {
+  .wt-brainstorm__panes {
+    grid-template-columns: 1fr;
+  }
+
+  .wt-brainstorm__panes > * {
+    max-height: none;
+  }
+
+  .wt-brainstorm__submit {
+    align-items: stretch;
+  }
+}

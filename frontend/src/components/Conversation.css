@@ -1,0 +1,135 @@
+.wt-convo {
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* let the log scroll inside a flex column */
+  padding: var(--space-4);
+  gap: var(--space-3);
+}
+
+.wt-convo__log {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-right: var(--space-2);
+  min-height: 14rem;
+}
+
+.wt-convo__intro {
+  color: var(--ink-muted);
+  max-width: 34rem;
+  line-height: 1.55;
+}
+
+.wt-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 90%;
+}
+
+.wt-bubble--user {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.wt-bubble__who {
+  font-size: var(--text-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+.wt-bubble__text {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.wt-bubble--assistant .wt-bubble__text {
+  background: var(--paper-sunken);
+  color: var(--ink);
+  border-bottom-left-radius: var(--radius-sm);
+}
+
+.wt-bubble--user .wt-bubble__text {
+  background: var(--focus);
+  color: #fff;
+  border-bottom-right-radius: var(--radius-sm);
+}
+
+.wt-bubble--pending {
+  opacity: 0.6;
+}
+
+.wt-convo__thinking {
+  display: inline-flex;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  align-self: flex-start;
+}
+
+.wt-convo__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--slate);
+  animation: wt-blink var(--motion-pulse) var(--ease) infinite;
+}
+
+.wt-convo__dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.wt-convo__dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes wt-blink {
+  0%,
+  60%,
+  100% {
+    opacity: 0.25;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+.wt-convo__error {
+  color: var(--clay);
+  font-size: var(--text-sm);
+}
+
+.wt-convo__composer {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-end;
+  border-top: 1px solid var(--hairline);
+  padding-top: var(--space-3);
+}
+
+.wt-convo__input {
+  flex: 1 1 auto;
+  resize: vertical;
+  min-height: 2.75rem;
+  max-height: 12rem;
+  padding: var(--space-3);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  font: inherit;
+  font-family: var(--font-ui);
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
+.wt-convo__input:focus-visible {
+  border-color: var(--focus);
+}
+
+.wt-convo__send {
+  flex: 0 0 auto;
+  height: 2.75rem;
+}

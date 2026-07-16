@@ -12,6 +12,7 @@
 import { BACKEND_URL } from "../config";
 import type {
   BrainstormMessageResponse,
+  BrainstormState,
   CreateRunResponse,
   EditOutlineResponse,
   ResumeResponse,
@@ -148,6 +149,12 @@ export async function getStatus(
 }
 
 // -- Brainstorm ---------------------------------------------------------------
+
+/** Load the co-design state for the canvas (§7.1) — the outline, the transcript,
+ * and the sufficiency banner. Used on page load and on resume (§7.5). */
+export function getBrainstorm(runCode: string): Promise<BrainstormState> {
+  return request<BrainstormState>("GET", `/api/runs/${runCode}/brainstorm`);
+}
 
 export function brainstormMessage(
   runCode: string,

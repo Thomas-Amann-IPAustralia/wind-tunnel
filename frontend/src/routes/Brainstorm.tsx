@@ -1,23 +1,175 @@
-import { Navigate, useParams } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 
+import { Conversation } from "../components/Conversation";
 import { FocusTrack } from "../components/FocusTrack";
 import type { FocusStage } from "../components/FocusTrack";
+import { OutlineCanvas } from "../components/OutlineCanvas";
 import { RunCodeChip } from "../components/RunCodeChip";
+import { SufficiencyBanner } from "../components/SufficiencyBanner";
 import { Surface } from "../components/Surface";
+import {
+  ApiError,
+  brainstormMessage,
+  editOutline,
+  getBrainstorm,
+  NetworkError,
+  submitRun,
+} from "../lib/api";
+import { parseOutline } from "../lib/outline";
 import { isValid } from "../lib/runCode";
-import "./PhasePlaceholder.css";
+import type { Sufficiency, TranscriptTurn } from "../lib/types";
+import "./Brainstorm.css";
+
+type LoadState = "loading" | "ready" | "error";
 
 /**
- * The Brainstorm shell (design §6). This phase establishes the Console surface,
- * the run-code chip and the focus track (§6.1); the co-design conversation + live
- * outline canvas (§6.2) is the next phase and slots into the marked region below.
+ * The Brainstorm co-design canvas (design §6) — the conversation that fills the
+ * outline, the live outline canvas, the sufficiency banner, and submission. The
+ * backend interview loop (`/brainstorm/message`, `/edit-outline`, `/brainstorm`)
+ * does the thinking; this screen renders the exchange and its result, and hands
+ * the finished outline to Governance on Submit.
  */
 export function Brainstorm() {
   const { code } = useParams();
-  if (!code || !isValid(code)) return <Navigate to="/" replace />;
+  const navigate = useNavigate();
+
+  const [load, setLoad] = useState<LoadState>("loading");
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [redirectStage, setRedirectStage] = useState<string | null>(null);
+
+  const [turns, setTurns] = useState<TranscriptTurn[]>([]);
+  const [outlineMd, setOutlineMd] = useState("");
+  const [sufficiency, setSufficiency] = useState<Sufficiency | null>(null);
+
+  const [pendingUser, setPendingUser] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
+  const [sendError, setSendError] = useState<string | null>(null);
+
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [savingId, setSavingId] = useState<string | null>(null);
+  const [editError, setEditError] = useState<string | null>(null);
+  const [youEdited, setYouEdited] = useState<ReadonlySet<string>>(new Set());
+
+  const [resolvingIds, setResolvingIds] = useState<ReadonlySet<string>>(new Set());
+  const resolveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const valid = Boolean(code && isValid(code));
+
+  // Highlight newly-resolved / amended sections for one settle beat (§3.6).
+  const markResolving = useCallback((ids: string[]) => {
+    if (ids.length === 0) return;
+    if (resolveTimer.current) clearTimeout(resolveTimer.current);
+    setResolvingIds(new Set(ids));
+    resolveTimer.current = setTimeout(() => setResolvingIds(new Set()), 1400);
+  }, []);
+
+  useEffect(() => () => void (resolveTimer.current && clearTimeout(resolveTimer.current)), []);
+
+  // Load (or resume) the co-design state (§7.5).
+  useEffect(() => {
+    if (!valid || !code) return;
+    let cancelled = false;
+    setLoad("loading");
+    getBrainstorm(code)
+      .then((state) => {
+        if (cancelled) return;
+        if (state.stage !== "BRAINSTORM") {
+          setRedirectStage(state.stage); // a submitted run belongs on the Chamber
+          return;
+        }
+        setTurns(state.transcript);
+        setOutlineMd(state.outline_md);
+        setSufficiency(state.sufficiency);
+        setLoad("ready");
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        setLoadError(describe(err, "load this run"));
+        setLoad("error");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [code, valid]);
+
+  const outline = useMemo(() => parseOutline(outlineMd), [outlineMd]);
+
+  const send = useCallback(
+    async (message: string) => {
+      if (!code) return;
+      setSendError(null);
+      setPendingUser(message);
+      setSending(true);
+      try {
+        const resp = await brainstormMessage(code, message);
+        setTurns((prev) => [
+          ...prev,
+          { role: "user", text: message, ts: nowIso() },
+          { role: "assistant", text: resp.assistant_message, ts: nowIso() },
+        ]);
+        setOutlineMd(resp.outline_md);
+        setSufficiency(resp.sufficiency);
+        if (resp.outline_delta) {
+          markResolving([...resp.outline_delta.newly_resolved, ...resp.outline_delta.updated]);
+        }
+      } catch (err) {
+        setSendError(describe(err, "send that message"));
+      } finally {
+        setPendingUser(null);
+        setSending(false);
+      }
+    },
+    [code, markResolving],
+  );
+
+  const saveSection = useCallback(
+    async (id: string, body: string) => {
+      if (!code || body.length === 0) return;
+      setEditError(null);
+      setSavingId(id);
+      try {
+        const resp = await editOutline(code, { sections: { [id]: body } });
+        setOutlineMd(resp.outline_md);
+        setSufficiency(resp.sufficiency);
+        setYouEdited((prev) => new Set(prev).add(id));
+        markResolving([id]);
+        setEditingId(null);
+      } catch (err) {
+        setEditError(describe(err, "save that edit"));
+      } finally {
+        setSavingId(null);
+      }
+    },
+    [code, markResolving],
+  );
+
+  const submit = useCallback(async () => {
+    if (!code) return;
+    setSubmitError(null);
+    setSubmitting(true);
+    try {
+      await submitRun(code);
+      navigate(`/run/${code}/chamber`);
+    } catch (err) {
+      setSubmitting(false);
+      setSubmitError(describe(err, "submit this run"));
+    }
+  }, [code, navigate]);
+
+  if (!valid || !code) return <Navigate to="/" replace />;
+  if (redirectStage) return <Navigate to={`/run/${code}/chamber`} replace />;
 
   const stages: FocusStage[] = [
-    { n: 1, label: "Scoping interview", artefact: "→ a structured outline", state: "current" },
+    {
+      n: 1,
+      label: "Scoping interview",
+      artefact: "→ a structured outline",
+      state: sufficiency?.ready ? "done" : "current",
+    },
     {
       n: 2,
       label: "Proof of concept",
@@ -36,19 +188,79 @@ export function Brainstorm() {
 
   return (
     <Surface kind="console" subtitle="Brainstorm" header={<RunCodeChip code={code} />}>
-      <div className="wt-phase">
+      <div className="wt-brainstorm">
         <FocusTrack stages={stages} />
-        <section className="wt-phase__placeholder wt-panel" aria-label="Scoping interview">
-          <h2 className="wt-phase__title">Your co-design space</h2>
-          <p className="wt-phase__lead">
-            This is where the scoping conversation and your live outline canvas will sit — a
-            conversation on the left, your outline resolving section by section on the right (design
-            §6.2). The interview and sufficiency backends are already built; wiring this canvas to
-            them is the next phase of work.
+
+        {load === "loading" ? (
+          <p className="wt-brainstorm__status" role="status">
+            Loading your co-design space…
           </p>
-          <p className="wt-phase__meta wt-mono">brainstorm · run {code}</p>
-        </section>
+        ) : load === "error" ? (
+          <p className="wt-brainstorm__status wt-brainstorm__status--error" role="alert">
+            {loadError}
+          </p>
+        ) : (
+          <>
+            <div className="wt-brainstorm__panes">
+              <Conversation
+                turns={turns}
+                pendingUser={pendingUser}
+                thinking={sending}
+                onSend={send}
+                disabled={sending}
+                error={sendError}
+              />
+              <OutlineCanvas
+                outline={outline}
+                resolvingIds={resolvingIds}
+                youEdited={youEdited}
+                editingId={editingId}
+                savingId={savingId}
+                editError={editError}
+                onStartEdit={setEditingId}
+                onCancelEdit={() => {
+                  setEditingId(null);
+                  setEditError(null);
+                }}
+                onSave={saveSection}
+              />
+            </div>
+
+            <div className="wt-brainstorm__footer">
+              <SufficiencyBanner sufficiency={sufficiency} outline={outline} />
+              <div className="wt-brainstorm__submit">
+                {submitError ? (
+                  <p className="wt-brainstorm__submit-error" role="alert">
+                    {submitError}
+                  </p>
+                ) : null}
+                <button
+                  type="button"
+                  className={`wt-btn ${
+                    sufficiency?.ready ? "wt-btn--primary" : "wt-btn--secondary"
+                  } wt-brainstorm__submit-btn`}
+                  onClick={submit}
+                  disabled={submitting}
+                >
+                  {submitting ? "Submitting…" : "Submit for assessment"}
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </Surface>
   );
+}
+
+function nowIso(): string {
+  return new Date().toISOString();
+}
+
+function describe(err: unknown, action: string): string {
+  if (err instanceof NetworkError) {
+    return `Couldn't reach the tunnel to ${action}. It may still be warming up — give it a moment and try again.`;
+  }
+  if (err instanceof ApiError) return err.message;
+  return `Something went wrong trying to ${action}. Please try again.`;
 }

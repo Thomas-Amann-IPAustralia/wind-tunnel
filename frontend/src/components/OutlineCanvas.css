@@ -1,0 +1,189 @@
+.wt-canvas {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-4);
+  gap: var(--space-4);
+  min-height: 0;
+}
+
+.wt-canvas__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+  border-bottom: 1px solid var(--hairline);
+  padding-bottom: var(--space-3);
+}
+
+.wt-canvas__title {
+  font-size: var(--text-lg);
+  line-height: 1.25;
+}
+
+.wt-canvas__summary {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
+  max-width: 32rem;
+}
+
+.wt-canvas__count {
+  font-size: var(--text-xs);
+  color: var(--slate);
+  white-space: nowrap;
+}
+
+.wt-canvas__sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* -- a section --------------------------------------------------------------- */
+
+.wt-section {
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  background: var(--paper-raised);
+  transition: background var(--motion-settle) var(--ease);
+}
+
+.wt-section--open {
+  border-style: dashed;
+  background: transparent;
+}
+
+/* The settle highlight on a newly-resolved / amended section (§3.6). */
+.wt-section--resolving {
+  background: color-mix(in srgb, var(--focus) 12%, var(--paper-raised));
+  border-color: var(--focus);
+}
+
+.wt-section__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.wt-section__marker {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--slate);
+  flex: 0 0 auto;
+}
+
+.wt-section--resolved .wt-section__marker {
+  background: var(--focus);
+  border-color: var(--focus);
+}
+
+.wt-section__label {
+  font-weight: 600;
+  font-size: var(--text-sm);
+  flex: 1 1 auto;
+}
+
+.wt-section__n {
+  color: var(--slate);
+  font-size: var(--text-xs);
+}
+
+.wt-section__tags {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.wt-section__you {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--focus);
+  border: 1px solid var(--focus);
+  border-radius: var(--radius-sm);
+  padding: 0 var(--space-1);
+}
+
+.wt-section__status {
+  font-size: var(--text-xs);
+  letter-spacing: 0.03em;
+}
+
+.wt-section__status--resolved {
+  color: var(--focus);
+}
+
+.wt-section__status--open {
+  color: var(--slate);
+}
+
+/* The body doubles as the click-to-edit target — a full-width, quiet button. */
+.wt-section__body {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-top: var(--space-2);
+  padding: var(--space-2);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: text;
+  font: inherit;
+  color: inherit;
+}
+
+.wt-section__body:hover {
+  background: var(--paper-sunken);
+}
+
+.wt-section__text {
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.wt-section__guidance {
+  color: var(--slate);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* -- the inline editor ------------------------------------------------------- */
+
+.wt-section__editor {
+  margin-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.wt-section__input {
+  width: 100%;
+  resize: vertical;
+  padding: var(--space-3);
+  border: 1px solid var(--focus);
+  border-radius: var(--radius);
+  font: inherit;
+  font-family: var(--font-ui);
+  background: var(--paper-raised);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.wt-section__error {
+  color: var(--clay);
+  font-size: var(--text-sm);
+}
+
+.wt-section__actions {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.wt-section__save {
+  padding-block: var(--space-2);
+}
