@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "run_id": "WT-RWEP-ED",
+  "created_at": "2026-07-16T14:20:04Z",
+  "updated_at": "2026-07-16T14:20:04Z",
+  "stage": "BRAINSTORM",
+  "stage_status": "in_progress",
+  "phase": "threshold",
+  "checkpoints": {},
+  "revisions": {
+    "outline": 0,
+    "poc": 0,
+    "flow_map": 0,
+    "threshold": 0,
+    "full": 0
+  },
+  "review_cycles": 0,
+  "attestation": {
+    "sensitivity_ceiling": "OFFICIAL",
+    "attested": false
+  },
+  "last_error": null
+}
