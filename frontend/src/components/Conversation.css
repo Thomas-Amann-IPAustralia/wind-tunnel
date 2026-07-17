@@ -64,6 +64,28 @@
   opacity: 0.6;
 }
 
+/* A blinking caret while the interviewer's reply writes itself out. */
+.wt-bubble__caret {
+  display: inline-block;
+  width: 0.5ch;
+  height: 1em;
+  margin-left: 1px;
+  vertical-align: text-bottom;
+  background: var(--slate);
+  animation: wt-caret-blink 1s steps(1) infinite;
+}
+
+@keyframes wt-caret-blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
+}
+
 .wt-convo__thinking {
   display: inline-flex;
   gap: var(--space-1);

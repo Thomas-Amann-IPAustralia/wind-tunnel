@@ -52,9 +52,10 @@ export function Chamber() {
       <Surface kind="chamber" subtitle="Governance" header={<RunCodeChip code={code} />}>
         <div className="wt-chamber__notice" role="status">
           <h2>Opening the tunnel…</h2>
+          <span className="wt-chamber__travel" aria-hidden="true" />
           <p>
             {offline
-              ? "The backend may be warming up — this can take up to a minute on a cold start."
+              ? "The backend may be warming up — this can take up to a minute on a cold start. It hasn't stalled; keep this open."
               : "Loading your run."}
           </p>
         </div>
@@ -193,9 +194,11 @@ function NotStartedPrompt({
 
   return (
     <div className="wt-chamber__start" role="status">
+      <span className="wt-chamber__travel" aria-hidden="true" />
       <p className="wt-chamber__start-lead">
-        Waiting for the run to start. This can take up to a minute while the tunnel spins up — you
-        can safely close the tab and come back with your run code.
+        Waiting for the run to start. This can take up to a minute while the tunnel spins up —
+        it&rsquo;s still working, not stuck. You can safely close the tab and come back with your
+        run code.
       </p>
       {state === "done" ? (
         <p className="wt-chamber__start-note">Restart requested — watch the stages above.</p>

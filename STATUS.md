@@ -2,7 +2,33 @@
 
 ## Current stage
 
-**This branch (`claude/governance-chamber-bugs-hygv1b`): the first-live-test bug fixes —
+**This branch (`claude/brainstorm-partner-ux-mgphjn`): Brainstorm partner UX tweaks from
+Tom's use (DESIGN §5, §6).** Five interface/behaviour refinements to the Brainstorm phase,
+no contract or pipeline change:
+1. **Warm-up reads as "working", not "hung".** The cold-start liveness indicator
+   (`ColdStartNote`) and the two Chamber waiting states ("Opening the tunnel…", the
+   "waiting to start" prompt) now show a *moving* travelling-pips animation (air down the
+   tunnel) instead of a single static pulse, with copy that says it hasn't stalled. Static
+   but still visible under reduced motion.
+2. **The interviewer writes its replies out gradually** — a typewriter reveal of the newest
+   assistant turn in `Conversation` (detected by the `thinking` true→false transition, so
+   restored history and reduced-motion users get the whole text at once).
+3. **The interviewer infers more and moves faster** — `prompts/interviewer.v1.md` now drafts
+   ahead by inference (fill multiple sections, flag assumptions), so a user can reach a
+   submittable outline as fast as they like (Submit was already always-enabled).
+4. **The interviewer is less passive** — it asks the sharp question, surfaces the nuance/design
+   fork the user may have missed, softly provoking design choices rather than just collecting
+   answers.
+5. **The interviewer is less verbose** — replies are 1–2 sentences + one question.
+6. **PoC and flow map are promoted to top tabs** (`BrainstormTabs`): the conversation, the
+   proof of concept, and the flow map now sit as three selectable tabs above the canvas —
+   equal, expressive ways to say what the end state should be — instead of a block at the
+   foot of the page. `BrainstormSynthesis` split into `PocPanel`/`FlowMapPanel`; the unused
+   `FocusTrack` removed. **Frontend: 40 tests green, build + lint + format clean.** Backend
+   unchanged (23 brainstorm tests green; the prompt edit is content-only, LLM-free tests
+   unaffected).
+
+**Prior branch (`claude/governance-chamber-bugs-hygv1b`): the first-live-test bug fixes —
 a stranded submit and a chamber that never animates (TECH_SPEC §5.7; CLAUDE.md §6).**
 Tom's first end-to-end test surfaced two bugs, both rooted in the same cause: the
 `workflow_dispatch` that starts Governance **fails** because the `WINDTUNNEL_PAT` carries
@@ -239,8 +265,45 @@ pipeline.
 
 ## Done
 
+- **Brainstorm partner UX tweaks (DESIGN §5, §6; this branch).** Five refinements from Tom's
+  use of the Brainstorm phase; no data-contract, pipeline, or endpoint change. Frontend build +
+  strict typecheck + lint (0 errors, 1 pre-existing warning) + `format:check` clean; **40
+  frontend tests green**; backend `test_brainstorm.py` 23 green (prompt edit is content-only).
+  The pieces:
+  - **Warm-up shows motion, not a hang.** `ColdStartNote.css` and `Chamber.css` gained a
+    travelling-pips indicator (two pips sweeping a short track, "air down the tunnel") replacing
+    the single breathing pulse that could read as stalled; wired into `ColdStartNote`, the
+    Chamber "Opening the tunnel…" notice, and the `NotStartedPrompt` "waiting to start" lead,
+    each with copy that it hasn't stalled. Neutralised-but-visible under reduced motion (the
+    global `prefers-reduced-motion` guard in `base.css`).
+  - **Gradual reply reveal (`Conversation.tsx`).** The newest interviewer turn types itself out
+    (2 chars / 18 ms) with a blinking caret. Only a *freshly arrived* reply animates — detected
+    by the `thinking` true→false transition — so restored transcript and reduced-motion /
+    no-`matchMedia` environments render the full text at once. The interval is torn down on
+    unmount and on the next reply.
+  - **Interviewer prompt (`prompts/interviewer.v1.md`) — infer more, less passive, less verbose.**
+    Rewrote the framing + per-turn guidance: draft ahead by inference (write every reasonably
+    inferable section, flag real assumptions in one phrase so the user can wave them through or
+    fix them), push the user's thinking (ask the sharp question / surface the missed nuance or
+    design fork), and keep replies to 1–2 sentences + one question. Same strict-JSON output
+    contract (no version bump — guidance refinement, `assistant_message`/`section_updates`/
+    `title`/`summary` unchanged). Submit was already always-enabled, so "progress as fast as the
+    user desires" needed no UI change.
+  - **PoC + flow map as top tabs (`BrainstormTabs.tsx` + `.css`).** A new accessible tablist
+    (arrow-key nav, `role=tab`/`tabpanel`, per-tab state glyph — check when produced, ◇ when a
+    PoC wasn't a fit, never colour alone §9) sits above the canvas: **Conversation | Proof of
+    concept | Flow map**. `Brainstorm.tsx` switches the left working surface by tab while the
+    outline canvas stays put on the right; the sufficiency banner + Submit stay in the footer.
+    `BrainstormSynthesis.tsx` split into presentational `PocPanel` / `FlowMapPanel` (each framed
+    as a more expressive way to say what the end state should be, not an artefact of the
+    outline); a not-a-fit PoC keeps its honest note on the PoC tab and lights the Flow map tab's
+    glyph rather than auto-navigating. The now-unused `FocusTrack.tsx`/`.css` removed.
+  - **Tests.** `Brainstorm.test.tsx` synthesis cases updated to open the relevant tab before
+    acting (PoC/map are tabs now, not a footer block); the four scoping/interview cases are
+    unchanged and still green (the send case exercises the typewriter via `findByText`).
+
 - **First-live-test bug fixes — graceful, recoverable governance dispatch (TECH_SPEC §5.7;
-  CLAUDE.md §6; this branch).** Tom's first end-to-end test hit two bugs, one root cause: a
+  CLAUDE.md §6; prior branch).** Tom's first end-to-end test hit two bugs, one root cause: a
   `workflow_dispatch` that fails after the state transition is committed. Diagnosed to the PAT
   scope (`contents:write` without `actions:write`; confirmed live — `governance.yml` has 0 runs)
   and made non-fatal + recoverable in code. LLM-free tested; ruff + eslint + prettier clean.

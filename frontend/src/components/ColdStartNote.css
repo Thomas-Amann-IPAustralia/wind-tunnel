@@ -10,24 +10,50 @@
   color: var(--clay);
 }
 
-/* An honest, indeterminate liveness pip in `focus` — not a progress bar that
- * lies (design §5). Slow breathing; static under reduced motion (base.css). */
+/* An honest, indeterminate liveness indicator — deliberately *moving*, not a single
+ * static pulse that can read as a hang (design §5). Three pips travel left-to-right
+ * through a short track, like air moving down the tunnel, so it plainly reads as
+ * "working" rather than "stuck". Static under reduced motion (base.css neutralises
+ * the animation; the pips stay visible so the meaning survives). */
 .wt-coldstart__pip {
-  width: 9px;
+  position: relative;
+  flex: 0 0 auto;
+  width: 34px;
   height: 9px;
-  border-radius: 50%;
-  background: var(--focus);
-  animation: wt-coldstart-pulse var(--motion-pulse) var(--ease) infinite;
+  overflow: hidden;
 }
 
-@keyframes wt-coldstart-pulse {
-  0%,
-  100% {
-    opacity: 0.35;
-    transform: scale(0.85);
+.wt-coldstart__pip::before,
+.wt-coldstart__pip::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--focus);
+  animation: wt-coldstart-travel var(--motion-pulse) var(--ease) infinite;
+}
+
+.wt-coldstart__pip::after {
+  animation-delay: calc(var(--motion-pulse) / 2);
+}
+
+@keyframes wt-coldstart-travel {
+  0% {
+    transform: translateX(-9px);
+    opacity: 0;
   }
-  50% {
+  25% {
     opacity: 1;
-    transform: scale(1);
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(34px);
+    opacity: 0;
   }
 }

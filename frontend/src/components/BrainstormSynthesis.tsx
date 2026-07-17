@@ -2,88 +2,70 @@ import type { FeasibilityVerdict } from "../lib/types";
 import "./BrainstormSynthesis.css";
 
 /**
- * The optional synthesis block on the Brainstorm canvas (design §6.2–6.4) — the two
- * "enrich the assessment" actions and their produced artefacts. Both are encouraged
- * honestly, never nagged (§6.5): the outline alone is enough to submit; a PoC or a
- * flow map simply gives the specialists more to work with.
+ * The two expressive input surfaces on the Brainstorm canvas — the proof of concept
+ * (§6.3) and the flow map (§6.4). These are not artefacts squeezed out of the outline:
+ * they are alternative ways for a public servant to *say what they want the end state
+ * to be*, more vividly than prose. Each lives behind its own top-of-page tab (design
+ * §6.2), so it reads as a thing you do, not a leftover at the foot of the page.
  *
- * - **Proof of concept (§6.3).** Offered until the feasibility gate has spoken. If the
- *   gate decides a static mock is not a fit, the PoC action is replaced by an honest
- *   conditional-stage note and the flow map is produced instead — no dead button.
- * - **Flow map (§6.4).** Always available. The SVG is rendered client-side (CLAUDE.md
- *   §9) and shown in a sandboxed iframe — it is derived from untrusted user content
- *   (§9.2), so, like the report, it can only display, never act. It uses the same
- *   node/flow grammar as the pipeline animation the user is about to watch (§3.5).
+ * Both are encouraged honestly, never nagged (§6.5): the outline alone is enough to
+ * submit; a PoC or a flow map simply gives the specialists — and the user — a sharper
+ * picture. Each produced artefact shows in a `sandbox=""` iframe: it is derived from
+ * untrusted user content (§9.2), so, like the report, it can only display, never act.
  *
  * Presentational: all state and the API calls live in the Brainstorm route.
  */
-export function BrainstormSynthesis({
+
+/** The proof-of-concept panel. Offered until the feasibility gate has spoken; if the
+ * gate decides a static mock is not a fit, the build action is replaced by an honest
+ * note pointing at the flow map (which was produced instead) — no dead button. */
+export function PocPanel({
   feasibility,
   pocUrl,
-  flowSvg,
   building,
   error,
   onBuildPoc,
-  onGenerateMap,
 }: {
   feasibility: FeasibilityVerdict | null;
   pocUrl: string | null;
-  flowSvg: string | null;
-  building: "poc" | "map" | null;
+  building: boolean;
   error: string | null;
   onBuildPoc: () => void;
-  onGenerateMap: () => void;
 }) {
-  const busy = building !== null;
   const pocNotAFit = feasibility !== null && !feasibility.feasible;
 
   return (
-    <section className="wt-synth wt-panel" aria-label="Enrich the assessment">
+    <section className="wt-synth wt-panel" aria-label="Proof of concept">
       <div className="wt-synth__head">
-        <h3 className="wt-synth__title">Enrich the assessment — optional</h3>
+        <h3 className="wt-synth__title">Proof of concept — optional</h3>
         <p className="wt-synth__lead">
-          Your outline is enough on its own. A proof of concept or a flow map gives the specialists
-          more to work with — add either, or submit as you are.
+          Sketch the end state. A clickable mock can say what you&rsquo;re picturing far more
+          vividly than words — and the specialists read it too. Your outline is already enough to
+          submit; this just sharpens it.
         </p>
       </div>
 
-      <div className="wt-synth__actions">
-        {pocNotAFit ? null : (
+      {pocNotAFit ? (
+        <p className="wt-synth__not-a-fit" role="status">
+          <span className="wt-synth__not-a-fit-label">Not a fit for this idea.</span>{" "}
+          {feasibility?.reason} We&rsquo;ve drawn a flow map instead — see the Flow map tab.
+        </p>
+      ) : (
+        <div className="wt-synth__actions">
           <button
             type="button"
             className="wt-btn wt-btn--secondary"
             onClick={onBuildPoc}
-            disabled={busy}
+            disabled={building}
           >
-            {building === "poc"
+            {building
               ? "Building a proof of concept…"
               : pocUrl
                 ? "Rebuild the proof of concept"
                 : "Build a proof of concept"}
           </button>
-        )}
-        <button
-          type="button"
-          className="wt-btn wt-btn--secondary"
-          onClick={onGenerateMap}
-          disabled={busy}
-        >
-          {building === "map"
-            ? "Drawing the flow map…"
-            : flowSvg
-              ? "Regenerate the flow map"
-              : "Generate a flow map"}
-        </button>
-      </div>
-
-      {pocNotAFit ? (
-        <p className="wt-synth__not-a-fit" role="status">
-          <span className="wt-synth__not-a-fit-label">
-            Proof of concept — not a fit for this idea.
-          </span>{" "}
-          {feasibility?.reason} You&rsquo;ll get a flow map instead.
-        </p>
-      ) : null}
+        </div>
+      )}
 
       {error ? (
         <p className="wt-synth__error" role="alert">
@@ -109,6 +91,55 @@ export function BrainstormSynthesis({
             An illustrative mock — its own limitations banner names exactly what it fakes.
           </p>
         </figure>
+      ) : null}
+    </section>
+  );
+}
+
+/** The flow-map panel. Always available. The SVG is rendered client-side (CLAUDE.md §9)
+ * and shown in a sandboxed iframe. It uses the same node/flow grammar as the pipeline
+ * animation the user is about to watch (§3.5). */
+export function FlowMapPanel({
+  flowSvg,
+  building,
+  error,
+  onGenerateMap,
+}: {
+  flowSvg: string | null;
+  building: boolean;
+  error: string | null;
+  onGenerateMap: () => void;
+}) {
+  return (
+    <section className="wt-synth wt-panel" aria-label="Flow map">
+      <div className="wt-synth__head">
+        <h3 className="wt-synth__title">Flow map — optional</h3>
+        <p className="wt-synth__lead">
+          Draw the shape of the thing: the actors, the systems, and how data moves between them.
+          It&rsquo;s often the clearest way to externalise where the AI actually sits. Your outline
+          is already enough to submit; this just sharpens it.
+        </p>
+      </div>
+
+      <div className="wt-synth__actions">
+        <button
+          type="button"
+          className="wt-btn wt-btn--secondary"
+          onClick={onGenerateMap}
+          disabled={building}
+        >
+          {building
+            ? "Drawing the flow map…"
+            : flowSvg
+              ? "Regenerate the flow map"
+              : "Generate a flow map"}
+        </button>
+      </div>
+
+      {error ? (
+        <p className="wt-synth__error" role="alert">
+          {error}
+        </p>
       ) : null}
 
       {flowSvg ? (
