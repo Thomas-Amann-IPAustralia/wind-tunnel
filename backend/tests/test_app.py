@@ -176,6 +176,96 @@ def test_submit_404s_unknown_run(client):
     assert resp.status_code == 404
 
 
+# -- dispatch failure is non-fatal + re-dispatch (§5.7) --------------------------
+
+
+class _FailingDispatcher:
+    """A dispatcher whose trigger always fails — stands in for a PAT lacking
+    ``actions:write`` or a transient GitHub API error (§5.7)."""
+
+    def dispatch(self, workflow_file, *, ref, inputs):
+        from dispatch import DispatchError
+
+        raise DispatchError("HTTP 403: Resource not accessible by personal access token")
+
+
+def _failing_client(github):
+    from conftest import TEST_SETTINGS
+    from fastapi.testclient import TestClient
+
+    from app import create_app
+
+    app = create_app(github=github, dispatcher=_FailingDispatcher(), settings=TEST_SETTINGS)
+    return TestClient(app)
+
+
+def test_submit_dispatch_failure_keeps_run_submitted_and_reports(github):
+    # A dispatch failure must NOT strand the run: the SUBMITTED transition is
+    # committed, the endpoint returns 200 with dispatched=false + the reason, and
+    # the SPA can move on to the Chamber (Bug: a 502 left the run un-resubmittable).
+    seed_run(github, "WT-DSPA-22", stage=statefile.Stage.BRAINSTORM)
+    resp = _failing_client(github).post("/api/runs/WT-DSPA-22/submit")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["dispatched"] is False
+    assert "actions" in body["dispatch_error"] or "403" in body["dispatch_error"]
+
+    run = statefile.RunState.from_dict(json.loads(github.files[run_path("WT-DSPA-22", "run.json")]))
+    assert run.stage is statefile.Stage.SUBMITTED  # durably submitted, ready to re-kick
+
+
+def test_redispatch_refires_a_submitted_run(client, github, dispatcher):
+    # The §5.7 "hasn't started yet" re-dispatch: a run stuck at SUBMITTED is
+    # re-fired without redoing Brainstorm, resuming from THRESHOLD_DRAFTING.
+    seed_run(github, "WT-DSPB-23", stage=statefile.Stage.SUBMITTED)
+    resp = client.post("/api/runs/WT-DSPB-23/redispatch")
+    assert resp.status_code == 200
+    assert resp.json() == {
+        "run_id": "WT-DSPB-23",
+        "resume_from": "THRESHOLD_DRAFTING",
+        "dispatched": True,
+    }
+    assert dispatcher.calls[0]["inputs"] == {
+        "run_id": "WT-DSPB-23",
+        "resume_from": "THRESHOLD_DRAFTING",
+    }
+
+
+def test_redispatch_maps_full_revising_to_itself(client, github, dispatcher):
+    seed_run(github, "WT-DSPC-24", stage=statefile.Stage.FULL_REVISING)
+    resp = client.post("/api/runs/WT-DSPC-24/redispatch")
+    assert resp.status_code == 200
+    assert dispatcher.calls[0]["inputs"]["resume_from"] == "FULL_REVISING"
+
+
+def test_redispatch_refuses_at_brainstorm(client, github):
+    # Not yet submitted ⇒ there is no dispatch to re-fire (a plain 409).
+    seed_run(github, "WT-DSPD-25", stage=statefile.Stage.BRAINSTORM)
+    resp = client.post("/api/runs/WT-DSPD-25/redispatch")
+    assert resp.status_code == 409
+
+
+def test_redispatch_refuses_when_paused(client, github):
+    # Paused at a user checkpoint is not "awaiting a dispatch" — the user acts next.
+    seed_run(
+        github,
+        "WT-DSPE-26",
+        stage=statefile.Stage.FULL_CHECKPOINT,
+        stage_status=statefile.StageStatus.AWAITING_USER,
+    )
+    resp = client.post("/api/runs/WT-DSPE-26/redispatch")
+    assert resp.status_code == 409
+
+
+def test_redispatch_reports_a_dispatch_failure(github):
+    seed_run(github, "WT-DSPF-27", stage=statefile.Stage.SUBMITTED)
+    resp = _failing_client(github).post("/api/runs/WT-DSPF-27/redispatch")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["dispatched"] is False
+    assert body["dispatch_error"]
+
+
 # -- threshold routing -----------------------------------------------------------
 
 

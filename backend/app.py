@@ -9,7 +9,13 @@ routing, checkpoint answers (``/answers`` → ``FULL_REVISING``), and revision
 (``/revise``: ``poc``/``flow_map`` regenerate from the amended outline while at
 ``BRAINSTORM`` with the ≤2 cap; ``threshold`` re-runs ``THRESHOLD_RECONCILING`` while
 paused at ``THRESHOLD_REVIEW``; ``full`` dispatches ``USER_REVISION`` post-``COMPLETE``),
+re-dispatch (``/redispatch`` re-kicks a run whose ``workflow_dispatch`` never took, §5.7),
 and resume-by-code. The outline is unbounded and has no ``/revise`` branch (brief §4/§7).
+
+A dispatch that fails after its state transition is committed is **not** fatal
+(§5.7 — ``workflow_dispatch`` is fire-and-forget, the SPA watches ``status.json``):
+the dispatching endpoints return ``dispatched: false`` + ``dispatch_error`` rather
+than a 502, so a run is never stranded, and ``/redispatch`` re-fires it.
 
 **Statelessness (§14).** Render's disk is ephemeral and a cold instance has no
 memory of any run, so every endpoint re-reads ``run.json``/``status.json``
@@ -74,6 +80,20 @@ _ARTEFACTS: dict[str, tuple[str, str]] = {
     # resume; both are served here so the canvas can restore them (CLAUDE.md §9).
     "poc.html": ("brainstorm/poc.html", "text/html; charset=utf-8"),
     "flow-map.mmd": ("brainstorm/flow-map.mmd", "text/plain; charset=utf-8"),
+}
+
+# The dispatched stages a run can be re-kicked from (§5.7), mapped to the
+# ``resume_from`` the original dispatch used. SUBMITTED is a gate whose pipeline
+# entry is THRESHOLD_DRAFTING; every other stage here is entered by resuming from
+# itself. Paused (AWAITING_USER) and terminal stages are absent — they are not
+# waiting on a dispatch. (See ``/redispatch``.)
+_REDISPATCH_RESUME_FROM: dict[statefile.Stage, str] = {
+    statefile.Stage.SUBMITTED: "THRESHOLD_DRAFTING",
+    statefile.Stage.THRESHOLD_DRAFTING: "THRESHOLD_DRAFTING",
+    statefile.Stage.THRESHOLD_RECONCILING: "THRESHOLD_RECONCILING",
+    statefile.Stage.FULL_DRAFTING: "FULL_DRAFTING",
+    statefile.Stage.FULL_REVISING: "FULL_REVISING",
+    statefile.Stage.USER_REVISION: "USER_REVISION",
 }
 
 
@@ -216,15 +236,32 @@ def create_app(
         except GitHubError as exc:
             raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
 
-    def _dispatch(workflow: str, run_id: str, resume_from: str) -> None:
+    def _dispatch(workflow: str, run_id: str, resume_from: str) -> str | None:
+        """Fire the governance workflow (§5.7). ``workflow_dispatch`` is
+        fire-and-forget: the SPA learns the run *actually* started by watching
+        ``status.json`` advance, not by this call's result (§5.7). So a dispatch
+        failure is **not** fatal to the state transition the caller already
+        committed — the run is durably at its new stage and can be re-kicked via
+        ``/redispatch`` (or by simply retrying once the cause is fixed). Returns
+        the error string on failure, ``None`` on success; the caller surfaces it as
+        ``dispatched: false`` + ``dispatch_error`` rather than a 502 that would
+        strand the run with no Action behind it (the bug behind a submitted run
+        that never starts)."""
         try:
             dispatcher.dispatch(
                 workflow,
                 ref=settings.github_branch,
                 inputs={"run_id": run_id, "resume_from": resume_from},
             )
+            return None
         except DispatchError as exc:
-            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+            return str(exc)
+
+    def _dispatch_result(err: str | None) -> dict:
+        """The shared ``{dispatched, dispatch_error?}`` tail every dispatching
+        endpoint returns. On success it is just ``{"dispatched": True}`` (no error
+        key), so existing success-path contracts are unchanged."""
+        return {"dispatched": err is None} | ({"dispatch_error": err} if err else {})
 
     # -- endpoints ------------------------------------------------------------
 
@@ -572,8 +609,31 @@ def create_app(
         st.set_running(now=now)
         st.heartbeat(agent="backend", now=now)
         _commit_run_and_status(run_id, run, st, "submitted — dispatching governance")
-        _dispatch(settings.governance_workflow, run_id, "THRESHOLD_DRAFTING")
-        return {"run_id": run_id, "dispatched": True}
+        err = _dispatch(settings.governance_workflow, run_id, "THRESHOLD_DRAFTING")
+        return {"run_id": run_id, **_dispatch_result(err)}
+
+    @app.post("/api/runs/{run_id}/redispatch")
+    def redispatch_run(run_id: str = Depends(_valid_run_id)) -> dict:
+        """Re-fire Governance for a run whose dispatch never took (§5.7 "hasn't
+        started yet" re-dispatch). ``workflow_dispatch`` is fire-and-forget and can
+        fail *after* the state transition is already committed — a transient GitHub
+        API error, or a PAT lacking ``actions:write`` — leaving the run sitting at a
+        running stage with no Action behind it. This re-kicks it without redoing any
+        prior work: the pipeline resumes idempotently from its last checkpoint (§5.3)
+        and the governance workflow's per-run ``concurrency`` group serialises repeat
+        dispatches (a second queues, never races), so this is safe to call more than
+        once. Valid only for a non-paused, non-terminal dispatched stage — the
+        ``resume_from`` is the one the original dispatch used."""
+        run = _load_run(run_id)
+        resume_from = _REDISPATCH_RESUME_FROM.get(run.stage)
+        if resume_from is None or run.stage_status is not statefile.StageStatus.IN_PROGRESS:
+            raise HTTPException(
+                http_status.HTTP_409_CONFLICT,
+                f"Run {run_id} is not awaiting a governance dispatch "
+                f"(stage={run.stage}, status={run.stage_status}).",
+            )
+        err = _dispatch(settings.governance_workflow, run_id, resume_from)
+        return {"run_id": run_id, "resume_from": resume_from, **_dispatch_result(err)}
 
     @app.post("/api/runs/{run_id}/threshold/route")
     def threshold_route(body: RouteBody, run_id: str = Depends(_valid_run_id)) -> dict:
@@ -602,8 +662,13 @@ def create_app(
         st.set_running(now=now)
         st.heartbeat(agent="backend", now=now)
         _commit_run_and_status(run_id, run, st, "threshold routing: full assessment")
-        _dispatch(settings.governance_workflow, run_id, "FULL_DRAFTING")
-        return {"run_id": run_id, "outcome": "full", "stage": str(run.stage), "dispatched": True}
+        err = _dispatch(settings.governance_workflow, run_id, "FULL_DRAFTING")
+        return {
+            "run_id": run_id,
+            "outcome": "full",
+            "stage": str(run.stage),
+            **_dispatch_result(err),
+        }
 
     @app.post("/api/runs/{run_id}/answers")
     def submit_answers(body: AnswersBody, run_id: str = Depends(_valid_run_id)) -> dict:
@@ -646,12 +711,12 @@ def create_app(
             github.commit_files(files, f"run {run_id}: checkpoint answers — revising")
         except GitHubError as exc:
             raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
-        _dispatch(settings.governance_workflow, run_id, "FULL_REVISING")
+        err = _dispatch(settings.governance_workflow, run_id, "FULL_REVISING")
         return {
             "run_id": run_id,
             "answered": len(answered_ids),
             "skipped": len(skip_ids),
-            "dispatched": True,
+            **_dispatch_result(err),
         }
 
     def _question_ids(run_id: str) -> set[str]:
@@ -773,8 +838,8 @@ def create_app(
             github.commit_files(files, f"run {run_id}: threshold revision {revision} requested")
         except GitHubError as exc:
             raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
-        _dispatch(settings.governance_workflow, run_id, "THRESHOLD_RECONCILING")
-        return {"run_id": run_id, "revision": revision, "dispatched": True}
+        err = _dispatch(settings.governance_workflow, run_id, "THRESHOLD_RECONCILING")
+        return {"run_id": run_id, "revision": revision, **_dispatch_result(err)}
 
     @app.post("/api/runs/{run_id}/revise")
     def revise_run(body: ReviseBody, run_id: str = Depends(_valid_run_id)) -> dict:
@@ -827,8 +892,8 @@ def create_app(
             )
         except GitHubError as exc:
             raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
-        _dispatch(settings.governance_workflow, run_id, "USER_REVISION")
-        return {"run_id": run_id, "revision": revision, "dispatched": True}
+        err = _dispatch(settings.governance_workflow, run_id, "USER_REVISION")
+        return {"run_id": run_id, "revision": revision, **_dispatch_result(err)}
 
     @app.post("/api/runs/{run_id}/resume")
     def resume_run(run_id: str = Depends(_valid_run_id)) -> dict:
