@@ -2,9 +2,9 @@
   "schema_version": 1,
   "run_id": "WT-ZM6W-FX",
   "created_at": "2026-07-17T17:20:17Z",
-  "updated_at": "2026-07-17T17:21:08Z",
+  "updated_at": "2026-07-17T17:21:10Z",
   "stage": "THRESHOLD_DRAFTING",
-  "stage_status": "in_progress",
+  "stage_status": "failed",
   "phase": "threshold",
   "checkpoints": {},
   "revisions": {
@@ -18,5 +18,9 @@
     "sensitivity_ceiling": "OFFICIAL",
     "attested": false
   },
-  "last_error": null
+  "last_error": {
+    "stage": "threshold.generalist_a",
+    "message": "Something went wrong while drafting the threshold assessment. Your run is safe — paste the run code WT-ZM6W-FX to resume from the last checkpoint.",
+    "technical": "LLMError: Gemini HTTP 503 for model 'gemini-3.5-flash': {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n"
+  }
 }

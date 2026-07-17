@@ -3,10 +3,10 @@
   "run_id": "WT-ZM6W-FX",
   "run_code": "WT-ZM6W-FX",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-17T17:21:08Z",
+  "overall_state": "failed",
+  "updated_at": "2026-07-17T17:21:10Z",
   "nodes": {
-    "threshold.generalist_a": "pending",
+    "threshold.generalist_a": "failed",
     "threshold.generalist_b": "pending",
     "threshold.reconciler": "pending",
     "threshold.rating_engine": "pending",
@@ -35,11 +35,44 @@
       "agent": "pipeline",
       "type": "heartbeat",
       "detail": ""
+    },
+    {
+      "id": "evt_000003",
+      "ts": "2026-07-17T17:21:09Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000004",
+      "ts": "2026-07-17T17:21:09Z",
+      "agent": "threshold.generalist_a",
+      "type": "stage_started",
+      "detail": "Assessor A started"
+    },
+    {
+      "id": "evt_000005",
+      "ts": "2026-07-17T17:21:09Z",
+      "agent": "threshold.generalist_a",
+      "type": "drafting",
+      "detail": "drafting threshold sections 1–4"
+    },
+    {
+      "id": "evt_000006",
+      "ts": "2026-07-17T17:21:10Z",
+      "agent": "threshold.generalist_a",
+      "type": "error",
+      "detail": "Something went wrong while drafting the threshold assessment. Your run is safe — paste the run code WT-ZM6W-FX to resume from the last checkpoint."
     }
   ],
-  "log_cursor": 2,
+  "log_cursor": 6,
   "questions": null,
-  "failure": null,
+  "failure": {
+    "stage": "threshold.generalist_a",
+    "message": "Something went wrong while drafting the threshold assessment. Your run is safe — paste the run code WT-ZM6W-FX to resume from the last checkpoint.",
+    "run_code": "WT-ZM6W-FX",
+    "technical": "LLMError: Gemini HTTP 503 for model 'gemini-3.5-flash': {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n"
+  },
   "expected_ranges": {
     "threshold": [
       50,
