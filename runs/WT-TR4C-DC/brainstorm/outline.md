@@ -11,8 +11,8 @@ run_id: "WT-TR4C-DC"
 title: "Canberra Business Navigator"
 summary: "A chatbot designed to guide small business owners through government registration, regulatory requirements, and funding opportunities."
 created_at: "2026-07-17T09:10:23Z"
-updated_at: "2026-07-17T09:21:03Z"
-resolved: ["problem", "solution", "users_stakeholders", "ux_ui"]
+updated_at: "2026-07-17T09:21:29Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "ux_ui"]
 ---
 
 <!-- section: problem -->
@@ -33,7 +33,7 @@ The primary users are small business owners in Canberra. Key stakeholders includ
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+The tool will ingest and reference publicly available government regulatory documents, legislation, and funding guidelines. It does not require access to private business records or sensitive internal government data.
 
 <!-- section: happy_path -->
 ## 5. Happy path
