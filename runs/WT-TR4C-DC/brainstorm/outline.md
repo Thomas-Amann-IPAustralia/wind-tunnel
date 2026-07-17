@@ -11,8 +11,8 @@ run_id: "WT-TR4C-DC"
 title: "Canberra Business Navigator"
 summary: "A chatbot designed to guide small business owners through government registration, regulatory requirements, and funding opportunities."
 created_at: "2026-07-17T09:10:23Z"
-updated_at: "2026-07-17T09:12:28Z"
-resolved: ["problem"]
+updated_at: "2026-07-17T09:15:21Z"
+resolved: ["problem", "solution"]
 ---
 
 <!-- section: problem -->
@@ -23,7 +23,7 @@ Small business owners in Canberra often struggle to navigate the complex landsca
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+The solution is a conversational AI assistant that acts as a navigator for small business owners. It uses a large language model to ingest and interpret government regulatory documents, legislation, and funding guidelines, allowing users to ask plain-language questions about their specific business obligations and opportunities.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
