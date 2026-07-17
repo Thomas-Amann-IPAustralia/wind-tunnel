@@ -31,7 +31,10 @@ answers) resumes into ``FULL_REVISING``, which revises the questioning specialis
 sections before ``ARCHITECT``. After ``COMPLETE``, a ``resume_from=USER_REVISION``
 dispatch (from ``POST /revise``) runs the ≤2 full-assessment revision path — reviewer
 triage → targeted amendment → one verify pass → ``ASSEMBLY`` rebuilds and returns to
-``COMPLETE`` (§5.8).
+``COMPLETE`` (§5.8). While paused at ``THRESHOLD_REVIEW``, a ``resume_from=THRESHOLD_
+RECONCILING`` dispatch (from ``POST /revise {threshold}``) re-runs the reconciler with the
+user's instructions in context and returns to the ``THRESHOLD_REVIEW`` pause; the generalist
+drafts stand untouched, so the engine's ratings are unchanged (§7, §10).
 """
 
 from __future__ import annotations
@@ -72,6 +75,9 @@ from stages.threshold import (
     NODE_RECONCILER,
     threshold_drafting,
     threshold_reconciling,
+)
+from stages.threshold import (
+    revision_reconciled_relpath as threshold_revision_reconciled_relpath,
 )
 from statefile import RunState, Stage, StageStatus, utc_now_iso
 from status import StatusModel
@@ -135,11 +141,16 @@ _CHECKPOINT_OUTPUTS: dict[Stage, tuple[str, ...]] = {
 
 
 def _checkpoint_outputs(run: RunState, stage: Stage) -> tuple[str, ...]:
-    """The checkpoint output files for ``stage`` (§5.3). Most are a fixed table entry;
-    USER_REVISION's is per-revision (rev_<N>/verification.json), so it is resolved from
-    ``run.json``'s ``revisions.full`` — the revision the dispatch is working on."""
+    """The checkpoint output files for ``stage`` (§5.3). Most are a fixed table entry; two
+    are per-revision, resolved from ``run.json`` so a revision re-dispatch is not skipped by
+    the initial pass's outputs: USER_REVISION's ``rev_<N>/verification.json`` (from
+    ``revisions.full``), and THRESHOLD_RECONCILING's ``rev_<N>/reconciled.json`` when a
+    threshold revision is in flight (``revisions.threshold > 0``, §7). On the initial
+    reconciliation (``revisions.threshold == 0``) the standard threshold outputs apply."""
     if stage is Stage.USER_REVISION:
         return (revision_verification_relpath(run.revisions.get("full", 0)),)
+    if stage is Stage.THRESHOLD_RECONCILING and run.revisions.get("threshold", 0) > 0:
+        return (threshold_revision_reconciled_relpath(run.revisions["threshold"]),)
     return _CHECKPOINT_OUTPUTS.get(stage, ())
 
 

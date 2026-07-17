@@ -94,19 +94,42 @@ def run_reconciler(
     draft_a: GeneralistDraft,
     draft_b: GeneralistDraft,
     resolved: dict[str, dict],
+    *,
+    revision_instructions: str | None = None,
 ) -> ReconcilerResult:
     """Run the reconciler (§5.1, §10.3). ``resolved`` is the code-resolved
     higher-wins ``{3.x: {consequence, likelihood}}`` map the stage computed; the
     reconciler writes the narrative and rationale that explain it but never sets a
-    tier or rating."""
+    tier or rating.
+
+    ``revision_instructions`` (a threshold revision, §7) — when present — carries the
+    user's requested changes as **untrusted data** (§9.2): they steer the reconciled
+    narrative and rationale but never license changing a resolved tier or a rating (those
+    are computed by code from the two generalists' unchanged inputs — "models argue, code
+    computes", §10). On the initial reconciliation it is ``None`` and the prompt is
+    unchanged."""
     prompt = load_prompt("threshold_reconciler")
-    user = (
-        f"{threshold_instrument_context()}\n\n"
-        f"{wrap_untrusted(outline_md, label='## Use-case outline')}\n\n"
-        f"{_render_draft('Assessor A', draft_a)}\n\n"
-        f"{_render_draft('Assessor B', draft_b)}\n\n"
-        f"{_render_resolved(resolved)}"
-    )
+    parts = [
+        threshold_instrument_context(),
+        wrap_untrusted(outline_md, label="## Use-case outline"),
+        _render_draft("Assessor A", draft_a),
+        _render_draft("Assessor B", draft_b),
+        _render_resolved(resolved),
+    ]
+    if revision_instructions and revision_instructions.strip():
+        parts.append(
+            wrap_untrusted(
+                revision_instructions,
+                label=(
+                    "## Requested revision to the threshold assessment\n"
+                    "The user has asked for the following changes. Apply them to the reconciled "
+                    "narrative and rationale where faithful to the resolved position. You may "
+                    "**not** change any consequence tier, likelihood tier, or rating — those are "
+                    "computed by code from the two assessors' unchanged inputs (§10)."
+                ),
+            )
+        )
+    user = "\n\n".join(parts)
     data, resp = client.complete_json(prompt.model_role, prompt.system, user)
     sections = _require_sections(data, "reconciler")
     rationale = _require_rationale(data)

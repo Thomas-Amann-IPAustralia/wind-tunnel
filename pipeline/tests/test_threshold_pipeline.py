@@ -264,6 +264,109 @@ def test_pipeline_is_idempotent_on_resume(tmp_path):
     assert result.stage_status is StageStatus.AWAITING_USER
 
 
+# -- threshold revision (§7, brief §7) -----------------------------------------
+
+
+def _drive_to_review(run_dir, transport) -> None:
+    _make_run(run_dir, run_id=run_dir.name)
+    run_pipeline(run_dir, llm=LLMClient(transport=transport), committer=FakeCommitter())
+
+
+def _stage_threshold_revision(run_dir, instructions: str) -> int:
+    """Mimic ``POST /revise {threshold}``: consume a cap, stage the request, rewind to
+    THRESHOLD_RECONCILING. Returns the revision number."""
+    run = RunState.load(run_dir)
+    n = run.record_revision("threshold")
+    run.advance_to(Stage.THRESHOLD_RECONCILING)
+    run.save(run_dir)
+    req_dir = run_dir / "threshold" / "revisions" / f"rev_{n}"
+    req_dir.mkdir(parents=True)
+    (req_dir / "request.json").write_text(
+        json.dumps({"instructions": instructions}), encoding="utf-8"
+    )
+    return n
+
+
+def test_threshold_revision_reruns_reconciler_with_instructions(tmp_path):
+    run_dir = tmp_path / "WT-TEST-RV"
+    run_dir.mkdir()
+    transport = ScriptedTransport(
+        responses={
+            resolve_model("threshold_generalist"): [_generalist_json(_A), _generalist_json(_B)],
+            resolve_model("threshold_reconciler"): _reconciler_json(),
+        }
+    )
+    _drive_to_review(run_dir, transport)
+
+    n = _stage_threshold_revision(run_dir, "Emphasise the accessibility mitigations in section 4.")
+    result = run_pipeline(
+        run_dir,
+        llm=LLMClient(transport=transport),
+        committer=FakeCommitter(),
+        resume_from="THRESHOLD_RECONCILING",
+    )
+
+    # Back at the review pause, one revision in.
+    assert result.ok
+    assert result.final_stage is Stage.THRESHOLD_REVIEW
+    assert result.stage_status is StageStatus.AWAITING_USER
+    assert n == 1
+
+    # The reconciler was re-run and the user's instructions reached its prompt as untrusted
+    # data — but the generalists were NOT re-called (drafting is checkpoint-skipped, §5.3).
+    reconciler_model = resolve_model("threshold_reconciler")
+    reconciler_prompts = [s["user"] for s in transport.seen if s["model"] == reconciler_model]
+    assert len(reconciler_prompts) == 2  # once on the initial pass, once on the revision
+    assert "accessibility mitigations" in reconciler_prompts[-1]
+
+    # The per-revision checkpoint marker was written (idempotency key for the re-dispatch).
+    marker = json.loads(
+        (run_dir / "threshold" / "revisions" / "rev_1" / "reconciled.json").read_text()
+    )
+    assert marker["revision"] == 1
+
+    # The ratings are UNCHANGED — the generalist drafts stand, so the resolved tiers and the
+    # engine's ratings are identical; a revision steers narrative, never a rating (§10).
+    ratings = json.loads((run_dir / "threshold" / "ratings.json").read_text())
+    got = {sid: ratings["sections"][sid]["rating"] for sid in RISK_SECTIONS}
+    assert got == _EXPECTED_RATINGS
+    assert ratings["overall_inherent"] == _EXPECTED_OVERALL
+
+
+def test_threshold_revision_is_idempotent_on_resume(tmp_path):
+    run_dir = tmp_path / "WT-TEST-RW"
+    run_dir.mkdir()
+    transport = ScriptedTransport(
+        responses={
+            resolve_model("threshold_generalist"): [_generalist_json(_A), _generalist_json(_B)],
+            resolve_model("threshold_reconciler"): _reconciler_json(),
+        }
+    )
+    _drive_to_review(run_dir, transport)
+    _stage_threshold_revision(run_dir, "Tighten section 2.")
+    run_pipeline(
+        run_dir,
+        llm=LLMClient(transport=transport),
+        committer=FakeCommitter(),
+        resume_from="THRESHOLD_RECONCILING",
+    )
+
+    # A re-dispatch of the same revision must NOT re-run the reconciler: rev_1/reconciled.json
+    # exists, so the per-revision checkpoint short-circuits it (§5.3).
+    run = RunState.load(run_dir)
+    run.advance_to(Stage.THRESHOLD_RECONCILING)
+    run.save(run_dir)
+
+    class _Boom:
+        def generate(self, **_):
+            raise AssertionError("model must not be called on an idempotent revision resume")
+
+    result = run_pipeline(run_dir, llm=LLMClient(transport=_Boom()), committer=FakeCommitter())
+    assert result.ok
+    assert result.final_stage is Stage.THRESHOLD_REVIEW
+    assert result.stage_status is StageStatus.AWAITING_USER
+
+
 def test_pipeline_fails_calmly_on_bad_model_json(tmp_path):
     run_dir = tmp_path / "WT-TEST-03"
     run_dir.mkdir()

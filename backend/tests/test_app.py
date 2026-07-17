@@ -441,15 +441,97 @@ def test_revise_rejects_empty_instructions(client, github):
     assert resp.status_code == 400
 
 
-def test_revise_rejects_threshold_artefact(client, github):
-    # "threshold" revises on its own THRESHOLD_REVIEW path, not this endpoint; the outline is
-    # unbounded and has no /revise branch at all (brief §4/§7). Both are rejected by the Literal.
+def test_revise_rejects_outline_artefact(client, github):
+    # The outline is unbounded and has no /revise branch at all (brief §4/§7): it is refined
+    # through the interview, not revised here. An "outline" value is rejected by the Literal.
+    # ("threshold" IS accepted now — see the threshold-revision tests below.)
     _seed_complete(github, "WT-REDF-27")
-    resp = client.post(
-        "/api/runs/WT-REDF-27/revise", json={"artefact": "threshold", "instructions": "x"}
-    )
-    assert resp.status_code == 422
     resp = client.post(
         "/api/runs/WT-REDF-27/revise", json={"artefact": "outline", "instructions": "x"}
     )
     assert resp.status_code == 422
+
+
+# -- threshold revision (§7, brief §7) --------------------------------------------
+
+
+def _seed_threshold_review(github, run_id: str, *, revisions_threshold: int = 0) -> None:
+    """A run paused at THRESHOLD_REVIEW (the review screen open), optionally with some
+    threshold revisions already used."""
+    run = seed_run(
+        github,
+        run_id,
+        stage=statefile.Stage.THRESHOLD_REVIEW,
+        stage_status=statefile.StageStatus.AWAITING_USER,
+    )
+    if revisions_threshold:
+        run.revisions["threshold"] = revisions_threshold
+        github.files[run_path(run_id, "run.json")] = dump_json(run.to_dict())
+
+
+def test_revise_threshold_commits_request_and_dispatches(client, github, dispatcher):
+    _seed_threshold_review(github, "WT-THRA-35")
+    resp = client.post(
+        "/api/runs/WT-THRA-35/revise",
+        json={"artefact": "threshold", "instructions": "Emphasise the accessibility mitigations."},
+    )
+    assert resp.status_code == 200
+    assert resp.json() == {"run_id": "WT-THRA-35", "revision": 1, "dispatched": True}
+
+    # rev_1/request.json committed with the instructions.
+    request = json.loads(
+        github.files[run_path("WT-THRA-35", "threshold", "revisions", "rev_1", "request.json")]
+    )
+    assert request["instructions"] == "Emphasise the accessibility mitigations."
+
+    # run.json rewound to THRESHOLD_RECONCILING with the count incremented; governance dispatched
+    # to re-run the reconciler (not FULL_DRAFTING — a revision is not a routing decision).
+    run = statefile.RunState.from_dict(json.loads(github.files[run_path("WT-THRA-35", "run.json")]))
+    assert run.stage is statefile.Stage.THRESHOLD_RECONCILING
+    assert run.revisions["threshold"] == 1
+    assert dispatcher.calls[0]["inputs"] == {
+        "run_id": "WT-THRA-35",
+        "resume_from": "THRESHOLD_RECONCILING",
+    }
+    status_doc = json.loads(github.files[run_path("WT-THRA-35", "status.json")])
+    assert status_doc["overall_state"] == "running"
+
+
+def test_revise_threshold_second_revision_increments_to_two(client, github):
+    _seed_threshold_review(github, "WT-THRB-36", revisions_threshold=1)
+    resp = client.post(
+        "/api/runs/WT-THRB-36/revise", json={"artefact": "threshold", "instructions": "Once more."}
+    )
+    assert resp.status_code == 200
+    assert resp.json()["revision"] == 2
+    assert run_path("WT-THRB-36", "threshold", "revisions", "rev_2", "request.json") in github.files
+
+
+def test_revise_threshold_refuses_over_the_cap(client, github, dispatcher):
+    # Two revisions already used ⇒ the third is refused at the cap (brief §7), nothing dispatched.
+    _seed_threshold_review(github, "WT-THRC-32", revisions_threshold=2)
+    resp = client.post(
+        "/api/runs/WT-THRC-32/revise", json={"artefact": "threshold", "instructions": "Again."}
+    )
+    assert resp.status_code == 409
+    assert "cap" in resp.json()["detail"].lower() or "no further" in resp.json()["detail"].lower()
+    assert dispatcher.calls == []
+
+
+def test_revise_threshold_refuses_when_not_paused_at_review(client, github, dispatcher):
+    # A threshold revision presupposes the review screen is open (paused at THRESHOLD_REVIEW).
+    # A run still drafting, or already routed on, cannot revise the threshold artefact here.
+    seed_run(github, "WT-THRD-33", stage=statefile.Stage.THRESHOLD_DRAFTING)
+    resp = client.post(
+        "/api/runs/WT-THRD-33/revise", json={"artefact": "threshold", "instructions": "Change it."}
+    )
+    assert resp.status_code == 409
+    assert dispatcher.calls == []
+
+
+def test_revise_threshold_rejects_empty_instructions(client, github):
+    _seed_threshold_review(github, "WT-THRE-34")
+    resp = client.post(
+        "/api/runs/WT-THRE-34/revise", json={"artefact": "threshold", "instructions": "   "}
+    )
+    assert resp.status_code == 400
