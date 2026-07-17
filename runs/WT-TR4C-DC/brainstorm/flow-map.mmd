@@ -1,0 +1,49 @@
+flowchart TD
+    %% Actors
+    User["Small Business Owner (e.g., Cafe Owner)"]
+    GovStaff["ACT Government Staff / Compliance Managers"]
+
+    %% User Interfaces Subgraph
+    subgraph UI["User Interfaces"]
+        WA["WhatsApp Mobile App"]
+        Web["Business.gov Web Portal Widget"]
+    end
+
+    %% Core AI System Subgraph
+    subgraph AI["Canberra Business Navigator System"]
+        Engine["LLM & RAG Engine"]
+        KB[("ACT Regulatory Docs & Guidelines DB")]
+        Logs[("Interaction & Audit Logs")]
+    end
+
+    %% External Systems Subgraph
+    subgraph Gov["ACT Government Ecosystem"]
+        Portals["Official ACT Portals (Access Canberra, WorkSafe ACT)"]
+    end
+
+    %% Information Flows
+    User -->|"1. Plain-language query (e.g., WHS obligations)"| WA
+    User -->|"1. Plain-language query (e.g., WHS obligations)"| Web
+
+    WA -->|"2. Forward query"| Engine
+    Web -->|"2. Forward query"| Engine
+
+    Engine -->|"3. Retrieve relevant regulations"| KB
+    KB -->|"4. Context & guidelines"| Engine
+
+    Engine -->|"5. Generate response & log event"| Logs
+    
+    Engine -->|"6. Plain-language summary & referral links"| WA
+    Engine -->|"6. Plain-language summary & referral links"| Web
+
+    WA -->|"7. Display guidance"| User
+    Web -->|"7. Display guidance"| User
+
+    User -->|"8. Click referral link"| Portals
+    User -->|"9. Submit feedback (Thumbs Up/Down)"| Web
+    User -->|"9. Submit feedback (Thumbs Up/Down)"| WA
+    
+    Web -->|"10. Record feedback"| Logs
+    WA -->|"10. Record feedback"| Logs
+
+    GovStaff -->|"11. Audit & review metrics"| Logs
