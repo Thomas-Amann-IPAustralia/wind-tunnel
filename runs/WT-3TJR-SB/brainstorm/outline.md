@@ -11,8 +11,8 @@ run_id: "WT-3TJR-SB"
 title: "APS AI Thought Partner"
 summary: "A creative AI-powered brainstorming assistant designed to help public servants identify and explore novel solutions to complex policy and project challenges."
 created_at: "2026-07-17T15:27:49Z"
-updated_at: "2026-07-17T15:35:18Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints"]
+updated_at: "2026-07-17T15:36:33Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
 <!-- section: problem -->
@@ -58,4 +58,4 @@ The system must host data within Australia to meet sovereignty requirements. It 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-*How you'd know, six months in, that it worked.*
+Success will be measured six months post-launch by tracking the number of active users and gathering qualitative feedback from public servants. The primary indicator of success is whether users report that the tool effectively helps them overcome creative blocks and develop more robust project concepts.
