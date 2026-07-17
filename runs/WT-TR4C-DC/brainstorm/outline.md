@@ -7,18 +7,18 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-TR4C-DC"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-TR4C-DC"
+title: "Canberra Business Navigator"
+summary: "A chatbot designed to guide small business owners through government registration, regulatory requirements, and funding opportunities."
 created_at: "2026-07-17T09:10:23Z"
-updated_at: "2026-07-17T09:10:23Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-17T09:12:28Z"
+resolved: ["problem"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Small business owners in Canberra often struggle to navigate the complex landscape of government registration requirements, regulatory obligations, and available funding opportunities, leading to confusion and potential compliance gaps.
 
 <!-- section: solution -->
 ## 2. Proposed solution
