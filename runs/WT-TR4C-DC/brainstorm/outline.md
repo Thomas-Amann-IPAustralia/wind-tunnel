@@ -11,7 +11,7 @@ run_id: "WT-TR4C-DC"
 title: "Canberra Business Navigator"
 summary: "A chatbot designed to guide small business owners through government registration, regulatory requirements, and funding opportunities."
 created_at: "2026-07-17T09:10:23Z"
-updated_at: "2026-07-17T09:23:58Z"
+updated_at: "2026-07-17T09:24:49Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "ux_ui"]
 ---
 
@@ -38,7 +38,7 @@ The tool will ingest and reference publicly available government regulatory docu
 <!-- section: happy_path -->
 ## 5. Happy path
 
-A new cafe owner texts the WhatsApp bot asking about their WHS obligations. The bot analyzes the query against the ingested ACT government regulatory documents and provides a concise, plain-language summary of the relevant WHS requirements for a small hospitality business. It concludes by providing direct links to the official ACT government portal for any necessary registration forms or further detailed guidance.
+A new cafe owner texts the WhatsApp bot asking about their WHS obligations. The bot analyzes the query against the ingested ACT government regulatory documents and provides a concise, plain-language summary of the relevant requirements. If the query is ambiguous or the bot lacks a definitive answer, it provides links to official ACT government contact points and portals for further guidance, ensuring the user is never left without a path to resolution.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
