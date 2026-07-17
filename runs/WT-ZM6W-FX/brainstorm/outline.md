@@ -7,12 +7,12 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-ZM6W-FX"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-ZM6W-FX"
+title: "Telephone System Project"
+summary: "A project focused on developing or improving telephone communication infrastructure."
 created_at: "2026-07-17T17:20:17Z"
-updated_at: "2026-07-17T17:20:17Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-17T17:20:33Z"
+resolved: []
 ---
 
 <!-- section: problem -->
