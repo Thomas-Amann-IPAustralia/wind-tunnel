@@ -11,8 +11,8 @@ run_id: "WT-3TJR-SB"
 title: "APS AI Thought Partner"
 summary: "A creative AI-powered brainstorming assistant designed to help public servants identify and explore novel solutions to complex policy and project challenges."
 created_at: "2026-07-17T15:27:49Z"
-updated_at: "2026-07-17T15:30:54Z"
-resolved: ["problem", "solution", "users_stakeholders"]
+updated_at: "2026-07-17T15:31:49Z"
+resolved: ["problem", "solution", "users_stakeholders", "data"]
 ---
 
 <!-- section: problem -->
@@ -33,7 +33,7 @@ The tool is intended for use by any public servant across the Australian Public 
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+The tool processes non-sensitive, OFFICIAL information. Users primarily input rough notes, project ideas, and preliminary policy concepts rather than classified or sensitive internal documents.
 
 <!-- section: happy_path -->
 ## 5. Happy path
