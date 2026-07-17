@@ -11,8 +11,8 @@ run_id: "WT-TR4C-DC"
 title: "Canberra Business Navigator"
 summary: "A chatbot designed to guide small business owners through government registration, regulatory requirements, and funding opportunities."
 created_at: "2026-07-17T09:10:23Z"
-updated_at: "2026-07-17T09:26:26Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui"]
+updated_at: "2026-07-17T09:27:11Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints"]
 ---
 
 <!-- section: problem -->
@@ -53,7 +53,7 @@ The interface is a conversational chatbot accessible via WhatsApp for mobile con
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-*The hard limits and strong preferences: technical, organisational, maintenance.*
+The system must strictly avoid providing legal advice or recommending specific commercial suppliers. All interactions must be clearly framed as informational guidance. Additionally, the system must retain logs of all data interactions for audit and improvement purposes, while ensuring compliance with government information standards.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
