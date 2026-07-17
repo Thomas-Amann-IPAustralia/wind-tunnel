@@ -4,7 +4,7 @@
   "run_code": "WT-TR4C-DC",
   "phase": "threshold",
   "overall_state": "running",
-  "updated_at": "2026-07-17T09:10:23Z",
+  "updated_at": "2026-07-17T09:36:34Z",
   "nodes": {
     "threshold.generalist_a": "pending",
     "threshold.generalist_b": "pending",
@@ -21,8 +21,16 @@
     "full.reviewer": "pending",
     "full.assembly": "pending"
   },
-  "log": [],
-  "log_cursor": 0,
+  "log": [
+    {
+      "id": "evt_000001",
+      "ts": "2026-07-17T09:36:34Z",
+      "agent": "backend",
+      "type": "heartbeat",
+      "detail": ""
+    }
+  ],
+  "log_cursor": 1,
   "questions": null,
   "failure": null,
   "expected_ranges": {
