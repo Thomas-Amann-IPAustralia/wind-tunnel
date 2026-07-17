@@ -11,8 +11,8 @@ run_id: "WT-TR4C-DC"
 title: "Canberra Business Navigator"
 summary: "A chatbot designed to guide small business owners through government registration, regulatory requirements, and funding opportunities."
 created_at: "2026-07-17T09:10:23Z"
-updated_at: "2026-07-17T09:24:49Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "ux_ui"]
+updated_at: "2026-07-17T09:26:26Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui"]
 ---
 
 <!-- section: problem -->
@@ -43,7 +43,7 @@ A new cafe owner texts the WhatsApp bot asking about their WHS obligations. The 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
 
-*What else could solve this, including at least one non-AI option.*
+The primary non-AI alternatives are centralized government call centers and static, search-based knowledge bases. These options are limited by their operating hours and their inability to interpret the specific, nuanced context of a user's business query. An AI-driven approach provides 24/7 accessibility and the capacity to translate complex regulatory language into actionable, personalized advice, while still grounding the output in authoritative government content.
 
 <!-- section: ux_ui -->
 ## 7. UX and interface
