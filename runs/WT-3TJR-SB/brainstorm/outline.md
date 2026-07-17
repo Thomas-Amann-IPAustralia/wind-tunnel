@@ -11,8 +11,8 @@ run_id: "WT-3TJR-SB"
 title: "APS AI Thought Partner"
 summary: "A creative AI-powered brainstorming assistant designed to help public servants identify and explore novel solutions to complex policy and project challenges."
 created_at: "2026-07-17T15:27:49Z"
-updated_at: "2026-07-17T15:29:34Z"
-resolved: ["problem", "solution"]
+updated_at: "2026-07-17T15:30:54Z"
+resolved: ["problem", "solution", "users_stakeholders"]
 ---
 
 <!-- section: problem -->
@@ -28,7 +28,7 @@ A web-based brainstorming tool that acts as a creative thought partner for publi
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+The tool is intended for use by any public servant across the Australian Public Service (APS), with initial deployment planned via the Department of Finance's GovAI Exchange platform. The primary users are policy officers and project managers, while the broader APS benefits from more robust and creative policy outcomes.
 
 <!-- section: data -->
 ## 4. Data
