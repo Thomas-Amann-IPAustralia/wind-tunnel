@@ -1,49 +1,39 @@
 flowchart TD
-    %% Actors
-    User["Small Business Owner (e.g., Cafe Owner)"]
-    GovStaff["ACT Government Staff / Compliance Managers"]
+    Owner["Small Business Owner"]
+    GovStaff["ACT Government Staff"]
 
-    %% User Interfaces Subgraph
     subgraph UI["User Interfaces"]
-        WA["WhatsApp Mobile App"]
-        Web["Business.gov Web Portal Widget"]
+        WhatsApp["WhatsApp Mobile Bot"]
+        WebWidget["Business.gov Portal Widget"]
     end
 
-    %% Core AI System Subgraph
-    subgraph AI["Canberra Business Navigator System"]
-        Engine["LLM & RAG Engine"]
-        KB[("ACT Regulatory Docs & Guidelines DB")]
+    subgraph Navigator["Canberra Business Navigator"]
+        AI_Engine["Conversational AI Engine (LLM)"]
         Logs[("Interaction & Audit Logs")]
     end
 
-    %% External Systems Subgraph
-    subgraph Gov["ACT Government Ecosystem"]
-        Portals["Official ACT Portals (Access Canberra, WorkSafe ACT)"]
+    subgraph ACT_Gov["ACT Government Ecosystem"]
+        GovDocs[("Public Regulatory Docs, Legislation & Guidelines")]
+        GovPortals["Official ACT Portals (Access Canberra / WorkSafe ACT)"]
     end
 
-    %% Information Flows
-    User -->|"1. Plain-language query (e.g., WHS obligations)"| WA
-    User -->|"1. Plain-language query (e.g., WHS obligations)"| Web
+    GovStaff -->|"Publishes & updates"| GovDocs
+    GovDocs -->|"Ingested & referenced by"| AI_Engine
 
-    WA -->|"2. Forward query"| Engine
-    Web -->|"2. Forward query"| Engine
+    Owner -->|"1. Asks plain-language question"| WhatsApp
+    Owner -->|"1. Asks plain-language question"| WebWidget
 
-    Engine -->|"3. Retrieve relevant regulations"| KB
-    KB -->|"4. Context & guidelines"| Engine
+    WhatsApp -->|"2. Forwards query"| AI_Engine
+    WebWidget -->|"2. Forwards query"| AI_Engine
 
-    Engine -->|"5. Generate response & log event"| Logs
-    
-    Engine -->|"6. Plain-language summary & referral links"| WA
-    Engine -->|"6. Plain-language summary & referral links"| Web
+    AI_Engine -->|"3. Analyzes query against"| GovDocs
+    AI_Engine -->|"4. Writes session data"| Logs
 
-    WA -->|"7. Display guidance"| User
-    Web -->|"7. Display guidance"| User
+    AI_Engine -->|"5. Sends plain-language summary & links"| WhatsApp
+    AI_Engine -->|"5. Sends plain-language summary & links"| WebWidget
 
-    User -->|"8. Click referral link"| Portals
-    User -->|"9. Submit feedback (Thumbs Up/Down)"| Web
-    User -->|"9. Submit feedback (Thumbs Up/Down)"| WA
-    
-    Web -->|"10. Record feedback"| Logs
-    WA -->|"10. Record feedback"| Logs
+    WhatsApp -->|"6. Delivers guidance"| Owner
+    WebWidget -->|"6. Delivers guidance"| Owner
 
-    GovStaff -->|"11. Audit & review metrics"| Logs
+    Owner -->|"7. Clicks referral link for official action"| GovPortals
+    Owner -->|"8. Submits thumbs up/down feedback"| WebWidget
