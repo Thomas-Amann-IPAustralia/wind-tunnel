@@ -1,7 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import type { TranscriptTurn } from "../lib/types";
 import "./Conversation.css";
+
+/** Reveal cadence for the interviewer's replies — a few characters every frame-ish
+ * tick, brisk enough to never feel slow but clearly *writing itself out*. */
+const REVEAL_STEP = 2;
+const REVEAL_INTERVAL_MS = 18;
 
 /**
  * The scoping conversation (design §6.2) — the left pane of the Brainstorm canvas.
@@ -29,11 +34,60 @@ export function Conversation({
   const logRef = useRef<HTMLDivElement>(null);
   const isEmpty = turns.length === 0 && pendingUser === null;
 
-  // Keep the newest message in view as the exchange grows.
+  // Gradual reveal: the interviewer's newest reply writes itself out rather than
+  // landing all at once. We animate only a *freshly arrived* reply — detected by the
+  // `thinking` true→false transition — so restored history and earlier turns show in
+  // full. `stream` holds { index, chars }; when it targets the last turn we render a
+  // sliced body plus a caret.
+  const [stream, setStream] = useState<{ index: number; chars: number } | null>(null);
+  const wasThinking = useRef(thinking);
+  const revealTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const stopReveal = useCallback(() => {
+    if (revealTimer.current) {
+      clearInterval(revealTimer.current);
+      revealTimer.current = null;
+    }
+  }, []);
+
+  useEffect(() => {
+    const justAnswered = wasThinking.current && !thinking;
+    wasThinking.current = thinking;
+    if (!justAnswered) return;
+
+    const index = turns.length - 1;
+    const last = turns[index];
+    if (!last || last.role !== "assistant") return;
+
+    // Honour reduced-motion (and environments without matchMedia): show it whole.
+    const reduce =
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return;
+
+    stopReveal();
+    setStream({ index, chars: 0 });
+    revealTimer.current = setInterval(() => {
+      setStream((prev) => {
+        if (!prev) return prev;
+        const next = prev.chars + REVEAL_STEP;
+        if (next >= last.text.length) {
+          stopReveal();
+          return null; // done — the bubble now renders its full text
+        }
+        return { index: prev.index, chars: next };
+      });
+    }, REVEAL_INTERVAL_MS);
+  }, [thinking, turns, stopReveal]);
+
+  useEffect(() => stopReveal, [stopReveal]);
+
+  // Keep the newest message in view as the exchange grows or streams.
   useEffect(() => {
     const el = logRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [turns, pendingUser, thinking]);
+  }, [turns, pendingUser, thinking, stream]);
 
   function submit() {
     const message = draft.trim();
@@ -60,7 +114,14 @@ export function Conversation({
             questions and your outline will fill in on the right as you go.
           </p>
         ) : (
-          turns.map((t, i) => <Bubble key={i} role={t.role} text={t.text} />)
+          turns.map((t, i) => (
+            <Bubble
+              key={i}
+              role={t.role}
+              text={stream && stream.index === i ? t.text.slice(0, stream.chars) : t.text}
+              streaming={Boolean(stream && stream.index === i)}
+            />
+          ))
         )}
         {pendingUser !== null ? <Bubble role="user" text={pendingUser} pending /> : null}
         {thinking ? (
@@ -105,7 +166,17 @@ export function Conversation({
   );
 }
 
-function Bubble({ role, text, pending }: { role: string; text: string; pending?: boolean }) {
+function Bubble({
+  role,
+  text,
+  pending,
+  streaming,
+}: {
+  role: string;
+  text: string;
+  pending?: boolean;
+  streaming?: boolean;
+}) {
   const who = role === "user" ? "You" : "Interviewer";
   return (
     <div
@@ -113,7 +184,10 @@ function Bubble({ role, text, pending }: { role: string; text: string; pending?:
       aria-label={`${who} said`}
     >
       <span className="wt-bubble__who">{who}</span>
-      <p className="wt-bubble__text">{text}</p>
+      <p className="wt-bubble__text">
+        {text}
+        {streaming ? <span className="wt-bubble__caret" aria-hidden="true" /> : null}
+      </p>
     </div>
   );
 }

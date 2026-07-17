@@ -188,6 +188,10 @@ describe("Brainstorm synthesis — PoC and flow map (§6.3/§6.4)", () => {
     });
   }
 
+  async function openTab(name: RegExp) {
+    fireEvent.click(await screen.findByRole("tab", { name }));
+  }
+
   it("builds a proof of concept and previews it in a sandboxed frame", async () => {
     loadReady();
     vi.mocked(generatePoc).mockResolvedValue({
@@ -196,6 +200,8 @@ describe("Brainstorm synthesis — PoC and flow map (§6.3/§6.4)", () => {
     });
 
     renderBrainstorm();
+    // The PoC is a top-level tab now, not a block at the foot of the page.
+    await openTab(/proof of concept/i);
     fireEvent.click(await screen.findByRole("button", { name: /build a proof of concept/i }));
 
     const frame = (await screen.findByTitle("Proof-of-concept preview")) as HTMLIFrameElement;
@@ -216,17 +222,20 @@ describe("Brainstorm synthesis — PoC and flow map (§6.3/§6.4)", () => {
     vi.mocked(postFlowMapSvg).mockResolvedValue({ run_id: CODE, committed: true });
 
     renderBrainstorm();
+    await openTab(/proof of concept/i);
     fireEvent.click(await screen.findByRole("button", { name: /build a proof of concept/i }));
 
-    // The honest conditional-stage note (§6.1), not an error.
+    // The honest conditional-stage note (§6.1), not an error — shown on the PoC tab.
     expect(await screen.findByText(/not a fit for this idea/i)).toBeTruthy();
     expect(screen.getByText(/data pipeline, not an interface/i)).toBeTruthy();
-    // The flow map was rendered client-side and posted back (CLAUDE.md §9).
-    expect(await screen.findByTitle("Information-flow map")).toBeTruthy();
+    // The PoC build action is gone (the gate ruled it out); no dead button.
+    expect(screen.queryByRole("button", { name: /build a proof of concept/i })).toBeNull();
+    // The flow map was rendered client-side and posted back (CLAUDE.md §9)…
     expect(vi.mocked(renderMermaid)).toHaveBeenCalledWith("flowchart TD\n  A-->B");
     expect(vi.mocked(postFlowMapSvg)).toHaveBeenCalledWith(CODE, expect.stringContaining("<svg"));
-    // The PoC action is gone (the gate already ruled it out); no dead button.
-    expect(screen.queryByRole("button", { name: /proof of concept/i })).toBeNull();
+    // …and is waiting on its own tab.
+    await openTab(/flow map/i);
+    expect(await screen.findByTitle("Information-flow map")).toBeTruthy();
   });
 
   it("generates a flow map on demand, renders it, and commits the SVG", async () => {
@@ -238,6 +247,7 @@ describe("Brainstorm synthesis — PoC and flow map (§6.3/§6.4)", () => {
     vi.mocked(postFlowMapSvg).mockResolvedValue({ run_id: CODE, committed: true });
 
     renderBrainstorm();
+    await openTab(/flow map/i);
     fireEvent.click(await screen.findByRole("button", { name: /generate a flow map/i }));
 
     expect(await screen.findByTitle("Information-flow map")).toBeTruthy();
@@ -265,8 +275,10 @@ describe("Brainstorm synthesis — PoC and flow map (§6.3/§6.4)", () => {
 
     renderBrainstorm();
 
-    // Both artefacts come back from committed state (§7.5).
+    // Both artefacts come back from committed state (§7.5), each on its own tab.
+    await openTab(/proof of concept/i);
     expect(await screen.findByTitle("Proof-of-concept preview")).toBeTruthy();
+    await openTab(/flow map/i);
     expect(await screen.findByTitle("Information-flow map")).toBeTruthy();
     expect(vi.mocked(fetchArtefactText)).toHaveBeenCalledWith(CODE, "flow-map.mmd");
     expect(vi.mocked(postFlowMapSvg)).not.toHaveBeenCalled();

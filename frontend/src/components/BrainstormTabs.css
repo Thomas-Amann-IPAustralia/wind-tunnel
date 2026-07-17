@@ -1,0 +1,61 @@
+.wt-tabs {
+  display: flex;
+  gap: var(--space-1);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.wt-tabs__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  color: var(--ink-muted);
+  font: inherit;
+  font-family: var(--font-ui);
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  transition:
+    color var(--motion-resolve) var(--ease),
+    border-color var(--motion-resolve) var(--ease),
+    background var(--motion-resolve) var(--ease);
+}
+
+.wt-tabs__tab:hover {
+  color: var(--ink);
+  background: var(--paper-sunken);
+}
+
+.wt-tabs__tab--active {
+  color: var(--ink);
+  border-bottom-color: var(--focus);
+}
+
+.wt-tabs__tab:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.wt-tabs__glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  font-size: var(--text-xs);
+  border-radius: 50%;
+}
+
+.wt-tabs__glyph--ready {
+  color: #fff;
+  background: var(--focus);
+}
+
+.wt-tabs__glyph--adjusted {
+  color: var(--slate);
+  border: 1px solid var(--hairline);
+}

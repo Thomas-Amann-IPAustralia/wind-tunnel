@@ -31,6 +31,20 @@
   max-height: 44rem;
 }
 
+/* The left working surface hosts whichever tab is active (conversation / PoC / map).
+ * It stretches its single panel child to the pane height so the conversation scrolls
+ * internally and the artefact frames sit within the same footprint. */
+.wt-brainstorm__surface {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.wt-brainstorm__surface > * {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
 .wt-brainstorm__footer {
   display: flex;
   flex-direction: column;

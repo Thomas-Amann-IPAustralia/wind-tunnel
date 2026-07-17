@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 
-import { BrainstormSynthesis } from "../components/BrainstormSynthesis";
+import { FlowMapPanel, PocPanel } from "../components/BrainstormSynthesis";
+import { BrainstormTabs } from "../components/BrainstormTabs";
+import type { BrainstormTab } from "../components/BrainstormTabs";
 import { Conversation } from "../components/Conversation";
-import { FocusTrack } from "../components/FocusTrack";
-import type { FocusStage } from "../components/FocusTrack";
 import { OutlineCanvas } from "../components/OutlineCanvas";
 import { RunCodeChip } from "../components/RunCodeChip";
 import { SufficiencyBanner } from "../components/SufficiencyBanner";
@@ -70,6 +70,10 @@ export function Brainstorm() {
 
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Which working surface is showing (§6.2): the conversation, or the two more
+  // expressive ways to say the same thing — the PoC and the flow map.
+  const [tab, setTab] = useState<BrainstormTab>("conversation");
 
   // Optional synthesis (§6.3/§6.4): the PoC and the flow map.
   const [feasibility, setFeasibility] = useState<FeasibilityVerdict | null>(null);
@@ -222,6 +226,8 @@ export function Brainstorm() {
           setFlowSvg(svg);
           await postFlowMapSvg(code, svg);
         }
+        // Stay on the PoC tab so the honest "not a fit" note is seen; the map is now
+        // ready on its own tab (its glyph lights up) for the user to open next.
       }
     } catch (err) {
       setSynthError(describe(err, "build a proof of concept"));
@@ -263,37 +269,14 @@ export function Brainstorm() {
   if (redirectStage) return <Navigate to={`/run/${code}/chamber`} replace />;
 
   const pocNotAFit = feasibility !== null && !feasibility.feasible;
-  const stages: FocusStage[] = [
-    {
-      n: 1,
-      label: "Scoping interview",
-      artefact: "→ a structured outline",
-      state: sufficiency?.ready ? "done" : "current",
-    },
-    {
-      n: 2,
-      label: "Proof of concept",
-      artefact: "→ an HTML preview",
-      state: pocReady ? "done" : pocNotAFit ? "unavailable" : "upcoming",
-      optional: true,
-      note: pocNotAFit ? "not a fit — you'll get a flow map instead" : undefined,
-    },
-    {
-      n: 3,
-      label: "Flow map",
-      artefact: "→ an architecture map",
-      state: flowSvg ? "done" : "upcoming",
-      optional: true,
-    },
-  ];
-
   const pocUrl = pocReady && code ? `${artefactUrl(code, "poc.html")}?v=${pocNonce}` : null;
+
+  const pocState = pocReady ? "ready" : pocNotAFit ? "not-a-fit" : "idle";
+  const mapState = flowSvg ? "ready" : "idle";
 
   return (
     <Surface kind="console" subtitle="Brainstorm" header={<RunCodeChip code={code} />}>
       <div className="wt-brainstorm">
-        <FocusTrack stages={stages} />
-
         {load === "loading" ? (
           <p className="wt-brainstorm__status" role="status">
             Loading your co-design space…
@@ -304,15 +287,46 @@ export function Brainstorm() {
           </p>
         ) : (
           <>
+            <BrainstormTabs
+              active={tab}
+              onChange={setTab}
+              pocState={pocState}
+              mapState={mapState}
+            />
+
             <div className="wt-brainstorm__panes">
-              <Conversation
-                turns={turns}
-                pendingUser={pendingUser}
-                thinking={sending}
-                onSend={send}
-                disabled={sending}
-                error={sendError}
-              />
+              <div
+                className="wt-brainstorm__surface"
+                role="tabpanel"
+                id={`wt-panel-${tab}`}
+                aria-labelledby={`wt-tab-${tab}`}
+              >
+                {tab === "conversation" ? (
+                  <Conversation
+                    turns={turns}
+                    pendingUser={pendingUser}
+                    thinking={sending}
+                    onSend={send}
+                    disabled={sending}
+                    error={sendError}
+                  />
+                ) : tab === "poc" ? (
+                  <PocPanel
+                    feasibility={feasibility}
+                    pocUrl={pocUrl}
+                    building={building === "poc"}
+                    error={synthError}
+                    onBuildPoc={buildPoc}
+                  />
+                ) : (
+                  <FlowMapPanel
+                    flowSvg={flowSvg}
+                    building={building === "map"}
+                    error={synthError}
+                    onGenerateMap={generateMap}
+                  />
+                )}
+              </div>
               <OutlineCanvas
                 outline={outline}
                 resolvingIds={resolvingIds}
@@ -331,15 +345,6 @@ export function Brainstorm() {
 
             <div className="wt-brainstorm__footer">
               <SufficiencyBanner sufficiency={sufficiency} outline={outline} />
-              <BrainstormSynthesis
-                feasibility={feasibility}
-                pocUrl={pocUrl}
-                flowSvg={flowSvg}
-                building={building}
-                error={synthError}
-                onBuildPoc={buildPoc}
-                onGenerateMap={generateMap}
-              />
               <div className="wt-brainstorm__submit">
                 {submitError ? (
                   <p className="wt-brainstorm__submit-error" role="alert">
