@@ -11,8 +11,8 @@ run_id: "WT-TR4C-DC"
 title: "Canberra Business Navigator"
 summary: "A chatbot designed to guide small business owners through government registration, regulatory requirements, and funding opportunities."
 created_at: "2026-07-17T09:10:23Z"
-updated_at: "2026-07-17T09:18:41Z"
-resolved: ["problem", "solution", "ux_ui"]
+updated_at: "2026-07-17T09:21:03Z"
+resolved: ["problem", "solution", "users_stakeholders", "ux_ui"]
 ---
 
 <!-- section: problem -->
@@ -28,7 +28,7 @@ The solution is a conversational AI assistant that acts as a navigator for small
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+The primary users are small business owners in Canberra. Key stakeholders include ACT government staff who manage regulatory compliance, as well as professional business advisors and accountants, whose workflows may be impacted by the tool's ability to provide instant regulatory guidance.
 
 <!-- section: data -->
 ## 4. Data
