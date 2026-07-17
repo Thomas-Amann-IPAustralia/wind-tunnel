@@ -21,11 +21,29 @@ from agents.threshold import (
 )
 from rating import consequence_tiers, likelihood_tiers, overall_rating, rating
 from stages.context import StageContext
+from statefile import REVISION_CAP
 
 NODE_A = "threshold.generalist_a"
 NODE_B = "threshold.generalist_b"
 NODE_RECONCILER = "threshold.reconciler"
 NODE_RATING = "threshold.rating_engine"
+
+REVISIONS_RELDIR = "threshold/revisions"
+
+
+def revision_request_relpath(n: int) -> str:
+    """Where ``POST /revise {threshold}`` stages the user's revision request (§7)."""
+    return f"{REVISIONS_RELDIR}/rev_{n}/request.json"
+
+
+def revision_reconciled_relpath(n: int) -> str:
+    """THRESHOLD_RECONCILING's per-revision checkpoint output (§5.3): a record of the
+    reconciled narrative produced for revision ``N``. It is distinct per revision so a
+    revision re-dispatch is **not** idempotently skipped by the initial pass's standard
+    ``reconciled.json``/``ratings.json`` outputs (the same technique USER_REVISION uses for
+    its ``rev_<N>/verification.json`` checkpoint, run.py)."""
+    return f"{REVISIONS_RELDIR}/rev_{n}/reconciled.json"
+
 
 _CONTEXT_SECTIONS = ("1", "2", "4")
 _SECTION_TITLES = {
@@ -68,17 +86,38 @@ def threshold_reconciling(ctx: StageContext) -> None:
     """Resolve the two drafts higher-wins, compute ratings deterministically, run the
     reconciler for narrative, and compute routing (§5.1, §10.3). Outputs
     ``reconciled.json``, ``divergence.json``, ``ratings.json``, ``routing.json`` and
-    a human-readable ``threshold_assessment.md``."""
+    a human-readable ``threshold_assessment.md``.
+
+    On a **user revision** (§7, ``run.json.revisions.threshold > 0``) this same stage
+    re-runs with the staged instructions in context. The two generalist drafts stand
+    untouched, so the higher-wins resolution — and thus the engine's ratings — are
+    unchanged; the revision steers only the reconciled narrative ("models argue, code
+    computes", §10). A per-revision ``rev_<N>/reconciled.json`` checkpoint is written so the
+    re-dispatch is not idempotently skipped by the initial pass's outputs (run.py)."""
     draft_a = _load_draft(ctx, "generalist_a")
     draft_b = _load_draft(ctx, "generalist_b")
 
     resolved = resolve_inputs(draft_a, draft_b)
     divergence = build_divergence(draft_a, draft_b, resolved)
 
+    # A threshold revision (§7): re-run with the user's instructions in context. rev is 0 on
+    # the initial reconciliation (no request file, unchanged prompt).
+    rev = ctx.run.revisions.get("threshold", 0)
+    revision_instructions: str | None = None
+    if rev > 0:
+        request = ctx.read_json(revision_request_relpath(rev))
+        revision_instructions = str(request.get("instructions", ""))
+
     # Reconciler writes narrative + rationale around the code-resolved tiers.
     ctx.status.start_node(NODE_RECONCILER)
+    if rev > 0:
+        ctx.status.revision(
+            NODE_RECONCILER, f"user revision {rev} of {REVISION_CAP}", target="reconciler"
+        )
     outline = ctx.outline()
-    result = run_reconciler(ctx.llm, outline, draft_a, draft_b, resolved)
+    result = run_reconciler(
+        ctx.llm, outline, draft_a, draft_b, resolved, revision_instructions=revision_instructions
+    )
     ctx.status.complete_node(NODE_RECONCILER)
 
     # The engine computes every rating — the one place a rating comes into being.
@@ -96,6 +135,13 @@ def threshold_reconciling(ctx: StageContext) -> None:
         "threshold/threshold_assessment.md",
         render_markdown(ctx.run.run_id, reconciled, ratings, routing),
     )
+
+    # Per-revision checkpoint marker (§5.3) + audit record of what this revision produced.
+    if rev > 0:
+        ctx.write_json(
+            revision_reconciled_relpath(rev),
+            {"revision": rev, "reconciled": reconciled, "routing": routing},
+        )
 
 
 # -- higher-wins resolution + the engine (§10.3) -------------------------------

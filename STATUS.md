@@ -2,7 +2,32 @@
 
 ## Current stage
 
-**This branch: the `/revise` brainstorm branches (`poc`/`flow_map`) — the last remaining
+**This branch: the `threshold` `/revise` branch — the last unbuilt `/revise` value, and with
+it the whole revision surface (TECH_SPEC §7, §5.1; PROJECT_BRIEF §7; CLAUDE.md §3 "models argue,
+code computes").** `/revise` served `poc`/`flow_map`/`full`; it now also serves `threshold`.
+`POST /revise {artefact:"threshold", instructions}` is valid **only while paused at
+`THRESHOLD_REVIEW`** (409 otherwise — the review screen is where a user asks for a change),
+enforces the ≤2 cap via `record_revision("threshold")`, commits
+`threshold/revisions/rev_<N>/request.json` alongside the run **rewound to `THRESHOLD_RECONCILING`**
+and dispatches Governance with `resume_from=THRESHOLD_RECONCILING` (a dispatching path, like
+`full`/`answers` — *not* a Render-side brainstorm regenerate). The reconciler then re-runs with
+the instructions **in context as untrusted data (§9.2)**: `run_reconciler` gained an optional
+`revision_instructions` param, wrapped and framed so it steers the reconciled **narrative and
+rationale** but never a tier or rating. **The integrity property is the point:** the two
+generalist drafts stand untouched, so higher-wins resolution — and therefore the engine's
+ratings — are provably unchanged by a user's revision (CLAUDE.md §3; §10 "no LLM ever emits a
+rating"). Idempotency follows the `USER_REVISION` precedent: `THRESHOLD_RECONCILING`'s checkpoint
+output is the standard four files on the initial pass (`revisions.threshold == 0`) but a
+per-revision `rev_<N>/reconciled.json` marker once a revision is in flight, so a re-dispatch runs
+rather than skipping on the first pass's outputs. After the re-run it returns to the
+`THRESHOLD_REVIEW` pause with the amended `threshold_assessment.md`. **With this every `/revise`
+value in TECH_SPEC §7 is built and the whole revision surface is complete.** No document
+contradiction to fix — TECH_SPEC §7 already specified this branch; the build is to spec.
+**What remains: a first live Gemini run** (the only untested seam is live LLM *judgement*; the
+whole path is unit-tested LLM-free). **Backend: 111 tests green (106 prior + 5 threshold-revise),
+ruff clean; pipeline: 186 tests green (184 prior + 2 threshold-revision), ruff clean.** See Done.
+
+**Prior branch: the `/revise` brainstorm branches (`poc`/`flow_map`) — the last remaining
 piece of the Brainstorm *backend* (TECH_SPEC §7; PROJECT_BRIEF §4/§7; CLAUDE.md §2).** The
 `/revise` endpoint served only `full` (→ `USER_REVISION`); it now also serves the two
 brainstorm artefacts. `POST /revise {artefact:"poc"|"flow_map", instructions}` is valid only
@@ -190,8 +215,50 @@ pipeline.
 
 ## Done
 
+- **`threshold` `/revise` branch — the last `/revise` value, completing the revision surface
+  (TECH_SPEC §7, §5.1; PROJECT_BRIEF §7; CLAUDE.md §3; this branch).** A threshold assessment
+  can now be revised up to twice while the review screen is open, by re-running the reconciler —
+  never by moving a rating. LLM-free tested (§15); ruff clean. **111 backend + 186 pipeline tests
+  green.** The pieces:
+  - **`backend/app.py` — the `threshold` branch of `POST /revise`.** `ReviseBody.artefact`
+    widened to `Literal["poc","flow_map","threshold","full"]` (`outline` → 422; the outline is
+    unbounded, brief §4/§7). A new `_revise_threshold` helper: valid **only** while paused at
+    `THRESHOLD_REVIEW`+`awaiting_user` (409 otherwise), enforces the ≤2 cap via
+    `record_revision("threshold")` (409 at cap), and commits `threshold/revisions/rev_<N>/
+    request.json` alongside the run **rewound to `THRESHOLD_RECONCILING`** + `status.json` running
+    as **one atomic commit**, then dispatches `resume_from=THRESHOLD_RECONCILING`. It is a
+    *dispatching* path (Governance runs in Actions), so it lives with `/answers` and `/revise
+    full`, not the Render-side brainstorm regenerate — mirrors both exactly.
+  - **`pipeline/agents/threshold.py::run_reconciler` — an optional `revision_instructions`.**
+    When present, the user's instructions are added as an **untrusted-wrapped block (§9.2)** with
+    trusted framing that they steer the *narrative and rationale only* — never a consequence tier,
+    likelihood tier, or rating (those are computed by code from the two generalists' unchanged
+    inputs, §10). `None` on the initial pass (prompt unchanged, existing tests untouched). The
+    `threshold_reconciler.v1.md` prompt gained a matching "If a revision has been requested"
+    section (additive guidance, identical output contract — no version bump; see Decisions).
+  - **`pipeline/stages/threshold.py::threshold_reconciling` — the same stage, revision-aware.**
+    Reads `revisions.threshold` from `run.json`; when `> 0` it loads the staged request, narrates
+    a `revision` event on the reconciler node, threads the instructions into `run_reconciler`, and
+    writes a per-revision `rev_<N>/reconciled.json` marker. The generalist drafts are **not**
+    re-read/re-drafted (drafting is checkpoint-skipped), so the resolved tiers and the engine's
+    ratings are identical — the audit-critical invariant. New relpath helpers
+    `revision_request_relpath`/`revision_reconciled_relpath`.
+  - **`pipeline/run.py` — the idempotency fix.** `_checkpoint_outputs(run, stage)` now resolves
+    `THRESHOLD_RECONCILING`'s checkpoint to the per-revision `rev_<N>/reconciled.json` when
+    `revisions.threshold > 0` (the standard four files when `== 0`), the same run-state-dependent
+    checkpoint technique `USER_REVISION` already uses. Without this a revision re-dispatch would
+    idempotently skip on the initial pass's committed outputs and never re-run the reconciler.
+  - **7 new tests.** `backend/tests/test_app.py` (5): commit+rewind+dispatch, second-revision
+    increments, cap→409 (nothing dispatched), refuse-when-not-paused→409, empty→400; the stale
+    `test_revise_rejects_threshold_artefact` became `test_revise_rejects_outline_artefact`
+    (threshold is valid now; only `outline` is a 422). `pipeline/tests/test_threshold_pipeline.py`
+    (2): the revision re-runs the reconciler with the instructions reaching its prompt while the
+    ratings stay `_EXPECTED_*` (generalists not re-called), and the per-revision checkpoint makes
+    a re-dispatch idempotent (a Boom transport proves the model isn't re-called). LLM-free (§15);
+    ruff clean.
+
 - **`/revise` brainstorm branches (`poc`/`flow_map`) — the Brainstorm backend, completed
-  (TECH_SPEC §7; PROJECT_BRIEF §4/§7; CLAUDE.md §2; Stage 1; this branch).** The last
+  (TECH_SPEC §7; PROJECT_BRIEF §4/§7; CLAUDE.md §2; Stage 1; prior branch).** The last
   Brainstorm backend piece, plus the document-contradiction fix it surfaced. LLM-free tested
   (§15); ruff clean. **106 backend + 184 pipeline tests green.** The pieces:
   - **Contradiction resolved: the outline is not a capped `/revise` artefact (CLAUDE.md §2).**
@@ -1096,16 +1163,14 @@ banner) up to `/submit`. What remains is the rest of Brainstorm (PoC / flow-map)
    "open design question" (is an `outline` revision a distinct capped path?) is **resolved by the
    brief, not deferred:** the outline is unbounded (brief §4) and is not in the cap list (brief
    §7), so it has no `/revise` branch — the contradiction with `REVISION_ARTEFACTS`/TECH_SPEC §7
-   was fixed per CLAUDE.md §2 (see Done + Decisions). **What remains of `/revise`:** the
-   `threshold` branch — *not* a brainstorm artefact. Per TECH_SPEC §7 it is valid only while
-   paused at `THRESHOLD_REVIEW` and **re-runs `THRESHOLD_RECONCILING`** with the instructions in
-   context (the two generalist drafts stand untouched, preserving independence; the engine
-   recomputes). It dispatches Governance (like `full`/`answers`), so it belongs with the
-   threshold-routing path, not the Render-side brainstorm endpoints. `record_revision("threshold")`
-   and the cap already exist; what's needed is the `/revise` `threshold` branch in `app.py`
-   (409 unless paused at `THRESHOLD_REVIEW`) and a `resume_from=THRESHOLD_RECONCILING` dispatch
-   that threads the instructions into the reconciler (a small prompt-context addition). A
-   following slice.
+   was fixed per CLAUDE.md §2 (see Done + Decisions). **The `threshold` branch — DONE (this
+   branch).** Valid only while paused at `THRESHOLD_REVIEW`, it commits the request + rewinds to
+   `THRESHOLD_RECONCILING` and dispatches `resume_from=THRESHOLD_RECONCILING`; the reconciler
+   re-runs with the instructions as untrusted context (`run_reconciler`'s new optional
+   `revision_instructions`), steering the narrative while the untouched generalist drafts keep the
+   ratings provably fixed; a per-revision `rev_<N>/reconciled.json` checkpoint keeps the
+   re-dispatch from idempotently skipping. **With this every `/revise` value in TECH_SPEC §7 is
+   built.** See Done + Decisions.
 2. **Frontend — foundations DONE (this branch); the interactive screens remain.** The
    scaffold, the "Instrument" design system, `src/config.ts`, the run-code mirror, the typed
    API client (with cold-start), the usage-warning gate (§4), the landing/empty states (§5),
@@ -1230,6 +1295,30 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **A threshold revision changes the narrative, never a rating — and so the generalist drafts
+  are left untouched (this branch).** TECH_SPEC §7 says the `threshold` `/revise` "re-runs
+  `THRESHOLD_RECONCILING` with the instructions in context — the two generalist drafts stand
+  untouched, preserving their independence, and the engine recomputes." The documents don't spell
+  out the consequence, so recording it: because the drafts stand and higher-wins resolution is
+  deterministic, the recomputed ratings are **identical** to the pre-revision ones. A threshold
+  revision therefore steers only the reconciled *narrative and rationale*; a user cannot move a
+  rating by asking (CLAUDE.md §3 "models argue, code computes"). The reconciler prompt is told to
+  honour only the narrative part of any "make this lower/higher" request. This is the right
+  reading of the invariant, not a limitation to apologise for.
+- **The `threshold_reconciler.v1.md` prompt was extended, not version-bumped (this branch).**
+  §9.1 versions prompts, but the revision-handling section is *additive* guidance for a new
+  optional input block and leaves the JSON output contract byte-for-byte identical; the initial
+  reconciliation path sends the exact same prompt+user it always did (the revision block only
+  appears when `revision_instructions` is present). Bumping to `.v2` would fork a prompt whose
+  contract didn't change. If a future change alters the reconciler's *output* shape, that is the
+  moment to bump.
+- **`THRESHOLD_RECONCILING` gets a per-revision checkpoint output, mirroring `USER_REVISION`
+  (this branch).** A revision re-dispatch must actually re-run the reconciler, but the stage's
+  standard outputs (`reconciled.json` etc.) already exist from the initial pass, so the §5.3
+  idempotent-skip would wrongly short-circuit it. Following the `USER_REVISION` precedent,
+  `run.py::_checkpoint_outputs` resolves the stage's checkpoint to `rev_<N>/reconciled.json` when
+  `revisions.threshold > 0` (run-state-dependent, from `run.json`), and the stage writes that
+  marker on a revision. The initial pass (`== 0`) is unchanged.
 - **The outline is not a capped `/revise` artefact — contradiction resolved in the brief's
   favour (this branch, CLAUDE.md §2).** `statefile.REVISION_ARTEFACTS` and TECH_SPEC §7 both
   listed `outline` among the ≤2-cap revisable artefacts, but PROJECT_BRIEF §4 ("the interview

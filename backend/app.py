@@ -7,9 +7,9 @@ Mermaid; ``/flow-map/svg`` → the SPA posts back the client-rendered SVG, CLAUD
 the status proxy, the artefact download proxy, submission into Governance, threshold
 routing, checkpoint answers (``/answers`` → ``FULL_REVISING``), and revision
 (``/revise``: ``poc``/``flow_map`` regenerate from the amended outline while at
-``BRAINSTORM`` with the ≤2 cap; ``full`` dispatches ``USER_REVISION`` post-``COMPLETE``),
-and resume-by-code. The outline is unbounded and has no ``/revise`` branch (brief §4/§7);
-``threshold`` revisions run on their own ``THRESHOLD_REVIEW`` path, not this endpoint.
+``BRAINSTORM`` with the ≤2 cap; ``threshold`` re-runs ``THRESHOLD_RECONCILING`` while
+paused at ``THRESHOLD_REVIEW``; ``full`` dispatches ``USER_REVISION`` post-``COMPLETE``),
+and resume-by-code. The outline is unbounded and has no ``/revise`` branch (brief §4/§7).
 
 **Statelessness (§14).** Render's disk is ephemeral and a cold instance has no
 memory of any run, so every endpoint re-reads ``run.json``/``status.json``
@@ -93,11 +93,11 @@ class AnswersBody(BaseModel):
 
 class ReviseBody(BaseModel):
     # The brainstorm artefacts ("poc"/"flow_map") regenerate from the amended outline on the
-    # backend while at BRAINSTORM; "full" dispatches USER_REVISION post-COMPLETE (§5.8, §7).
-    # "threshold" revises on its own THRESHOLD_REVIEW path (not this endpoint), so it is not
-    # accepted here — a "threshold" value is a 422. The outline is unbounded and has no /revise
-    # branch (brief §4, §7 — see statefile.REVISION_ARTEFACTS).
-    artefact: Literal["poc", "flow_map", "full"]
+    # backend while at BRAINSTORM; "threshold" re-runs THRESHOLD_RECONCILING while paused at
+    # THRESHOLD_REVIEW; "full" dispatches USER_REVISION post-COMPLETE (§5.8, §7). The outline is
+    # unbounded and has no /revise branch (brief §4, §7 — an "outline" value is a 422; see
+    # statefile.REVISION_ARTEFACTS).
+    artefact: Literal["poc", "flow_map", "threshold", "full"]
     instructions: str
 
 
@@ -730,10 +730,58 @@ def create_app(
         )
         return {"run_id": run_id, "artefact": artefact, "revision": revision, **extra}
 
+    def _revise_threshold(run_id: str, instructions: str) -> dict:
+        """Revise the threshold assessment (§7, brief §7). Valid only while paused at
+        ``THRESHOLD_REVIEW`` — the review screen is where the user asks for a change. Enforces
+        the ≤2 cap (``run.json.revisions.threshold``), commits the request alongside the run
+        advanced back to ``THRESHOLD_RECONCILING``, and dispatches Governance with
+        ``resume_from=THRESHOLD_RECONCILING`` so the reconciler re-runs with the instructions in
+        context. The two generalist drafts stand untouched (their independence is preserved) and
+        the engine recomputes the ratings — a revision steers the reconciled narrative, never a
+        rating ("models argue, code computes", §10). Mirrors ``/answers`` and ``/revise full``:
+        one atomic commit, then the dispatch."""
+        run = _load_run(run_id)
+        if (
+            run.stage is not statefile.Stage.THRESHOLD_REVIEW
+            or run.stage_status is not statefile.StageStatus.AWAITING_USER
+        ):
+            raise HTTPException(
+                http_status.HTTP_409_CONFLICT,
+                f"Run {run_id} is not paused at THRESHOLD_REVIEW (stage={run.stage}, "
+                f"status={run.stage_status}); a threshold revision is only possible while the "
+                "threshold review is open.",
+            )
+        now = statefile.utc_now_iso()
+        try:
+            revision = run.record_revision("threshold", now=now)  # raises at the cap (brief §7)
+        except statefile.StateError as exc:
+            raise HTTPException(http_status.HTTP_409_CONFLICT, str(exc)) from exc
+
+        run.advance_to(statefile.Stage.THRESHOLD_RECONCILING, now=now)
+        st = _load_status(run_id, run)
+        st.set_running(now=now)
+        st.heartbeat(agent="backend", now=now)
+        request_doc = {"instructions": instructions, "requested_at": now}
+        files = {
+            _run_path(
+                run_id, "threshold", "revisions", f"rev_{revision}", "request.json"
+            ): _dump_json(request_doc),
+            _run_path(run_id, "run.json"): _dump_json(run.to_dict()),
+            _run_path(run_id, "status.json"): _dump_json(st.to_dict()),
+        }
+        try:
+            github.commit_files(files, f"run {run_id}: threshold revision {revision} requested")
+        except GitHubError as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+        _dispatch(settings.governance_workflow, run_id, "THRESHOLD_RECONCILING")
+        return {"run_id": run_id, "revision": revision, "dispatched": True}
+
     @app.post("/api/runs/{run_id}/revise")
     def revise_run(body: ReviseBody, run_id: str = Depends(_valid_run_id)) -> dict:
         """Revise an artefact (§7). ``poc``/``flow_map`` regenerate from the amended outline
-        while at ``BRAINSTORM`` (brief §4/§7). ``full`` is the full-assessment revision (§5.1
+        while at ``BRAINSTORM`` (brief §4/§7). ``threshold`` re-runs ``THRESHOLD_RECONCILING``
+        while paused at ``THRESHOLD_REVIEW`` with the instructions in context (the generalist
+        drafts stand; the engine recomputes). ``full`` is the full-assessment revision (§5.1
         USER_REVISION, §5.8): valid only at ``COMPLETE``, it enforces the ≤2 cap
         (``run.json.revisions.full``), commits ``full/revisions/rev_<N>/request.json`` alongside
         the advanced ``run.json``/``status.json``, and dispatches Governance with
@@ -745,6 +793,8 @@ def create_app(
             )
         if body.artefact in ("poc", "flow_map"):
             return _revise_brainstorm_artefact(run_id, body.artefact, instructions)
+        if body.artefact == "threshold":
+            return _revise_threshold(run_id, instructions)
 
         run = _load_run(run_id)
         if run.stage is not statefile.Stage.COMPLETE:
