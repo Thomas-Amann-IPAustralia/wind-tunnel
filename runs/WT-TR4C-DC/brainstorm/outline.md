@@ -11,8 +11,8 @@ run_id: "WT-TR4C-DC"
 title: "Canberra Business Navigator"
 summary: "A chatbot designed to guide small business owners through government registration, regulatory requirements, and funding opportunities."
 created_at: "2026-07-17T09:10:23Z"
-updated_at: "2026-07-17T09:15:21Z"
-resolved: ["problem", "solution"]
+updated_at: "2026-07-17T09:18:41Z"
+resolved: ["problem", "solution", "ux_ui"]
 ---
 
 <!-- section: problem -->
@@ -48,7 +48,7 @@ The solution is a conversational AI assistant that acts as a navigator for small
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-*What the user sees and touches — or an honest "nothing; it's headless."*
+The interface is a conversational chatbot accessible via WhatsApp for mobile convenience, with an integrated web-based version hosted on the official Business.gov portal.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
