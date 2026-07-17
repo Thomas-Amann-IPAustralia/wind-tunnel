@@ -11,8 +11,8 @@ run_id: "WT-TR4C-DC"
 title: "Canberra Business Navigator"
 summary: "A chatbot designed to guide small business owners through government registration, regulatory requirements, and funding opportunities."
 created_at: "2026-07-17T09:10:23Z"
-updated_at: "2026-07-17T09:27:11Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints"]
+updated_at: "2026-07-17T09:29:19Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
 <!-- section: problem -->
@@ -58,4 +58,4 @@ The system must strictly avoid providing legal advice or recommending specific c
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-*How you'd know, six months in, that it worked.*
+Success will be measured six months post-launch through two primary metrics: a user satisfaction rating where at least 70% of interactions receive a 'thumbs up' feedback, and a conversion metric where 10% of total traffic to the Business.gov portal originates from referrals provided by the chatbot.
