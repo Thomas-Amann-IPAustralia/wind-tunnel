@@ -31,9 +31,17 @@ RUN_JSON = "run.json"
 REVISION_CAP = 2
 REVIEW_CYCLE_CAP = 2
 
-# The five revisable artefacts (§4 revisions map / §7 /revise). One owner for the
-# revision counts: run.json only — never the outline front-matter (§7.1).
-REVISION_ARTEFACTS: tuple[str, ...] = ("outline", "poc", "flow_map", "threshold", "full")
+# The capped, user-revisable artefacts (PROJECT_BRIEF §7 / §7 /revise). One owner for
+# the revision counts: run.json only — never the outline front-matter (§7.1).
+#
+# The outline is deliberately NOT here. The brief settles it: "The interview conversation
+# itself is unbounded" (§4) and the two-cycle cap applies only to "the information-flow
+# map, the PoC, the threshold assessment and the full impact assessment" (§7) — the
+# outline is refined without limit through the interview (/brainstorm/message) and canvas
+# edits (/edit-outline), so it has no revision counter and no /revise branch. (This aligns
+# the encoding with the brief's intent, which governs — CLAUDE.md §2; TECH_SPEC §7 was
+# corrected to match.) `from_dict` ignores any legacy `revisions.outline` key.
+REVISION_ARTEFACTS: tuple[str, ...] = ("poc", "flow_map", "threshold", "full")
 
 
 class StateError(ValueError):

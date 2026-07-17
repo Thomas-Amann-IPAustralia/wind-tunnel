@@ -441,10 +441,15 @@ def test_revise_rejects_empty_instructions(client, github):
     assert resp.status_code == 400
 
 
-def test_revise_rejects_non_full_artefact(client, github):
-    # Only "full" is served here; other artefacts revise on their own paths (§7).
+def test_revise_rejects_threshold_artefact(client, github):
+    # "threshold" revises on its own THRESHOLD_REVIEW path, not this endpoint; the outline is
+    # unbounded and has no /revise branch at all (brief §4/§7). Both are rejected by the Literal.
     _seed_complete(github, "WT-REDF-27")
     resp = client.post(
         "/api/runs/WT-REDF-27/revise", json={"artefact": "threshold", "instructions": "x"}
+    )
+    assert resp.status_code == 422
+    resp = client.post(
+        "/api/runs/WT-REDF-27/revise", json={"artefact": "outline", "instructions": "x"}
     )
     assert resp.status_code == 422

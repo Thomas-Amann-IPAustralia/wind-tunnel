@@ -356,3 +356,130 @@ def test_flow_map_svg_409_after_brainstorm(github):
         "/api/runs/WT-SWGX-33/flow-map/svg", json={"svg": "<svg></svg>"}
     )
     assert resp.status_code == 409
+
+
+# -- revision framing on the generators -----------------------------------------
+
+
+def test_generate_poc_revision_instructions_reach_prompt():
+    seen: list[str] = []
+
+    def handler(**kw):
+        seen.append(kw["user"])
+        return _poc_html()
+
+    generate_poc(
+        _handler_client(handler),
+        outline_md="o",
+        revision_instructions="Make the triage screen show a confidence bar.",
+    )
+    assert any("confidence bar" in u for u in seen)
+    assert any("Regenerate it whole" in u for u in seen)  # regenerate-not-patch framing (brief §4)
+
+
+def test_generate_flow_map_revision_instructions_reach_prompt():
+    seen: list[str] = []
+
+    def handler(**kw):
+        seen.append(kw["user"])
+        return _mermaid()
+
+    generate_flow_map(
+        _handler_client(handler),
+        outline_md="o",
+        revision_instructions="Add the audit-log store.",
+    )
+    assert any("audit-log store" in u for u in seen)
+    assert any("Regenerate it whole" in u for u in seen)
+
+
+# -- POST /revise (brainstorm artefacts: poc / flow_map) ------------------------
+
+
+def test_revise_poc_regenerates_and_increments(github):
+    _seed_brainstorm(github, "WT-RPCA-42")
+    github.files[run_path("WT-RPCA-42", "brainstorm", "poc.html")] = _poc_html().encode()
+    seen: list[str] = []
+
+    def make_llm():
+        def handler(**kw):
+            seen.append(kw["user"])
+            return _poc_html().replace("Enquiry triage", "Enquiry triage v2")
+
+        return LLMClient(transport=ScriptedTransport(handler=handler))
+
+    resp = _app_client(github, make_llm).post(
+        "/api/runs/WT-RPCA-42/revise",
+        json={"artefact": "poc", "instructions": "Rename the heading to v2."},
+    )
+    assert resp.status_code == 200
+    assert resp.json() == {"run_id": "WT-RPCA-42", "artefact": "poc", "revision": 1}
+    # The instructions reached the generator, and the regenerated PoC was committed.
+    assert any("Rename the heading to v2" in u for u in seen)
+    assert (
+        "Enquiry triage v2"
+        in github.files[run_path("WT-RPCA-42", "brainstorm", "poc.html")].decode()
+    )
+    # The cap counter advanced in run.json (its one owner, §7.1).
+    run = statefile.RunState.from_dict(json.loads(github.files[run_path("WT-RPCA-42", "run.json")]))
+    assert run.revisions["poc"] == 1
+    assert run.stage is statefile.Stage.BRAINSTORM  # still brainstorming; no dispatch
+
+
+def test_revise_poc_caps_at_two(github):
+    _seed_brainstorm(github, "WT-RPCB-43")
+    github.files[run_path("WT-RPCB-43", "brainstorm", "poc.html")] = _poc_html().encode()
+    client = _app_client(github, _make_llm(flash=[_poc_html(), _poc_html()]))
+    body = {"artefact": "poc", "instructions": "tweak"}
+    assert client.post("/api/runs/WT-RPCB-43/revise", json=body).json()["revision"] == 1
+    assert client.post("/api/runs/WT-RPCB-43/revise", json=body).json()["revision"] == 2
+    capped = client.post("/api/runs/WT-RPCB-43/revise", json=body)  # third → over the cap
+    assert capped.status_code == 409
+    assert "cap" in capped.json()["detail"].lower()
+
+
+def test_revise_poc_requires_existing_poc(github):
+    # A revision presupposes an initial generation (brief §7); no PoC yet ⇒ 409, cap untouched.
+    _seed_brainstorm(github, "WT-RPCN-52")
+    resp = _app_client(github, _make_llm()).post(
+        "/api/runs/WT-RPCN-52/revise", json={"artefact": "poc", "instructions": "x"}
+    )
+    assert resp.status_code == 409
+    run = statefile.RunState.from_dict(json.loads(github.files[run_path("WT-RPCN-52", "run.json")]))
+    assert run.revisions["poc"] == 0
+
+
+def test_revise_flow_map_regenerates_and_returns_source(github):
+    _seed_brainstorm(github, "WT-RMAP-53")
+    github.files[run_path("WT-RMAP-53", "brainstorm", "flow-map.mmd")] = _mermaid().encode()
+    new_map = "flowchart TD\n  A -->|revised| B"
+    resp = _app_client(github, _make_llm(flash=[new_map])).post(
+        "/api/runs/WT-RMAP-53/revise",
+        json={"artefact": "flow_map", "instructions": "Simplify to two nodes."},
+    )
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["artefact"] == "flow_map"
+    assert body["revision"] == 1
+    assert body["mermaid"] == new_map  # returned for the SPA to re-render + re-post the SVG
+    assert github.files[run_path("WT-RMAP-53", "brainstorm", "flow-map.mmd")].decode() == new_map
+    run = statefile.RunState.from_dict(json.loads(github.files[run_path("WT-RMAP-53", "run.json")]))
+    assert run.revisions["flow_map"] == 1
+
+
+def test_revise_brainstorm_409_after_submission(github):
+    seed_run(github, "WT-RBSX-62", stage=statefile.Stage.SUBMITTED)
+    github.files[run_path("WT-RBSX-62", "brainstorm", "poc.html")] = _poc_html().encode()
+    resp = _app_client(github, _make_llm()).post(
+        "/api/runs/WT-RBSX-62/revise", json={"artefact": "poc", "instructions": "x"}
+    )
+    assert resp.status_code == 409
+
+
+def test_revise_brainstorm_rejects_empty_instructions(github):
+    _seed_brainstorm(github, "WT-RBSE-63")
+    github.files[run_path("WT-RBSE-63", "brainstorm", "poc.html")] = _poc_html().encode()
+    resp = _app_client(github, _make_llm()).post(
+        "/api/runs/WT-RBSE-63/revise", json={"artefact": "poc", "instructions": "   "}
+    )
+    assert resp.status_code == 400
