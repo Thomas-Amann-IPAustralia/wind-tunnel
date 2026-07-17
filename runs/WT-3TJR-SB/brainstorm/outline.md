@@ -7,12 +7,12 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-3TJR-SB"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-3TJR-SB"
+title: "APS AI Thought Partner"
+summary: "A creative AI-powered brainstorming assistant designed to help public servants develop and iterate on project and policy ideas."
 created_at: "2026-07-17T15:27:49Z"
-updated_at: "2026-07-17T15:27:49Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-17T15:28:30Z"
+resolved: ["solution"]
 ---
 
 <!-- section: problem -->
@@ -23,7 +23,7 @@ resolved: []          # section ids populated so far; maintained by the backend 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+A web-based brainstorming tool that acts as a creative thought partner for public servants, using generative AI to help users iterate on project ideas, policy drafts, or research questions.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
