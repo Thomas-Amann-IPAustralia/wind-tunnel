@@ -34,7 +34,12 @@ class WorkflowDispatcher:
     """The real dispatcher: ``POST .../actions/workflows/{file}/dispatches``.
     Shares the fine-grained PAT with ``github_io.RestGitHubClient`` (CLAUDE.md
     §6 — the backend is the sole holder); read lazily so construction never
-    fails on an unconfigured env (same rationale as ``llm.GeminiTransport``)."""
+    fails on an unconfigured env (same rationale as ``llm.GeminiTransport``).
+
+    **The PAT must carry ``actions:write``**, not just the ``contents:write`` it
+    needs for committing run state: this endpoint is gated behind the fine-grained
+    token's *Actions* permission. A contents-only token returns 403 here — commits
+    succeed but no Governance run ever starts (CLAUDE.md §6)."""
 
     owner: str
     repo: str

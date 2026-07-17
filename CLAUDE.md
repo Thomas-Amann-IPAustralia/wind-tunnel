@@ -83,8 +83,18 @@ Decided here so instances don't diverge. If you have strong reason to change one
 | Secret | Held as | Used by |
 | --- | --- | --- |
 | `GEMINI_API_KEY` | Render env var; GitHub Actions secret | Backend (brainstorm) and pipeline (governance) |
-| `WINDTUNNEL_PAT` (fine-grained, contents:write, this repo only) | Render env var | Backend, to commit brainstorm state |
+| `WINDTUNNEL_PAT` (fine-grained, **contents:write + actions:write**, this repo only) | Render env var | Backend, to commit brainstorm state **and dispatch the Governance workflow** |
 | Actions token (`GITHUB_TOKEN`) | Provided by Actions automatically | Pipeline, to commit run state — no PAT needed inside Actions |
+
+> **The PAT needs `actions:write`, not just `contents:write`.** The backend both
+> commits run state (contents) *and* triggers the Governance workflow via the REST
+> "create a workflow dispatch event" endpoint (`dispatch.py`), which the fine-grained
+> token permission model gates behind **Actions: write**. A contents-only token
+> commits fine but every dispatch returns 403 — the run reaches `SUBMITTED` and then
+> sits forever with no Action behind it (the "I submitted but the chamber never
+> started" bug). The code now degrades gracefully (a failed dispatch is reported, not
+> a 502, and `/redispatch` re-kicks the run), but the run still won't *run* until the
+> PAT carries `actions:write`.
 
 **Non-secret config** — committed. `config/models.yml` (tier→role decided; exact Gemini ids pinned by Tom), `config/retrieval.yml`, `config/budgets.yml` (tech spec §13). Deployment identity the SPA needs — the backend base URL, the repo `owner/name`, the run-code alphabet — belongs in a committed `frontend/` config (e.g. a typed `config.ts`) and a pipeline constant, **not** hardcoded across files. One owner per fact.
 

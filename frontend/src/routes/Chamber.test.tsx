@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -11,10 +11,10 @@ import type { StatusDoc } from "../lib/types";
 // Each test drives a different overall_state and asserts the right screen renders.
 vi.mock("../lib/api", async (importActual) => {
   const actual = await importActual<typeof import("../lib/api")>();
-  return { ...actual, getStatus: vi.fn(), fetchArtefactText: vi.fn() };
+  return { ...actual, getStatus: vi.fn(), fetchArtefactText: vi.fn(), redispatchRun: vi.fn() };
 });
 
-import { fetchArtefactText, getStatus } from "../lib/api";
+import { fetchArtefactText, getStatus, redispatchRun } from "../lib/api";
 
 const CODE = "WT-ABCD-EF";
 
@@ -53,6 +53,7 @@ function renderChamber() {
 beforeEach(() => {
   vi.mocked(getStatus).mockReset();
   vi.mocked(fetchArtefactText).mockReset();
+  vi.mocked(redispatchRun).mockReset();
 });
 afterEach(() => vi.clearAllMocks());
 
@@ -81,6 +82,40 @@ describe("Chamber state routing", () => {
     // graph, and as a line in the log (no event exists only in the graph, §7.2.1).
     const subs = screen.getAllByText(/reading OAIC PIA guidance/);
     expect(subs.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("running but not started: offers a calm wait + a re-dispatch that re-kicks the run", async () => {
+    vi.mocked(redispatchRun).mockResolvedValue({
+      run_id: CODE,
+      resume_from: "THRESHOLD_DRAFTING",
+      dispatched: true,
+    });
+    // Every node still pending — the pipeline hasn't demonstrably begun (§5.7).
+    serve(
+      baseDoc({
+        overall_state: "running",
+        nodes: { "threshold.generalist_a": "pending", "threshold.reconciler": "pending" },
+        log: [],
+      }),
+    );
+    renderChamber();
+
+    const restart = await screen.findByRole("button", { name: /restart the run/i });
+    fireEvent.click(restart);
+    expect(redispatchRun).toHaveBeenCalledWith(CODE);
+    expect(await screen.findByText(/restart requested/i)).toBeTruthy();
+  });
+
+  it("running with progress: no restart prompt (a node has begun)", async () => {
+    serve(
+      baseDoc({
+        overall_state: "running",
+        nodes: { "threshold.generalist_a": "active", "threshold.reconciler": "pending" },
+      }),
+    );
+    renderChamber();
+    await screen.findAllByText("Assessor A");
+    expect(screen.queryByRole("button", { name: /restart the run/i })).toBeNull();
   });
 
   it("paused with no questions: shows the threshold review screen", async () => {

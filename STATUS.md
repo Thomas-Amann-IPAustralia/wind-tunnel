@@ -2,6 +2,30 @@
 
 ## Current stage
 
+**This branch (`claude/governance-chamber-bugs-hygv1b`): the first-live-test bug fixes —
+a stranded submit and a chamber that never animates (TECH_SPEC §5.7; CLAUDE.md §6).**
+Tom's first end-to-end test surfaced two bugs, both rooted in the same cause: the
+`workflow_dispatch` that starts Governance **fails** because the `WINDTUNNEL_PAT` carries
+`contents:write` only, but the dispatch endpoint needs **`actions:write`** — so after Submit
+the backend committed the `SUBMITTED` transition, then the dispatch 403'd and the endpoint
+raised a 502, stranding the run (Bug 1: "had to refresh; resubmit said *not at BRAINSTORM
+(currently SUBMITTED)*") with no Action behind it (Bug 2: "the chamber opened but nothing
+happened"). Confirmed live: `governance.yml` has **0 runs**; `WT-TR4C-DC`'s `status.json` is
+frozen at the initial state. **The root cause is Tom's to fix** (regenerate the PAT with
+`actions:write` — see Blocked on Tom). **The code now fails gracefully and recoverably:**
+(1) a dispatch failure is no longer a 502 — the four dispatching endpoints return
+`{dispatched:false, dispatch_error}` and keep the committed transition (§5.7 — dispatch is
+fire-and-forget, observed via `status.json`), so Submit resolves and the SPA navigates to the
+Chamber instead of stranding on Brainstorm; (2) a new `POST /api/runs/{id}/redispatch` re-kicks
+a run whose dispatch never took, resuming idempotently from its checkpoint (§5.3), serialised by
+the workflow's per-run `concurrency` group; (3) the Chamber shows an honest "waiting for the run
+to start… restart the run" affordance whenever a submitted run has no node progress, wired to
+redispatch — replacing the silently frozen graph. **Backend: 117 tests green (111 prior + 6
+dispatch/redispatch), ruff clean. Frontend: 40 tests green (38 prior + 2 Chamber), build +
+lint + format clean.** Docs updated (CLAUDE.md §6, `dispatch.py`) so the PAT requirement is
+recorded, not rediscovered. See Done + Blocked on Tom.
+
+
 **This branch: the `threshold` `/revise` branch — the last unbuilt `/revise` value, and with
 it the whole revision surface (TECH_SPEC §7, §5.1; PROJECT_BRIEF §7; CLAUDE.md §3 "models argue,
 code computes").** `/revise` served `poc`/`flow_map`/`full`; it now also serves `threshold`.
@@ -214,6 +238,42 @@ threshold stage — this is the first place `pipeline/rating/` is consumed by a 
 pipeline.
 
 ## Done
+
+- **First-live-test bug fixes — graceful, recoverable governance dispatch (TECH_SPEC §5.7;
+  CLAUDE.md §6; this branch).** Tom's first end-to-end test hit two bugs, one root cause: a
+  `workflow_dispatch` that fails after the state transition is committed. Diagnosed to the PAT
+  scope (`contents:write` without `actions:write`; confirmed live — `governance.yml` has 0 runs)
+  and made non-fatal + recoverable in code. LLM-free tested; ruff + eslint + prettier clean.
+  **117 backend + 40 frontend tests green.** The pieces:
+  - **`backend/app.py` — dispatch failures no longer strand a run.** `_dispatch` now returns
+    the error string (or `None`) instead of raising a 502; the four dispatching endpoints
+    (`/submit`, `/threshold/route` full, `/answers`, `/revise` threshold+full) return a shared
+    `{dispatched, dispatch_error?}` tail via `_dispatch_result`. On success the response is
+    unchanged (`{"dispatched": true}`, no error key — existing contracts hold). The committed
+    state transition stands (the run is durably submitted/advanced), matching §5.7's
+    fire-and-forget model where the SPA learns the run started by watching `status.json`.
+  - **`backend/app.py` — `POST /api/runs/{id}/redispatch`.** The §5.7 "hasn't started yet"
+    re-dispatch: re-fires Governance for a non-paused, non-terminal dispatched stage
+    (`_REDISPATCH_RESUME_FROM` maps `SUBMITTED→THRESHOLD_DRAFTING`, others to themselves).
+    Idempotent (the pipeline resumes from its checkpoint, §5.3) and safe to repeat (the
+    workflow's per-run `concurrency` group serialises dispatches). A 409 if the run isn't
+    awaiting a dispatch (e.g. still at BRAINSTORM, or paused for the user).
+  - **`frontend/src/routes/Chamber.tsx` + `.css` — the "waiting to start / restart" affordance.**
+    When a submitted run shows no node progress (`allPending`), a calm `NotStartedPrompt` explains
+    the run is waiting for its Action to spin up and offers a "Restart the run" button
+    (`redispatchRun`) — replacing the silently frozen graph a failed dispatch used to leave.
+    Because Submit now resolves even when the dispatch fails, the SPA navigates to the Chamber
+    (no more manual refresh / resubmit-409). `redispatchRun` added to `api.ts`; `submitRun`'s
+    type carries the optional `dispatch_error`.
+  - **Docs.** CLAUDE.md §6 + `backend/dispatch.py` now state the PAT needs `contents:write` **and**
+    `actions:write`, and why a contents-only token produces exactly this "submitted run never
+    starts" symptom. Recorded in Blocked on Tom as the one remaining action (regenerate the PAT).
+  - **8 new tests.** `backend/tests/test_app.py` (6): submit with a failing dispatcher →
+    200 + `dispatched:false` + reason, run stays `SUBMITTED`; redispatch re-fires a submitted run
+    (resume_from THRESHOLD_DRAFTING) and a FULL_REVISING run (→ itself); redispatch 409s at
+    BRAINSTORM and while paused; redispatch reports a dispatch failure. `frontend/.../Chamber.test.tsx`
+    (2): not-started → restart prompt calls `redispatchRun` and confirms; a run with an active node
+    shows no prompt.
 
 - **`threshold` `/revise` branch — the last `/revise` value, completing the revision surface
   (TECH_SPEC §7, §5.1; PROJECT_BRIEF §7; CLAUDE.md §3; this branch).** A threshold assessment
@@ -1921,6 +1981,21 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 These block the *next* tasks (CLAUDE.md §8, TECH_SPEC §16). The instrument
 source and Table 1/Table 2 landed July 2026 (see Done) and are no longer here:
+
+- **⚠️ The `WINDTUNNEL_PAT` needs `actions:write` added (this is why the first live
+  test never started a Governance run).** The fine-grained PAT was created with
+  `contents:write` only (as CLAUDE.md §6 originally documented). Committing run state
+  works with that, but the REST *create-a-workflow-dispatch-event* endpoint the backend
+  uses to trigger `governance.yml` (`backend/dispatch.py`) is gated behind the token's
+  **Actions: write** permission — so every dispatch returns 403, the run reaches
+  `SUBMITTED`, and no Action ever runs. Confirmed on the live repo: `governance.yml`
+  has **0 workflow runs** while `ingestion`/`pages` have run, and run `WT-TR4C-DC`'s
+  `status.json` is frozen at the backend-written initial state. **Fix:** regenerate the
+  PAT with **contents:write + actions:write** (this repo only) and update the Render env
+  var. Once done, existing stuck runs can be re-kicked with `POST /api/runs/<code>/redispatch`
+  (or the Chamber's "Restart the run" button) without redoing Brainstorm. CLAUDE.md §6
+  and `dispatch.py` now document the requirement; the code degrades gracefully in the
+  meantime (a failed dispatch is reported honestly, not a 502 that strands the run).
 
 - **~~`.meta.yml` sidecars with verified licences~~ — DONE (July 2026), and the
   follow-on allow-list config is now RESOLVED** (`config/licences.yml`). Nothing

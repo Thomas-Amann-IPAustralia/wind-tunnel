@@ -182,8 +182,28 @@ export function editOutline(
   );
 }
 
-export function submitRun(runCode: string): Promise<{ run_id: string; dispatched: boolean }> {
+/**
+ * Submit the finished outline into Governance (§7, §5.1 SUBMITTED). The run's
+ * SUBMITTED transition is committed server-side before the workflow is triggered,
+ * and `workflow_dispatch` is fire-and-forget (§5.7): if the trigger itself fails
+ * the call still resolves with `dispatched: false` + `dispatch_error` (the run is
+ * durably submitted, just not yet kicked) rather than throwing — so the SPA moves
+ * on to the Chamber, which offers a re-dispatch. A throw here means the *commit*
+ * failed and the run is genuinely still at BRAINSTORM.
+ */
+export function submitRun(
+  runCode: string,
+): Promise<{ run_id: string; dispatched: boolean; dispatch_error?: string }> {
   return request("POST", `/api/runs/${runCode}/submit`);
+}
+
+/** Re-fire Governance for a run whose dispatch never took (§5.7 "hasn't started
+ * yet" re-dispatch) — used by the Chamber when a run is submitted but no node has
+ * begun. Safe to call repeatedly (the workflow serialises per-run dispatches). */
+export function redispatchRun(
+  runCode: string,
+): Promise<{ run_id: string; resume_from: string; dispatched: boolean; dispatch_error?: string }> {
+  return request("POST", `/api/runs/${runCode}/redispatch`);
 }
 
 // -- Optional synthesis: PoC + flow map (§6.3/§6.4) ---------------------------

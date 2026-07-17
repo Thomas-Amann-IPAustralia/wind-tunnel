@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 import { ActivityLog } from "../components/ActivityLog";
@@ -10,7 +10,7 @@ import { RunCodeChip } from "../components/RunCodeChip";
 import { Surface } from "../components/Surface";
 import { ThresholdReview } from "../components/ThresholdReview";
 import { useStatusPoll } from "../hooks/useStatusPoll";
-import { artefactUrl } from "../lib/api";
+import { ApiError, artefactUrl, NetworkError, redispatchRun } from "../lib/api";
 import { isValid } from "../lib/runCode";
 import { TOPOLOGY } from "../lib/topology";
 import type { StatusDoc } from "../lib/types";
@@ -108,12 +108,19 @@ function RunningView({
 }) {
   const subActivity = useMemo(() => buildSubActivity(doc), [doc]);
   const range = doc.expected_ranges?.[doc.phase];
+  // A submitted run whose pipeline hasn't demonstrably begun — no node has left
+  // `pending` and nothing has failed. Usually the GitHub Action is just spinning
+  // up (checkout + deps, up to ~a minute), but a `workflow_dispatch` that never
+  // took (§5.7 — e.g. a PAT lacking actions:write) looks identical, so offer an
+  // honest wait + a safe re-kick rather than a silently frozen graph.
+  const notStarted = !failed && allPending(doc.nodes);
 
   return (
     <div className="wt-chamber">
       <p className="wt-chamber__orient">
         Your idea is going through the tunnel. Here&rsquo;s every stage — watch it work.
       </p>
+      {notStarted ? <NotStartedPrompt runCode={doc.run_code} staleSeconds={staleSeconds} /> : null}
       <div className="wt-chamber__panes">
         <div className="wt-chamber__graph">
           <PipelineGraph nodes={doc.nodes} subActivity={subActivity} />
@@ -140,6 +147,84 @@ function RunningView({
   );
 }
 
+/**
+ * Shown while a submitted run's pipeline hasn't demonstrably started (§5.7). It is
+ * honest about the usual cause (the run's GitHub Action taking a moment to spin up)
+ * and, after a short wait, offers a safe re-kick for the case where the dispatch
+ * genuinely never took (the bug behind "the chamber opened but nothing happened").
+ * The re-dispatch is idempotent and serialised per run, so a click during a healthy
+ * cold start simply queues behind the run that is already starting.
+ */
+function NotStartedPrompt({
+  runCode,
+  staleSeconds,
+}: {
+  runCode: string;
+  staleSeconds: number | null;
+}) {
+  const [state, setState] = useState<"idle" | "working" | "done" | "error">("idle");
+  const [error, setError] = useState<string | null>(null);
+
+  const restart = useCallback(async () => {
+    setState("working");
+    setError(null);
+    try {
+      const res = await redispatchRun(runCode);
+      if (res.dispatched) {
+        setState("done");
+      } else {
+        setState("error");
+        setError(res.dispatch_error ?? "The run could not be started. Please try again shortly.");
+      }
+    } catch (err) {
+      setState("error");
+      setError(
+        err instanceof NetworkError
+          ? "Couldn't reach the tunnel — it may be warming up. Give it a moment and try again."
+          : err instanceof ApiError
+            ? err.message
+            : "Something went wrong trying to restart the run. Please try again.",
+      );
+    }
+  }, [runCode]);
+
+  // Give the Action a genuine chance to start before nudging a retry (§7.2.5).
+  const waitedAWhile = staleSeconds !== null && staleSeconds >= 45;
+
+  return (
+    <div className="wt-chamber__start" role="status">
+      <p className="wt-chamber__start-lead">
+        Waiting for the run to start. This can take up to a minute while the tunnel spins up — you
+        can safely close the tab and come back with your run code.
+      </p>
+      {state === "done" ? (
+        <p className="wt-chamber__start-note">Restart requested — watch the stages above.</p>
+      ) : (
+        <>
+          <p className="wt-chamber__start-note">
+            {waitedAWhile
+              ? "Still nothing after a moment? You can restart the run — it won't lose any progress."
+              : "If nothing happens after a minute, you can restart it."}
+          </p>
+          <button
+            type="button"
+            className="wt-btn wt-btn--secondary"
+            onClick={restart}
+            disabled={state === "working"}
+          >
+            {state === "working" ? "Restarting…" : "Restart the run"}
+          </button>
+          {state === "error" && error ? (
+            <p className="wt-chamber__start-error" role="alert">
+              {error}
+            </p>
+          ) : null}
+        </>
+      )}
+    </div>
+  );
+}
+
 /** A threshold run the user chose to conclude — no full report, just the
  * threshold artefact and a plain, non-overclaiming close (§7.4). */
 function ConcludedView({ runCode }: { runCode: string }) {
@@ -159,6 +244,13 @@ function ConcludedView({ runCode }: { runCode: string }) {
 
 function hasQuestions(doc: StatusDoc): boolean {
   return Boolean(doc.questions && (doc.questions.specialists?.length ?? 0) > 0);
+}
+
+/** True when no node has left `pending` — the pipeline hasn't demonstrably begun.
+ * An empty map counts as "not started" too (a just-submitted run before the first
+ * pipeline write). */
+function allPending(nodes: StatusDoc["nodes"]): boolean {
+  return Object.values(nodes).every((s) => s === "pending");
 }
 
 /** The genuine current sub-activity per node — the latest retrieval/drafting
