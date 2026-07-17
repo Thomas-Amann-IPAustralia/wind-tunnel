@@ -9,16 +9,16 @@
 schema_version: 1
 run_id: "WT-3TJR-SB"
 title: "APS AI Thought Partner"
-summary: "A creative AI-powered brainstorming assistant designed to help public servants develop and iterate on project and policy ideas."
+summary: "A creative AI-powered brainstorming assistant designed to help public servants identify and explore novel solutions to complex policy and project challenges."
 created_at: "2026-07-17T15:27:49Z"
-updated_at: "2026-07-17T15:28:30Z"
-resolved: ["solution"]
+updated_at: "2026-07-17T15:29:34Z"
+resolved: ["problem", "solution"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Public servants often face challenges in identifying creative or novel approaches to complex problems because they lack exposure to diverse methodologies or perspectives, leading to a 'blind spot' where they are unaware of potential solutions they haven't yet considered.
 
 <!-- section: solution -->
 ## 2. Proposed solution
