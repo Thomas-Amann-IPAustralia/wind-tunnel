@@ -11,8 +11,8 @@ run_id: "WT-3TJR-SB"
 title: "APS AI Thought Partner"
 summary: "A creative AI-powered brainstorming assistant designed to help public servants identify and explore novel solutions to complex policy and project challenges."
 created_at: "2026-07-17T15:27:49Z"
-updated_at: "2026-07-17T15:34:05Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui"]
+updated_at: "2026-07-17T15:35:18Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints"]
 ---
 
 <!-- section: problem -->
@@ -53,7 +53,7 @@ The interface is voice-first, designed to feel like a natural conversation with 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-*The hard limits and strong preferences: technical, organisational, maintenance.*
+The system must host data within Australia to meet sovereignty requirements. It must include a clear disclaimer that it does not provide legal advice. To mitigate the risk of over-reliance, the interface must provide transparency into the AI's reasoning process, showing users how it arrived at its suggestions.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
