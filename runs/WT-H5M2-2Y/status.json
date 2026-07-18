@@ -4,7 +4,7 @@
   "run_code": "WT-H5M2-2Y",
   "phase": "threshold",
   "overall_state": "running",
-  "updated_at": "2026-07-18T02:03:29Z",
+  "updated_at": "2026-07-18T02:04:44Z",
   "nodes": {
     "threshold.generalist_a": "pending",
     "threshold.generalist_b": "pending",
@@ -21,8 +21,16 @@
     "full.reviewer": "pending",
     "full.assembly": "pending"
   },
-  "log": [],
-  "log_cursor": 0,
+  "log": [
+    {
+      "id": "evt_000001",
+      "ts": "2026-07-18T02:04:44Z",
+      "agent": "backend",
+      "type": "heartbeat",
+      "detail": ""
+    }
+  ],
+  "log_cursor": 1,
   "questions": null,
   "failure": null,
   "expected_ranges": {
