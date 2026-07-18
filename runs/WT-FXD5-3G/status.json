@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T23:55:28Z",
+  "updated_at": "2026-07-18T23:55:45Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -147,9 +147,181 @@
       "agent": "full.specialist.it_security",
       "type": "stage_started",
       "detail": "IT Security specialist started"
+    },
+    {
+      "id": "evt_000019",
+      "ts": "2026-07-18T23:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "drafting",
+      "detail": "drafting it_security's owned sections"
+    },
+    {
+      "id": "evt_000020",
+      "ts": "2026-07-18T23:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000021",
+      "ts": "2026-07-18T23:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000022",
+      "ts": "2026-07-18T23:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000023",
+      "ts": "2026-07-18T23:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI Data Security CSI",
+      "ref": {
+        "doc": "AI Data Security CSI",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000024",
+      "ts": "2026-07-18T23:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000025",
+      "ts": "2026-07-18T23:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000026",
+      "ts": "2026-07-18T23:55:34Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.171"
+      }
+    },
+    {
+      "id": "evt_000027",
+      "ts": "2026-07-18T23:55:34Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000028",
+      "ts": "2026-07-18T23:55:34Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000029",
+      "ts": "2026-07-18T23:55:34Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000030",
+      "ts": "2026-07-18T23:55:34Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.25"
+      }
+    },
+    {
+      "id": "evt_000031",
+      "ts": "2026-07-18T23:55:34Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000032",
+      "ts": "2026-07-18T23:55:34Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000033",
+      "ts": "2026-07-18T23:55:34Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000034",
+      "ts": "2026-07-18T23:55:45Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.20"
+      }
     }
   ],
-  "log_cursor": 18,
+  "log_cursor": 34,
   "questions": null,
   "failure": null,
   "expected_ranges": {
