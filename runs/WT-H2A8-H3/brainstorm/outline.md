@@ -7,55 +7,55 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-H2A8-H3"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-H2A8-H3"
+title: "Markdown Content Converter"
+summary: "A tool to transform diverse web and document formats into clean, standardized Markdown for easier internal use."
 created_at: "2026-07-18T06:17:32Z"
-updated_at: "2026-07-18T06:17:32Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-18T06:18:06Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Public servants often struggle with information trapped in poorly formatted PDFs, legacy web pages, or inconsistent document structures, making it difficult to index, search, or reuse content effectively.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+A conversion service that takes a URL or file upload, uses an LLM to parse the structure and extract text, and outputs a clean, standardized Markdown file.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+Primary users are policy researchers and content managers; stakeholders include IT teams responsible for document repositories and the public who rely on accessible government information.
 
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+The system processes public-facing web content and internal documents, which may contain sensitive or PII-heavy information depending on the source.
 
 <!-- section: happy_path -->
 ## 5. Happy path
 
-*One ordinary, successful use — narrated start to finish.*
+A user pastes a URL into the tool, the system fetches the page, strips the navigation and ads, converts the core content to clean Markdown, and provides a download link.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
 
-*What else could solve this, including at least one non-AI option.*
+Manual re-typing, traditional web scraping scripts (BeautifulSoup), or off-the-shelf document conversion software like Pandoc.
 
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-*What the user sees and touches — or an honest "nothing; it's headless."*
+A simple web interface with a single input field for a URL or file upload and a 'Convert' button.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-*The hard limits and strong preferences: technical, organisational, maintenance.*
+Must handle a wide variety of site layouts; must ensure no data leakage if processing internal files.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-*How you'd know, six months in, that it worked.*
+A measurable reduction in time spent manually formatting documents and a high user-reported accuracy rate for the generated Markdown.
