@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:29:05Z",
+  "updated_at": "2026-07-18T11:29:06Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -14,7 +14,7 @@
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
-    "full.specialist.data_governance": "pending",
+    "full.specialist.data_governance": "active",
     "full.specialist.solution_architect": "pending",
     "full.checkpoint": "pending",
     "full.architect": "pending",
@@ -2263,9 +2263,16 @@
       "agent": "full.specialist.legal",
       "type": "stage_complete",
       "detail": "Legal & Administrative Law specialist complete"
+    },
+    {
+      "id": "evt_000219",
+      "ts": "2026-07-18T11:29:06Z",
+      "agent": "full.specialist.data_governance",
+      "type": "stage_started",
+      "detail": "Data Governance specialist started"
     }
   ],
-  "log_cursor": 218,
+  "log_cursor": 219,
   "questions": null,
   "failure": null,
   "expected_ranges": {
