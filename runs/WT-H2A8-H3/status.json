@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:37:35Z",
+  "updated_at": "2026-07-18T11:37:53Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -3037,9 +3037,184 @@
       "agent": "full.specialist.it_security",
       "type": "stage_started",
       "detail": "IT Security specialist started"
+    },
+    {
+      "id": "evt_000293",
+      "ts": "2026-07-18T11:37:35Z",
+      "agent": "full.specialist.it_security",
+      "type": "revision",
+      "detail": "revising it_security's sections in light of your answers",
+      "ref": {
+        "target": "it_security"
+      }
+    },
+    {
+      "id": "evt_000294",
+      "ts": "2026-07-18T11:37:35Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.213"
+      }
+    },
+    {
+      "id": "evt_000295",
+      "ts": "2026-07-18T11:37:35Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading E8 Assessment Guide",
+      "ref": {
+        "doc": "E8 Assessment Guide",
+        "locator": "p.37"
+      }
+    },
+    {
+      "id": "evt_000296",
+      "ts": "2026-07-18T11:37:35Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading E8 Maturity FAQ",
+      "ref": {
+        "doc": "E8 Maturity FAQ",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000297",
+      "ts": "2026-07-18T11:37:35Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000298",
+      "ts": "2026-07-18T11:37:35Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.187"
+      }
+    },
+    {
+      "id": "evt_000299",
+      "ts": "2026-07-18T11:37:35Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.40"
+      }
+    },
+    {
+      "id": "evt_000300",
+      "ts": "2026-07-18T11:37:44Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.43"
+      }
+    },
+    {
+      "id": "evt_000301",
+      "ts": "2026-07-18T11:37:44Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.27"
+      }
+    },
+    {
+      "id": "evt_000302",
+      "ts": "2026-07-18T11:37:44Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.44"
+      }
+    },
+    {
+      "id": "evt_000303",
+      "ts": "2026-07-18T11:37:44Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.44"
+      }
+    },
+    {
+      "id": "evt_000304",
+      "ts": "2026-07-18T11:37:44Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000305",
+      "ts": "2026-07-18T11:37:44Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.27"
+      }
+    },
+    {
+      "id": "evt_000306",
+      "ts": "2026-07-18T11:37:44Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.63"
+      }
+    },
+    {
+      "id": "evt_000307",
+      "ts": "2026-07-18T11:37:44Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.24"
+      }
+    },
+    {
+      "id": "evt_000308",
+      "ts": "2026-07-18T11:37:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.43"
+      }
     }
   ],
-  "log_cursor": 292,
+  "log_cursor": 308,
   "questions": null,
   "failure": null,
   "expected_ranges": {
