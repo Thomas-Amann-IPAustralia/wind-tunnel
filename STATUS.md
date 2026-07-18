@@ -2,7 +2,50 @@
 
 ## Current stage
 
-**This branch (`claude/windtunnel-governance-json-error-c0kgvr`): the governance chamber's
+**This branch (`claude/wt-h2a8-h3-errors-vl5tu7`): two errors from Tom's live run WT-H2A8-H3 —
+a specialist that failed the run on the instrument's own sub-question ids, and a threshold
+download that 404'd because the proxy pointed at a phantom path (TECH_SPEC §9.3, §7, §2;
+CLAUDE.md §3).** Both are seam/wiring bugs, LLM-free tested; no integrity invariant relaxed.
+
+1. **`AgentError: legal: sections contain out-of-scope keys ['12.2.1', '12.2.2']`.** A handful of
+   DTA sections carry numbered sub-questions in the instrument (`questions.json`): §12.2 'Legal
+   advice' → 12.2.1/12.2.2, §8.4 → 8.4.1/8.4.2. The specialist prompt lists them, so the legal
+   model keyed its answer by those sub-question ids instead of the owned parent `12.2` — and the
+   flat write-scope validator (`_parse_draft`) rejected them as out-of-scope, killing the run. It
+   was **non-deterministic**: the *same run's* ethics specialist keyed §8.4 correctly ("Yes.
+   (8.4.1)… (8.4.2)…") in one prose answer. `12.2.1`/`12.2.2` are not a scope violation — they are
+   children of a section legal *owns*. Fix = defense-in-depth, matching the JSON-seam precedent:
+   (a) **prompt clarity** — `specialist_instrument_context` now says to key by the **section id**
+   and address sub-questions *within that single answer*, never returning a sub-question number as
+   a key; (b) **tolerant, lossless fold** — `agents/specialist.py` `_fold_subquestions` (applied in
+   both `_parse_draft` and `_parse_amendment`, before the scope checks) folds instrument
+   sub-question keys onto their owned parent: sub-answers concatenate in declared order (so a
+   yes_no_na parent still opens with the Yes/No of its first sub-question), citations extend the
+   parent's list, a sub-question gap becomes a parent gap. A key resolving to neither an owned
+   section nor one of *its* sub-questions is still rejected **loudly** (§9.3 preserved). The
+   parent↔sub-question map has one owner: `agents/prompting.owned_subquestions` (reads
+   `questions.json`). Verified by driving the exact WT-H2A8-H3 legal failure shape through the real
+   agent boundary → folds to a valid `12.2`.
+2. **`threshold.md not yet produced for run WT-H2A8-H3`.** The threshold-review screen fetches the
+   `threshold.md` artefact; the backend proxy `_ARTEFACTS` mapped it to `artefacts/threshold.md`
+   (and `outline.md` → `artefacts/outline.md`) — paths **no code ever writes**. The pipeline's
+   canonical files are `threshold/threshold_assessment.md` (written by THRESHOLD_RECONCILING) and
+   `brainstorm/outline.md` (§7.1). Fix = point the proxy at the canonical files; the public artefact
+   *names* (§7 contract) are unchanged, so the SPA needs no change. No duplicate `artefacts/` copy
+   is produced — one owner per fact (CLAUDE.md §3). This was a genuine doc/impl contradiction
+   (TECH_SPEC §2 listed phantom `artefacts/threshold.md`/`outline.md` and a `reconciled.md` that
+   was renamed to `threshold_assessment.md` in the build); per CLAUDE.md §2 the losing document is
+   fixed — the §2 run-directory tree now describes the real layout.
+
+**Recovery for WT-H2A8-H3:** the run is FAILED at `full.specialist.legal`; ethics/it_security/
+privacy are already committed (per-agent idempotent, checkpoint-skipped on resume), so a
+redispatch (resume from FULL_DRAFTING) re-runs only legal/data_governance/solution_architect with
+the fix in place. **Pipeline: 210 tests green (204 prior + 6: owned_subquestions map, draft fold,
+citation fold, still-rejects-true-out-of-scope, amendment fold), ruff clean. Backend: 120 tests
+green (119 prior + 1: outline proxy; the threshold proxy test re-pointed), ruff clean.** Frontend
+untouched (the artefact name is stable). See Done.
+
+**Prior branch (`claude/windtunnel-governance-json-error-c0kgvr`): the governance chamber's
 first three live runs all died at the LLM seam — made the seam absorb transient failure,
 and made a failed run actually recoverable (TECH_SPEC §13, §5.6, §5.3, §6.3; CLAUDE.md §3).**
 Tom's live tests produced three failed runs, three different proximate causes, one seam:
@@ -325,8 +368,46 @@ pipeline.
 
 ## Done
 
+- **WT-H2A8-H3 two-error fix — sub-question write-scope + the threshold download path
+  (TECH_SPEC §9.3, §7, §2; CLAUDE.md §2, §3; this branch).** Two errors from Tom's live run,
+  both seam/wiring, neither relaxing an integrity invariant. LLM-free tested (§15); ruff clean.
+  **210 pipeline + 120 backend tests green.** The pieces:
+  - **`pipeline/agents/prompting.py` — `owned_subquestions()` + clearer instrument context.**
+    New helper maps each owned section to its instrument-defined nested sub-question ids
+    (`12.2` → `('12.2.1','12.2.2')`, `8.4` → `('8.4.1','8.4.2')`; read once from `questions.json`,
+    one owner per fact). `specialist_instrument_context` now instructs: key every entry by the
+    **section id**, address a section's listed sub-questions *within its single answer*, never
+    return a sub-question number as a key (guidance-only; the context is code-generated, no prompt
+    version bump — the interviewer precedent).
+  - **`pipeline/agents/specialist.py` — `_fold_subquestions` (lossless, before scope checks).**
+    Folds any sub-question-keyed `sections`/`citations`/`gaps` onto the owned parent section:
+    sub-answers concatenate in the instrument's declared order (a yes_no_na parent still opens with
+    its first sub-question's Yes/No), citations extend the parent list, a sub-question gap becomes a
+    parent gap. Applied in `_parse_draft` (owned) and `_parse_amendment` (directed targets). A key
+    resolving to neither an allowed section nor one of its sub-questions passes through untouched, so
+    the out-of-scope guard still rejects a true §9.3 violation loudly. Returns the payload unchanged
+    when nothing is sub-keyed (fast path). This mirrors the LLM-seam philosophy: harden the prompt
+    **and** absorb the reasonable output shape tolerantly, never fail the run on it.
+  - **`backend/app.py` — the artefact proxy points at the canonical files.** `_ARTEFACTS`
+    `"threshold.md"` → `threshold/threshold_assessment.md` (was the never-written
+    `artefacts/threshold.md`) and `"outline.md"` → `brainstorm/outline.md` (was
+    `artefacts/outline.md`). The public artefact names (§7) are stable, so the SPA is unchanged; no
+    duplicate copy is produced (one owner per fact). The other two names (`assessment.ipynb/.html`)
+    are genuinely under `artefacts/` and untouched.
+  - **`TECH_SPEC.md` §2 — the run-directory tree corrected (CLAUDE.md §2, losing doc fixed).**
+    Renamed the phantom `threshold/reconciled.md` to the built `threshold_assessment.md`, dropped the
+    never-produced `artefacts/threshold.md`/`artefacts/outline.md` rows, and added a note that the
+    downloadable `threshold.md`/`outline.md` artefact names are served from their canonical files.
+  - **7 new/updated tests.** `test_full_drafting.py` (5): `owned_subquestions` maps only nested
+    sections; the reported 12.2.1/12.2.2 draft folds to a valid `12.2`; sub-question citations fold;
+    a true out-of-scope key (`7.1.1`, privacy's territory) is still rejected. `test_review.py` (1):
+    an amendment on `12.2` keyed by sub-questions folds onto the directed parent. `test_app.py`:
+    the threshold-download test re-pointed to `threshold/threshold_assessment.md` + a new
+    `outline.md` proxy test. Verified end-to-end by driving the exact WT-H2A8-H3 legal failure shape
+    through `run_specialist` → folds cleanly, no AgentError.
+
 - **Governance-chamber first-live-run fixes — the LLM seam absorbs failure, and a failed
-  run is actually recoverable (TECH_SPEC §13, §5.6, §5.3, §6.3; CLAUDE.md §3; this
+  run is actually recoverable (TECH_SPEC §13, §5.6, §5.3, §6.3; CLAUDE.md §3; prior
   branch).** Three live runs failed at the seam three different ways (malformed JSON /
   trailing text after a valid object / transient 503), and the promised recovery path
   didn't exist (redispatch 409'd on failed; same-stage resume kept FAILED — a zombie).
@@ -1542,6 +1623,25 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **A specialist owns a section *and everything under it*; sub-question keys fold, not fail
+  (WT-H2A8-H3 branch).** The docs define write-scope (§9.3) at subsection granularity (`12.2`),
+  but `questions.json` nests real sub-questions (`12.2.1`/`12.2.2`, `8.4.1`/`8.4.2`) under some
+  sections, and the prompt shows them — an ambiguity the model resolves non-deterministically
+  (the same run keyed §8.4 by the section id but §12.2 by its sub-questions). Decided: a
+  sub-question id resolves to its single owned parent and is folded there losslessly; it is
+  **not** a scope violation. This keeps write-scope at section granularity everywhere downstream
+  (coverage, ownership 1:1, assembly, rating) — no sub-question granularity leaks — while a key
+  that resolves outside the owned sections is still rejected loudly. The alternative (make the
+  model always key by section id via the prompt alone) was rejected as insufficient on its own:
+  LLMs are imperfect, so defense-in-depth (prompt clarity **and** a tolerant fold) matches the
+  established LLM-seam precedent.
+- **The downloadable `threshold.md`/`outline.md` are served from their canonical files, not
+  copied into `artefacts/` (WT-H2A8-H3 branch).** TECH_SPEC §2 pictured `artefacts/threshold.md`
+  and `artefacts/outline.md` copies, but nothing produced them and the build's canonical files are
+  `threshold/threshold_assessment.md` and `brainstorm/outline.md`. Producing duplicates would give
+  the same content two owners that can drift (violates §3). Decided: the artefact *name* is the
+  stable public contract (§7); it resolves to the canonical file. `artefacts/` holds only the
+  assembly-stage deliverables. TECH_SPEC §2 corrected to match (CLAUDE.md §2).
 - **The LLM seam retries; the agent layer does not (governance-fixes branch).** The
   documents are silent on failure handling below §5.6's calm-failure rule. Decided: transient
   HTTP retries live in the transport, malformed-JSON corrective re-asks live in

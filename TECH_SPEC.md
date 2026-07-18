@@ -131,7 +131,7 @@ runs/WT-7K3D-Q2/
 │  ├─ generalist_a.json     # sections 1–4 draft: per field {consequence, likelihood, rationale, citations}
 │  ├─ generalist_b.json
 │  ├─ reconciled.json       # adopted/synthesised fields + engine-computed ratings
-│  ├─ reconciled.md         # human-readable threshold assessment (downloadable)
+│  ├─ threshold_assessment.md # human-readable threshold assessment (the downloadable "threshold.md" artefact, §7)
 │  ├─ divergence.json       # assessor divergence records (surfaced, not hidden)
 │  ├─ ratings.json          # engine output: 3.1–3.8 per-category + 3.9 overall
 │  └─ routing.json          # {outcome: concluded_here|full_required|full_by_choice, driver}
@@ -152,10 +152,14 @@ runs/WT-7K3D-Q2/
 └─ artefacts/
    ├─ assessment.ipynb      # non-executable notebook (source of record)
    ├─ assessment.html       # nbconvert render (shareable deliverable)
-   ├─ superseded/rev_<N>/   # pre-revision assessment.ipynb/.html, archived before re-assembly (§5.8)
-   ├─ threshold.md          # downloadable threshold artefact (disclaimer header)
-   └─ outline.md            # downloadable outline copy
+   └─ superseded/rev_<N>/   # pre-revision assessment.ipynb/.html, archived before re-assembly (§5.8)
 ```
+
+The downloadable `threshold.md` and `outline.md` artefact names (§7) are served
+directly from their canonical committed files — `threshold/threshold_assessment.md`
+and `brainstorm/outline.md` — not duplicated into `artefacts/`; one owner per fact
+(CLAUDE.md §3). The `artefacts/` directory holds only the full-assessment deliverables
+the assembly stage produces.
 
 **`run.json` shape (authoritative):**
 

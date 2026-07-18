@@ -11,6 +11,7 @@ here means an agent cannot forget the untrusted wrapper or diverge on the delimi
 from __future__ import annotations
 
 import json
+from collections.abc import Iterable
 from dataclasses import dataclass
 from functools import lru_cache
 from pathlib import Path
@@ -124,6 +125,29 @@ def specialist_owned_sections(specialist_id: str) -> tuple[str, ...]:
     return tuple(sorted(owned, key=_section_sort_key))
 
 
+def owned_subquestions(section_ids: Iterable[str]) -> dict[str, tuple[str, ...]]:
+    """For the given section ids, the instrument-defined nested sub-question ids
+    each carries, in declared order — e.g. ``{"12.2": ("12.2.1", "12.2.2"),
+    "8.4": ("8.4.1", "8.4.2")}``. Sections without sub-questions are omitted.
+
+    A handful of DTA subsections (``questions.json``) list numbered sub-questions
+    under one owned parent section (§9.3). The specialist prompt shows them, so a
+    model may key its answer, citations, or a gap by a sub-question id; those all
+    resolve to the single owned parent and are folded there (agents.specialist),
+    never a write-scope violation. This is the one place that parent↔sub-question
+    map is read from (CLAUDE.md §3, "one owner per fact")."""
+    index = _full_question_index()
+    out: dict[str, tuple[str, ...]] = {}
+    for sid in section_ids:
+        entry = index.get(sid)
+        if not entry:
+            continue
+        sub_ids = tuple(q["question_id"] for q in entry["questions"])
+        if sub_ids:
+            out[sid] = sub_ids
+    return out
+
+
 def response_type_of(section_id: str) -> str:
     """The questions.json ``response_type`` for a full-assessment subsection."""
     entry = _full_question_index().get(section_id)
@@ -182,6 +206,10 @@ def specialist_instrument_context(specialist_id: str) -> str:
         "You own EXACTLY the subsections below. Do not draft, cite, or flag a gap for "
         "any other section id — that is another specialist's or the reviewer's scope "
         "(§9.3, structural write-scope).\n",
+        "Key every entry in `sections`, `citations`, and `gaps` by the **section id** "
+        "shown as a heading (e.g. `12.2`). A few sections list numbered sub-questions "
+        "(e.g. 12.2.1, 12.2.2): address all of them **within that section's single "
+        "answer** — never return a sub-question number as its own key.\n",
     ]
     current_section = None
     for sid in owned:
@@ -196,6 +224,8 @@ def specialist_instrument_context(specialist_id: str) -> str:
         lines.append(f"### {sid} — {entry['title']} (`response_type: {entry['response_type']}`)")
         if entry["prompt"]:
             lines.append(f"*{entry['prompt']}*")
+        if entry["questions"]:
+            lines.append(f"Cover each of these points within your single `{sid}` answer:")
         for q in entry["questions"]:
             rt = f" (`{q['response_type']}`)" if q.get("response_type") else ""
             lines.append(f"- {q['question_id']}{rt}: {q['prompt']}")

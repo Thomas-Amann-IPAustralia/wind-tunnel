@@ -12,7 +12,12 @@ from pathlib import Path
 
 import pytest
 
-from agents.prompting import response_type_of, specialist_friendly_name, specialist_owned_sections
+from agents.prompting import (
+    owned_subquestions,
+    response_type_of,
+    specialist_friendly_name,
+    specialist_owned_sections,
+)
 from agents.specialist import AgentError, run_specialist
 from llm import LLMClient, ScriptedTransport, resolve_model
 from retrieval.db import write_kb
@@ -279,6 +284,65 @@ def test_rejects_gap_for_out_of_scope_section(tmp_path):
     )
     with pytest.raises(AgentError, match="out-of-scope"):
         run_specialist(client, "privacy", "o", "t", kb, "{}")
+    kb.close()
+
+
+# -- sub-question folding (§9.3): 12.2.1/12.2.2 → 12.2, losslessly --------------
+
+
+def test_owned_subquestions_maps_only_sections_with_nested_questions():
+    # 12.2 'Legal advice' and 8.4 are the only DTA sections carrying sub-questions.
+    assert owned_subquestions(specialist_owned_sections("legal"))["12.2"] == ("12.2.1", "12.2.2")
+    assert owned_subquestions(specialist_owned_sections("ethics"))["8.4"] == ("8.4.1", "8.4.2")
+    # A specialist with no nested-question sections gets an empty map.
+    assert owned_subquestions(specialist_owned_sections("it_security")) == {}
+
+
+def test_folds_subquestion_keys_into_owned_parent(tmp_path):
+    """The reported WT-H2A8-H3 failure: the legal specialist keyed its answer by
+    12.2.1/12.2.2 — the instrument's real sub-questions of the owned section 12.2 —
+    instead of 12.2. They fold into the single owned parent, losslessly, rather than
+    failing the run as out-of-scope (§9.3)."""
+    kb = _open_empty_kb(tmp_path)
+    sections = _draft_sections("legal")
+    del sections["12.2"]
+    sections["12.2.1"] = "Yes, we identified the need for legal advice during scoping."
+    sections["12.2.2"] = "Stored in the departmental records management system."
+    client = _client(lambda **_: _bad_draft("legal", sections=sections))
+    draft = run_specialist(client, "legal", "o", "t", kb, "{}")
+    assert "12.2" in draft.sections
+    assert "12.2.1" not in draft.sections and "12.2.2" not in draft.sections
+    # Concatenated in instrument order → the folded parent still opens with the Yes
+    # of 12.2.1 (12.2 is yes_no_na), and 12.2.2's content is preserved.
+    assert draft.sections["12.2"].startswith("Yes, we identified")
+    assert "records management system" in draft.sections["12.2"]
+    kb.close()
+
+
+def test_folds_subquestion_citations_onto_parent(tmp_path):
+    kb = _open_empty_kb(tmp_path)
+    sections = _draft_sections("legal")
+    del sections["12.2"]
+    sections["12.2.1"] = "Yes, legal advice was sought early."
+    sections["12.2.2"] = "Held in the case management system."
+    citations = {"12.2.1": [{"short_name": "Legal-Memo", "locator": "p.3"}]}
+    client = _client(lambda **_: _bad_draft("legal", sections=sections, citations=citations))
+    draft = run_specialist(client, "legal", "o", "t", kb, "{}")
+    assert "12.2.1" not in draft.citations
+    assert draft.citations["12.2"] == [{"short_name": "Legal-Memo", "locator": "p.3"}]
+    kb.close()
+
+
+def test_fold_still_rejects_a_true_out_of_scope_key(tmp_path):
+    """Folding is scoped to instrument sub-questions of *owned* sections. A deeper id
+    whose parent the specialist does not own is not folded — the structural write-scope
+    guard still rejects it loudly (§9.3)."""
+    kb = _open_empty_kb(tmp_path)
+    sections = _draft_sections("legal")
+    sections["7.1.1"] = "Yes. this belongs to privacy, not legal."
+    client = _client(lambda **_: _bad_draft("legal", sections=sections))
+    with pytest.raises(AgentError, match="out-of-scope"):
+        run_specialist(client, "legal", "o", "t", kb, "{}")
     kb.close()
 
 

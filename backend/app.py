@@ -69,10 +69,14 @@ from github_io import GitHubClient, GitHubError, RestGitHubClient  # noqa: E402
 from outline import Outline, OutlineError, render_initial_outline  # noqa: E402
 
 # name -> path within runs/<id>/, and its download media type (§7 artefact proxy;
-# "name is allow-listed; arbitrary repo paths are refused").
+# "name is allow-listed; arbitrary repo paths are refused"). The public artefact
+# name is stable (TECH_SPEC §7); it resolves to the pipeline's canonical committed
+# file, not a duplicate copy — one owner per fact (CLAUDE.md §3). The outline is
+# authored at brainstorm/outline.md (§7.1) and the threshold export is written by
+# THRESHOLD_RECONCILING as threshold/threshold_assessment.md (§5.1, stages/threshold.py).
 _ARTEFACTS: dict[str, tuple[str, str]] = {
-    "outline.md": ("artefacts/outline.md", "text/markdown; charset=utf-8"),
-    "threshold.md": ("artefacts/threshold.md", "text/markdown; charset=utf-8"),
+    "outline.md": ("brainstorm/outline.md", "text/markdown; charset=utf-8"),
+    "threshold.md": ("threshold/threshold_assessment.md", "text/markdown; charset=utf-8"),
     "assessment.ipynb": ("artefacts/assessment.ipynb", "application/x-ipynb+json"),
     "assessment.html": ("artefacts/assessment.html", "text/html; charset=utf-8"),
     # Brainstorm optional artefacts (§6.3/§6.4). The SPA displays the PoC in a

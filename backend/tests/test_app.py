@@ -116,12 +116,25 @@ def test_artefact_proxy_404s_when_not_yet_produced(client, github):
     assert resp.status_code == 404
 
 
-def test_artefact_proxy_streams_a_produced_artefact(client, github):
+def test_artefact_proxy_streams_the_threshold_export(client, github):
+    # The "threshold.md" name resolves to the pipeline's canonical committed file,
+    # threshold/threshold_assessment.md — not a phantom artefacts/ copy (one owner, §3).
     seed_run(github, "WT-FFFF-FF")
-    github.files[run_path("WT-FFFF-FF", "artefacts", "threshold.md")] = b"# Threshold\n"
+    github.files[run_path("WT-FFFF-FF", "threshold", "threshold_assessment.md")] = b"# Threshold\n"
     resp = client.get("/api/runs/WT-FFFF-FF/artefact/threshold.md")
     assert resp.status_code == 200
     assert resp.content == b"# Threshold\n"
+    assert "markdown" in resp.headers["content-type"]
+
+
+def test_artefact_proxy_streams_the_outline(client, github):
+    # The "outline.md" name resolves to brainstorm/outline.md, the single source of
+    # the concept (§7.1), not a phantom artefacts/ copy.
+    seed_run(github, "WT-GGGG-GG")
+    github.files[run_path("WT-GGGG-GG", "brainstorm", "outline.md")] = b"# Outline\n"
+    resp = client.get("/api/runs/WT-GGGG-GG/artefact/outline.md")
+    assert resp.status_code == 200
+    assert resp.content == b"# Outline\n"
     assert "markdown" in resp.headers["content-type"]
 
 

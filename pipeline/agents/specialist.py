@@ -25,6 +25,7 @@ from pathlib import Path
 
 from agents.prompting import (
     load_prompt,
+    owned_subquestions,
     response_type_of,
     specialist_instrument_context,
     specialist_owned_sections,
@@ -449,9 +450,105 @@ def _render_prior(prior_draft: SpecialistDraft, targets: tuple[str, ...]) -> str
 # -- validation (§9.3 structural write-scope, §9.4 citation shape) -------------
 
 
+def _keys(obj: object) -> set[str]:
+    return set(obj) if isinstance(obj, dict) else set()
+
+
+def _gap_sections(obj: object) -> set[str]:
+    if not isinstance(obj, list):
+        return set()
+    return {str(g["section"]) for g in obj if isinstance(g, dict) and g.get("section")}
+
+
+def _fold_sections(sections_in: dict, sub_to_parent: dict[str, str], order: dict[str, int]) -> dict:
+    """Rekey sub-question answers onto their parent, concatenating in instrument order."""
+    folded: dict[str, object] = {}
+    subparts: dict[str, list[tuple[int, str]]] = {}
+    for key, value in sections_in.items():
+        parent = sub_to_parent.get(key)
+        if parent is None:
+            folded.setdefault(key, value)  # section-keyed or out-of-scope: keep as-is
+        elif isinstance(value, str) and value.strip():
+            subparts.setdefault(parent, []).append((order[key], value.strip()))
+    for parent, parts in subparts.items():
+        joined = "\n\n".join(text for _, text in sorted(parts, key=lambda p: p[0]))
+        existing = folded.get(parent)
+        folded[parent] = f"{existing.strip()}\n\n{joined}" if isinstance(existing, str) else joined
+    return folded
+
+
+def _fold_mapping(mapping_in: dict, sub_to_parent: dict[str, str]) -> dict:
+    """Rekey a per-section mapping (citations) onto parents, concatenating lists."""
+    folded: dict[str, object] = {}
+    for key, value in mapping_in.items():
+        parent = sub_to_parent.get(key, key)
+        existing = folded.get(parent)
+        if isinstance(existing, list) and isinstance(value, list):
+            folded[parent] = existing + value
+        elif parent not in folded:
+            folded[parent] = value
+    return folded
+
+
+def _fold_gaps(gaps_in: list, sub_to_parent: dict[str, str]) -> list:
+    """Rewrite a sub-question gap onto its parent section; de-duplicate by parent."""
+    folded: list = []
+    seen: set[str] = set()
+    for g in gaps_in:
+        section = str(g.get("section")) if isinstance(g, dict) else None
+        if section in sub_to_parent:
+            parent = sub_to_parent[section]
+            if parent in seen:
+                continue
+            seen.add(parent)
+            folded.append({**g, "section": parent})
+        else:
+            folded.append(g)
+    return folded
+
+
+def _fold_subquestions(data: dict, allowed: tuple[str, ...]) -> dict:
+    """Fold instrument sub-question keys into their owned parent section (§9.3),
+    losslessly, before write-scope validation.
+
+    A few DTA sections carry numbered sub-questions in the instrument
+    (``questions.json``): 12.2 'Legal advice' → 12.2.1/12.2.2, 8.4 → 8.4.1/8.4.2. The
+    specialist prompt lists them, so a model may key its answer, citations, or a gap
+    by a sub-question id — each resolves to the single owned parent and is folded there,
+    not rejected as out-of-scope. Sub-answers join in the instrument's declared order (so
+    a yes_no_na parent still opens with the Yes/No of its first sub-question); citations
+    extend the parent's list; a gap on a sub-question becomes a gap on its parent. Any key
+    already at section granularity, and any key resolving to neither an allowed section
+    nor one of its sub-questions, is left untouched — so the out-of-scope checks below
+    still reject a true scope violation loudly. Returns ``data`` unchanged when nothing is
+    sub-keyed; otherwise a shallow copy with folded sections/citations/gaps."""
+    subq = owned_subquestions(allowed)  # parent -> ordered sub-question ids
+    if not subq:
+        return data
+    order = {q: i for sub_ids in subq.values() for i, q in enumerate(sub_ids)}
+    sub_to_parent = {q: parent for parent, sub_ids in subq.items() for q in sub_ids}
+
+    sections_in = data.get("sections")
+    citations_in = data.get("citations")
+    gaps_in = data.get("gaps")
+    touched = _keys(sections_in) | _keys(citations_in) | _gap_sections(gaps_in)
+    if not (touched & set(sub_to_parent)):
+        return data  # nothing sub-keyed — leave the payload exactly as the model sent it
+
+    folded = dict(data)
+    if isinstance(sections_in, dict):
+        folded["sections"] = _fold_sections(sections_in, sub_to_parent, order)
+    if isinstance(citations_in, dict):
+        folded["citations"] = _fold_mapping(citations_in, sub_to_parent)
+    if isinstance(gaps_in, list):
+        folded["gaps"] = _fold_gaps(gaps_in, sub_to_parent)
+    return folded
+
+
 def _parse_draft(
     data: dict, specialist_id: str, owned: tuple[str, ...], resp, prompt
 ) -> SpecialistDraft:
+    data = _fold_subquestions(data, owned)
     sections_in = data.get("sections")
     if not isinstance(sections_in, dict):
         raise AgentError(f"{specialist_id}: 'sections' must be an object.")
@@ -507,6 +604,7 @@ def _parse_amendment(data: dict, specialist_id: str, targets: tuple[str, ...]) -
     """Validate an amendment's partial output — scoped to ``targets`` only (§11.3). Same
     drafted-or-gapped discipline as a fresh draft, but the allowed keys are the directed
     sections, not the specialist's whole owned set."""
+    data = _fold_subquestions(data, targets)
     sections_in = data.get("sections")
     if not isinstance(sections_in, dict):
         raise AgentError(f"{specialist_id}: amendment 'sections' must be an object.")
