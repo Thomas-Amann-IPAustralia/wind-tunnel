@@ -13,30 +13,24 @@
   max-width: 48rem;
 }
 
-.wt-chamber__panes {
-  display: grid;
-  grid-template-columns: 1fr minmax(18rem, 24rem);
-  gap: var(--space-5);
-  align-items: start;
-}
-
-.wt-chamber__graph {
+/* The flagship: the node canvas on top (with its detail drawer overlaid), the
+ * activity log below it — the graph shows the shape, the log tells the story. */
+.wt-chamber__flagship {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
   min-width: 0;
 }
 
+/* Positioning context for the detail drawer, which slides in over the stage. */
+.wt-chamber__stagewrap {
+  position: relative;
+}
+
 .wt-chamber__range {
   color: var(--chamber-slate);
   font-size: var(--text-sm);
   max-width: 40rem;
-}
-
-.wt-chamber__side {
-  position: sticky;
-  top: var(--space-4);
-  min-width: 0;
 }
 
 /* Notices (connecting / hard error / concluded) — centred, calm. */
@@ -55,6 +49,12 @@
   color: var(--chamber-ink);
 }
 
+/* The first-load notice centres its warm-up sprite over the copy. */
+.wt-chamber__notice--center {
+  align-items: center;
+  text-align: center;
+}
+
 .wt-chamber__notice--light {
   color: var(--ink-muted);
   align-items: flex-start;
@@ -66,53 +66,6 @@
 
 .wt-chamber__notice--light .wt-btn {
   margin-top: var(--space-2);
-}
-
-/* A moving "air down the tunnel" indicator for the waiting states (§5.7). It is
-   deliberately in motion so a cold start reads as "working", never as a hang.
-   Neutralised (but still visible) under reduced motion via base.css. */
-.wt-chamber__travel {
-  position: relative;
-  display: inline-block;
-  width: 42px;
-  height: 9px;
-  margin-top: var(--space-1);
-  overflow: hidden;
-}
-
-.wt-chamber__travel::before,
-.wt-chamber__travel::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 7px;
-  height: 7px;
-  margin-top: -3.5px;
-  border-radius: 50%;
-  background: var(--focus);
-  animation: wt-chamber-travel var(--motion-pulse) var(--ease) infinite;
-}
-
-.wt-chamber__travel::after {
-  animation-delay: calc(var(--motion-pulse) / 2);
-}
-
-@keyframes wt-chamber-travel {
-  0% {
-    transform: translateX(-9px);
-    opacity: 0;
-  }
-  25% {
-    opacity: 1;
-  }
-  75% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateX(42px);
-    opacity: 0;
-  }
 }
 
 /* "Waiting to start / restart" prompt (§5.7) — calm, not alarming: the run is

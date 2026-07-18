@@ -1,183 +1,275 @@
-/* The pipeline graph (design §7.2.1) on the dark Chamber surface. State reads from
- * label + shape + position, never colour alone (§9): the dot shape and the state
- * word carry the meaning; the glow is an enhancement, not the signal. */
+/* The pipeline graph (design §7.2.1) — a node canvas on the dark Chamber surface.
+ * State reads from label + shape + position, never colour alone (§9): the state
+ * word and the dot shape carry the meaning; the glow and the flowing wires are
+ * enhancement. Node positions come from lib/topology (fixed layout px); this file
+ * only styles them. */
 
 .wt-graph {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-}
-
-.wt-graph__band {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.wt-graph__band-title {
-  font-size: var(--text-xs);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--chamber-slate);
-  font-family: var(--font-display);
-}
-
-.wt-graph__clusters {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  position: relative;
-}
-
-/* The connecting flow-line down the band (node/flow grammar, §3.5). */
-.wt-graph__clusters::before {
-  content: "";
-  position: absolute;
-  left: 0.6rem;
-  top: 1rem;
-  bottom: 1rem;
-  width: 2px;
-  background: var(--chamber-hairline);
-}
-
-.wt-graph__cluster {
-  position: relative;
-  padding-left: var(--space-5);
-}
-
-.wt-graph__cluster-label {
-  font-size: var(--text-sm);
-  color: var(--chamber-slate);
-  margin-bottom: var(--space-2);
-}
-
-.wt-graph__nodes {
-  display: flex;
-  flex-direction: column;
   gap: var(--space-2);
 }
 
-/* The specialist bloom + the two generalists fan across the row (§7.2.2). */
-.wt-graph__cluster--parallel .wt-graph__nodes {
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.wt-node {
-  display: flex;
-  align-items: flex-start;
-  gap: var(--space-3);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius);
+/* The stage: a framed, clipped viewport the workspace pans/zooms inside. */
+.wt-graph__stage {
+  position: relative;
+  height: min(64vh, 620px);
+  min-height: 340px;
+  overflow: hidden;
   border: 1px solid var(--chamber-hairline);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle, rgba(143, 185, 196, 0.07) 1.4px, transparent 1.4px) 0 0 / 28px 28px,
+    var(--chamber);
+  touch-action: none;
+  cursor: grab;
+}
+.wt-graph__stage:active {
+  cursor: grabbing;
+}
+
+.wt-graph__viewport {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-origin: 0 0;
+}
+
+.wt-graph__wires {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* -- Wires ----------------------------------------------------------------- */
+
+.wt-wire {
+  fill: none;
+  stroke: var(--chamber-hairline);
+  stroke-width: 2;
+  transition: stroke var(--motion-resolve) var(--ease);
+}
+.wt-wire--ready {
+  stroke: color-mix(in srgb, var(--focus) 65%, var(--chamber-hairline));
+}
+.wt-wire--done {
+  stroke: color-mix(in srgb, var(--focus) 50%, var(--chamber-hairline));
+}
+.wt-wire--flow {
+  stroke: var(--focus-glow);
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--focus-glow) 55%, transparent));
+}
+
+/* A dash travelling along a live handoff — the "air down the tunnel" motif. */
+.wt-wire__pulse {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 1.4;
+  stroke-dasharray: 6 14;
+  stroke-linecap: round;
+  opacity: 0.85;
+  animation: wt-wire-flow 1s linear infinite;
+}
+@keyframes wt-wire-flow {
+  from {
+    stroke-dashoffset: 20;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* -- Node cards ------------------------------------------------------------ */
+
+.wt-gnode {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-3) var(--space-2);
+  text-align: left;
+  border: 1px solid var(--chamber-hairline);
+  border-radius: var(--radius);
   background: var(--chamber-raised);
-  min-width: 12rem;
-  flex: 1 1 12rem;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  overflow: hidden;
   transition:
     border-color var(--motion-resolve) var(--ease),
+    box-shadow var(--motion-resolve) var(--ease),
     background var(--motion-resolve) var(--ease);
 }
+.wt-gnode:hover {
+  border-color: var(--chamber-slate);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+.wt-gnode.is-selected {
+  border-color: var(--chamber-ink);
+  box-shadow:
+    0 0 0 1.5px var(--chamber-ink),
+    0 8px 24px rgba(0, 0, 0, 0.55);
+}
 
-.wt-node__dot {
+/* A status strip along the top edge — a second, non-colour-only state cue. */
+.wt-gnode__strip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  height: 3px;
+  background: var(--chamber-hairline);
+  transition: background var(--motion-resolve) var(--ease);
+}
+
+.wt-gnode__head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.wt-gnode__dot {
   flex: 0 0 auto;
   width: 0.7rem;
   height: 0.7rem;
-  margin-top: 0.35rem;
   border-radius: 50%;
   border: 2px solid var(--chamber-slate);
   background: transparent;
 }
 
-.wt-node__body {
-  display: flex;
-  flex-direction: column;
-  gap: 0.1rem;
+.wt-gnode__name {
+  flex: 1 1 auto;
   min-width: 0;
-}
-
-.wt-node__name {
   color: var(--chamber-ink);
   font-weight: 600;
   font-size: var(--text-sm);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.wt-node__state {
-  font-size: var(--text-xs);
+.wt-gnode__state {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--chamber-slate);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
 }
 
-.wt-node__sub {
+.wt-gnode__blurb {
   font-size: var(--text-sm);
-  color: var(--vapour);
-  margin-top: var(--space-1);
-  overflow-wrap: anywhere;
+  line-height: 1.4;
+  color: var(--chamber-slate);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.wt-node__kind {
-  font-size: var(--text-xs);
+/* Reserved single-line slot so a card never resizes as live activity streams in
+ * (the wire maths depends on a fixed card height). */
+.wt-gnode__foot {
+  margin-top: auto;
+  min-height: 1.35em;
+  display: flex;
+  align-items: center;
+}
+
+.wt-gnode__sub,
+.wt-gnode__engine,
+.wt-gnode__kind {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.wt-gnode__sub {
+  color: var(--focus-glow);
+}
+.wt-gnode__engine {
+  color: var(--chamber-slate);
+}
+.wt-gnode__kind {
   color: var(--chamber-slate);
   font-style: italic;
 }
 
-/* -- States ---------------------------------------------------------------- */
+/* -- Node states (label + shape + colour, §9) ------------------------------ */
 
-.wt-node--active {
-  border-color: var(--focus);
-  background: color-mix(in srgb, var(--focus) 14%, var(--chamber-raised));
+.wt-gnode--active {
+  border-color: color-mix(in srgb, var(--focus-glow) 45%, var(--chamber-hairline));
+  background: color-mix(in srgb, var(--focus) 12%, var(--chamber-raised));
 }
-.wt-node--active .wt-node__dot {
+.wt-gnode--active .wt-gnode__strip {
+  background: var(--focus-glow);
+}
+.wt-gnode--active .wt-gnode__state {
+  color: var(--focus-glow);
+  background: color-mix(in srgb, var(--focus-glow) 16%, transparent);
+}
+.wt-gnode--active .wt-gnode__dot {
   border-color: var(--focus-glow);
   background: var(--focus-glow);
-  box-shadow: 0 0 0 0 color-mix(in srgb, var(--focus-glow) 60%, transparent);
-  animation: wt-node-pulse var(--motion-pulse) var(--ease) infinite;
-}
-.wt-node--active .wt-node__state {
-  color: var(--focus-glow);
+  animation: wt-gnode-pulse var(--motion-pulse) var(--ease) infinite;
 }
 
-.wt-node--complete .wt-node__dot {
+.wt-gnode--complete .wt-gnode__strip {
+  background: var(--focus);
+}
+.wt-gnode--complete .wt-gnode__dot {
   border-color: var(--focus);
   background: var(--focus);
 }
-.wt-node--complete .wt-node__name {
+.wt-gnode--complete .wt-gnode__name {
   color: var(--chamber-slate);
 }
+.wt-gnode--complete .wt-gnode__state {
+  color: color-mix(in srgb, var(--focus) 80%, var(--chamber-ink));
+}
 
-.wt-node--waiting_user {
+.wt-gnode--waiting_user {
   border-color: var(--amber);
   background: color-mix(in srgb, var(--amber) 16%, var(--chamber-raised));
 }
-.wt-node--waiting_user .wt-node__dot {
+.wt-gnode--waiting_user .wt-gnode__strip {
+  background: var(--amber);
+}
+.wt-gnode--waiting_user .wt-gnode__state {
+  color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 18%, transparent);
+}
+.wt-gnode--waiting_user .wt-gnode__dot {
   border-color: var(--amber);
   background: var(--amber);
   border-radius: 2px; /* square = waiting-on-you, a shape cue beyond colour */
 }
-.wt-node--waiting_user .wt-node__state {
-  color: var(--amber);
-}
 
-.wt-node--failed {
+.wt-gnode--failed {
   border-color: var(--clay);
-  background: color-mix(in srgb, var(--clay) 16%, var(--chamber-raised));
+  background: color-mix(in srgb, var(--clay) 18%, var(--chamber-raised));
 }
-.wt-node--failed .wt-node__dot {
+.wt-gnode--failed .wt-gnode__strip {
+  background: var(--clay);
+}
+.wt-gnode--failed .wt-gnode__state {
+  color: color-mix(in srgb, var(--clay) 70%, var(--chamber-ink));
+  background: color-mix(in srgb, var(--clay) 22%, transparent);
+}
+.wt-gnode--failed .wt-gnode__dot {
   border-color: var(--clay);
   background: var(--clay);
-  /* triangle = stopped, a shape cue beyond colour */
   border-radius: 0;
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-}
-.wt-node--failed .wt-node__state {
-  color: var(--clay);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%); /* triangle = stopped */
 }
 
-@keyframes wt-node-pulse {
+@keyframes wt-gnode-pulse {
   0% {
     box-shadow: 0 0 0 0 color-mix(in srgb, var(--focus-glow) 55%, transparent);
   }
@@ -187,4 +279,48 @@
   100% {
     box-shadow: 0 0 0 0 color-mix(in srgb, var(--focus-glow) 0%, transparent);
   }
+}
+
+/* -- Controls + hint ------------------------------------------------------- */
+
+.wt-graph__controls {
+  position: absolute;
+  right: var(--space-3);
+  bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--radius);
+  border: 1px solid var(--chamber-hairline);
+  background: color-mix(in srgb, var(--chamber) 80%, transparent);
+  backdrop-filter: blur(4px);
+}
+
+.wt-graph__ctl {
+  min-width: 28px;
+  height: 26px;
+  padding: 0 var(--space-2);
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--chamber-slate);
+  font-size: var(--text-base);
+  cursor: pointer;
+}
+.wt-graph__ctl:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--chamber-ink);
+}
+
+.wt-graph__zoom {
+  width: 44px;
+  text-align: center;
+  font-size: var(--text-xs);
+  color: var(--chamber-slate);
+}
+
+.wt-graph__hint {
+  font-size: var(--text-xs);
+  color: var(--chamber-slate);
 }

@@ -1,6 +1,14 @@
 import { describe, expect, it } from "vitest";
 
-import { allNodeIds, friendlyFor, TOPOLOGY } from "./topology";
+import {
+  allNodeIds,
+  allNodes,
+  EDGES,
+  friendlyFor,
+  nodeById,
+  TOPOLOGY,
+  workspaceSize,
+} from "./topology";
 
 // Pins the topology to the ids `pipeline/status.py` `_node_specs()` owns, in graph
 // order (design §7.2.6). If the pipeline adds/renames/reorders a node, this test
@@ -54,5 +62,36 @@ describe("topology", () => {
     expect(byId["full.assembly"]).toBe("compute");
     expect(byId["full.checkpoint"]).toBe("pause");
     expect(byId["full.specialist.privacy"]).toBe("llm");
+  });
+
+  it("gives every node a position and lay-audience copy", () => {
+    for (const node of allNodes()) {
+      expect(Number.isFinite(node.pos.x)).toBe(true);
+      expect(Number.isFinite(node.pos.y)).toBe(true);
+      expect(node.engine.length).toBeGreaterThan(0);
+      expect(node.blurb.length).toBeGreaterThan(0);
+      // The explanation is the transparency payload — a real sentence, not a stub.
+      expect(node.explain.length).toBeGreaterThan(40);
+    }
+  });
+
+  it("wires only real nodes, and covers the pipeline's real handoffs", () => {
+    const ids = new Set(allNodeIds());
+    for (const e of EDGES) {
+      expect(ids.has(e.from)).toBe(true);
+      expect(ids.has(e.to)).toBe(true);
+    }
+    // The two parallel moments: two generalists → reconciler, and the six-specialist
+    // bloom from the rating engine (§7.2.2).
+    expect(EDGES.filter((e) => e.to === "threshold.reconciler")).toHaveLength(2);
+    expect(EDGES.filter((e) => e.from === "threshold.rating_engine")).toHaveLength(6);
+    expect(EDGES.filter((e) => e.to === "full.checkpoint")).toHaveLength(6);
+  });
+
+  it("computes a workspace that contains every node", () => {
+    const { width, height } = workspaceSize();
+    expect(width).toBeGreaterThan(0);
+    expect(height).toBeGreaterThan(0);
+    expect(nodeById("full.assembly")?.pos.x).toBeLessThanOrEqual(width);
   });
 });

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ColdStartNote } from "../components/ColdStartNote";
 import { Surface } from "../components/Surface";
 import { useBackendStatus } from "../context/BackendStatus";
+import logo from "../img/WindTunnelLogo.png";
 import { ApiError, createRun, NetworkError } from "../lib/api";
 import "./Landing.css";
 
@@ -40,6 +41,7 @@ export function Landing() {
     <Surface kind="console">
       <div className="wt-landing">
         <div className="wt-landing__lede">
+          <img className="wt-landing__logo" src={logo} alt="Windtunnel" width={112} height={112} />
           <h1 className="wt-landing__title">Test your AI idea before you build it.</h1>
           <p className="wt-landing__sub">
             Sharpen a loose idea into a clear outline, then run it through a college of specialists

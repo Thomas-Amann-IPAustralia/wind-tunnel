@@ -1,0 +1,43 @@
+/* "Tunnel warming up" flip-book. Stacked frames, one visible at a time; pixel-art
+ * kept crisp. Motion lives entirely in the frame swap (JS), so the global
+ * reduced-motion guard needs no special case — the component itself freezes on the
+ * grown frame when reduced motion is set. */
+
+.wt-warmup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.wt-warmup--stack {
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.wt-warmup__stage {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-block;
+}
+
+.wt-warmup__frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+  opacity: 0;
+}
+.wt-warmup__frame[data-on="true"] {
+  opacity: 1;
+}
+
+.wt-warmup__label {
+  font-size: var(--text-sm);
+  color: var(--chamber-slate);
+}
+
+/* On the light Console surface the label reads in the muted body colour. */
+.wt-surface--console .wt-warmup__label {
+  color: var(--slate);
+}

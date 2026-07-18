@@ -9,6 +9,15 @@
   padding: var(--space-8) 0;
 }
 
+.wt-landing__logo {
+  display: block;
+  width: 112px;
+  height: 112px;
+  object-fit: contain;
+  margin-bottom: var(--space-4);
+  mix-blend-mode: multiply; /* melts the logo's white ground into the paper */
+}
+
 .wt-landing__title {
   font-size: var(--text-3xl);
   letter-spacing: 0.005em;

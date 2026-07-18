@@ -1,18 +1,21 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 
 import { ActivityLog } from "../components/ActivityLog";
 import { Checkpoint } from "../components/Checkpoint";
 import { FailureState } from "../components/FailureState";
+import { NodeDetail } from "../components/NodeDetail";
+import type { NodeEvidence } from "../components/NodeDetail";
 import { PipelineGraph } from "../components/PipelineGraph";
 import { ReportView } from "../components/ReportView";
 import { RunCodeChip } from "../components/RunCodeChip";
 import { Surface } from "../components/Surface";
 import { ThresholdReview } from "../components/ThresholdReview";
+import { TunnelWarmup } from "../components/TunnelWarmup";
 import { useStatusPoll } from "../hooks/useStatusPoll";
 import { ApiError, artefactUrl, NetworkError, redispatchRun } from "../lib/api";
 import { isValid } from "../lib/runCode";
-import { TOPOLOGY } from "../lib/topology";
+import { allNodes, nodeById } from "../lib/topology";
 import type { StatusDoc } from "../lib/types";
 import "./Chamber.css";
 
@@ -50,9 +53,9 @@ export function Chamber() {
   if (!doc) {
     return (
       <Surface kind="chamber" subtitle="Governance" header={<RunCodeChip code={code} />}>
-        <div className="wt-chamber__notice" role="status">
+        <div className="wt-chamber__notice wt-chamber__notice--center" role="status">
+          <TunnelWarmup size={96} />
           <h2>Opening the tunnel…</h2>
-          <span className="wt-chamber__travel" aria-hidden="true" />
           <p>
             {offline
               ? "The backend may be warming up — this can take up to a minute on a cold start. It hasn't stalled; keep this open."
@@ -108,6 +111,7 @@ function RunningView({
   offline: boolean;
 }) {
   const subActivity = useMemo(() => buildSubActivity(doc), [doc]);
+  const evidence = useMemo(() => buildEvidence(doc), [doc]);
   const range = doc.expected_ranges?.[doc.phase];
   // A submitted run whose pipeline hasn't demonstrably begun — no node has left
   // `pending` and nothing has failed. Usually the GitHub Action is just spinning
@@ -116,32 +120,58 @@ function RunningView({
   // honest wait + a safe re-kick rather than a silently frozen graph.
   const notStarted = !failed && allPending(doc.nodes);
 
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selectedNode = selectedId ? nodeById(selectedId) : undefined;
+
+  // Escape closes the detail drawer — a graph-canvas convention (§9 keyboard).
+  useEffect(() => {
+    if (!selectedId) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedId(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [selectedId]);
+
   return (
     <div className="wt-chamber">
       <p className="wt-chamber__orient">
-        Your idea is going through the tunnel. Here&rsquo;s every stage — watch it work.
+        Your idea is going through the tunnel. Here&rsquo;s every stage — watch it work, and select
+        any one to see, in plain terms, what it does.
       </p>
       {notStarted ? <NotStartedPrompt runCode={doc.run_code} staleSeconds={staleSeconds} /> : null}
-      <div className="wt-chamber__panes">
-        <div className="wt-chamber__graph">
-          <PipelineGraph nodes={doc.nodes} subActivity={subActivity} />
-          {range && !failed ? (
-            <p className="wt-chamber__range">
-              This phase usually takes {minutes(range[0])}–{minutes(range[1])} minutes. You can
-              safely close the tab and come back with your run code.
-            </p>
+      <div className="wt-chamber__flagship">
+        <div className="wt-chamber__stagewrap">
+          <PipelineGraph
+            nodes={doc.nodes}
+            subActivity={subActivity}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
+          />
+          {selectedNode ? (
+            <NodeDetail
+              node={selectedNode}
+              state={doc.nodes[selectedNode.id] ?? "pending"}
+              subActivity={subActivity[selectedNode.id]}
+              evidence={evidence[selectedNode.id] ?? { retrievals: [], questions: [] }}
+              onClose={() => setSelectedId(null)}
+            />
           ) : null}
         </div>
-        <aside className="wt-chamber__side">
-          {failed ? null : (
-            <ActivityLog
-              events={doc.log}
-              staleSeconds={staleSeconds}
-              offline={offline}
-              running={doc.overall_state === "running" || doc.overall_state === "created"}
-            />
-          )}
-        </aside>
+        {range && !failed ? (
+          <p className="wt-chamber__range">
+            This phase usually takes {minutes(range[0])}–{minutes(range[1])} minutes. You can safely
+            close the tab and come back with your run code.
+          </p>
+        ) : null}
+        {failed ? null : (
+          <ActivityLog
+            events={doc.log}
+            staleSeconds={staleSeconds}
+            offline={offline}
+            running={doc.overall_state === "running" || doc.overall_state === "created"}
+          />
+        )}
       </div>
       {failed ? <FailureState runCode={doc.run_code} failure={doc.failure} /> : null}
     </div>
@@ -194,7 +224,7 @@ function NotStartedPrompt({
 
   return (
     <div className="wt-chamber__start" role="status">
-      <span className="wt-chamber__travel" aria-hidden="true" />
+      <TunnelWarmup size={64} layout="inline" label="Warming up the tunnel…" />
       <p className="wt-chamber__start-lead">
         Waiting for the run to start. This can take up to a minute while the tunnel spins up —
         it&rsquo;s still working, not stuck. You can safely close the tab and come back with your
@@ -269,13 +299,38 @@ function buildSubActivity(doc: StatusDoc): Record<string, string> {
     if (e.type === "retrieval" || e.type === "drafting") byAgent[e.agent] = e.detail;
   }
   const out: Record<string, string> = {};
-  for (const band of TOPOLOGY) {
-    for (const cluster of band.clusters) {
-      for (const node of cluster.nodes) {
-        const detail = byAgent[node.id] ?? byAgent[node.friendly];
-        if (detail) out[node.id] = detail;
-      }
+  for (const node of allNodes()) {
+    const detail = byAgent[node.id] ?? byAgent[node.friendly];
+    if (detail) out[node.id] = detail;
+  }
+  return out;
+}
+
+/** Per-node evidence for the detail drawer — the sources a node has read and the
+ * questions it has raised, drawn straight from the status log (CLAUDE.md §3, one
+ * poll). The log's `agent` may be a node id or its friendly name (§7.2.6), so both
+ * resolve to the node id. Retrievals are newest-first, capped for a calm drawer. */
+function buildEvidence(doc: StatusDoc): Record<string, NodeEvidence> {
+  const idByFriendly: Record<string, string> = {};
+  for (const n of allNodes()) idByFriendly[n.friendly] = n.id;
+  const resolve = (agent: string): string | undefined =>
+    nodeById(agent) ? agent : idByFriendly[agent];
+
+  const out: Record<string, NodeEvidence> = {};
+  const ensure = (id: string): NodeEvidence => (out[id] ??= { retrievals: [], questions: [] });
+
+  for (const e of doc.log) {
+    const id = resolve(e.agent);
+    if (!id) continue;
+    const ref = (e.ref ?? {}) as { doc?: string; locator?: string; question_id?: string };
+    if (e.type === "retrieval") {
+      ensure(id).retrievals.push({ detail: e.detail, doc: ref.doc, locator: ref.locator });
+    } else if (e.type === "question_raised") {
+      ensure(id).questions.push({ id: ref.question_id ?? e.id, text: e.detail });
     }
+  }
+  for (const id of Object.keys(out)) {
+    out[id].retrievals = out[id].retrievals.reverse().slice(0, 12);
   }
   return out;
 }
