@@ -6,6 +6,6 @@ Yes. The core architecture of the APS Markdown Conversion Service is designed to
 
 *Citations: [APP Guidelines, p.188], [OAIC AI Selection Checklist, p.2], [OAIC AI Training Checklist, p.1]*
 
-## Gaps
+## 7.2
 
-- **7.2**: The use-case outline does not specify the storage location or document management system repository for the privacy threshold assessment or privacy impact assessment.
+The privacy threshold assessment and/or privacy impact assessment for the APS Markdown Conversion Service are stored on the assessor's work SharePoint.

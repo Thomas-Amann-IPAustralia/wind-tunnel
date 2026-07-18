@@ -4,14 +4,14 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:39:35Z",
+  "updated_at": "2026-07-18T11:39:46Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
-    "full.specialist.privacy": "active",
+    "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
@@ -3533,9 +3533,93 @@
         "doc": "OAIC AI Training Top 5",
         "locator": "p.1"
       }
+    },
+    {
+      "id": "evt_000339",
+      "ts": "2026-07-18T11:39:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000340",
+      "ts": "2026-07-18T11:39:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000341",
+      "ts": "2026-07-18T11:39:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000342",
+      "ts": "2026-07-18T11:39:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.91"
+      }
+    },
+    {
+      "id": "evt_000343",
+      "ts": "2026-07-18T11:39:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000344",
+      "ts": "2026-07-18T11:39:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000345",
+      "ts": "2026-07-18T11:39:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000346",
+      "ts": "2026-07-18T11:39:46Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_complete",
+      "detail": "Privacy specialist complete"
     }
   ],
-  "log_cursor": 338,
+  "log_cursor": 346,
   "questions": null,
   "failure": null,
   "expected_ranges": {
