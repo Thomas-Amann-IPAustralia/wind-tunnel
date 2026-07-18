@@ -1,0 +1,40 @@
+flowchart TD
+    subgraph User_Space ["User Environment"]
+        APS_Staff["APS Staff (Public Servant)"]
+    end
+
+    subgraph Sovereign_Cloud ["Sovereign Australian Cloud (OFFICIAL)"]
+        Tech_Navigator_UI["Tech Navigator UI (Web & Voice)"]
+        AI_Engine["AI Advisor Engine (LLM)"]
+        
+        subgraph Data_Stores ["Approved Knowledge Sources"]
+            Internal_KB[("Internal KB (Catalogs, Policies, Projects)")]
+        end
+    end
+
+    subgraph External_Sources ["External Sources"]
+        Public_Info[("Public Tech Info")]
+    end
+
+    subgraph Downstream ["Downstream Implementation"]
+        IT_Procurement["IT & Procurement Departments"]
+    end
+
+    APS_Staff -->|1. Describes manual process via Voice/Text| Tech_Navigator_UI
+    Tech_Navigator_UI -->|2. Forwards user input| AI_Engine
+    
+    AI_Engine -->|3. Queries approved solutions & policies| Internal_KB
+    Internal_KB -->|4. Returns software catalogs & guidelines| AI_Engine
+    
+    AI_Engine -.->|5. Queries public tech data| Public_Info
+    Public_Info -.->|6. Returns public tech info| AI_Engine
+    
+    AI_Engine -->|7. Clarifying questions| Tech_Navigator_UI
+    Tech_Navigator_UI -->|8. Interactive dialogue| APS_Staff
+    
+    APS_Staff -->|9. Refines requirements| Tech_Navigator_UI
+    
+    AI_Engine -->|10. Generates Draft Project Brief| Tech_Navigator_UI
+    Tech_Navigator_UI -->|11. Delivers draft for review| APS_Staff
+    
+    APS_Staff -->|12. Submits finalized brief| IT_Procurement
