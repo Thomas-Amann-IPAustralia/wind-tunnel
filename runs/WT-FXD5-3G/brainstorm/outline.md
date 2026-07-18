@@ -9,10 +9,10 @@
 schema_version: 1
 run_id: "WT-FXD5-3G"
 title: "ATO Deduction Assistant"
-summary: "A public-facing chatbot designed to help taxpayers understand deduction eligibility through conversational guidance."
+summary: "A public-facing chatbot using RAG and a user-adjustable 'creativity' dial to provide guidance on tax deduction eligibility while maintaining clear boundaries between advice and policy."
 created_at: "2026-07-18T23:35:12Z"
-updated_at: "2026-07-18T23:39:15Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints"]
+updated_at: "2026-07-18T23:44:01Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
 <!-- section: problem -->
@@ -58,4 +58,4 @@ The system must remain strictly advisory, include prominent disclaimers, and ens
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-*How you'd know, six months in, that it worked.*
+Success will be measured by a reduction in general inquiry call volume to the ATO, a high rate of user click-throughs to official policy documentation, and positive sentiment scores regarding the clarity of guidance provided, all while maintaining zero instances of the bot providing legally binding advice.
