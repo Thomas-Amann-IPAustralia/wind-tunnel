@@ -3,10 +3,10 @@
   "run_id": "WT-H5M2-2Y",
   "run_code": "WT-H5M2-2Y",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-18T02:05:03Z",
+  "overall_state": "failed",
+  "updated_at": "2026-07-18T02:05:23Z",
   "nodes": {
-    "threshold.generalist_a": "pending",
+    "threshold.generalist_a": "failed",
     "threshold.generalist_b": "pending",
     "threshold.reconciler": "pending",
     "threshold.rating_engine": "pending",
@@ -35,11 +35,44 @@
       "agent": "pipeline",
       "type": "heartbeat",
       "detail": ""
+    },
+    {
+      "id": "evt_000003",
+      "ts": "2026-07-18T02:05:04Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000004",
+      "ts": "2026-07-18T02:05:04Z",
+      "agent": "threshold.generalist_a",
+      "type": "stage_started",
+      "detail": "Assessor A started"
+    },
+    {
+      "id": "evt_000005",
+      "ts": "2026-07-18T02:05:04Z",
+      "agent": "threshold.generalist_a",
+      "type": "drafting",
+      "detail": "drafting threshold sections 1–4"
+    },
+    {
+      "id": "evt_000006",
+      "ts": "2026-07-18T02:05:23Z",
+      "agent": "threshold.generalist_a",
+      "type": "error",
+      "detail": "Something went wrong while drafting the threshold assessment. Your run is safe — paste the run code WT-H5M2-2Y to resume from the last checkpoint."
     }
   ],
-  "log_cursor": 2,
+  "log_cursor": 6,
   "questions": null,
-  "failure": null,
+  "failure": {
+    "stage": "threshold.generalist_a",
+    "message": "Something went wrong while drafting the threshold assessment. Your run is safe — paste the run code WT-H5M2-2Y to resume from the last checkpoint.",
+    "run_code": "WT-H5M2-2Y",
+    "technical": "LLMError: 'threshold_generalist' (gemini-3.5-flash) did not return valid JSON: Expecting ',' delimiter: line 6 column 3 (char 5005). First 200 chars: '{\\n  \"sections\": {\\n    \"1\": \"# Section 1 — Basic Information\\\\n\\\\n### 1.1 AI Use Case Profile\\\\n* **Name of AI Use Case:** Canberra Business Navigator AI\\\\n* **Run ID:** WT-H5M2-2Y\\\\n* **Status:** Draft Thr'"
+  },
   "expected_ranges": {
     "threshold": [
       50,

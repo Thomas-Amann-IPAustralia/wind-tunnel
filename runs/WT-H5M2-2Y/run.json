@@ -2,9 +2,9 @@
   "schema_version": 1,
   "run_id": "WT-H5M2-2Y",
   "created_at": "2026-07-18T02:03:29Z",
-  "updated_at": "2026-07-18T02:05:03Z",
+  "updated_at": "2026-07-18T02:05:23Z",
   "stage": "THRESHOLD_DRAFTING",
-  "stage_status": "in_progress",
+  "stage_status": "failed",
   "phase": "threshold",
   "checkpoints": {},
   "revisions": {
@@ -18,5 +18,9 @@
     "sensitivity_ceiling": "OFFICIAL",
     "attested": false
   },
-  "last_error": null
+  "last_error": {
+    "stage": "threshold.generalist_a",
+    "message": "Something went wrong while drafting the threshold assessment. Your run is safe — paste the run code WT-H5M2-2Y to resume from the last checkpoint.",
+    "technical": "LLMError: 'threshold_generalist' (gemini-3.5-flash) did not return valid JSON: Expecting ',' delimiter: line 6 column 3 (char 5005). First 200 chars: '{\\n  \"sections\": {\\n    \"1\": \"# Section 1 — Basic Information\\\\n\\\\n### 1.1 AI Use Case Profile\\\\n* **Name of AI Use Case:** Canberra Business Navigator AI\\\\n* **Run ID:** WT-H5M2-2Y\\\\n* **Status:** Draft Thr'"
+  }
 }
