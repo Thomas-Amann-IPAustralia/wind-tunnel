@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:39:17Z",
+  "updated_at": "2026-07-18T11:39:35Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -3478,9 +3478,64 @@
         "doc": "APP Guidelines",
         "locator": "p.189"
       }
+    },
+    {
+      "id": "evt_000334",
+      "ts": "2026-07-18T11:39:18Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.188"
+      }
+    },
+    {
+      "id": "evt_000335",
+      "ts": "2026-07-18T11:39:18Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.193"
+      }
+    },
+    {
+      "id": "evt_000336",
+      "ts": "2026-07-18T11:39:18Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.185"
+      }
+    },
+    {
+      "id": "evt_000337",
+      "ts": "2026-07-18T11:39:18Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.187"
+      }
+    },
+    {
+      "id": "evt_000338",
+      "ts": "2026-07-18T11:39:35Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Top 5",
+      "ref": {
+        "doc": "OAIC AI Training Top 5",
+        "locator": "p.1"
+      }
     }
   ],
-  "log_cursor": 333,
+  "log_cursor": 338,
   "questions": null,
   "failure": null,
   "expected_ranges": {
