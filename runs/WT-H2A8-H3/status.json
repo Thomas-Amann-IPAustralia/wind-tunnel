@@ -4,14 +4,14 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T06:29:35Z",
+  "updated_at": "2026-07-18T06:29:36Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
-    "full.specialist.privacy": "pending",
+    "full.specialist.privacy": "active",
     "full.specialist.ethics": "pending",
     "full.specialist.legal": "pending",
     "full.specialist.data_governance": "pending",
@@ -491,9 +491,16 @@
       "agent": "full.specialist.it_security",
       "type": "stage_complete",
       "detail": "IT Security specialist complete"
+    },
+    {
+      "id": "evt_000051",
+      "ts": "2026-07-18T06:29:36Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_started",
+      "detail": "Privacy specialist started"
     }
   ],
-  "log_cursor": 50,
+  "log_cursor": 51,
   "questions": null,
   "failure": null,
   "expected_ranges": {
