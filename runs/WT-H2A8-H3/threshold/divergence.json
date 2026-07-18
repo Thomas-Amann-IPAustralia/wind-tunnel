@@ -1,0 +1,124 @@
+{
+  "sections": {
+    "3.1": {
+      "a": {
+        "consequence": "Minor",
+        "likelihood": "Possible"
+      },
+      "b": {
+        "consequence": "Minor",
+        "likelihood": "Possible"
+      },
+      "resolved": {
+        "consequence": "Minor",
+        "likelihood": "Possible"
+      },
+      "diverged": false
+    },
+    "3.2": {
+      "a": {
+        "consequence": "Insignificant",
+        "likelihood": "Rare"
+      },
+      "b": {
+        "consequence": "Insignificant",
+        "likelihood": "Unlikely"
+      },
+      "resolved": {
+        "consequence": "Insignificant",
+        "likelihood": "Unlikely"
+      },
+      "diverged": true
+    },
+    "3.3": {
+      "a": {
+        "consequence": "Insignificant",
+        "likelihood": "Rare"
+      },
+      "b": {
+        "consequence": "Insignificant",
+        "likelihood": "Unlikely"
+      },
+      "resolved": {
+        "consequence": "Insignificant",
+        "likelihood": "Unlikely"
+      },
+      "diverged": true
+    },
+    "3.4": {
+      "a": {
+        "consequence": "Minor",
+        "likelihood": "Possible"
+      },
+      "b": {
+        "consequence": "Minor",
+        "likelihood": "Possible"
+      },
+      "resolved": {
+        "consequence": "Minor",
+        "likelihood": "Possible"
+      },
+      "diverged": false
+    },
+    "3.5": {
+      "a": {
+        "consequence": "Moderate",
+        "likelihood": "Possible"
+      },
+      "b": {
+        "consequence": "Moderate",
+        "likelihood": "Possible"
+      },
+      "resolved": {
+        "consequence": "Moderate",
+        "likelihood": "Possible"
+      },
+      "diverged": false
+    },
+    "3.6": {
+      "a": {
+        "consequence": "Moderate",
+        "likelihood": "Possible"
+      },
+      "b": {
+        "consequence": "Moderate",
+        "likelihood": "Possible"
+      },
+      "resolved": {
+        "consequence": "Moderate",
+        "likelihood": "Possible"
+      },
+      "diverged": false
+    },
+    "3.7": {
+      "a": {
+        "consequence": "Moderate",
+        "likelihood": "Possible"
+      },
+      "b": {
+        "consequence": "Moderate",
+        "likelihood": "Possible"
+      },
+      "resolved": {
+        "consequence": "Moderate",
+        "likelihood": "Possible"
+      },
+      "diverged": false
+    },
+    "3.8": {
+      "a": {
+        "consequence": "Minor",
+        "likelihood": "Possible"
+      },
+      "b": {
+        "consequence": "Minor",
+        "likelihood": "Possible"
+      },
+      "resolved": {
+        "consequence": "Minor",
+        "likelihood": "Possible"
+      },
+      "diverged": false
+    }
+  }
+}
