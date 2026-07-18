@@ -3,8 +3,8 @@
   "run_id": "WT-H2A8-H3",
   "run_code": "WT-H2A8-H3",
   "phase": "full",
-  "overall_state": "failed",
-  "updated_at": "2026-07-18T06:44:43Z",
+  "overall_state": "running",
+  "updated_at": "2026-07-18T11:28:04Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -1898,16 +1898,18 @@
       "agent": "full.specialist.legal",
       "type": "error",
       "detail": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-H2A8-H3 to resume from the last checkpoint."
+    },
+    {
+      "id": "evt_000184",
+      "ts": "2026-07-18T11:28:04Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 183,
+  "log_cursor": 184,
   "questions": null,
-  "failure": {
-    "stage": "full.specialist.legal",
-    "message": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-H2A8-H3 to resume from the last checkpoint.",
-    "run_code": "WT-H2A8-H3",
-    "technical": "AgentError: legal: sections contain out-of-scope keys ['12.2.1', '12.2.2'] (§9.3 structural write-scope)."
-  },
+  "failure": null,
   "expected_ranges": {
     "threshold": [
       50,
