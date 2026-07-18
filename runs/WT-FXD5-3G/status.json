@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T23:57:46Z",
+  "updated_at": "2026-07-18T23:57:47Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
-    "full.specialist.legal": "pending",
+    "full.specialist.legal": "active",
     "full.specialist.data_governance": "pending",
     "full.specialist.solution_architect": "pending",
     "full.checkpoint": "pending",
@@ -1160,9 +1160,16 @@
       "agent": "full.specialist.ethics",
       "type": "stage_complete",
       "detail": "Ethics & Fairness specialist complete"
+    },
+    {
+      "id": "evt_000114",
+      "ts": "2026-07-18T23:57:47Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_started",
+      "detail": "Legal & Administrative Law specialist started"
     }
   ],
-  "log_cursor": 113,
+  "log_cursor": 114,
   "questions": null,
   "failure": null,
   "expected_ranges": {
