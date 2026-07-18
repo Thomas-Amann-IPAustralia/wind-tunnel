@@ -7,55 +7,55 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-H5M2-2Y"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-H5M2-2Y"
+title: "Canberra Business Navigator AI"
+summary: "A conversational assistant to help Canberra small businesses navigate government registrations and funding opportunities."
 created_at: "2026-07-18T02:03:29Z"
-updated_at: "2026-07-18T02:03:29Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-18T02:03:48Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Small business owners in Canberra struggle to navigate the fragmented landscape of government registration requirements, compliance obligations, and available funding opportunities.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+A conversational AI chatbot integrated into the government business portal that provides tailored guidance on registrations, permits, and grants based on user-provided business details.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+Primary users are small business owners and entrepreneurs. Stakeholders include the various government departments responsible for regulation and funding, who are affected by the quality and accuracy of the guidance provided.
 
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+The system will process public-facing government policy documents, grant criteria, and registration requirements. It will also handle user-provided business information, which may include sensitive identifiers.
 
 <!-- section: happy_path -->
 ## 5. Happy path
 
-*One ordinary, successful use — narrated start to finish.*
+A user visits the portal, describes their business type and location, and the chatbot provides a prioritized checklist of necessary registrations and a list of relevant funding programs with direct links to application forms.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
 
-*What else could solve this, including at least one non-AI option.*
+A static, searchable FAQ database or a traditional 'wizard' style form that guides users through a decision tree without generative AI.
 
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-*What the user sees and touches — or an honest "nothing; it's headless."*
+A web-based chat interface embedded on the government business portal, likely featuring a 'human-in-the-loop' escalation button for complex queries.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-*The hard limits and strong preferences: technical, organisational, maintenance.*
+Must strictly adhere to official government policy and maintain high accuracy; must be accessible and mobile-friendly.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-*How you'd know, six months in, that it worked.*
+A measurable reduction in support tickets related to basic registration questions and positive user feedback on the clarity of the guidance provided.
