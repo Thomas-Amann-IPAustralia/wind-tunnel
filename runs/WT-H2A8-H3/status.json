@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T06:29:36Z",
+  "updated_at": "2026-07-18T06:29:52Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -498,9 +498,181 @@
       "agent": "full.specialist.privacy",
       "type": "stage_started",
       "detail": "Privacy specialist started"
+    },
+    {
+      "id": "evt_000052",
+      "ts": "2026-07-18T06:29:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "drafting",
+      "detail": "drafting privacy's owned sections"
+    },
+    {
+      "id": "evt_000053",
+      "ts": "2026-07-18T06:29:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§Part 3: Privacy management — addressing risks"
+      }
+    },
+    {
+      "id": "evt_000054",
+      "ts": "2026-07-18T06:29:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000055",
+      "ts": "2026-07-18T06:29:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000056",
+      "ts": "2026-07-18T06:29:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§Ensuring compliance"
+      }
+    },
+    {
+      "id": "evt_000057",
+      "ts": "2026-07-18T06:29:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000058",
+      "ts": "2026-07-18T06:29:37Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§APP 11 — Security of personal information"
+      }
+    },
+    {
+      "id": "evt_000059",
+      "ts": "2026-07-18T06:29:43Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000060",
+      "ts": "2026-07-18T06:29:43Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000061",
+      "ts": "2026-07-18T06:29:43Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000062",
+      "ts": "2026-07-18T06:29:43Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 33D"
+      }
+    },
+    {
+      "id": "evt_000063",
+      "ts": "2026-07-18T06:29:43Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.39"
+      }
+    },
+    {
+      "id": "evt_000064",
+      "ts": "2026-07-18T06:29:43Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.39"
+      }
+    },
+    {
+      "id": "evt_000065",
+      "ts": "2026-07-18T06:29:43Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000066",
+      "ts": "2026-07-18T06:29:43Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.38"
+      }
+    },
+    {
+      "id": "evt_000067",
+      "ts": "2026-07-18T06:29:52Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
     }
   ],
-  "log_cursor": 51,
+  "log_cursor": 67,
   "questions": null,
   "failure": null,
   "expected_ranges": {
