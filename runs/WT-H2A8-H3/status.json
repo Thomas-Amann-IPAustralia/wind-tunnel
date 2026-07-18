@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T12:29:15Z",
+  "updated_at": "2026-07-18T12:29:17Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -19,7 +19,7 @@
     "full.checkpoint": "pending",
     "full.architect": "complete",
     "full.reviewer": "complete",
-    "full.assembly": "pending"
+    "full.assembly": "active"
   },
   "log": [
     {
@@ -5889,9 +5889,30 @@
       "agent": "full.reviewer",
       "type": "stage_complete",
       "detail": "Adjudicating reviewer complete"
+    },
+    {
+      "id": "evt_000571",
+      "ts": "2026-07-18T12:29:16Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Residual overall risk after mitigation (highest-wins): Medium."
+    },
+    {
+      "id": "evt_000572",
+      "ts": "2026-07-18T12:29:17Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000573",
+      "ts": "2026-07-18T12:29:17Z",
+      "agent": "full.assembly",
+      "type": "stage_started",
+      "detail": "Assembly started"
     }
   ],
-  "log_cursor": 570,
+  "log_cursor": 573,
   "questions": null,
   "failure": null,
   "expected_ranges": {
