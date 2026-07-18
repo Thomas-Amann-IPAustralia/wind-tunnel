@@ -11,8 +11,8 @@ run_id: "WT-PX5H-3D"
 title: "APS Tech Navigator"
 summary: "An AI-powered chatbot designed to help public servants identify and navigate technology solutions for their operational challenges."
 created_at: "2026-07-18T01:41:12Z"
-updated_at: "2026-07-18T01:47:54Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui"]
+updated_at: "2026-07-18T01:48:34Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints"]
 ---
 
 <!-- section: problem -->
@@ -53,7 +53,7 @@ The interface is a web-based application accessible via a browser. It features a
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-*The hard limits and strong preferences: technical, organisational, maintenance.*
+The system must strictly avoid providing legal advice. All data hosting and processing must occur within Australia to comply with sovereign data requirements.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
