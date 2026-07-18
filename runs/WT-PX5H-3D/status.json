@@ -3,12 +3,12 @@
   "run_id": "WT-PX5H-3D",
   "run_code": "WT-PX5H-3D",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-18T01:54:54Z",
+  "overall_state": "failed",
+  "updated_at": "2026-07-18T01:55:56Z",
   "nodes": {
-    "threshold.generalist_a": "pending",
-    "threshold.generalist_b": "pending",
-    "threshold.reconciler": "pending",
+    "threshold.generalist_a": "complete",
+    "threshold.generalist_b": "complete",
+    "threshold.reconciler": "failed",
     "threshold.rating_engine": "pending",
     "full.specialist.it_security": "pending",
     "full.specialist.privacy": "pending",
@@ -35,11 +35,86 @@
       "agent": "pipeline",
       "type": "heartbeat",
       "detail": ""
+    },
+    {
+      "id": "evt_000003",
+      "ts": "2026-07-18T01:54:56Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000004",
+      "ts": "2026-07-18T01:54:56Z",
+      "agent": "threshold.generalist_a",
+      "type": "stage_started",
+      "detail": "Assessor A started"
+    },
+    {
+      "id": "evt_000005",
+      "ts": "2026-07-18T01:54:56Z",
+      "agent": "threshold.generalist_a",
+      "type": "drafting",
+      "detail": "drafting threshold sections 1–4"
+    },
+    {
+      "id": "evt_000006",
+      "ts": "2026-07-18T01:55:18Z",
+      "agent": "threshold.generalist_a",
+      "type": "stage_complete",
+      "detail": "Assessor A complete"
+    },
+    {
+      "id": "evt_000007",
+      "ts": "2026-07-18T01:55:18Z",
+      "agent": "threshold.generalist_b",
+      "type": "stage_started",
+      "detail": "Assessor B started"
+    },
+    {
+      "id": "evt_000008",
+      "ts": "2026-07-18T01:55:18Z",
+      "agent": "threshold.generalist_b",
+      "type": "drafting",
+      "detail": "drafting threshold sections 1–4"
+    },
+    {
+      "id": "evt_000009",
+      "ts": "2026-07-18T01:55:38Z",
+      "agent": "threshold.generalist_b",
+      "type": "stage_complete",
+      "detail": "Assessor B complete"
+    },
+    {
+      "id": "evt_000010",
+      "ts": "2026-07-18T01:55:39Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000011",
+      "ts": "2026-07-18T01:55:39Z",
+      "agent": "threshold.reconciler",
+      "type": "stage_started",
+      "detail": "Reconciler started"
+    },
+    {
+      "id": "evt_000012",
+      "ts": "2026-07-18T01:55:56Z",
+      "agent": "threshold.reconciler",
+      "type": "error",
+      "detail": "Something went wrong while reconciling the threshold assessment. Your run is safe — paste the run code WT-PX5H-3D to resume from the last checkpoint."
     }
   ],
-  "log_cursor": 2,
+  "log_cursor": 12,
   "questions": null,
-  "failure": null,
+  "failure": {
+    "stage": "threshold.reconciler",
+    "message": "Something went wrong while reconciling the threshold assessment. Your run is safe — paste the run code WT-PX5H-3D to resume from the last checkpoint.",
+    "run_code": "WT-PX5H-3D",
+    "technical": "LLMError: Gemini HTTP 503 for model 'gemini-3.1-pro-preview': {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n"
+  },
   "expected_ranges": {
     "threshold": [
       50,
