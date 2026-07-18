@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:39:47Z",
+  "updated_at": "2026-07-18T11:40:04Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -3624,9 +3624,96 @@
       "agent": "full.specialist.ethics",
       "type": "stage_started",
       "detail": "Ethics & Fairness specialist started"
+    },
+    {
+      "id": "evt_000348",
+      "ts": "2026-07-18T11:39:48Z",
+      "agent": "full.specialist.ethics",
+      "type": "revision",
+      "detail": "revising ethics's sections in light of your answers",
+      "ref": {
+        "target": "ethics"
+      }
+    },
+    {
+      "id": "evt_000349",
+      "ts": "2026-07-18T11:39:48Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000350",
+      "ts": "2026-07-18T11:39:48Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000351",
+      "ts": "2026-07-18T11:39:48Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000352",
+      "ts": "2026-07-18T11:39:48Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§Designing for people with disability"
+      }
+    },
+    {
+      "id": "evt_000353",
+      "ts": "2026-07-18T11:39:48Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.57"
+      }
+    },
+    {
+      "id": "evt_000354",
+      "ts": "2026-07-18T11:39:48Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000355",
+      "ts": "2026-07-18T11:40:04Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.1"
+      }
     }
   ],
-  "log_cursor": 347,
+  "log_cursor": 355,
   "questions": null,
   "failure": null,
   "expected_ranges": {
