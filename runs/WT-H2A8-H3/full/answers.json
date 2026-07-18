@@ -1,0 +1,54 @@
+{
+  "answers": [
+    {
+      "question_id": "it_security-1",
+      "value": "Yes"
+    },
+    {
+      "question_id": "it_security-2",
+      "value": "Yes"
+    },
+    {
+      "question_id": "privacy-1",
+      "value": "On my work SharePoint"
+    },
+    {
+      "question_id": "ethics-1",
+      "value": "No? Its just a simple conversion tool"
+    },
+    {
+      "question_id": "ethics-2",
+      "value": "There is no design and development team"
+    },
+    {
+      "question_id": "legal-1",
+      "value": "Yes"
+    },
+    {
+      "question_id": "legal-2",
+      "value": "No. No legal advice has been sought."
+    },
+    {
+      "question_id": "legal-3",
+      "value": "No"
+    },
+    {
+      "question_id": "data_governance-1",
+      "value": "No, we will rely on GitHub history"
+    },
+    {
+      "question_id": "solution_architect-1",
+      "value": "No. I don't know what that is"
+    },
+    {
+      "question_id": "solution_architect-2",
+      "value": "No"
+    },
+    {
+      "question_id": "solution_architect-3",
+      "value": "I'll be able to see who visits my webpage via web analytics. Plus there's the feedback system too so I'll be able to see responses that way. I'll probably rely on anecdotal evidence beyond that"
+    }
+  ],
+  "skips": [],
+  "submitted_at": "2026-07-18T11:37:17Z"
+}

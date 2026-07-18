@@ -3,8 +3,8 @@
   "run_id": "WT-H2A8-H3",
   "run_code": "WT-H2A8-H3",
   "phase": "full",
-  "overall_state": "paused",
-  "updated_at": "2026-07-18T11:31:10Z",
+  "overall_state": "running",
+  "updated_at": "2026-07-18T11:37:17Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -3009,153 +3009,17 @@
         "specialist": "solution_architect",
         "question_id": "solution_architect-3"
       }
+    },
+    {
+      "id": "evt_000289",
+      "ts": "2026-07-18T11:37:17Z",
+      "agent": "backend",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 288,
-  "questions": {
-    "batch_id": "q-1",
-    "specialists": [
-      {
-        "node_id": "full.specialist.it_security",
-        "friendly": "IT Security specialist",
-        "why": "The outline lacks details on network-level controls for URL fetching and administrative override capabilities.",
-        "items": [
-          {
-            "question_id": "it_security-1",
-            "text": "Will the deployment environment implement network-level egress controls (e.g., restricting the parser from fetching internal/private IP addresses) to mitigate Server-Side Request Forgery (SSRF) risks?",
-            "options": [
-              "Yes",
-              "No",
-              "Under consideration"
-            ],
-            "allow_free_text": true
-          },
-          {
-            "question_id": "it_security-2",
-            "text": "Is there an administrative interface or 'kill-switch' planned that allows IT security teams to immediately suspend the service or disable specific parsers if a vulnerability or critical error is detected?",
-            "options": [
-              "Yes",
-              "No",
-              "Under consideration"
-            ],
-            "allow_free_text": true
-          }
-        ]
-      },
-      {
-        "node_id": "full.specialist.privacy",
-        "friendly": "Privacy specialist",
-        "why": "The storage location of the privacy threshold assessment and privacy impact assessment is a factual detail not provided in the project outline.",
-        "items": [
-          {
-            "question_id": "privacy-1",
-            "text": "Where are the privacy threshold assessment and/or privacy impact assessment for the APS Markdown Conversion Service stored (e.g., specific document management system, case file, or other repository)?",
-            "options": null,
-            "allow_free_text": true
-          }
-        ]
-      },
-      {
-        "node_id": "full.specialist.ethics",
-        "friendly": "Ethics & Fairness specialist",
-        "why": "The project outline lacks details regarding stakeholder engagement activities and the composition of the project team, which are critical to assessing compliance with consultation and diversity standards.",
-        "items": [
-          {
-            "question_id": "ethics-1",
-            "text": "Has the project team conducted or scheduled formal consultations with representative APS end-users (including those who rely on assistive technologies) and agency IT security teams?",
-            "options": [],
-            "allow_free_text": true
-          },
-          {
-            "question_id": "ethics-2",
-            "text": "What is the current composition of the project design and development team, and does it include multidisciplinary roles such as accessibility specialists, user experience designers, and policy/legal officers?",
-            "options": [],
-            "allow_free_text": true
-          }
-        ]
-      },
-      {
-        "node_id": "full.specialist.legal",
-        "friendly": "Legal & Administrative Law specialist",
-        "why": "To confirm whether accountability roles, legal clearances for web scraping, and accessibility compliance reviews have been established for this utility.",
-        "items": [
-          {
-            "question_id": "legal-1",
-            "text": "Has the agency designated an Accountable Official and an Accountable Use Case Owner for this utility under the Policy for the Responsible Use of AI in Government?",
-            "options": [
-              "Yes",
-              "No",
-              "In progress"
-            ],
-            "allow_free_text": true
-          },
-          {
-            "question_id": "legal-2",
-            "text": "Has any legal advice been sought regarding potential copyright or intellectual property implications of converting third-party web content, and if so, where is it stored?",
-            "options": [],
-            "allow_free_text": true
-          },
-          {
-            "question_id": "legal-3",
-            "text": "Have any accessibility or human rights reviews been conducted to ensure the Markdown outputs comply with the Disability Discrimination Act 1992?",
-            "options": [
-              "Yes",
-              "No",
-              "In progress"
-            ],
-            "allow_free_text": true
-          }
-        ]
-      },
-      {
-        "node_id": "full.specialist.data_governance",
-        "friendly": "Data Governance specialist",
-        "why": "To clarify recordkeeping and compliance arrangements for the system's development and governance lifecycle.",
-        "items": [
-          {
-            "question_id": "data_governance-1",
-            "text": "Will the agency establish a formal recordkeeping plan in an approved records management system to capture the system's design, development, and configuration records in accordance with AFDA Express?",
-            "options": [
-              "Yes, a plan will be established",
-              "No, we will rely on GitHub history",
-              "Undecided"
-            ],
-            "allow_free_text": true
-          }
-        ]
-      },
-      {
-        "node_id": "full.specialist.solution_architect",
-        "friendly": "Solution Architect (sections)",
-        "why": "The assessment requires clarification on testing, piloting, and monitoring plans to evaluate the reliability, safety, and operational readiness of the service.",
-        "items": [
-          {
-            "question_id": "solution_architect-1",
-            "text": "Has any testing (such as security, reliability, or accessibility testing) been conducted on the deterministic parsing libraries or the web interface?",
-            "options": null,
-            "allow_free_text": true
-          },
-          {
-            "question_id": "solution_architect-2",
-            "text": "Do you plan to conduct a pilot of the Markdown conversion service with a limited group of APS users before full deployment?",
-            "options": null,
-            "allow_free_text": true
-          },
-          {
-            "question_id": "solution_architect-3",
-            "text": "What plans or mechanisms (e.g., logging, error rate tracking) will be established to monitor and evaluate the performance of the conversion service in production?",
-            "options": null,
-            "allow_free_text": true
-          }
-        ]
-      }
-    ],
-    "counts": {
-      "total": 12,
-      "answered": 0,
-      "skipped": 0
-    }
-  },
+  "log_cursor": 289,
+  "questions": null,
   "failure": null,
   "expected_ranges": {
     "threshold": [
