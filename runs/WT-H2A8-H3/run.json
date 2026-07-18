@@ -2,13 +2,14 @@
   "schema_version": 1,
   "run_id": "WT-H2A8-H3",
   "created_at": "2026-07-18T06:17:32Z",
-  "updated_at": "2026-07-18T11:28:04Z",
-  "stage": "FULL_DRAFTING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-18T11:31:10Z",
+  "stage": "FULL_CHECKPOINT",
+  "stage_status": "awaiting_user",
   "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "06f55d2eb379a688c2541407e82a1ef9fd1119a8",
-    "THRESHOLD_RECONCILING": "7f020f895509f21531cb97cb133e56cec8f5fb77"
+    "THRESHOLD_RECONCILING": "7f020f895509f21531cb97cb133e56cec8f5fb77",
+    "FULL_DRAFTING": "bea6a6c22904569fd9079ea14768b32e3302c94d"
   },
   "revisions": {
     "poc": 0,
