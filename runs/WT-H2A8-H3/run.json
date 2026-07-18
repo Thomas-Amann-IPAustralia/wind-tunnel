@@ -2,11 +2,14 @@
   "schema_version": 1,
   "run_id": "WT-H2A8-H3",
   "created_at": "2026-07-18T06:17:32Z",
-  "updated_at": "2026-07-18T06:25:14Z",
-  "stage": "THRESHOLD_DRAFTING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-18T06:26:37Z",
+  "stage": "THRESHOLD_REVIEW",
+  "stage_status": "awaiting_user",
   "phase": "threshold",
-  "checkpoints": {},
+  "checkpoints": {
+    "THRESHOLD_DRAFTING": "06f55d2eb379a688c2541407e82a1ef9fd1119a8",
+    "THRESHOLD_RECONCILING": "7f020f895509f21531cb97cb133e56cec8f5fb77"
+  },
   "revisions": {
     "poc": 0,
     "flow_map": 0,

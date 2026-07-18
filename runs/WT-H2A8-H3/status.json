@@ -3,8 +3,8 @@
   "run_id": "WT-H2A8-H3",
   "run_code": "WT-H2A8-H3",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-18T06:26:35Z",
+  "overall_state": "paused",
+  "updated_at": "2026-07-18T06:26:37Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
