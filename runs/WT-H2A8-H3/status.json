@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T06:30:23Z",
+  "updated_at": "2026-07-18T06:30:51Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -816,9 +816,181 @@
       "agent": "full.specialist.ethics",
       "type": "stage_started",
       "detail": "Ethics & Fairness specialist started"
+    },
+    {
+      "id": "evt_000082",
+      "ts": "2026-07-18T06:30:24Z",
+      "agent": "full.specialist.ethics",
+      "type": "drafting",
+      "detail": "drafting ethics's owned sections"
+    },
+    {
+      "id": "evt_000083",
+      "ts": "2026-07-18T06:30:24Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000084",
+      "ts": "2026-07-18T06:30:24Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000085",
+      "ts": "2026-07-18T06:30:24Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000086",
+      "ts": "2026-07-18T06:30:24Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000087",
+      "ts": "2026-07-18T06:30:24Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000088",
+      "ts": "2026-07-18T06:30:24Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000089",
+      "ts": "2026-07-18T06:30:39Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000090",
+      "ts": "2026-07-18T06:30:39Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.50"
+      }
+    },
+    {
+      "id": "evt_000091",
+      "ts": "2026-07-18T06:30:39Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000092",
+      "ts": "2026-07-18T06:30:39Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000093",
+      "ts": "2026-07-18T06:30:39Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§AI Ethics Principles at a glance"
+      }
+    },
+    {
+      "id": "evt_000094",
+      "ts": "2026-07-18T06:30:39Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000095",
+      "ts": "2026-07-18T06:30:39Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§The rise of AI and ethics"
+      }
+    },
+    {
+      "id": "evt_000096",
+      "ts": "2026-07-18T06:30:39Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000097",
+      "ts": "2026-07-18T06:30:51Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§AI Ethics Principles at a glance"
+      }
     }
   ],
-  "log_cursor": 81,
+  "log_cursor": 97,
   "questions": null,
   "failure": null,
   "expected_ranges": {
