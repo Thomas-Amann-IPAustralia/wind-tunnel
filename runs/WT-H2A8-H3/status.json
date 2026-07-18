@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:30:08Z",
+  "updated_at": "2026-07-18T11:30:26Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -2555,9 +2555,181 @@
       "agent": "full.specialist.solution_architect",
       "type": "stage_started",
       "detail": "Solution Architect (sections) started"
+    },
+    {
+      "id": "evt_000247",
+      "ts": "2026-07-18T11:30:09Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "drafting",
+      "detail": "drafting solution_architect's owned sections"
+    },
+    {
+      "id": "evt_000248",
+      "ts": "2026-07-18T11:30:09Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading QB4AIRA",
+      "ref": {
+        "doc": "QB4AIRA",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000249",
+      "ts": "2026-07-18T11:30:09Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000250",
+      "ts": "2026-07-18T11:30:09Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Pattern Catalogue",
+      "ref": {
+        "doc": "RAI Pattern Catalogue",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000251",
+      "ts": "2026-07-18T11:30:09Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.25"
+      }
+    },
+    {
+      "id": "evt_000252",
+      "ts": "2026-07-18T11:30:09Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading QB4AIRA",
+      "ref": {
+        "doc": "QB4AIRA",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000253",
+      "ts": "2026-07-18T11:30:09Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000254",
+      "ts": "2026-07-18T11:30:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000255",
+      "ts": "2026-07-18T11:30:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000256",
+      "ts": "2026-07-18T11:30:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r105"
+      }
+    },
+    {
+      "id": "evt_000257",
+      "ts": "2026-07-18T11:30:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000258",
+      "ts": "2026-07-18T11:30:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Acceptance Testing",
+      "ref": {
+        "doc": "RAI Acceptance Testing",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000259",
+      "ts": "2026-07-18T11:30:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r114"
+      }
+    },
+    {
+      "id": "evt_000260",
+      "ts": "2026-07-18T11:30:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.27"
+      }
+    },
+    {
+      "id": "evt_000261",
+      "ts": "2026-07-18T11:30:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r139"
+      }
+    },
+    {
+      "id": "evt_000262",
+      "ts": "2026-07-18T11:30:26Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
     }
   ],
-  "log_cursor": 246,
+  "log_cursor": 262,
   "questions": null,
   "failure": null,
   "expected_ranges": {
