@@ -2,9 +2,9 @@
   "schema_version": 1,
   "run_id": "WT-PX5H-3D",
   "created_at": "2026-07-18T01:41:12Z",
-  "updated_at": "2026-07-18T01:55:56Z",
+  "updated_at": "2026-07-18T06:17:13Z",
   "stage": "THRESHOLD_RECONCILING",
-  "stage_status": "failed",
+  "stage_status": "in_progress",
   "phase": "threshold",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "dbbb28ae51fbe7eb9b21c9bb240adbd38c7967be"
@@ -20,9 +20,5 @@
     "sensitivity_ceiling": "OFFICIAL",
     "attested": false
   },
-  "last_error": {
-    "stage": "threshold.reconciler",
-    "message": "Something went wrong while reconciling the threshold assessment. Your run is safe — paste the run code WT-PX5H-3D to resume from the last checkpoint.",
-    "technical": "LLMError: Gemini HTTP 503 for model 'gemini-3.1-pro-preview': {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n"
-  }
+  "last_error": null
 }

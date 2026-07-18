@@ -3,8 +3,8 @@
   "run_id": "WT-PX5H-3D",
   "run_code": "WT-PX5H-3D",
   "phase": "threshold",
-  "overall_state": "failed",
-  "updated_at": "2026-07-18T01:55:56Z",
+  "overall_state": "running",
+  "updated_at": "2026-07-18T06:17:13Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -105,16 +105,18 @@
       "agent": "threshold.reconciler",
       "type": "error",
       "detail": "Something went wrong while reconciling the threshold assessment. Your run is safe — paste the run code WT-PX5H-3D to resume from the last checkpoint."
+    },
+    {
+      "id": "evt_000013",
+      "ts": "2026-07-18T06:17:13Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 12,
+  "log_cursor": 13,
   "questions": null,
-  "failure": {
-    "stage": "threshold.reconciler",
-    "message": "Something went wrong while reconciling the threshold assessment. Your run is safe — paste the run code WT-PX5H-3D to resume from the last checkpoint.",
-    "run_code": "WT-PX5H-3D",
-    "technical": "LLMError: Gemini HTTP 503 for model 'gemini-3.1-pro-preview': {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n"
-  },
+  "failure": null,
   "expected_ranges": {
     "threshold": [
       50,
