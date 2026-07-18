@@ -4,12 +4,12 @@
   "run_code": "WT-TR4C-DC",
   "phase": "threshold",
   "overall_state": "running",
-  "updated_at": "2026-07-18T23:35:29Z",
+  "updated_at": "2026-07-18T23:35:32Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
-    "threshold.rating_engine": "pending",
+    "threshold.rating_engine": "active",
     "full.specialist.it_security": "pending",
     "full.specialist.privacy": "pending",
     "full.specialist.ethics": "pending",
@@ -133,9 +133,16 @@
       "agent": "threshold.reconciler",
       "type": "stage_complete",
       "detail": "Reconciler complete"
+    },
+    {
+      "id": "evt_000017",
+      "ts": "2026-07-18T23:35:32Z",
+      "agent": "threshold.rating_engine",
+      "type": "stage_started",
+      "detail": "Rating engine started"
     }
   ],
-  "log_cursor": 16,
+  "log_cursor": 17,
   "questions": null,
   "failure": null,
   "expected_ranges": {
