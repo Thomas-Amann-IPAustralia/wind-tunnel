@@ -4,10 +4,10 @@
   "run_code": "WT-FXD5-3G",
   "phase": "threshold",
   "overall_state": "running",
-  "updated_at": "2026-07-18T23:52:34Z",
+  "updated_at": "2026-07-18T23:52:35Z",
   "nodes": {
     "threshold.generalist_a": "complete",
-    "threshold.generalist_b": "pending",
+    "threshold.generalist_b": "active",
     "threshold.reconciler": "pending",
     "threshold.rating_engine": "pending",
     "full.specialist.it_security": "pending",
@@ -63,9 +63,16 @@
       "agent": "threshold.generalist_a",
       "type": "stage_complete",
       "detail": "Assessor A complete"
+    },
+    {
+      "id": "evt_000007",
+      "ts": "2026-07-18T23:52:35Z",
+      "agent": "threshold.generalist_b",
+      "type": "stage_started",
+      "detail": "Assessor B started"
     }
   ],
-  "log_cursor": 6,
+  "log_cursor": 7,
   "questions": null,
   "failure": null,
   "expected_ranges": {
