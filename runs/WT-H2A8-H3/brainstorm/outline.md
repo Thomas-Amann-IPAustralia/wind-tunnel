@@ -11,7 +11,7 @@ run_id: "WT-H2A8-H3"
 title: "APS Markdown Conversion Service"
 summary: "A cross-agency, ephemeral utility for public servants to convert diverse web and document formats into standardized Markdown using deterministic parsing."
 created_at: "2026-07-18T06:17:32Z"
-updated_at: "2026-07-18T06:23:54Z"
+updated_at: "2026-07-18T06:24:12Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -48,7 +48,7 @@ Manual re-typing, traditional web scraping scripts (BeautifulSoup), or off-the-s
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-A simple web interface with a single input field for a URL or file upload and a 'Convert' button. Feedback is handled via a 'Report Issue' link that directs users to a public GitHub repository, with a 250-character limit and a clear warning against including sensitive information; the repository will be monitored for accidental PII exposure.
+A simple web interface with a single input field for a URL or file upload and a 'Convert' button. Feedback is handled via a 'Report Issue' link that directs users to a public GitHub repository, with a 250-character limit and a clear warning against including sensitive information; the repository will use an automated GitHub Action to scan for and redact potential PII in incoming issues.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
