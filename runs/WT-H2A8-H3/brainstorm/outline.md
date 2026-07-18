@@ -11,7 +11,7 @@ run_id: "WT-H2A8-H3"
 title: "APS Markdown Conversion Service"
 summary: "A cross-agency, ephemeral utility for public servants to convert diverse web and document formats into standardized Markdown without persistent data storage."
 created_at: "2026-07-18T06:17:32Z"
-updated_at: "2026-07-18T06:19:55Z"
+updated_at: "2026-07-18T06:21:03Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -53,7 +53,7 @@ A simple web interface with a single input field for a URL or file upload and a 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-Must support cross-agency authentication (e.g., GovPass or similar); must implement strict data isolation so that files uploaded by one agency are never accessible to or processed alongside those from another.
+Must support cross-agency authentication; must implement strict data isolation; system is strictly ephemeral with no persistent storage, placing the burden of file retention on the user.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
