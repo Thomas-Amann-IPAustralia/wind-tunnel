@@ -11,8 +11,8 @@ run_id: "WT-PX5H-3D"
 title: "APS Tech Navigator"
 summary: "An AI-powered chatbot designed to help public servants identify and navigate technology solutions for their operational challenges."
 created_at: "2026-07-18T01:41:12Z"
-updated_at: "2026-07-18T01:46:40Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path"]
+updated_at: "2026-07-18T01:47:54Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui"]
 ---
 
 <!-- section: problem -->
@@ -43,12 +43,12 @@ A public servant opens the voice-enabled interface and describes a manual, repet
 <!-- section: alternatives -->
 ## 6. Alternatives considered
 
-*What else could solve this, including at least one non-AI option.*
+While traditional search engines or internal knowledge bases exist, they lack the ability to act as an interactive thought partner. No non-AI alternative currently provides the same capacity to synthesize complex, unstructured operational problems into actionable project briefs through iterative dialogue.
 
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-*What the user sees and touches — or an honest "nothing; it's headless."*
+The interface is a web-based application accessible via a browser. It features a voice-enabled chat interface where the user engages in a dialogue, and the system provides text-based outputs or draft documents.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
