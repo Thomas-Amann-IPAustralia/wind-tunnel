@@ -11,8 +11,8 @@ run_id: "WT-PX5H-3D"
 title: "APS Tech Navigator"
 summary: "An AI-powered chatbot designed to help public servants identify and navigate technology solutions for their operational challenges."
 created_at: "2026-07-18T01:41:12Z"
-updated_at: "2026-07-18T01:44:38Z"
-resolved: ["problem", "solution", "users_stakeholders"]
+updated_at: "2026-07-18T01:45:24Z"
+resolved: ["problem", "solution", "users_stakeholders", "data"]
 ---
 
 <!-- section: problem -->
@@ -33,7 +33,7 @@ The primary users are APS staff across various roles who encounter operational h
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+The system will ingest and reference internal documentation classified up to OFFICIAL, alongside publicly available information. This includes internal policy documents, existing software catalogs, and potentially past project documentation to ensure recommendations are grounded in approved organizational knowledge.
 
 <!-- section: happy_path -->
 ## 5. Happy path
