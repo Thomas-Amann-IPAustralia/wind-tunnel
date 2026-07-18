@@ -8,10 +8,10 @@
 ---
 schema_version: 1
 run_id: "WT-H2A8-H3"
-title: "Markdown Content Converter"
-summary: "A tool to transform diverse web and document formats into clean, standardized Markdown for easier internal use."
+title: "APS Markdown Conversion Service"
+summary: "A cross-agency utility for public servants to convert diverse web and document formats into standardized Markdown while maintaining strict data isolation."
 created_at: "2026-07-18T06:17:32Z"
-updated_at: "2026-07-18T06:18:06Z"
+updated_at: "2026-07-18T06:18:57Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -28,7 +28,7 @@ A conversion service that takes a URL or file upload, uses an LLM to parse the s
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-Primary users are policy researchers and content managers; stakeholders include IT teams responsible for document repositories and the public who rely on accessible government information.
+Primary users are public servants across all APS agencies; stakeholders include agency IT security teams who will need to vet the tool for cross-departmental data handling and compliance.
 
 <!-- section: data -->
 ## 4. Data
@@ -53,7 +53,7 @@ A simple web interface with a single input field for a URL or file upload and a 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-Must handle a wide variety of site layouts; must ensure no data leakage if processing internal files.
+Must support cross-agency authentication (e.g., GovPass or similar); must implement strict data isolation so that files uploaded by one agency are never accessible to or processed alongside those from another.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
