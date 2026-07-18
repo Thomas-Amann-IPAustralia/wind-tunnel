@@ -157,6 +157,27 @@ def test_artefact_proxy_serves_the_flow_map_source(client, github):
     assert resp.content == b"flowchart TD\n  A-->B\n"
 
 
+def test_artefact_proxy_forces_download_with_query_flag(client, github):
+    # ?download=1 -> Content-Disposition: attachment, so a cross-origin (Pages ->
+    # Render) link saves the notebook instead of opening its raw JSON inline. The
+    # anchor's `download` attribute alone is ignored across origins.
+    seed_run(github, "WT-DNBA-23")
+    github.files[run_path("WT-DNBA-23", "artefacts", "assessment.ipynb")] = b'{"cells": []}'
+    resp = client.get("/api/runs/WT-DNBA-23/artefact/assessment.ipynb?download=1")
+    assert resp.status_code == 200
+    assert resp.headers["content-disposition"] == 'attachment; filename="assessment.ipynb"'
+
+
+def test_artefact_proxy_serves_inline_without_download_flag(client, github):
+    # Without the flag the same name is served inline (iframe src, fetchArtefactText),
+    # so no attachment header is set.
+    seed_run(github, "WT-DNBA-24")
+    github.files[run_path("WT-DNBA-24", "artefacts", "assessment.ipynb")] = b'{"cells": []}'
+    resp = client.get("/api/runs/WT-DNBA-24/artefact/assessment.ipynb")
+    assert resp.status_code == 200
+    assert "content-disposition" not in resp.headers
+
+
 # -- submit -----------------------------------------------------------
 
 

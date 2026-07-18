@@ -238,7 +238,11 @@ function ConcludedView({ runCode }: { runCode: string }) {
         This threshold assessment is ready for an approving officer to consider. You chose to
         conclude here rather than run the full assessment.
       </p>
-      <a className="wt-btn wt-btn--secondary" href={artefactUrl(runCode, "threshold.md")} download>
+      <a
+        className="wt-btn wt-btn--secondary"
+        href={artefactUrl(runCode, "threshold.md", { download: true })}
+        download
+      >
         Download the assessment (Markdown)
       </a>
     </div>

@@ -55,7 +55,7 @@ export function ReportView({ runCode }: { runCode: string }) {
           </a>
           <a
             className="wt-btn wt-btn--quiet"
-            href={artefactUrl(runCode, "assessment.ipynb")}
+            href={artefactUrl(runCode, "assessment.ipynb", { download: true })}
             download
           >
             Download notebook
