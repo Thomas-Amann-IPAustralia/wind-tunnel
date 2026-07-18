@@ -4,14 +4,14 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T06:29:52Z",
+  "updated_at": "2026-07-18T06:30:22Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
-    "full.specialist.privacy": "active",
+    "full.specialist.privacy": "complete",
     "full.specialist.ethics": "pending",
     "full.specialist.legal": "pending",
     "full.specialist.data_governance": "pending",
@@ -670,9 +670,148 @@
         "doc": "OAIC AI Selection Checklist",
         "locator": "p.1"
       }
+    },
+    {
+      "id": "evt_000068",
+      "ts": "2026-07-18T06:29:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000069",
+      "ts": "2026-07-18T06:29:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000070",
+      "ts": "2026-07-18T06:29:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000071",
+      "ts": "2026-07-18T06:29:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000072",
+      "ts": "2026-07-18T06:30:05Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 17"
+      }
+    },
+    {
+      "id": "evt_000073",
+      "ts": "2026-07-18T06:30:05Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000074",
+      "ts": "2026-07-18T06:30:05Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.188"
+      }
+    },
+    {
+      "id": "evt_000075",
+      "ts": "2026-07-18T06:30:05Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.185"
+      }
+    },
+    {
+      "id": "evt_000076",
+      "ts": "2026-07-18T06:30:05Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.41"
+      }
+    },
+    {
+      "id": "evt_000077",
+      "ts": "2026-07-18T06:30:05Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.187"
+      }
+    },
+    {
+      "id": "evt_000078",
+      "ts": "2026-07-18T06:30:05Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.189"
+      }
+    },
+    {
+      "id": "evt_000079",
+      "ts": "2026-07-18T06:30:05Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.187"
+      }
+    },
+    {
+      "id": "evt_000080",
+      "ts": "2026-07-18T06:30:22Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_complete",
+      "detail": "Privacy specialist complete"
     }
   ],
-  "log_cursor": 67,
+  "log_cursor": 80,
   "questions": null,
   "failure": null,
   "expected_ranges": {
