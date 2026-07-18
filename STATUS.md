@@ -2,7 +2,46 @@
 
 ## Current stage
 
-**This branch (`claude/wt-h2a8-h3-errors-vl5tu7`): two errors from Tom's live run WT-H2A8-H3 —
+**This branch (`claude/agent-error-legal-amendment-23lu5v`): WT-H2A8-H3 died again, further in —
+at REVIEW cycle 1, on the first amend directive (`AgentError: legal: amendment touched
+non-directed sections ['10.2', '12.1', '12.2', '9.1', '9.2']`). Root cause: the amendment
+path handed the model a self-contradictory contract (TECH_SPEC §11.3 vs the shared specialist
+prompt), then killed the run for obeying the wrong half.** The reviewer directed legal to amend
+`11.1` alone, but `run_specialist_amendment` reused the *full* instrument context (all six owned
+sections' question text) under a system prompt that commands "for **every** owned section, draft
+it or gap it… every owned section id must appear in exactly one of `sections` or `gaps`". The
+user-turn line "cover exactly the directed sections" lost to the system-level rule: the model
+(Flash) returned all six owned sections — the five extras are exactly owned-minus-target — and
+`_parse_amendment` hard-failed. Deterministic, not a flake: both attempts failed identically,
+and privacy/it_security (the cycle's other directives, never reached) would have hit the same
+wall. Fix = the same defense-in-depth shape as the sub-question-id incident:
+
+1. **Prompt-side — the model's visible scope now IS the directive's scope.**
+   `specialist_instrument_context` gained an `only=` param (validated subset of owned, raises
+   on anything else); the amendment passes the directed sections, so the context lists *only*
+   the directive's question text with an §11.3 scope preamble, and the shared prompt's "every
+   owned section" rule now reads over exactly the directed set instead of fighting it. Fresh
+   drafting (`run_specialist`) is unchanged; no prompt-file edit, so no version bump.
+2. **Boundary-side — tolerate the echo, keep the invariant.** `_parse_amendment` now folds
+   sub-question keys against the whole owned set, then **discards** owned-but-non-directed
+   keys (`_discard_undirected`) from `sections`/`citations`/`gaps` before validation: an echo
+   of settled work could never land anyway (the merge is target-scoped), so it must not kill
+   the run. A key outside the owned set entirely is still rejected **loudly** (§9.3 preserved),
+   and a directed section missing from the output still fails as before. This supersedes the
+   ledger decision "any other key is rejected" (below) for the owned-but-undirected case only —
+   the §11.3 guarantee ("a directive may only change the sections it named") is enforced by the
+   discard + target-scoped merge, not by run death.
+
+**Recovery for WT-H2A8-H3:** the run is FAILED at REVIEW, cycle 1; `reviewer/cycle_1.json`
+(the ruling) is committed, no amendment landed. Merge this branch to `main`, then redispatch —
+REVIEW re-enters at cycle 1, reuses the committed ruling, and re-runs the three amendments
+(legal, privacy, it_security) with the scoped context. **Pipeline: 213 tests green (210 prior
++ 3: whole-owned-set echo rehearsal of the exact legal failure shape, non-owned key still
+rejected loudly, scoped instrument context renders only the directed sections; the old
+"rejects non-directed" test became "discards the echo, prior draft survives"), ruff clean.**
+Backend and frontend untouched.
+
+**Prior branch (`claude/wt-h2a8-h3-errors-vl5tu7`): two errors from Tom's live run WT-H2A8-H3 —
 a specialist that failed the run on the instrument's own sub-question ids, and a threshold
 download that 404'd because the proxy pointed at a phantom path (TECH_SPEC §9.3, §7, §2;
 CLAUDE.md §3).** Both are seam/wiring bugs, LLM-free tested; no integrity invariant relaxed.
@@ -1982,7 +2021,10 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
   boundary rejects a directive naming a non-owned section; (2) the amendment's own output
   may contain **only** the directed sections (a subset of owned) — any other key is
   rejected — and the merge replaces exactly those, leaving every other section, citation
-  and gap untouched. So an amendment cannot silently drop or rewrite a specialist's other
+  and gap untouched. *(Amended by `claude/agent-error-legal-amendment-23lu5v` after run
+  WT-H2A8-H3: an owned-but-non-directed key is now discarded as an echo rather than
+  rejected — the target-scoped merge means it could never land — while a non-owned key
+  is still rejected loudly. See Current stage.)* So an amendment cannot silently drop or rewrite a specialist's other
   work. Amendments raise no new questions (skips → gaps, §5.8). The bounded retrieval loop
   is shared with fresh drafting via `_drive_retrieval` (one loop, two entry points) rather
   than duplicated.
