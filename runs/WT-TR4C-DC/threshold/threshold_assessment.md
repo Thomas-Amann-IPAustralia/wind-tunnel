@@ -1,0 +1,128 @@
+# Threshold AI impact assessment — WT-TR4C-DC
+
+## 1. Basic information
+
+### 1.1 AI Use Case Profile
+- **Name**: Canberra Business Navigator
+- **Summary**: A conversational AI assistant designed to guide small business owners through government registration, regulatory requirements, and funding opportunities.
+
+### 1.2 Establishing Impact Assessment Responsibilities
+- Not stated in the outline.
+
+### 1.3 Additional Roles and Responsibilities
+- Not stated in the outline.
+
+### 1.4 AI Use Case Description
+The Canberra Business Navigator is a conversational AI assistant (chatbot) that uses a large language model (LLM) to ingest and interpret public ACT government regulatory documents, legislation, and funding guidelines. It allows small business owners to ask plain-language questions about their specific business obligations and opportunities, providing concise summaries and linking to official ACT government contact points and portals when queries are ambiguous or lack definitive answers.
+
+### 1.5 In-Scope Use Case
+Yes, the use case involves deploying an AI system to assist the public in navigating government regulatory requirements.
+
+### 1.6 Type of AI Technology
+Large Language Model (LLM) / Generative AI.
+
+### 1.7 Usage Pattern
+Conversational chatbot accessible via WhatsApp and integrated into the official Business.gov web portal.
+
+### 1.8 Administrative Decisions
+The system does not make administrative decisions. It is strictly constrained to avoid providing legal advice or recommending specific commercial suppliers, framing all interactions as informational guidance.
+
+### 1.9 Domain
+Business regulation, compliance, licensing, and government funding within the Australian Capital Territory (ACT).
+
+### 1.10 Expert Contributions
+- Not stated in the outline.
+
+### 1.11 Impact Assessment Review Log
+- Not stated in the outline.
+
+## 2. Purpose and expected benefits
+
+### 2.1 Problem Definition
+Small business owners in Canberra frequently struggle to navigate the complex landscape of government registration requirements, regulatory obligations, and available funding opportunities. This complexity leads to confusion, operational delays, and potential compliance gaps.
+
+### 2.2 AI Use Case Purpose
+To act as an accessible, 24/7 conversational guide that translates complex regulatory language and legislation into plain-language, actionable advice, helping business owners understand their obligations and identify relevant funding opportunities.
+
+### 2.3 Non-AI Alternatives
+- **Centralized government call centers**: Limited by restricted operating hours.
+- **Static, search-based knowledge bases**: Unable to interpret the specific, nuanced context of a user's business query.
+
+### 2.4 Identifying Stakeholders
+- **Primary Users**: Small business owners in Canberra.
+- **Key Stakeholders**: ACT government staff managing regulatory compliance, professional business advisors, and accountants whose workflows may be impacted by the tool's guidance.
+
+### 2.5 Expected Benefits
+- **24/7 Accessibility**: Providing round-the-clock regulatory guidance to busy business owners.
+- **Personalized Plain-Language Advice**: Translating complex legal requirements into clear, actionable steps grounded in authoritative content.
+- **Improved Compliance**: Reducing confusion and potential compliance gaps for small businesses.
+- **User Satisfaction**: Achieving at least a 70% 'thumbs up' feedback rating within six months post-launch.
+- **Increased Portal Traffic**: Directing users to official channels, with a target of 10% of total Business.gov portal traffic originating from chatbot referrals.
+
+## 3. Inherent risk assessment
+
+| Area | Consequence | Likelihood | Risk rating |
+| --- | --- | --- | --- |
+| 3.1 Reducing service accessibility and inclusion | Moderate | Possible | Medium |
+| 3.2 Unfair discrimination | Moderate | Possible | Medium |
+| 3.3 Stereotyping or demeaning representations | Minor | Possible | Medium |
+| 3.4 Harm | Major | Possible | High |
+| 3.5 Privacy concerns | Moderate | Possible | Medium |
+| 3.6 Security concerns — data aspects | Moderate | Possible | Medium |
+| 3.7 Security concerns — system aspects | Moderate | Possible | Medium |
+| 3.8 Reputation or public confidence | Major | Possible | High |
+
+**3.9 Overall inherent risk rating (highest-wins): High**
+
+### 3.1 Reducing service accessibility and inclusion
+
+The chatbot will be deployed on WhatsApp and the Business.gov portal. While this increases convenience, users with limited digital literacy, English language barriers, or those who do not use WhatsApp may experience noticeable access issues if this becomes a primary channel for guidance. Additionally, if the LLM misinterprets queries or fails to provide accessible outputs, it could create barriers for business owners. Applying a precautionary approach, the likelihood is Possible and the consequence is Moderate, as some groups could be impacted by incorrect or inaccessible guidance.
+
+### 3.2 Unfair discrimination
+
+Large language models can exhibit subtle biases in language processing, translation, or interpretation. There is a risk that the AI could provide less accurate or more confusing guidance to business owners from culturally and linguistically diverse (CALD) backgrounds or specific niche industries, leading to noticeable differences in treatment. Under a precautionary stance, this is rated as a Possible likelihood with a Moderate consequence requiring intervention if detected.
+
+### 3.3 Stereotyping or demeaning representations
+
+Although the system is grounded in authoritative government documents, generative models can occasionally generate unexpected, patronizing, or stereotyped language when interacting with diverse users. Precautionary defaults suggest a Possible likelihood of isolated incidents, resulting in Minor consequences that can be promptly resolved.
+
+*Divergence: Assessor A suggested Unlikely, Assessor B suggested Possible. The higher likelihood (Possible) stands because generative models can unpredictably produce inappropriate language when interacting with diverse users.*
+
+### 3.4 Harm
+
+The chatbot provides guidance on critical regulatory obligations, including Work Health and Safety (WHS) and licensing. If the bot hallucinates or provides incorrect compliance advice, a business owner could face significant financial penalties, legal non-compliance, or operational disruption. Given the potential for severe financial and regulatory distress, a precautionary approach rates the consequence as Major and the likelihood as Possible.
+
+*Divergence: Assessor A suggested Moderate, Assessor B suggested Major. The higher consequence (Major) stands because incorrect compliance advice (e.g., WHS) could lead to significant financial penalties or operational disruption for businesses.*
+
+### 3.5 Privacy concerns
+
+While the system only ingests public data, users interacting via free-text prompts on WhatsApp or the web portal are highly likely to voluntarily input sensitive personal or business information (e.g., tax details, personal contact info, or proprietary business plans). Because the system retains logs of all data interactions for audit purposes, this creates a Possible risk of sensitive data exposure, resulting in a Moderate consequence.
+
+*Divergence: Assessor A suggested Minor, Assessor B suggested Moderate. The higher consequence (Moderate) stands because users may input sensitive business or personal data into free-text prompts, which are logged and could cause noticeable distress if exposed.*
+
+### 3.6 Security concerns — data aspects
+
+The system utilizes WhatsApp (a third-party commercial platform) and retains interaction logs. A security breach of the logging database or transit channel could expose user queries and metadata, raising moderate privacy and data security concerns. Adhering to a precautionary approach, the consequence is rated as Moderate and the likelihood as Possible.
+
+*Divergence: Assessor A suggested Minor consequence and Unlikely likelihood, Assessor B suggested Moderate consequence and Possible likelihood. The higher tiers (Moderate/Possible) stand because the use of a third-party platform (WhatsApp) and the retention of interaction logs present a realistic vector for data compromise.*
+
+### 3.7 Security concerns — system aspects
+
+Public-facing conversational AI systems are vulnerable to prompt injection attacks, jailbreaking, and system manipulation. This could cause the chatbot to bypass constraints, such as providing prohibited legal advice, recommending commercial suppliers, or outputting unauthorized content. This system-level vulnerability represents a Possible likelihood with a Moderate consequence.
+
+### 3.8 Reputation or public confidence
+
+The chatbot is hosted on the official Business.gov portal and branded as an ACT Government tool. Any high-profile failure—such as providing incorrect regulatory advice that leads to a business being fined, sued, or operating unsafely—would result in widespread public criticism and severely damage trust in digital government services. A precautionary assessment rates this as a Major consequence with a Possible likelihood.
+
+*Divergence: Assessor A suggested Moderate, Assessor B suggested Major. The higher consequence (Major) stands because a high-profile failure in providing regulatory advice could lead to widespread criticism and major reputational damage to the government.*
+
+## 4. Threshold assessment outcome
+
+### 4.1 Assessing Officer Recommendation
+The Canberra Business Navigator represents a high-utility, public-facing application of generative AI designed to lower barriers to regulatory compliance for Canberra's small business sector. However, because the system relies on a Large Language Model to interpret legislation and critical compliance matters (such as WHS obligations) directly to the public, it carries inherent risks of hallucination, misinformation, unintended data exposure through user prompts, and public trust erosion.
+
+To ensure safe and responsible deployment, it is recommended that the project team implement robust mitigation strategies prior to launch. These should include a Retrieval-Augmented Generation (RAG) architecture to strictly ground the LLM's responses in authoritative documents, rigorous red-teaming, and strict prompt engineering to prevent the system from offering commercial recommendations or formal legal advice. Clear, prominent disclaimers must be integrated into both the WhatsApp and web interfaces to reinforce that the tool provides informational guidance only. Furthermore, because the system retains interaction logs and operates over WhatsApp, a comprehensive privacy and security review of data transit and storage practices is strongly recommended to protect sensitive business information that users may inadvertently input. A continuous monitoring and feedback loop should also be established to review chat logs (ensuring compliance with government information standards) and iteratively refine the system's accuracy.
+
+A full assessment is **required**.
+
+Overall inherent risk is **High** — refer to an internal governance body (§12.5).
