@@ -1,0 +1,136 @@
+{
+  "batch_id": "q-1",
+  "specialists": [
+    {
+      "node_id": "full.specialist.it_security",
+      "friendly": "IT Security specialist",
+      "why": "To ensure robust security controls and data protection measures are aligned with ATO's operational environment.",
+      "items": [
+        {
+          "question_id": "it_security-1",
+          "text": "Where will the user interaction logs and prompt history be stored, and what specific data retention and sanitization policies will be applied to prevent the accidental storage of Tax File Numbers (TFNs) or sensitive personal financial details?",
+          "options": [],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "it_security-2",
+          "text": "What specific technical mechanism or threshold will be used to restrict or disable the 'creativity' dial if a user attempts to exploit it to generate non-compliant tax advice?",
+          "options": [],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.privacy",
+      "friendly": "Privacy specialist",
+      "why": "The storage location of the privacy threshold and impact assessments is a project-specific administrative detail not covered in the outline.",
+      "items": [
+        {
+          "question_id": "privacy-1",
+          "text": "Where will the completed privacy threshold assessment (PTA) and privacy impact assessment (PIA) for the ATO Deduction Assistant be officially stored?",
+          "options": [
+            "ATO Content Manager / Records Management System",
+            "Project SharePoint / Confluence space",
+            "Dedicated Privacy Team repository",
+            "Other"
+          ],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.ethics",
+      "friendly": "Ethics & Fairness specialist",
+      "why": "To determine if the project has addressed key human-centred design, accessibility, and multidisciplinary governance requirements that are not detailed in the current outline.",
+      "items": [
+        {
+          "question_id": "ethics-1",
+          "text": "Has the ATO established a multidisciplinary project team that includes legal, policy, and accessibility experts to oversee the chatbot's development?",
+          "options": [],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "ethics-2",
+          "text": "Are there plans to conduct a pilot study or user testing with a diverse cohort of taxpayers, including those with low digital literacy or non-standard employment types?",
+          "options": [],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "ethics-3",
+          "text": "Will the chatbot's interface support accessibility standards (such as WCAG) to ensure inclusion for users with disabilities?",
+          "options": [],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.legal",
+      "friendly": "Legal & Administrative Law specialist",
+      "why": "The project is in its initial scoping phase, and key governance, legal, and storage details have not yet been finalized or documented in the project outline.",
+      "items": [
+        {
+          "question_id": "legal-1",
+          "text": "Has the ATO formally designated an Accountable Use Case Owner and an Accountable Official for the ATO Deduction Assistant under the AI Use Policy?",
+          "options": [
+            "Yes",
+            "No",
+            "In progress"
+          ],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "legal-2",
+          "text": "Has the ATO consulted with its internal legal services branch or external counsel regarding the legal efficacy of the chatbot's disclaimers and the 'creativity' dial?",
+          "options": [
+            "Yes",
+            "No",
+            "In progress"
+          ],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "legal-3",
+          "text": "Where will the formal legal advice and human rights impact assessments for this project be stored once they are finalized?",
+          "options": null,
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.data_governance",
+      "friendly": "Data Governance specialist",
+      "why": "The National Archives of Australia recommends conducting a BSAF assessment as a first step to identify and manage AI-generated records and ensure compliance with recordkeeping obligations.",
+      "items": [
+        {
+          "question_id": "data_governance-1",
+          "text": "Has the ATO scheduled or conducted a Business System Assessment Framework (BSAF) assessment for the ATO Deduction Assistant to ensure its records management functionality is sufficient?",
+          "options": [
+            "Yes, completed",
+            "Yes, scheduled/in progress",
+            "No",
+            "Not sure"
+          ],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.solution_architect",
+      "friendly": "Solution Architect (sections)",
+      "why": "To confirm whether a pilot is officially planned and to obtain details on its scope and duration for section 6.5.",
+      "items": [
+        {
+          "question_id": "sol_arch-1",
+          "text": "Is there a planned pilot phase for the ATO Deduction Assistant before full public deployment, and if so, what are the scope and duration of this pilot?",
+          "options": [],
+          "allow_free_text": true
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "total": 11,
+    "answered": 0,
+    "skipped": 0
+  }
+}
