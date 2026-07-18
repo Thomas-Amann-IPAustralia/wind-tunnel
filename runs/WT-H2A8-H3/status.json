@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T12:28:24Z",
+  "updated_at": "2026-07-18T12:28:25Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -18,7 +18,7 @@
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "complete",
-    "full.reviewer": "complete",
+    "full.reviewer": "active",
     "full.assembly": "pending"
   },
   "log": [
@@ -5868,9 +5868,16 @@
       "agent": "full.specialist.it_security",
       "type": "stage_complete",
       "detail": "IT Security specialist complete"
+    },
+    {
+      "id": "evt_000568",
+      "ts": "2026-07-18T12:28:25Z",
+      "agent": "full.reviewer",
+      "type": "stage_started",
+      "detail": "Adjudicating reviewer started"
     }
   ],
-  "log_cursor": 567,
+  "log_cursor": 568,
   "questions": null,
   "failure": null,
   "expected_ranges": {
