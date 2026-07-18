@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:40:04Z",
+  "updated_at": "2026-07-18T11:40:21Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -3711,9 +3711,97 @@
         "doc": "Diversity & Inclusion in AI",
         "locator": "p.1"
       }
+    },
+    {
+      "id": "evt_000356",
+      "ts": "2026-07-18T11:40:04Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000357",
+      "ts": "2026-07-18T11:40:04Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000358",
+      "ts": "2026-07-18T11:40:04Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000359",
+      "ts": "2026-07-18T11:40:04Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000360",
+      "ts": "2026-07-18T11:40:04Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000361",
+      "ts": "2026-07-18T11:40:04Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading TRS AI Guidelines",
+      "ref": {
+        "doc": "TRS AI Guidelines",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000362",
+      "ts": "2026-07-18T11:40:04Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000363",
+      "ts": "2026-07-18T11:40:21Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.3"
+      }
     }
   ],
-  "log_cursor": 355,
+  "log_cursor": 363,
   "questions": null,
   "failure": null,
   "expected_ranges": {
