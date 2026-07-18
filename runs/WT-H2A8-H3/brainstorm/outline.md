@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-H2A8-H3"
 title: "APS Markdown Conversion Service"
-summary: "A cross-agency, ephemeral utility for public servants to convert diverse web and document formats into standardized Markdown without persistent data storage."
+summary: "A cross-agency, ephemeral utility for public servants to convert diverse web and document formats into standardized Markdown without persistent data storage or AI-based processing."
 created_at: "2026-07-18T06:17:32Z"
-updated_at: "2026-07-18T06:21:03Z"
+updated_at: "2026-07-18T06:21:34Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -23,7 +23,7 @@ Public servants often struggle with information trapped in poorly formatted PDFs
 <!-- section: solution -->
 ## 2. Proposed solution
 
-A conversion service that takes a URL or file upload, uses an LLM to parse the structure and extract text, and outputs a clean, standardized Markdown file.
+A web-based conversion utility that accepts URLs or files and uses deterministic parsing libraries to transform content into standardized Markdown, avoiding LLM-based processing entirely.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
@@ -58,4 +58,4 @@ Must support cross-agency authentication; must implement strict data isolation; 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-A measurable reduction in time spent manually formatting documents and a high user-reported accuracy rate for the generated Markdown.
+A measurable reduction in time spent manually formatting documents and a high rate of successful, accurate conversions for standard document and web formats.
