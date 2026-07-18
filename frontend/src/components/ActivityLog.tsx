@@ -26,13 +26,15 @@ export function ActivityLog({
   offline: boolean;
   running: boolean;
 }) {
-  const endRef = useRef<HTMLDivElement>(null);
+  const feedRef = useRef<HTMLOListElement>(null);
   const visible = events.filter((e) => e.type !== "heartbeat");
 
-  // Follow the feed as new lines land (honoured static under reduced motion via
-  // the global scroll-behavior guard in base.css).
+  // Follow the feed as new lines land by scrolling *the feed itself*, not the page:
+  // `scrollIntoView` would bubble to the window and drag the flagship graph out of
+  // view on load. Setting the feed's own scrollTop keeps the page still.
   useEffect(() => {
-    endRef.current?.scrollIntoView?.({ block: "end" });
+    const el = feedRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
   }, [visible.length]);
 
   return (
@@ -40,7 +42,7 @@ export function ActivityLog({
       <div className="wt-log__head">
         <h3 className="wt-log__title">Activity</h3>
       </div>
-      <ol className="wt-log__feed" aria-live="polite" aria-label="Live activity log">
+      <ol className="wt-log__feed" aria-live="polite" aria-label="Live activity log" ref={feedRef}>
         {visible.length === 0 ? (
           <li className="wt-log__empty">Ready to run.</li>
         ) : (
@@ -52,7 +54,6 @@ export function ActivityLog({
             </li>
           ))
         )}
-        <div ref={endRef} />
       </ol>
       {running ? (
         <p className="wt-log__stale" role="status">

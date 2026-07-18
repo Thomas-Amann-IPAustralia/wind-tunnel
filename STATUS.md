@@ -2,6 +2,64 @@
 
 ## Current stage
 
+**This branch (`claude/windtunnel-chamber-redesign-guxzzt`): the Chamber redesign — the
+governance surface is now a clickable node-graph canvas built for lay-audience
+transparency, plus the Windtunnel brand assets (logo, favicon, sprite loading
+animation) (DESIGN §7.2; CLAUDE.md §4, §9).** Tom asked to move the Chamber towards the
+`frontend/windtunnel_agent_telemetry.html` PoC — a node interface that explains *how the
+system technically works* in terms a non-engineer follows — and to place the new brand
+assets he added under `frontend/src/img/`. Frontend-only; no backend, pipeline, contract,
+or data-shape change (the redesign reads the same `status.json` one poll fully determines,
+CLAUDE.md §3). **45 frontend tests green (41 prior + 4), build + strict typecheck + lint
+(0 errors, 1 pre-existing accepted warning) + `format:check` clean.** Verified visually by
+driving the built app against a mocked backend (Playwright screenshots of the running
+graph, the detail drawer with real sources, the not-started warm-up, and the landing
+logo). The pieces:
+
+1. **`lib/topology.ts` — the layout + lay-audience metadata owner.** Kept the pinned
+   id/friendly/kind mirror of `pipeline/status.py` `_node_specs()` (topology.test still
+   green) and *added*, per node: a static workspace `pos` (no DOM measurement, so wires are
+   deterministic in every env), an `engine` label (lay model tier from `config/models.yml` —
+   "Fast drafting model" / "Deep-reasoning model" / "Fixed rules — no AI"), a one-line
+   `blurb`, and a plain-language `explain` paragraph. Plus `EDGES` (the real pipeline
+   handoffs, incl. the two parallel moments — two generalists → reconciler and the
+   six-specialist bloom from the rating engine), and `allNodes`/`nodeById`/`workspaceSize`
+   helpers. The explanatory copy is descriptive only — the machine-checkable
+   specialist↔section map still has one owner (`instrument/sections.json`).
+2. **`components/PipelineGraph.tsx` + `.css` — rebuilt as a node-graph canvas.** A
+   pannable/zoomable stage (drag to pan, wheel + buttons to zoom, fit-to-view default;
+   ResizeObserver-guarded for the headless test env) of positioned node cards joined by SVG
+   wires. Wire state derives from the two nodes it joins (a live handoff flows with a
+   travelling dash; a completed source lights; settled dims). State is carried by **label +
+   shape + position** never colour alone (§9): each card names its state, keeps the "computed,
+   not judged" cue on compute nodes, and shows its genuine current sub-activity when active.
+   The activity log stays the accessibility/honesty backbone (§7.2.1).
+3. **`components/NodeDetail.tsx` + `.css` — the transparency payload.** Selecting a stage
+   opens a drawer that explains, in lay terms, what it is and what it's doing, and backs it
+   with the *real* evidence from the status log — the sources it has read (doc + locator) and
+   the questions it raised — all from the one poll. Compute nodes get the "no AI model here"
+   callout (the visible face of "models argue, code computes", CLAUDE.md §3).
+4. **Brand assets (`frontend/src/img/`).** The Windtunnel logo rides in the wordmark (a round
+   tile that reads on both surfaces) and as the Landing hero (white ground melted into the
+   paper via `mix-blend-mode`); `WindTunnelFavicon.png` is wired as the favicon (Vite
+   rewrites the base path). `components/TunnelWarmup.tsx` flip-books the eleven pixel-art
+   sprites into a "tunnel warming up" loader used in the cold-start note, the first Chamber
+   load, and the not-started prompt (freezes on the grown frame under reduced motion; visible
+   copy carries the meaning). The old CSS-pip warm-up indicators were removed in favour of it.
+5. **`routes/Chamber.tsx` — wired the flagship.** RunningView now hosts the graph (with the
+   detail drawer overlaid) above the activity log, owns node-selection state (Escape closes),
+   and derives per-node evidence (`buildEvidence`) from the log alongside the existing
+   sub-activity. **Fixed a real regression the taller graph exposed:** `ActivityLog` scrolled
+   the *window* via `scrollIntoView` on load, dragging the flagship out of view — it now
+   scrolls only its own feed.
+
+**No document contradiction to fix** — the PoC is a direction, not a spec; the design brief's
+§7.2 flagship (graph + activity log, label+shape+position, one-poll determinism) is honoured,
+just realised as an interactive canvas. **Next:** unchanged from the prior branch's ledger
+(the redesign is orthogonal to the pipeline recovery work below). A possible future polish:
+the logo PNG is 853 kB — fine cached, but worth optimising if page weight matters.
+
+
 **This branch (`claude/agent-error-legal-amendment-23lu5v`): WT-H2A8-H3 died again, further in —
 at REVIEW cycle 1, on the first amend directive (`AgentError: legal: amendment touched
 non-directed sections ['10.2', '12.1', '12.2', '9.1', '9.2']`). Root cause: the amendment
@@ -406,6 +464,33 @@ threshold stage — this is the first place `pipeline/rating/` is consumed by a 
 pipeline.
 
 ## Done
+
+- **Chamber redesign — a lay-audience node-graph canvas + Windtunnel brand assets
+  (DESIGN §7.2; CLAUDE.md §4, §9; this branch).** Frontend-only; reads the same one-poll
+  `status.json` (CLAUDE.md §3). No backend/pipeline/contract change. **45 frontend tests
+  green (41 prior + 4: topology layout/edges ×3, node-detail interaction ×1), build +
+  strict typecheck + lint (0 err, 1 pre-existing warning) + format clean.** The pieces:
+  - **`lib/topology.ts`** — kept the pinned id/friendly/kind mirror of `status.py`
+    `_node_specs()`; added per-node `pos` (static, deterministic wires), lay `engine`/`blurb`/
+    `explain`, an `EDGES` handoff list (both parallel moments), and `allNodes`/`nodeById`/
+    `workspaceSize`. Descriptive copy only — `instrument/sections.json` stays the one owner
+    of the specialist↔section map.
+  - **`components/PipelineGraph.tsx` + `.css`** — rewritten from a banded list into a
+    pannable/zoomable node canvas (drag/wheel/fit; ResizeObserver-guarded) with SVG wires
+    whose state (flow/ready/done/pending) derives from the two nodes they join, a travelling
+    dash on live handoffs, and cards that carry state by label+shape+position (§9), the
+    "computed, not judged" cue, and genuine sub-activity when active.
+  - **`components/NodeDetail.tsx` + `.css`** — new: selecting a stage opens a drawer that
+    explains it in plain terms and shows the real sources it read (doc + locator) and
+    questions it raised, all from the poll; compute nodes get the "no AI model here" callout.
+  - **Brand assets** — logo in the wordmark (round tile) + Landing hero (`mix-blend-mode`
+    melts the white ground); `WindTunnelFavicon.png` wired as favicon; `TunnelWarmup.tsx`
+    flip-books the 11 pixel-art sprites for the cold-start / first-load / not-started waits
+    (freezes under reduced motion). Replaced the old CSS-pip warm-up indicators.
+  - **`routes/Chamber.tsx`** — RunningView hosts the graph (detail drawer overlaid) above the
+    activity log, owns selection state (Escape closes), and derives per-node evidence from the
+    log. Fixed `ActivityLog` scrolling the *window* on load (now scrolls only its own feed) —
+    a regression the taller graph exposed.
 
 - **WT-H2A8-H3 two-error fix — sub-question write-scope + the threshold download path
   (TECH_SPEC §9.3, §7, §2; CLAUDE.md §2, §3; this branch).** Two errors from Tom's live run,

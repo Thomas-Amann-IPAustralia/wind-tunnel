@@ -1,7 +1,21 @@
 .wt-wordmark {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-3);
+}
+
+/* The emblem rides in a round tile: on paper it disappears into the ground; on the
+ * dark Chamber the tile keeps the light logo legible without a hard white square. */
+.wt-wordmark__logo {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: contain;
+  background: #ffffff;
+}
+.wt-surface--chamber .wt-wordmark__logo {
+  box-shadow: 0 0 0 1px var(--chamber-hairline);
 }
 
 .wt-wordmark__name {

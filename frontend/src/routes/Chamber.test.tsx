@@ -84,6 +84,34 @@ describe("Chamber state routing", () => {
     expect(subs.length).toBeGreaterThanOrEqual(2);
   });
 
+  it("running: selecting a stage opens its plain-language detail with the sources it read", async () => {
+    serve(
+      baseDoc({
+        overall_state: "running",
+        nodes: { "threshold.generalist_a": "active" },
+        log: [
+          {
+            id: "evt_1",
+            ts: "2026-07-16T00:00:01Z",
+            agent: "threshold.generalist_a",
+            type: "retrieval",
+            detail: "reading OAIC PIA guidance",
+            ref: { doc: "OAIC — PIA guide", locator: "p.14" },
+          },
+        ],
+      }),
+    );
+    renderChamber();
+    // Open the Assessor A stage from the graph (its accessible name carries state).
+    const card = await screen.findByRole("button", { name: /Assessor A — working/i });
+    fireEvent.click(card);
+    // The drawer explains, in plain terms, what the stage is…
+    expect(await screen.findByText(/two assessors that read your submission fresh/i)).toBeTruthy();
+    // …and backs it with the real source it retrieved (doc + locator).
+    expect(screen.getByText("OAIC — PIA guide")).toBeTruthy();
+    expect(screen.getByText("p.14")).toBeTruthy();
+  });
+
   it("running but not started: offers a calm wait + a re-dispatch that re-kicks the run", async () => {
     vi.mocked(redispatchRun).mockResolvedValue({
       run_id: CODE,

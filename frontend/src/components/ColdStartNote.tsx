@@ -1,4 +1,5 @@
 import { useBackendStatus } from "../context/BackendStatus";
+import { TunnelWarmup } from "./TunnelWarmup";
 import "./ColdStartNote.css";
 
 /**
@@ -20,7 +21,7 @@ export function ColdStartNote() {
 
   return (
     <p className="wt-coldstart" role="status">
-      <span className="wt-coldstart__pip" aria-hidden="true" />
+      <TunnelWarmup size={30} />
       {state === "slow"
         ? "Still warming up — nearly there."
         : "Warming up the tunnel — this can take up to a minute the first time."}
