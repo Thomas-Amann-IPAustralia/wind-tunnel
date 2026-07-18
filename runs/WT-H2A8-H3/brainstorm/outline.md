@@ -11,7 +11,7 @@ run_id: "WT-H2A8-H3"
 title: "APS Markdown Conversion Service"
 summary: "A cross-agency, ephemeral utility for public servants to convert diverse web and document formats into standardized Markdown using deterministic parsing."
 created_at: "2026-07-18T06:17:32Z"
-updated_at: "2026-07-18T06:22:14Z"
+updated_at: "2026-07-18T06:23:27Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -48,7 +48,7 @@ Manual re-typing, traditional web scraping scripts (BeautifulSoup), or off-the-s
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-A simple web interface with a single input field for a URL or file upload and a 'Convert' button.
+A simple web interface with a single input field for a URL or file upload and a 'Convert' button. A 'Report Issue' link is included, which directs users to a public GitHub repository with a 250-character limit and a clear warning against including sensitive information.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
@@ -58,4 +58,4 @@ Must support cross-agency authentication; must implement strict data isolation; 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-Success is defined by the tool providing a net positive utility for document conversion across the APS, accepting that occasional inaccuracies are an acceptable trade-off for speed and statelessness.
+Success is defined by the tool providing a net positive utility for document conversion across the APS, with a feedback mechanism that allows for iterative improvements to the parser while maintaining a strictly stateless, ephemeral core.
