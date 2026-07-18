@@ -196,23 +196,53 @@ def reviewer_scope_context() -> str:
     return "\n".join(lines)
 
 
-def specialist_instrument_context(specialist_id: str) -> str:
+def specialist_instrument_context(specialist_id: str, only: Iterable[str] | None = None) -> str:
     """The DTA question text for one specialist's owned sections (§9.3) — the
-    tool's own wording, not a paraphrase, grouped by containing section."""
+    tool's own wording, not a paraphrase, grouped by containing section.
+
+    ``only`` narrows the rendered sections to a subset of the owned set: the
+    amendment path (§11.3) passes the directed sections, so the model's visible
+    scope IS the directive's scope — the shared specialist prompt's "every owned
+    section" rule then reads over exactly the sections the directive named,
+    instead of contradicting the directive by listing the whole owned slice.
+    A section outside the owned set raises loudly; scope is never silently
+    widened or shrunk."""
     owned = specialist_owned_sections(specialist_id)
+    if only is None:
+        shown = owned
+    else:
+        wanted = set(only)
+        unknown = wanted - set(owned)
+        if unknown:
+            raise PromptError(
+                f"Sections {sorted(unknown)} are not owned by specialist {specialist_id!r} "
+                "(§9.3) — cannot build a scoped instrument context."
+            )
+        shown = tuple(sid for sid in owned if sid in wanted)
     index = _full_question_index()
+    if only is None:
+        scope_line = (
+            "You own EXACTLY the subsections below. Do not draft, cite, or flag a gap for "
+            "any other section id — that is another specialist's or the reviewer's scope "
+            "(§9.3, structural write-scope).\n"
+        )
+    else:
+        scope_line = (
+            "This turn is scoped to EXACTLY the subsections below — the sections the "
+            "directive named, a subset of what you own. Every other section of yours is "
+            "settled and must NOT appear in your answer: draft, cite, or flag a gap for "
+            "ONLY the section ids shown here (§11.3).\n"
+        )
     lines = [
         f"# Instrument context — sections owned by {specialist_friendly_name(specialist_id)}\n",
-        "You own EXACTLY the subsections below. Do not draft, cite, or flag a gap for "
-        "any other section id — that is another specialist's or the reviewer's scope "
-        "(§9.3, structural write-scope).\n",
+        scope_line,
         "Key every entry in `sections`, `citations`, and `gaps` by the **section id** "
         "shown as a heading (e.g. `12.2`). A few sections list numbered sub-questions "
         "(e.g. 12.2.1, 12.2.2): address all of them **within that section's single "
         "answer** — never return a sub-question number as its own key.\n",
     ]
     current_section = None
-    for sid in owned:
+    for sid in shown:
         entry = index.get(sid)
         if entry is None:
             raise PromptError(

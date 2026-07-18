@@ -201,8 +201,13 @@ def run_specialist_amendment(
         )
     params = _resolve_params(max_rounds, search_top_k, seed_top_k, max_total_tokens)
     prompt = load_prompt("specialist")
-    context = specialist_instrument_context(specialist_id)
     targets = tuple(target_sections)
+    # Scope the instrument context to the directed sections (§11.3): the shared
+    # specialist prompt demands "every owned section" be drafted or gapped, so the
+    # context must show ONLY the sections this directive named — otherwise the model
+    # is being told to re-answer its whole owned slice and the scope check below
+    # can only fail (run WT-H2A8-H3, legal amendment).
+    context = specialist_instrument_context(specialist_id, only=targets)
     intro = directive_intro.format(targets=", ".join(targets))
 
     def build_user(history: list[str], round_no: int, max_rounds: int, final: bool) -> str:
@@ -545,6 +550,32 @@ def _fold_subquestions(data: dict, allowed: tuple[str, ...]) -> dict:
     return folded
 
 
+def _discard_undirected(data: dict, targets: tuple[str, ...], owned: tuple[str, ...]) -> dict:
+    """Drop owned-but-non-directed keys from an amendment payload before validation
+    (§11.3). A model that re-answers sections beyond the directive is echoing its own
+    settled work, not escaping write-scope — the merge is target-scoped, so those keys
+    could never land in the assessment; discarding them keeps the run alive instead of
+    failing it (run WT-H2A8-H3: the legal amendment, directed at 11.1 alone, returned
+    all six owned sections). Keys outside the owned set entirely are kept, so the §9.3
+    out-of-scope check that follows still rejects a true scope violation loudly."""
+    undirected = set(owned) - set(targets)
+    if not undirected:
+        return data
+    scoped = dict(data)
+    sections_in = data.get("sections")
+    if isinstance(sections_in, dict):
+        scoped["sections"] = {k: v for k, v in sections_in.items() if k not in undirected}
+    citations_in = data.get("citations")
+    if isinstance(citations_in, dict):
+        scoped["citations"] = {k: v for k, v in citations_in.items() if k not in undirected}
+    gaps_in = data.get("gaps")
+    if isinstance(gaps_in, list):
+        scoped["gaps"] = [
+            g for g in gaps_in if not (isinstance(g, dict) and str(g.get("section")) in undirected)
+        ]
+    return scoped
+
+
 def _parse_draft(
     data: dict, specialist_id: str, owned: tuple[str, ...], resp, prompt
 ) -> SpecialistDraft:
@@ -603,16 +634,20 @@ def _parse_draft(
 def _parse_amendment(data: dict, specialist_id: str, targets: tuple[str, ...]) -> dict:
     """Validate an amendment's partial output — scoped to ``targets`` only (§11.3). Same
     drafted-or-gapped discipline as a fresh draft, but the allowed keys are the directed
-    sections, not the specialist's whole owned set."""
-    data = _fold_subquestions(data, targets)
+    sections, not the specialist's whole owned set. A key for an owned-but-non-directed
+    section is discarded (an echo of settled work — the target-scoped merge could never
+    land it); a key outside the owned set is still rejected loudly (§9.3)."""
+    owned = specialist_owned_sections(specialist_id)
+    data = _fold_subquestions(data, owned)
+    data = _discard_undirected(data, targets, owned)
     sections_in = data.get("sections")
     if not isinstance(sections_in, dict):
         raise AgentError(f"{specialist_id}: amendment 'sections' must be an object.")
     out_of_scope = set(sections_in) - set(targets)
     if out_of_scope:
         raise AgentError(
-            f"{specialist_id}: amendment touched non-directed sections {sorted(out_of_scope)} "
-            "— a directive may only change the sections it named (§11.3)."
+            f"{specialist_id}: amendment touched sections outside the specialist's owned "
+            f"set {sorted(out_of_scope)} (§9.3 structural write-scope)."
         )
     gaps_out = _require_gaps(data.get("gaps"), specialist_id, targets)
     gap_ids = {g["section"] for g in gaps_out}

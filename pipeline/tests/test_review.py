@@ -18,6 +18,7 @@ import pytest
 from agents.prompting import (
     RISK_SECTIONS,
     response_type_of,
+    specialist_instrument_context,
     specialist_owned_sections,
 )
 from agents.reviewer import AgentError, ReviewerResult, run_reviewer
@@ -281,18 +282,78 @@ def test_amendment_merges_only_target_sections(tmp_path):
     assert new.questions == []  # amendments raise no questions
 
 
-def test_amendment_rejects_out_of_scope_output(tmp_path):
+def test_amendment_discards_owned_but_non_directed_output(tmp_path):
+    """A model that also re-answers an owned section the directive did not name is
+    echoing settled work — the echo is discarded, the prior draft survives untouched,
+    and the run does not die (§11.3; the target-scoped merge could never land it)."""
     prior = SpecialistDraft.from_dict(_draft_dict("privacy"))
-    # Model tries to also change 7.1, which was not directed.
     amend_payload = {
         "action": "draft",
         "sections": {"7.2": "Amended.", "7.1": "No. sneaky change."},
+        "citations": {"7.1": [{"short_name": "Invented", "locator": "p.1"}]},
+        "gaps": [],
+    }
+    kb_root = _kb_root(tmp_path)
+    with KB(kb_root / "privacy.sqlite") as kb:
+        new = run_specialist_amendment(
+            _client(_handler(amend_payload)),
+            "privacy",
+            prior,
+            ("7.2",),
+            "d",
+            "s",
+            "o",
+            "t",
+            kb,
+            "{}",
+        )
+    assert new.sections["7.2"] == "Amended."
+    assert new.sections["7.1"] == prior.sections["7.1"]  # the echo never lands
+    assert "7.1" not in new.citations
+
+
+def test_amendment_survives_whole_owned_set_echo(tmp_path):
+    """The WT-H2A8-H3 failure shape: legal, directed at 11.1 alone, returns its entire
+    owned set (9.1, 9.2, 10.2, 11.1, 12.1, 12.2) because the shared prompt demands every
+    owned section. Only 11.1 changes; the five echoes are discarded, prior work stands."""
+    prior = SpecialistDraft.from_dict(_draft_dict("legal"))
+    owned = specialist_owned_sections("legal")
+    sections = {sid: f"Yes. Echo of settled work for {sid}." for sid in owned}
+    sections["11.1"] = "No. Accountability roles have not been established."
+    amend_payload = {"action": "draft", "sections": sections, "citations": {}, "gaps": []}
+    kb_root = _kb_root(tmp_path)
+    with KB(kb_root / "legal.sqlite") as kb:
+        new = run_specialist_amendment(
+            _client(_handler(amend_payload)),
+            "legal",
+            prior,
+            ("11.1",),
+            "directive text",
+            "seed terms",
+            "outline",
+            "threshold",
+            kb,
+            "{}",
+        )
+    assert new.sections["11.1"].startswith("No. Accountability roles")
+    for sid in owned:
+        if sid != "11.1":
+            assert new.sections[sid] == prior.sections[sid]
+
+
+def test_amendment_rejects_non_owned_output(tmp_path):
+    """A key outside the specialist's owned set is a true §9.3 scope violation and is
+    still rejected loudly, not discarded."""
+    prior = SpecialistDraft.from_dict(_draft_dict("privacy"))
+    amend_payload = {
+        "action": "draft",
+        "sections": {"7.2": "Amended.", "5.1": "No. ethics' section."},
         "citations": {},
         "gaps": [],
     }
     kb_root = _kb_root(tmp_path)
     with KB(kb_root / "privacy.sqlite") as kb:
-        with pytest.raises(Exception, match="non-directed"):
+        with pytest.raises(Exception, match="outside the specialist's owned set"):
             run_specialist_amendment(
                 _client(_handler(amend_payload)),
                 "privacy",
@@ -337,6 +398,19 @@ def test_amendment_folds_subquestion_keys_into_target(tmp_path):
     assert new.sections["12.2"].startswith("Yes, legal advice was obtained.")
     assert "Stored in the records system." in new.sections["12.2"]
     assert "12.2.1" not in new.sections and "12.2.2" not in new.sections
+
+
+def test_scoped_instrument_context_shows_only_directed_sections():
+    """The amendment's instrument context renders exactly the directed sections, so the
+    shared prompt's 'every owned section' rule reads over the directive's scope — and a
+    scope outside the owned set is rejected, never silently widened (§11.3, §9.3)."""
+    ctx = specialist_instrument_context("legal", only=("11.1",))
+    assert "### 11.1" in ctx
+    for sid in specialist_owned_sections("legal"):
+        if sid != "11.1":
+            assert f"### {sid}" not in ctx
+    with pytest.raises(Exception, match="not owned"):
+        specialist_instrument_context("legal", only=("7.2",))
 
 
 def test_amendment_rejects_non_owned_target(tmp_path):
