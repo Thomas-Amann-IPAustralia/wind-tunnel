@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:40:21Z",
+  "updated_at": "2026-07-18T11:41:01Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -12,7 +12,7 @@
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
-    "full.specialist.ethics": "active",
+    "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
@@ -3799,9 +3799,93 @@
         "doc": "NAIC RAI Tools",
         "locator": "p.3"
       }
+    },
+    {
+      "id": "evt_000364",
+      "ts": "2026-07-18T11:40:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000365",
+      "ts": "2026-07-18T11:40:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000366",
+      "ts": "2026-07-18T11:40:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Guidance for AI Adoption",
+      "ref": {
+        "doc": "Guidance for AI Adoption",
+        "locator": "p.48"
+      }
+    },
+    {
+      "id": "evt_000367",
+      "ts": "2026-07-18T11:40:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.35"
+      }
+    },
+    {
+      "id": "evt_000368",
+      "ts": "2026-07-18T11:40:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000369",
+      "ts": "2026-07-18T11:40:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000370",
+      "ts": "2026-07-18T11:40:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading TRS AI Guidelines",
+      "ref": {
+        "doc": "TRS AI Guidelines",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000371",
+      "ts": "2026-07-18T11:41:01Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_complete",
+      "detail": "Ethics & Fairness specialist complete"
     }
   ],
-  "log_cursor": 363,
+  "log_cursor": 371,
   "questions": null,
   "failure": null,
   "expected_ranges": {
