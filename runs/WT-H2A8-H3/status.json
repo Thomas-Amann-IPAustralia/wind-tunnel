@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:42:40Z",
+  "updated_at": "2026-07-18T11:43:04Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -4488,9 +4488,118 @@
       "agent": "full.specialist.solution_architect",
       "type": "stage_started",
       "detail": "Solution Architect (sections) started"
+    },
+    {
+      "id": "evt_000429",
+      "ts": "2026-07-18T11:42:41Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "revision",
+      "detail": "revising solution_architect's sections in light of your answers",
+      "ref": {
+        "target": "solution_architect"
+      }
+    },
+    {
+      "id": "evt_000430",
+      "ts": "2026-07-18T11:42:41Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading QB4AIRA",
+      "ref": {
+        "doc": "QB4AIRA",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000431",
+      "ts": "2026-07-18T11:42:41Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.33"
+      }
+    },
+    {
+      "id": "evt_000432",
+      "ts": "2026-07-18T11:42:41Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r18"
+      }
+    },
+    {
+      "id": "evt_000433",
+      "ts": "2026-07-18T11:42:41Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading XAI Interface",
+      "ref": {
+        "doc": "XAI Interface",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000434",
+      "ts": "2026-07-18T11:42:41Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Knowledge Base",
+      "ref": {
+        "doc": "RAI Knowledge Base",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000435",
+      "ts": "2026-07-18T11:42:41Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Pattern Catalogue",
+      "ref": {
+        "doc": "RAI Pattern Catalogue",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000436",
+      "ts": "2026-07-18T11:42:52Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Suitability Assessment",
+      "ref": {
+        "doc": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000437",
+      "ts": "2026-07-18T11:42:52Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Acceptance Testing",
+      "ref": {
+        "doc": "RAI Acceptance Testing",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000438",
+      "ts": "2026-07-18T11:43:04Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.31"
+      }
     }
   ],
-  "log_cursor": 428,
+  "log_cursor": 438,
   "questions": null,
   "failure": null,
   "expected_ranges": {
