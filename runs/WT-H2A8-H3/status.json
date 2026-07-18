@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T12:27:47Z",
+  "updated_at": "2026-07-18T12:27:59Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
-    "full.specialist.legal": "active",
+    "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
@@ -5517,9 +5517,181 @@
       "agent": "full.specialist.legal",
       "type": "stage_started",
       "detail": "Legal & Administrative Law specialist started"
+    },
+    {
+      "id": "evt_000535",
+      "ts": "2026-07-18T12:27:48Z",
+      "agent": "full.specialist.legal",
+      "type": "revision",
+      "detail": "amending 11.1 per reviewer cycle 1",
+      "ref": {
+        "cycle": 1,
+        "target": "legal"
+      }
+    },
+    {
+      "id": "evt_000536",
+      "ts": "2026-07-18T12:27:48Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000537",
+      "ts": "2026-07-18T12:27:48Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000538",
+      "ts": "2026-07-18T12:27:48Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000539",
+      "ts": "2026-07-18T12:27:48Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000540",
+      "ts": "2026-07-18T12:27:48Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.36"
+      }
+    },
+    {
+      "id": "evt_000541",
+      "ts": "2026-07-18T12:27:48Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000542",
+      "ts": "2026-07-18T12:27:50Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000543",
+      "ts": "2026-07-18T12:27:50Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000544",
+      "ts": "2026-07-18T12:27:50Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000545",
+      "ts": "2026-07-18T12:27:50Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000546",
+      "ts": "2026-07-18T12:27:50Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000547",
+      "ts": "2026-07-18T12:27:50Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000548",
+      "ts": "2026-07-18T12:27:50Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000549",
+      "ts": "2026-07-18T12:27:50Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading GPN-AI",
+      "ref": {
+        "doc": "GPN-AI",
+        "locator": "¶30"
+      }
+    },
+    {
+      "id": "evt_000550",
+      "ts": "2026-07-18T12:27:59Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_complete",
+      "detail": "Legal & Administrative Law specialist complete"
     }
   ],
-  "log_cursor": 534,
+  "log_cursor": 550,
   "questions": null,
   "failure": null,
   "expected_ranges": {

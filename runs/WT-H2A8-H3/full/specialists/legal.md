@@ -14,12 +14,6 @@ No. No accessibility or human rights reviews have been conducted to ensure that 
 
 *Citations: [HTI State of AI Governance, p. 48], [HTI State of AI Governance, p. 68]*
 
-## 11.1
-
-Yes. The agency has designated an Accountable Official and an Accountable Use Case Owner for this utility under the Policy for the Responsible Use of AI in Government (AI Use Policy v2.0, p. 11). These designated roles establish clear mechanisms for ensuring responsibility and accountability throughout the lifecycle of the AI system, in alignment with the Standard for accountability (AI Use Policy v2.0, p. 11).
-
-*Citations: [AI Use Policy v2.0, p. 11]*
-
 ## 12.1
 
 Yes. The assessment has identified and documented the relevant overarching legal and regulatory frameworks, specifically the Privacy Act 1988 (Cth) (HTI State of AI Governance, p. 40) and the Policy for the Responsible Use of AI in Government (AI Use Policy v2.0, p. 11). Since this is a general, cross-agency utility rather than an agency-specific statutory program, there is no agency-specific enabling legislation to document.
@@ -33,3 +27,9 @@ No.
 - 12.2.2: Not applicable. No legal advice has been sought or stored.
 
 *Citations: [HTI State of AI Governance, p. 40]*
+
+## 11.1
+
+No. As noted in the threshold assessment (sections 1.2 and 1.3), an Accountable Official and an Accountable Use Case Owner have not yet been designated for this utility. To establish proper accountability mechanisms during the lifecycle of the AI system, the agency must designate an accountable official and an accountable use case owner in accordance with the Policy for the Responsible Use of AI in Government (AI Use Policy v2.0, p. 11). Once designated, the accountable official will be responsible for implementing the policy and maintaining a register of in-scope AI use cases, while the accountable use case owner will be responsible for the specific use case throughout its lifecycle (AI Use Policy v2.0, p. 11).
+
+*Citations: [AI Use Policy v2.0, p. 11]*
