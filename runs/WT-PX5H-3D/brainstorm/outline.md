@@ -11,7 +11,7 @@ run_id: "WT-PX5H-3D"
 title: "APS Tech Navigator"
 summary: "An AI-powered chatbot designed to help public servants identify and navigate technology solutions for their operational challenges."
 created_at: "2026-07-18T01:41:12Z"
-updated_at: "2026-07-18T01:43:22Z"
+updated_at: "2026-07-18T01:44:38Z"
 resolved: ["problem", "solution", "users_stakeholders"]
 ---
 
@@ -28,7 +28,7 @@ A chatbot interface that acts as a technical advisor, guiding APS staff through 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-The primary users are APS staff across various roles who encounter operational hurdles but lack the technical expertise to identify solutions. Stakeholders also include IT and procurement departments, who may be impacted by the downstream requests or projects initiated based on the chatbot's guidance.
+The primary users are APS staff across various roles who encounter operational hurdles but lack the technical expertise to identify solutions. Stakeholders include IT and procurement departments, who must manage the downstream implementation of suggested solutions, and the broader public, who benefit from a more efficient and capable public service.
 
 <!-- section: data -->
 ## 4. Data
