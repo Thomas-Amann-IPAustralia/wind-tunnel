@@ -3,8 +3,8 @@
   "run_id": "WT-H2A8-H3",
   "run_code": "WT-H2A8-H3",
   "phase": "full",
-  "overall_state": "failed",
-  "updated_at": "2026-07-18T11:45:23Z",
+  "overall_state": "running",
+  "updated_at": "2026-07-18T11:47:17Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -4985,16 +4985,18 @@
       "agent": "full.specialist.legal",
       "type": "error",
       "detail": "Something went wrong while reviewing the full assessment. Your run is safe — paste the run code WT-H2A8-H3 to resume from the last checkpoint."
+    },
+    {
+      "id": "evt_000479",
+      "ts": "2026-07-18T11:47:17Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 478,
+  "log_cursor": 479,
   "questions": null,
-  "failure": {
-    "stage": "full.specialist.legal",
-    "message": "Something went wrong while reviewing the full assessment. Your run is safe — paste the run code WT-H2A8-H3 to resume from the last checkpoint.",
-    "run_code": "WT-H2A8-H3",
-    "technical": "AgentError: legal: amendment touched non-directed sections ['10.2', '12.1', '12.2', '9.1', '9.2'] — a directive may only change the sections it named (§11.3)."
-  },
+  "failure": null,
   "expected_ranges": {
     "threshold": [
       50,
