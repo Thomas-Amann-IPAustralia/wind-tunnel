@@ -8,4 +8,4 @@ Yes. The core architecture of the APS Markdown Conversion Service is designed to
 
 ## 7.2
 
-The privacy threshold assessment and/or privacy impact assessment for the APS Markdown Conversion Service are stored on the assessor's work SharePoint.
+No privacy threshold assessment or privacy impact assessment has been documented or stored for the APS Markdown Conversion Service, as no such documentation is provided in the use-case outline or threshold assessment.
