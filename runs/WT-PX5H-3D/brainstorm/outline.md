@@ -7,23 +7,23 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-PX5H-3D"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-PX5H-3D"
+title: "APS Tech Navigator"
+summary: "An AI-powered chatbot designed to help public servants identify and navigate technology solutions for their operational challenges."
 created_at: "2026-07-18T01:41:12Z"
-updated_at: "2026-07-18T01:41:12Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-18T01:42:40Z"
+resolved: ["problem", "solution"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Public servants in the APS often lack the technical literacy or awareness of available tools to effectively identify and solve operational problems, leading to a gap between identifying a need and knowing how to address it with technology.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+A chatbot interface that acts as a technical advisor, guiding APS staff through their specific problems and suggesting appropriate technology solutions or pathways based on internal OFFICIAL information.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
