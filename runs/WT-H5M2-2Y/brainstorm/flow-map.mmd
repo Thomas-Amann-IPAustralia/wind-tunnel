@@ -1,0 +1,31 @@
+flowchart TD
+    subgraph UserSpace ["User Environment"]
+        User["Small Business Owner"]
+    end
+
+    subgraph PortalSpace ["Government Business Portal"]
+        UI["Web Chat Interface"]
+        Agent["Human Support Agent"]
+    end
+
+    subgraph AISpace ["Navigator AI Engine"]
+        AI["Canberra Business Navigator AI"]
+        SessionStore[("Temporary Session Store")]
+    end
+
+    subgraph DataSpace ["Government Knowledge Base"]
+        GovDocs[("Policy, Grants & Registration Rules")]
+    end
+
+    %% Happy Path Flow
+    User -->|1. Inputs business type, location & query| UI
+    UI -->|2. Forwards query & context| AI
+    AI -->|3. Stores sensitive identifiers securely| SessionStore
+    AI -->|4. Queries relevant rules & funding criteria| GovDocs
+    GovDocs -->|5. Returns verified policy & grant data| AI
+    AI -->|6. Generates prioritized checklist & direct links| UI
+    UI -->|7. Displays tailored guidance & forms| User
+
+    %% Escalation Path
+    UI -->|8. Escalates complex query with chat history| Agent
+    Agent -->|9. Provides direct assistance| User
