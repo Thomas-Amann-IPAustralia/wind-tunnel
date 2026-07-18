@@ -307,6 +307,38 @@ def test_amendment_rejects_out_of_scope_output(tmp_path):
             )
 
 
+def test_amendment_folds_subquestion_keys_into_target(tmp_path):
+    """A directive on 12.2 amended with sub-question keys (12.2.1/12.2.2) folds onto
+    the directed parent section, not rejected as touching a non-directed section (§9.3)."""
+    prior = SpecialistDraft.from_dict(_draft_dict("legal"))
+    amend_payload = {
+        "action": "draft",
+        "sections": {
+            "12.2.1": "Yes, legal advice was obtained.",
+            "12.2.2": "Stored in the records system.",
+        },
+        "citations": {},
+        "gaps": [],
+    }
+    kb_root = _kb_root(tmp_path)
+    with KB(kb_root / "legal.sqlite") as kb:
+        new = run_specialist_amendment(
+            _client(_handler(amend_payload)),
+            "legal",
+            prior,
+            ("12.2",),
+            "directive text",
+            "seed terms",
+            "outline",
+            "threshold",
+            kb,
+            "{}",
+        )
+    assert new.sections["12.2"].startswith("Yes, legal advice was obtained.")
+    assert "Stored in the records system." in new.sections["12.2"]
+    assert "12.2.1" not in new.sections and "12.2.2" not in new.sections
+
+
 def test_amendment_rejects_non_owned_target(tmp_path):
     prior = SpecialistDraft.from_dict(_draft_dict("privacy"))
     kb_root = _kb_root(tmp_path)
