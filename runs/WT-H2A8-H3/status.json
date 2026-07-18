@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T06:31:22Z",
+  "updated_at": "2026-07-18T06:31:57Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -12,7 +12,7 @@
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
-    "full.specialist.ethics": "active",
+    "full.specialist.ethics": "complete",
     "full.specialist.legal": "pending",
     "full.specialist.data_governance": "pending",
     "full.specialist.solution_architect": "pending",
@@ -1131,9 +1131,93 @@
         "doc": "ADM Guide (earlier ed.)",
         "locator": "p.4"
       }
+    },
+    {
+      "id": "evt_000111",
+      "ts": "2026-07-18T06:31:23Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000112",
+      "ts": "2026-07-18T06:31:23Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.29"
+      }
+    },
+    {
+      "id": "evt_000113",
+      "ts": "2026-07-18T06:31:23Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000114",
+      "ts": "2026-07-18T06:31:23Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.14"
+      }
+    },
+    {
+      "id": "evt_000115",
+      "ts": "2026-07-18T06:31:23Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.25"
+      }
+    },
+    {
+      "id": "evt_000116",
+      "ts": "2026-07-18T06:31:23Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000117",
+      "ts": "2026-07-18T06:31:23Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000118",
+      "ts": "2026-07-18T06:31:57Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_complete",
+      "detail": "Ethics & Fairness specialist complete"
     }
   ],
-  "log_cursor": 110,
+  "log_cursor": 118,
   "questions": null,
   "failure": null,
   "expected_ranges": {
