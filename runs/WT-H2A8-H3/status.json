@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T06:30:51Z",
+  "updated_at": "2026-07-18T06:31:22Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -988,9 +988,152 @@
         "doc": "AI Ethics Principles",
         "locator": "§AI Ethics Principles at a glance"
       }
+    },
+    {
+      "id": "evt_000098",
+      "ts": "2026-07-18T06:30:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§The rise of AI and ethics"
+      }
+    },
+    {
+      "id": "evt_000099",
+      "ts": "2026-07-18T06:30:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.32"
+      }
+    },
+    {
+      "id": "evt_000100",
+      "ts": "2026-07-18T06:30:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000101",
+      "ts": "2026-07-18T06:30:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000102",
+      "ts": "2026-07-18T06:30:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.33"
+      }
+    },
+    {
+      "id": "evt_000103",
+      "ts": "2026-07-18T06:30:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§**AI Ethics Principle 6: Transparency and explainability**"
+      }
+    },
+    {
+      "id": "evt_000104",
+      "ts": "2026-07-18T06:30:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading TRS AI Guidelines",
+      "ref": {
+        "doc": "TRS AI Guidelines",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000105",
+      "ts": "2026-07-18T06:31:05Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Guidance for AI Adoption",
+      "ref": {
+        "doc": "Guidance for AI Adoption",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000106",
+      "ts": "2026-07-18T06:31:05Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000107",
+      "ts": "2026-07-18T06:31:05Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§Part B: Artificial intelligence"
+      }
+    },
+    {
+      "id": "evt_000108",
+      "ts": "2026-07-18T06:31:05Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Co-Design Lessons Learned",
+      "ref": {
+        "doc": "Co-Design Lessons Learned",
+        "locator": "p.57"
+      }
+    },
+    {
+      "id": "evt_000109",
+      "ts": "2026-07-18T06:31:05Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Guidance for AI Adoption",
+      "ref": {
+        "doc": "Guidance for AI Adoption",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000110",
+      "ts": "2026-07-18T06:31:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.4"
+      }
     }
   ],
-  "log_cursor": 97,
+  "log_cursor": 110,
   "questions": null,
   "failure": null,
   "expected_ranges": {
