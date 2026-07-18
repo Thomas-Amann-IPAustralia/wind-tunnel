@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T23:56:13Z",
+  "updated_at": "2026-07-18T23:56:30Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -498,9 +498,269 @@
       "agent": "full.specialist.privacy",
       "type": "stage_started",
       "detail": "Privacy specialist started"
+    },
+    {
+      "id": "evt_000052",
+      "ts": "2026-07-18T23:56:14Z",
+      "agent": "full.specialist.privacy",
+      "type": "drafting",
+      "detail": "drafting privacy's owned sections"
+    },
+    {
+      "id": "evt_000053",
+      "ts": "2026-07-18T23:56:14Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§Part 3: Privacy management — addressing risks"
+      }
+    },
+    {
+      "id": "evt_000054",
+      "ts": "2026-07-18T23:56:14Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000055",
+      "ts": "2026-07-18T23:56:14Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000056",
+      "ts": "2026-07-18T23:56:14Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§Ensuring compliance"
+      }
+    },
+    {
+      "id": "evt_000057",
+      "ts": "2026-07-18T23:56:14Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000058",
+      "ts": "2026-07-18T23:56:14Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§APP 11 — Security of personal information"
+      }
+    },
+    {
+      "id": "evt_000059",
+      "ts": "2026-07-18T23:56:20Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Top 5",
+      "ref": {
+        "doc": "OAIC AI Training Top 5",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000060",
+      "ts": "2026-07-18T23:56:20Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000061",
+      "ts": "2026-07-18T23:56:20Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.91"
+      }
+    },
+    {
+      "id": "evt_000062",
+      "ts": "2026-07-18T23:56:20Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000063",
+      "ts": "2026-07-18T23:56:20Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000064",
+      "ts": "2026-07-18T23:56:20Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000065",
+      "ts": "2026-07-18T23:56:20Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000066",
+      "ts": "2026-07-18T23:56:20Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000067",
+      "ts": "2026-07-18T23:56:24Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.107"
+      }
+    },
+    {
+      "id": "evt_000068",
+      "ts": "2026-07-18T23:56:24Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.110"
+      }
+    },
+    {
+      "id": "evt_000069",
+      "ts": "2026-07-18T23:56:24Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.107"
+      }
+    },
+    {
+      "id": "evt_000070",
+      "ts": "2026-07-18T23:56:24Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.109"
+      }
+    },
+    {
+      "id": "evt_000071",
+      "ts": "2026-07-18T23:56:24Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.108"
+      }
+    },
+    {
+      "id": "evt_000072",
+      "ts": "2026-07-18T23:56:24Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§APP 4 — Dealing with unsolicited personal information"
+      }
+    },
+    {
+      "id": "evt_000073",
+      "ts": "2026-07-18T23:56:24Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.110"
+      }
+    },
+    {
+      "id": "evt_000074",
+      "ts": "2026-07-18T23:56:24Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.108"
+      }
+    },
+    {
+      "id": "evt_000075",
+      "ts": "2026-07-18T23:56:30Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.20"
+      }
     }
   ],
-  "log_cursor": 51,
+  "log_cursor": 75,
   "questions": null,
   "failure": null,
   "expected_ranges": {
