@@ -1,0 +1,41 @@
+flowchart TD
+    classDef actor fill:#e0f2fe,stroke:#0369a1,stroke-width:2px;
+    classDef system fill:#f8fafc,stroke:#64748b,stroke-width:2px;
+    classDef database fill:#fef3c7,stroke:#d97706,stroke-width:2px;
+    classDef external fill:#f0fdf4,stroke:#166534,stroke-width:2px;
+
+    Taxpayer((Taxpayer)):::actor
+    PolicyTeam((ATO Policy Team)):::actor
+
+    subgraph Portal [ATO Portal - Public Interface]
+        Triage[Pre-Chat Triage Form]:::system
+        Dial[Creativity Dial]:::system
+        Chat[Chatbot Interface]:::system
+    end
+
+    subgraph Backend [ATO Advisory AI Service]
+        RAG[RAG Engine & LLM]:::system
+        PolicyDB[(Public Tax Policy Database)]:::database
+    end
+
+    subgraph Verification [Official ATO Resources]
+        ATOWeb[Official ATO Website & Legal Database]:::external
+    end
+
+    PolicyTeam -->|Maintains & updates| PolicyDB
+    
+    Taxpayer -->|1. Submits occupation & expense category| Triage
+    Triage -->|2. Unlocks chat & passes context| Chat
+    
+    Taxpayer -->|3. Sets strictness level| Dial
+    Dial -->|4. Configures temperature & constraints| RAG
+    
+    Taxpayer -->|5. Asks deduction question| Chat
+    Chat -->|6. Forwards query & triage context| RAG
+    
+    PolicyDB -->|7. Retrieves relevant tax rulings| RAG
+    RAG -->|8. Generates advisory response with citations| Chat
+    
+    Chat -->|9. Displays guidance, warnings & links| Taxpayer
+    Taxpayer -->|10. Clicks citation link to verify| ATOWeb
+    ATOWeb -->|11. Provides authoritative policy confirmation| Taxpayer
