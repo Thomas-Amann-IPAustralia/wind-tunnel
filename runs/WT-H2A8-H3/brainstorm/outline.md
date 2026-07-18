@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-H2A8-H3"
 title: "APS Markdown Conversion Service"
-summary: "A cross-agency, ephemeral utility for public servants to convert diverse web and document formats into standardized Markdown without persistent data storage or AI-based processing."
+summary: "A cross-agency, ephemeral utility for public servants to convert diverse web and document formats into standardized Markdown using deterministic parsing."
 created_at: "2026-07-18T06:17:32Z"
-updated_at: "2026-07-18T06:21:34Z"
+updated_at: "2026-07-18T06:22:14Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -58,4 +58,4 @@ Must support cross-agency authentication; must implement strict data isolation; 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-A measurable reduction in time spent manually formatting documents and a high rate of successful, accurate conversions for standard document and web formats.
+Success is defined by the tool providing a net positive utility for document conversion across the APS, accepting that occasional inaccuracies are an acceptable trade-off for speed and statelessness.
