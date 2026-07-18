@@ -1,0 +1,67 @@
+{
+  "specialist": "legal",
+  "sections": {
+    "9.1": "Not applicable. The APS Markdown Conversion Service is an ephemeral document conversion utility that does not make, automate, or materially influence administrative actions or decisions that have legal or significant effects on individuals, groups, or communities. It functions solely as a formatting tool for public servants.",
+    "9.2": "Not applicable. Because the system does not perform or influence administrative actions affecting rights or interests (as detailed in section 9.1), there are no administrative actions of this nature to challenge, rendering a challenge process not applicable.",
+    "10.2": "No. The current use-case outline does not indicate that any formal consultation with human rights advisors or accessibility specialists has been conducted. Although the system is a deterministic parser, the threshold assessment notes potential risks of stripping accessibility features (such as alt text or semantic headers) during conversion. Alignment with human rights obligations, particularly under disability discrimination frameworks, remains unverified.",
+    "11.1": "No. While the outline notes that agency IT security teams will vet the tool for compliance, there are no documented mechanisms or designated roles (such as an Accountable Official or Accountable Use Case Owner) to ensure ongoing responsibility and accountability throughout the system's lifecycle as required by the Policy for the Responsible Use of AI in Government.",
+    "12.1": "Yes. The assessment has identified and documented the relevant overarching legal and regulatory frameworks, specifically the Privacy Act 1988 (Cth) and the Policy for the Responsible Use of AI in Government. Since this is a general, cross-agency utility rather than an agency-specific statutory program, there is no agency-specific enabling legislation to document.",
+    "12.2": "No. Cover each of these points within your single 12.2 answer:\n- 12.2.1: No need for legal advice has been identified or documented during this assessment process, as the tool is a deterministic parser that does not perform automated decision-making or exercise statutory discretions.\n- 12.2.2: Not applicable, as no legal advice has been sought or stored."
+  },
+  "citations": {
+    "9.1": [
+      {
+        "short_name": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    ],
+    "10.2": [
+      {
+        "short_name": "ADM Better Practice Guide",
+        "locator": "p.8"
+      }
+    ],
+    "11.1": [
+      {
+        "short_name": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    ]
+  },
+  "questions": {
+    "why": "To confirm whether accountability roles, legal clearances for web scraping, and accessibility compliance reviews have been established for this utility.",
+    "items": [
+      {
+        "question_id": "legal-1",
+        "text": "Has the agency designated an Accountable Official and an Accountable Use Case Owner for this utility under the Policy for the Responsible Use of AI in Government?",
+        "options": [
+          "Yes",
+          "No",
+          "In progress"
+        ],
+        "allow_free_text": true
+      },
+      {
+        "question_id": "legal-2",
+        "text": "Has any legal advice been sought regarding potential copyright or intellectual property implications of converting third-party web content, and if so, where is it stored?",
+        "options": [],
+        "allow_free_text": true
+      },
+      {
+        "question_id": "legal-3",
+        "text": "Have any accessibility or human rights reviews been conducted to ensure the Markdown outputs comply with the Disability Discrimination Act 1992?",
+        "options": [
+          "Yes",
+          "No",
+          "In progress"
+        ],
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
