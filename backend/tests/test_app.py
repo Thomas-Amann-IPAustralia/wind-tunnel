@@ -266,6 +266,45 @@ def test_redispatch_reports_a_dispatch_failure(github):
     assert body["dispatch_error"]
 
 
+def test_redispatch_resumes_a_failed_run(client, github, dispatcher):
+    # §5.6 "resume from the last checkpoint" — the retry path for a failed run
+    # (all three first live runs failed mid-stage and needed exactly this; the
+    # old gate 409'd on stage_status=failed, leaving no retry path at all).
+    seed_run(
+        github,
+        "WT-DSPG-28",
+        stage=statefile.Stage.THRESHOLD_DRAFTING,
+        stage_status=statefile.StageStatus.FAILED,
+    )
+    resp = client.post("/api/runs/WT-DSPG-28/redispatch")
+    assert resp.status_code == 200
+    assert resp.json() == {
+        "run_id": "WT-DSPG-28",
+        "resume_from": "THRESHOLD_DRAFTING",
+        "dispatched": True,
+    }
+    assert dispatcher.calls[0]["inputs"] == {
+        "run_id": "WT-DSPG-28",
+        "resume_from": "THRESHOLD_DRAFTING",
+    }
+
+
+def test_redispatch_resumes_a_failed_mid_flight_stage(client, github, dispatcher):
+    # ARCHITECT/REVIEW/ASSEMBLY are never dispatch targets on the happy path,
+    # but a run that failed there retries from exactly that stage — an earlier
+    # resume_from would fast-forward through checkpoints into a wrong re-pause.
+    seed_run(
+        github,
+        "WT-DSPH-29",
+        stage=statefile.Stage.REVIEW,
+        stage_status=statefile.StageStatus.FAILED,
+    )
+    resp = client.post("/api/runs/WT-DSPH-29/redispatch")
+    assert resp.status_code == 200
+    assert resp.json()["resume_from"] == "REVIEW"
+    assert dispatcher.calls[0]["inputs"]["resume_from"] == "REVIEW"
+
+
 # -- threshold routing -----------------------------------------------------------
 
 

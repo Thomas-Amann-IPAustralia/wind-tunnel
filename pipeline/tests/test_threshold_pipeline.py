@@ -404,3 +404,113 @@ def test_call_budget_trips():
     budget.charge()
     with pytest.raises(LLMError, match="budget exhausted"):
         budget.charge()
+
+
+# -- failure recovery: the same-stage resume path (§5.6, §5.3) -----------------
+
+
+def test_failed_run_resumes_from_its_failed_stage(tmp_path):
+    """The zombie-run bug: a failed run's `stage` still points at the failing
+    stage, so its retry dispatch is same-stage — that dispatch must clear the
+    FAILED marker and actually re-run the stage (all three live failed runs
+    needed exactly this). The retry also proves per-generalist idempotence: A's
+    committed draft is not re-drafted when only B failed."""
+    run_dir = tmp_path / "WT-TEST-FR"
+    run_dir.mkdir()
+    _make_run(run_dir, run_id="WT-TEST-FR")
+
+    calls = {"n": 0}
+
+    def failing_handler(*, model, system, user, response_json):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            return _generalist_json(_A)
+        raise LLMError("boom: simulated malformed-JSON exhaustion for assessor B")
+
+    first = run_pipeline(
+        run_dir,
+        llm=LLMClient(transport=ScriptedTransport(handler=failing_handler)),
+        committer=FakeCommitter(),
+    )
+    assert first.ok is False
+    run = RunState.load(run_dir)
+    assert run.stage is Stage.THRESHOLD_DRAFTING
+    assert run.stage_status is StageStatus.FAILED
+    assert "boom" in run.last_error["technical"]
+    status_doc = json.loads((run_dir / "status.json").read_text())
+    assert status_doc["overall_state"] == "failed"
+    assert status_doc["failure"] is not None
+
+    # The retry is a same-stage dispatch (the backend's /redispatch maps a failed
+    # THRESHOLD_DRAFTING to itself). Only B's draft is scripted — if A were
+    # re-drafted the queue would exhaust and the test would fail.
+    resume_client = LLMClient(
+        transport=ScriptedTransport(
+            responses={
+                resolve_model("threshold_generalist"): [_generalist_json(_B)],
+                resolve_model("threshold_reconciler"): _reconciler_json(),
+            }
+        )
+    )
+    second = run_pipeline(
+        run_dir,
+        llm=resume_client,
+        committer=FakeCommitter(),
+        resume_from="THRESHOLD_DRAFTING",
+    )
+    assert second.ok
+    assert second.final_stage is Stage.THRESHOLD_REVIEW
+    assert second.stage_status is StageStatus.AWAITING_USER
+
+    run = RunState.load(run_dir)
+    assert run.stage_status is StageStatus.AWAITING_USER
+    assert run.last_error is None
+    status_doc = json.loads((run_dir / "status.json").read_text())
+    assert status_doc["overall_state"] == "paused"
+    assert status_doc["failure"] is None
+    assert status_doc["nodes"]["threshold.generalist_a"] == "complete"
+    assert status_doc["nodes"]["threshold.generalist_b"] == "complete"
+    assert status_doc["nodes"]["threshold.rating_engine"] == "complete"
+
+
+# -- mid-stage status pulses (§6.3 cadence) ------------------------------------
+
+
+class _SnapshotCommitter:
+    """Records, at every commit, the message and the node map committed in
+    status.json — the observer a polling SPA effectively is."""
+
+    def __init__(self):
+        self.snapshots = []
+
+    def commit(self, run_dir, message):
+        from pathlib import Path
+
+        status_path = Path(run_dir) / "status.json"
+        nodes = None
+        if status_path.is_file():
+            nodes = json.loads(status_path.read_text())["nodes"]
+        self.snapshots.append((message, nodes))
+        return f"snap{len(self.snapshots):04d}"
+
+
+def test_status_pulses_publish_mid_stage_progress(tmp_path):
+    """Node transitions are committed as they happen, not only at stage
+    checkpoints — the SPA must see Assessor A go active while B is still
+    pending, or the whole first stage reads as a hung, not-yet-started run
+    (and invites a needless restart)."""
+    run_dir = tmp_path / "WT-TEST-PU"
+    run_dir.mkdir()
+    _make_run(run_dir, run_id="WT-TEST-PU")
+    committer = _SnapshotCommitter()
+
+    result = run_pipeline(run_dir, llm=_scripted_client(), committer=committer)
+    assert result.ok
+
+    pulses = [nodes for message, nodes in committer.snapshots if "status pulse" in message]
+    assert pulses, "expected mid-stage status pulses"
+    assert any(
+        nodes["threshold.generalist_a"] == "active" and nodes["threshold.generalist_b"] == "pending"
+        for nodes in pulses
+    ), "a poll during drafting must show A active while B is still pending"
+    assert any(nodes["threshold.reconciler"] == "active" for nodes in pulses)

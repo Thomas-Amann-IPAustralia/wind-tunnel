@@ -2,7 +2,67 @@
 
 ## Current stage
 
-**This branch (`claude/brainstorm-partner-ux-mgphjn`): Brainstorm partner UX tweaks from
+**This branch (`claude/windtunnel-governance-json-error-c0kgvr`): the governance chamber's
+first three live runs all died at the LLM seam — made the seam absorb transient failure,
+and made a failed run actually recoverable (TECH_SPEC §13, §5.6, §5.3, §6.3; CLAUDE.md §3).**
+Tom's live tests produced three failed runs, three different proximate causes, one seam:
+`WT-H5M2-2Y` — `threshold_generalist` returned *almost*-JSON with one syntax slip at char
+5005 (the reported bug); `WT-TR4C-DC` — the reconciler returned a **valid** object followed
+by trailing prose ("Extra data"); `WT-PX5H-3D` — a transient Gemini **503** ("high demand,
+try again later"). Every one was treated as instantly fatal, and — worse — the recovery
+path the failure screen promises did not exist: `/redispatch` 409'd on `stage_status=failed`,
+and even if re-kicked, a same-stage resume left `FAILED` in place so the driver flipped
+status.json to "running" and exited without doing anything (a zombie run). Five fixes,
+all LLM-free-tested, plus a rehearsal that drives the *actual stranded state* of
+`WT-H5M2-2Y` through the new code to its THRESHOLD_REVIEW pause:
+1. **`pipeline/llm.py` — the seam absorbs transient failure in two bounded layers.**
+   `GeminiTransport` retries 429/5xx/network blips/timeouts (backoff 2s/5s/12s; permanent
+   errors still fail immediately); `complete_json` parses tolerantly-but-losslessly (fence,
+   prose preamble, trailing text after the object, raw control chars in strings — none
+   change the content the model produced) and **re-asks the model** with a corrective note
+   on a genuinely malformed/truncated/non-object answer (≤2 re-asks, each budget-charged;
+   content is never guessed or repaired). `_extract_text` filters thinking-model `thought`
+   parts and names `MAX_TOKENS` truncation (`LLMTruncated`) instead of surfacing it as a
+   bewildering parse position. **The backend imports this same module, so the whole
+   brainstorm side (interviewer/sufficiency/feasibility/PoC/map) inherits every layer.**
+2. **`pipeline/run.py` — a same-stage resume clears `FAILED`.** A failed run's `stage`
+   still points at the failing stage (§5.6), so its retry dispatch is always same-stage;
+   `run_pipeline` now calls `advance_to` in that case too (clearing `last_error`), and
+   `status.set_running` clears the stale failure payload (one poll never shows "running"
+   *and* a failure, §6.1). Rebuild parity holds.
+3. **`backend/app.py` — `/redispatch` accepts failed runs** (§5.6 "resume from the last
+   checkpoint" now has an API), and `_REDISPATCH_RESUME_FROM` gains the mid-flight stages
+   `ARCHITECT`/`REVIEW`/`ASSEMBLY` → themselves (a run that failed there must resume from
+   exactly that stage — an earlier resume_from would fast-forward into a wrong re-pause).
+4. **`frontend/FailureState` — a "Resume the run" button** wired to `redispatchRun`, so the
+   failure screen's promise is one click, not a dead loop through resume-by-code back to
+   the same screen. (The run-code path stays for cross-device resume.)
+5. **`pipeline/status.py` + `run.py` — mid-stage status pulses (§6.3 cadence).** Node
+   transitions commit `status.json` as they happen (sub-activity throttled to ≥15s), so
+   the Chamber's flagship animation moves *during* a stage instead of freezing all-pending
+   until the first checkpoint (~2 min in which the "waiting to start… Restart the run"
+   prompt showed misleadingly mid-run, inviting duplicate dispatches). The pulse made
+   partial-stage commits real, so: `threshold_drafting` and `full_drafting` became
+   per-agent idempotent (a committed draft is never re-drafted on retry — its questions
+   reload from the file), and `full/questions.json` is now **always** written (empty
+   `specialists` when none) and is part of FULL_DRAFTING's checkpoint — without it, a
+   death between the last pulsed draft and the questions write would let resume skip the
+   stage and silently drop raised questions (`_resolve_next` reads the payload, not file
+   existence).
+Prompt hardening rides along: `threshold_generalist.v1.md` + `threshold_reconciler.v1.md`
+gain explicit JSON-escaping guidance (guidance-only, no version bump — the interviewer
+precedent). **Pipeline: 205 tests green (186 prior + 19 new: seam tolerances/re-ask/
+transport retry ×17, failed-resume + pulse ×2), ruff clean. Backend: 119 green (117 + 2
+failed-redispatch), ruff clean. Frontend: 41 green (40 + 1 failure-resume), build + lint
+(1 pre-existing accepted warning) + format clean.** The recovery rehearsal script drove
+`runs/WT-H5M2-2Y`'s committed failed state (copied to scratch) through
+resume_from=THRESHOLD_DRAFTING with a malformed-then-good generalist and a
+trailing-prose reconciler: failure cleared, 1 corrective re-ask, paused at
+THRESHOLD_REVIEW with `threshold_assessment.md` rendered. **Next live step is Tom's
+one click:** open each failed run in the Chamber and press "Resume the run" (or
+`POST /api/runs/<code>/redispatch`).
+
+**Prior branch (`claude/brainstorm-partner-ux-mgphjn`): Brainstorm partner UX tweaks from
 Tom's use (DESIGN §5, §6).** Five interface/behaviour refinements to the Brainstorm phase,
 no contract or pipeline change:
 1. **Warm-up reads as "working", not "hung".** The cold-start liveness indicator
@@ -264,6 +324,59 @@ threshold stage — this is the first place `pipeline/rating/` is consumed by a 
 pipeline.
 
 ## Done
+
+- **Governance-chamber first-live-run fixes — the LLM seam absorbs failure, and a failed
+  run is actually recoverable (TECH_SPEC §13, §5.6, §5.3, §6.3; CLAUDE.md §3; this
+  branch).** Three live runs failed at the seam three different ways (malformed JSON /
+  trailing text after a valid object / transient 503), and the promised recovery path
+  didn't exist (redispatch 409'd on failed; same-stage resume kept FAILED — a zombie).
+  All LLM-free tested (§15); ruff + eslint + prettier clean. **205 pipeline + 119
+  backend + 41 frontend tests green.** The pieces:
+  - **`pipeline/llm.py` — two bounded failure-absorption layers.** `GeminiTransport`
+    retries transient HTTP (429/5xx/URLError/timeout; 2s/5s/12s backoff, permanent errors
+    immediate); `complete_json` parses tolerantly-but-losslessly (`_parse_json_object`:
+    fence, prose preamble, trailing text via `raw_decode`, raw control chars via
+    `strict=False` — content never altered) and re-asks the model with a corrective note
+    on malformed/truncated/non-object answers (≤`JSON_REASKS`=2, budget-charged).
+    `_extract_text` skips `thought` parts and raises `LLMTruncated` on MAX_TOKENS.
+    The backend's brainstorm agents import this same module and inherit everything.
+  - **`pipeline/run.py` + `status.py` — the failed-run resume actually resumes.**
+    Same-stage `resume_from` on a FAILED run clears the marker via `advance_to`
+    (previously `_drive` bailed on the FAILED guard *after* the handshake had flipped
+    status.json to "running"); `set_running` clears the stale failure payload (§6.1
+    one-poll rule; rebuild parity preserved).
+  - **`backend/app.py` — `/redispatch` is the §5.6 retry.** Gate widened to
+    `stage_status ∈ {in_progress, failed}`; `_REDISPATCH_RESUME_FROM` +=
+    ARCHITECT/REVIEW/ASSEMBLY → themselves (fail-only dispatch targets; an earlier
+    resume_from would re-pause wrongly at a checkpoint already answered).
+  - **`frontend/src/components/FailureState.tsx` — "Resume the run".** The failure
+    screen's primary action calls `redispatchRun` (same states/copy family as the
+    NotStartedPrompt restart); run-code path retained for cross-device resume.
+  - **`pipeline/status.py` + `run.py` — mid-stage status pulses (§6.3 ~20s cadence).**
+    A driver-installed `pulse` on `StatusModel` saves + commits status.json on every
+    node transition (urgent) and on drafting/retrieval sub-activity throttled to
+    `PULSE_MIN_INTERVAL_S`=15s — the Chamber animation now moves during a stage, and
+    the "waiting to start" prompt stops showing misleadingly mid-run. Consequences
+    closed: `threshold_drafting`/`full_drafting` are per-agent idempotent (committed
+    drafts skipped on retry; questions reloaded from the file), and
+    `full/questions.json` is **always written** (empty ⇒ no pause) + added to
+    FULL_DRAFTING's checkpoint outputs, with `_resolve_next` reading the payload —
+    closing the drop-raised-questions window a partial-stage commit would open.
+  - **Prompts** `threshold_generalist.v1.md` / `threshold_reconciler.v1.md`: explicit
+    escape-quotes-and-newlines / nothing-outside-the-object guidance (guidance-only,
+    no version bump — interviewer precedent).
+  - **19 new pipeline tests** (`test_llm.py` ×17: tolerances, re-ask loop incl. budget
+    interaction, transport retry/permanent/give-up/network-blip, thought-part skip,
+    MAX_TOKENS; `test_threshold_pipeline.py` ×2: failed-run same-stage resume with
+    per-generalist skip proof, mid-stage pulse visibility), **2 backend**
+    (failed-run redispatch at THRESHOLD_DRAFTING; failed mid-flight REVIEW → itself),
+    **1 frontend** (failure-state resume click → redispatch). Existing
+    `test_full_drafting.py` no-questions assertions updated for the always-written file.
+  - **Recovery rehearsal on the real stranded state:** `runs/WT-H5M2-2Y` (failed with
+    the reported error) copied to scratch and driven with resume_from=THRESHOLD_DRAFTING,
+    a malformed-then-good generalist and a trailing-prose reconciler: failure cleared,
+    one corrective re-ask observed, 4 model calls, paused at THRESHOLD_REVIEW with the
+    assessment rendered.
 
 - **Brainstorm partner UX tweaks (DESIGN §5, §6; this branch).** Five refinements from Tom's
   use of the Brainstorm phase; no data-contract, pipeline, or endpoint change. Frontend build +
@@ -1274,6 +1387,17 @@ pipeline.
 
 ## In progress / handoff notes
 
+**From the governance-fixes branch — two small known consequences, deliberate:**
+- **`full_revising` is not per-specialist idempotent** (unlike drafting, now). Pulse
+  commits can land partially-amended specialist files; a crash mid-revising then re-amends
+  already-amended sections on retry. Low harm (narrative-only, reviewer-verified after,
+  answers applied once) and rare; if it bites, give amendments the same
+  per-specialist-marker treatment drafting got.
+- **Live-run confirmation outstanding:** the seam fixes are proven against the recorded
+  failure shapes (incl. a rehearsal over `WT-H5M2-2Y`'s real stranded state) but a live
+  Gemini run hasn't happened since. Tom pressing "Resume the run" on the three failed runs
+  is both the recovery and the live test.
+
 The whole **governance half** of the pipeline is complete and driven end-to-end, and — this
 branch — the **Brainstorm interview core** is built: the interviewer, the sufficiency judge,
 the `Outline` document model, and `POST /brainstorm/message` + `/edit-outline`. A user can
@@ -1418,6 +1542,31 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **The LLM seam retries; the agent layer does not (governance-fixes branch).** The
+  documents are silent on failure handling below §5.6's calm-failure rule. Decided: transient
+  HTTP retries live in the transport, malformed-JSON corrective re-asks live in
+  `complete_json` (both bounded, budget-charged, content never repaired — a re-ask is a fresh
+  model answer, so "models argue, code computes" is untouched) — while an `AgentError`
+  (valid JSON, wrong shape: missing section, off-vocabulary tier, forbidden rating key)
+  still fails loudly with no retry. Shape violations are contract breaches worth a human
+  look, and none has occurred live; if they start recurring, a shape-level re-ask can reuse
+  the same mechanism.
+- **Tolerant JSON parsing is bounded to lossless tolerances (governance-fixes branch).**
+  Accepted: code fence, prose preamble before the object, trailing text after a complete
+  object (`raw_decode`), raw control characters inside strings (`strict=False`). Each leaves
+  the parsed content exactly what the model wrote. Rejected: any repair that guesses (quote
+  fixing, comma insertion, bracket balancing) — those change content and are re-asks instead.
+- **Status pulses commit per node transition, throttled for sub-activity — not a
+  background-thread heartbeat (governance-fixes branch).** §6.3's "~20s" heartbeat is
+  honoured by publishing at transitions (always) and drafting/retrieval events (≥15s apart).
+  A true wall-clock heartbeat during one long LLM call would need a committing thread racing
+  the driver's own git operations; not worth it — the SPA's honest-staleness line covers the
+  bounded (≤120s per-call timeout) quiet stretch. Accepted consequence, recorded: during a
+  single long Pro call the committed status can go quiet up to ~2 min; the ActivityLog says
+  so honestly ("still working — last update Ns ago").
+- **Prompt escaping guidance without a version bump (governance-fixes branch).** The
+  JSON-escaping lines added to the two threshold prompts change no output contract —
+  guidance refinement, per the interviewer/reconciler precedent recorded below.
 - **A threshold revision changes the narrative, never a rating — and so the generalist drafts
   are left untouched (this branch).** TECH_SPEC §7 says the `threshold` `/revise` "re-runs
   `THRESHOLD_RECONCILING` with the instructions in context — the two generalist drafts stand
@@ -2045,20 +2194,16 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 These block the *next* tasks (CLAUDE.md §8, TECH_SPEC §16). The instrument
 source and Table 1/Table 2 landed July 2026 (see Done) and are no longer here:
 
-- **⚠️ The `WINDTUNNEL_PAT` needs `actions:write` added (this is why the first live
-  test never started a Governance run).** The fine-grained PAT was created with
-  `contents:write` only (as CLAUDE.md §6 originally documented). Committing run state
-  works with that, but the REST *create-a-workflow-dispatch-event* endpoint the backend
-  uses to trigger `governance.yml` (`backend/dispatch.py`) is gated behind the token's
-  **Actions: write** permission — so every dispatch returns 403, the run reaches
-  `SUBMITTED`, and no Action ever runs. Confirmed on the live repo: `governance.yml`
-  has **0 workflow runs** while `ingestion`/`pages` have run, and run `WT-TR4C-DC`'s
-  `status.json` is frozen at the backend-written initial state. **Fix:** regenerate the
-  PAT with **contents:write + actions:write** (this repo only) and update the Render env
-  var. Once done, existing stuck runs can be re-kicked with `POST /api/runs/<code>/redispatch`
-  (or the Chamber's "Restart the run" button) without redoing Brainstorm. CLAUDE.md §6
-  and `dispatch.py` now document the requirement; the code degrades gracefully in the
-  meantime (a failed dispatch is reported honestly, not a 502 that strands the run).
+- **~~The `WINDTUNNEL_PAT` needs `actions:write` added~~ — RESOLVED (July 2026).**
+  Evidenced in the repo history: `governance.yml` now runs on submit (runs `WT-TR4C-DC`,
+  `WT-PX5H-3D` and `WT-H5M2-2Y` all show pipeline heartbeat/checkpoint/failure commits
+  from Actions), so the regenerated PAT carries **actions:write** and dispatch works.
+  Those three runs then failed *inside* the chamber at the LLM seam — fixed on the
+  governance-fixes branch (see Current stage / Done). **The one manual step left: open
+  each failed run in the Chamber and press "Resume the run"** (or
+  `POST /api/runs/<code>/redispatch`) — each resumes idempotently from its last
+  checkpoint (`WT-PX5H-3D` will skip its committed drafting and go straight to the
+  reconciler).
 
 - **~~`.meta.yml` sidecars with verified licences~~ — DONE (July 2026), and the
   follow-on allow-list config is now RESOLVED** (`config/licences.yml`). Nothing

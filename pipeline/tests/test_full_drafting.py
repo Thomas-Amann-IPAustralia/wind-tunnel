@@ -319,7 +319,10 @@ def test_full_drafting_writes_every_specialist_no_questions(tmp_path):
         assert set(data["sections"]) == set(specialist_owned_sections(specialist))
         assert (run_dir / "full" / "specialists" / f"{specialist}.md").is_file()
         assert status.nodes[f"full.specialist.{specialist}"] == "complete"
-    assert not (run_dir / "full" / "questions.json").is_file()
+    # The questions file is always written (it closes the stage's checkpoint,
+    # run.py) — empty specialists ⇒ no pause.
+    payload = json.loads((run_dir / "full" / "questions.json").read_text())
+    assert payload["specialists"] == []
 
 
 def test_full_drafting_writes_questions_when_raised(tmp_path):
@@ -404,12 +407,14 @@ def test_pipeline_skips_checkpoint_when_no_questions(tmp_path):
         kb_root=kb_root,
     )
 
-    # The driver skipped FULL_CHECKPOINT/FULL_REVISING (no questions) and ran
+    # The driver skipped FULL_CHECKPOINT/FULL_REVISING (no questions — the
+    # always-written questions file has an empty specialists list) and ran
     # ARCHITECT straight through; REVIEW is not built yet, so the calm, resumable
     # failure there is the documented stopping point. The architect appendix
     # having been written proves the skip landed at ARCHITECT, not a needless pause.
     assert result.ok is False
-    assert not (run_dir / "full" / "questions.json").is_file()
+    questions = json.loads((run_dir / "full" / "questions.json").read_text())
+    assert questions["specialists"] == []
     assert (run_dir / "full" / "architect.md").is_file()
     run = RunState.load(run_dir)
     assert run.stage is Stage.REVIEW

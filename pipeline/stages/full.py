@@ -116,7 +116,17 @@ def _load_index_text(kb_root: Path, specialist: str) -> str:
 def full_drafting(ctx: StageContext) -> None:
     """Every specialist drafts its owned sections independently (§5.1, §9.3).
     Outputs ``full/specialists/<id>.json`` + ``.md`` for each, and
-    ``full/questions.json`` iff at least one specialist raised a question."""
+    ``full/questions.json`` — always, with an empty ``specialists`` list when no
+    question was raised. The questions file is part of the stage checkpoint
+    (run.py): drafts are pulse-committed one by one as they finish, so "all six
+    drafts exist" alone no longer proves the stage ran to its end — without the
+    questions file in the checkpoint, a death between the last draft and the
+    questions write would let resume skip the stage and silently drop raised
+    questions.
+
+    Each specialist is individually idempotent (§5.3): a retry skips any draft
+    already committed — its questions are reloaded from the committed file so the
+    batched payload still carries them."""
     kb_root = ctx.kb_root or _default_kb_root()
     outline = ctx.outline()
     threshold_md = ctx.read_text("threshold/threshold_assessment.md")
@@ -124,6 +134,12 @@ def full_drafting(ctx: StageContext) -> None:
     raised: list[tuple[str, SpecialistDraft]] = []
     for specialist in SPECIALISTS:
         node = f"full.specialist.{specialist}"
+        relpath = f"full/specialists/{specialist}.json"
+        if ctx.path(relpath).is_file():
+            draft = SpecialistDraft.from_dict(ctx.read_json(relpath))
+            if draft.questions:
+                raised.append((node, draft))
+            continue
         ctx.status.start_node(node)
         ctx.status.drafting(node, f"drafting {specialist}'s owned sections")
         index_text = _load_index_text(kb_root, specialist)
@@ -138,17 +154,16 @@ def full_drafting(ctx: StageContext) -> None:
                 status=ctx.status,
                 node_id=node,
             )
-        ctx.write_json(f"full/specialists/{specialist}.json", draft.to_dict())
+        ctx.write_json(relpath, draft.to_dict())
         ctx.write_text(f"full/specialists/{specialist}.md", render_specialist_markdown(draft))
         ctx.status.complete_node(node)
         if draft.questions:
             raised.append((node, draft))
 
-    if raised:
-        ctx.write_json(QUESTIONS_RELPATH, _build_questions_payload(raised))
-        for node, draft in raised:
-            for item in draft.questions:
-                ctx.status.question_raised(node, item["question_id"], item["text"])
+    ctx.write_json(QUESTIONS_RELPATH, _build_questions_payload(raised))
+    for node, draft in raised:
+        for item in draft.questions:
+            ctx.status.question_raised(node, item["question_id"], item["text"])
 
 
 # -- FULL_REVISING -------------------------------------------------------------

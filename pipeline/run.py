@@ -114,10 +114,20 @@ def _resolve_next(stage: Stage, run_dir: Path) -> Stage:
     """The stage after ``stage`` completes. Only FULL_DRAFTING branches at
     runtime (§5.1): if no specialist raised a question, FULL_CHECKPOINT (and
     FULL_REVISING, which exists only to act on answers) are skipped entirely —
-    the happy path goes straight to ARCHITECT (skipping the checkpoint pause)."""
-    if stage is Stage.FULL_DRAFTING and not (run_dir / QUESTIONS_RELPATH).is_file():
+    the happy path goes straight to ARCHITECT (skipping the checkpoint pause).
+    The questions file is always written (empty when none were raised — it is part
+    of the stage's checkpoint), so the branch reads the payload, not existence."""
+    if stage is Stage.FULL_DRAFTING and not _questions_raised(run_dir):
         return Stage.ARCHITECT
     return _NEXT[stage]
+
+
+def _questions_raised(run_dir: Path) -> bool:
+    path = run_dir / QUESTIONS_RELPATH
+    if not path.is_file():
+        return False
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    return bool(payload.get("specialists"))
 
 
 # Stage → the checkpoint output files whose existence means the stage is done (§5.3).
@@ -132,7 +142,12 @@ _CHECKPOINT_OUTPUTS: dict[Stage, tuple[str, ...]] = {
         "threshold/routing.json",
         "threshold/divergence.json",
     ),
-    Stage.FULL_DRAFTING: tuple(f"full/specialists/{s}.json" for s in SPECIALISTS),
+    # The always-written questions file marks the stage's *end* — individual drafts
+    # are pulse-committed as they finish, so the drafts alone don't prove it.
+    Stage.FULL_DRAFTING: (
+        *(f"full/specialists/{s}.json" for s in SPECIALISTS),
+        QUESTIONS_RELPATH,
+    ),
     Stage.FULL_REVISING: (REVISED_RELPATH,),
     Stage.ARCHITECT: (ARCHITECT_MD_RELPATH,),
     Stage.REVIEW: (RESIDUAL_RELPATH,),
@@ -195,6 +210,40 @@ _PAUSE_SETUP: dict[Stage, Callable[[Path, StatusModel], None]] = {
 
 _PAUSE_STAGES: frozenset[Stage] = frozenset({Stage.THRESHOLD_REVIEW, Stage.FULL_CHECKPOINT})
 _TERMINAL_STAGES: frozenset[Stage] = frozenset({Stage.COMPLETE, Stage.CONCLUDED, Stage.FAILED})
+
+# Minimum seconds between throttled (non-urgent) status pulses — the §6.3 "~20s"
+# heartbeat cadence. Node transitions always publish regardless.
+PULSE_MIN_INTERVAL_S = 15.0
+
+
+def _make_pulse(
+    run_dir: Path,
+    status: "StatusModel",
+    committer: "Committer",
+    *,
+    min_interval_s: float = PULSE_MIN_INTERVAL_S,
+    clock: Callable[[], float] = time.monotonic,
+) -> Callable[[bool], None]:
+    """The mid-stage publisher the driver installs on ``status`` (status.py §6.3).
+
+    Until now the projection only reached the repo at stage checkpoints, so the
+    SPA watched an all-pending graph for the entire first stage — indistinguishable
+    from the "dispatch never took" state, and an open invitation to a needless
+    restart. A pulse saves ``status.json`` and commits: always for a node
+    transition (``urgent=True``), at most every ``min_interval_s`` for sub-activity
+    (``urgent=False``). ``run.json`` is untouched mid-stage, so a pulse never moves
+    the authoritative state — a pulsed commit is still a valid §5.3 resume point
+    (artefacts it happens to carry are exactly what idempotent skip keys off)."""
+    last_pulse = {"t": float("-inf")}
+
+    def pulse(urgent: bool) -> None:
+        if not urgent and clock() - last_pulse["t"] < min_interval_s:
+            return
+        status.save(run_dir)
+        committer.commit(run_dir, f"run {run_dir.name}: status pulse")
+        last_pulse["t"] = clock()
+
+    return pulse
 
 
 class StageNotImplemented(RuntimeError):
@@ -345,10 +394,15 @@ def run_pipeline(
     run_dir = Path(run_dir)
     run = RunState.load(run_dir)
     status = StatusModel.load(run_dir, run)
+    status.pulse = _make_pulse(run_dir, status, committer)
 
     if resume_from:
         target = Stage(resume_from)
-        if target is not run.stage:
+        if target is not run.stage or run.stage_status is StageStatus.FAILED:
+            # A failed run resumes *at the stage it failed in* (§5.6 — `stage` still
+            # points there), so a same-stage dispatch must clear the FAILED marker
+            # (and last_error) or _drive refuses to re-enter the stage: the run
+            # would flip status.json to "running" and then silently do nothing.
             run.advance_to(target, now=now())
 
     # §5.7 handshake: the "tunnel is running" signal, committed first.
