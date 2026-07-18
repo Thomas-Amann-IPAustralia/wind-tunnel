@@ -1,0 +1,66 @@
+{
+  "specialist": "solution_architect",
+  "sections": {
+    "6.3": "Not applicable. The APS Markdown Conversion Service does not procure or utilize an AI model. Instead, it relies entirely on deterministic parsing libraries to transform web and document formats into standardized Markdown. As detailed in the AI Suitability Assessment pattern, a heuristic-based or deterministic approach is often more appropriate than an AI-based system because it is easier and cheaper to develop, and provides better predictability, transparency, and reliability for structured document conversion tasks.",
+    "6.8": "Not applicable. The APS Markdown Conversion Service is designed as a simple, self-service web utility for public servants across all APS agencies, rather than a system requiring specialized operators. There are no dedicated 'AI system operators' to train. However, to ensure safe and effective use, clear user guidance and warnings against uploading sensitive or classified information will be displayed on the user interface, and feedback is facilitated via a public GitHub repository with automated PII scanning."
+  },
+  "citations": {
+    "6.3": [
+      {
+        "short_name": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      }
+    ],
+    "6.8": [
+      {
+        "short_name": "OECD AI in Public Audit",
+        "locator": "p.48"
+      },
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r37"
+      }
+    ]
+  },
+  "questions": {
+    "why": "The assessment requires clarification on testing, piloting, and monitoring plans to evaluate the reliability, safety, and operational readiness of the service.",
+    "items": [
+      {
+        "question_id": "solution_architect-1",
+        "text": "Has any testing (such as security, reliability, or accessibility testing) been conducted on the deterministic parsing libraries or the web interface?",
+        "options": null,
+        "allow_free_text": true
+      },
+      {
+        "question_id": "solution_architect-2",
+        "text": "Do you plan to conduct a pilot of the Markdown conversion service with a limited group of APS users before full deployment?",
+        "options": null,
+        "allow_free_text": true
+      },
+      {
+        "question_id": "solution_architect-3",
+        "text": "What plans or mechanisms (e.g., logging, error rate tracking) will be established to monitor and evaluate the performance of the conversion service in production?",
+        "options": null,
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [
+    {
+      "section": "6.4",
+      "reason": "The outline does not state whether testing of the deterministic parsing libraries or the web interface has been completed or planned."
+    },
+    {
+      "section": "6.5",
+      "reason": "The outline does not specify whether a pilot phase is planned before full deployment across the APS."
+    },
+    {
+      "section": "6.6",
+      "reason": "The outline does not detail any performance monitoring or evaluation plans for the conversion service."
+    }
+  ],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
