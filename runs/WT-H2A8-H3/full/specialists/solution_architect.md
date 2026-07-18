@@ -6,14 +6,24 @@ Not applicable. The APS Markdown Conversion Service does not procure or utilize 
 
 *Citations: [AI Suitability Assessment, §(document start)]*
 
+## 6.4
+
+No. No testing (such as security, reliability, or accessibility testing) has been conducted on the deterministic parsing libraries or the web interface. As outlined in the RAI Acceptance Testing pattern, conducting acceptance testing is a critical process to verify that system requirements are met and to detect design flaws before deployment. The lack of testing poses significant risks, particularly given the potential for Server-Side Request Forgery (SSRF), malicious file uploads, and formatting corruption identified in the threshold assessment.
+
+*Citations: [RAI Acceptance Testing, §(document start)]*
+
+## 6.5
+
+No. There are no plans to conduct a pilot of the Markdown conversion service with a limited group of APS users before full deployment. Deploying the utility directly to all APS agencies without an initial pilot phase increases the risk of undetected parsing errors, security vulnerabilities, or usability issues. As noted in international practices, scaling successful pilot projects incrementally helps build stable platforms and ensures operational readiness before full-scale deployment.
+
+*Citations: [OECD AI in Public Audit, p.47]*
+
+## 6.6
+
+No. There is no formal plan or structured mechanism established to monitor and evaluate the performance of the conversion service in production. The current approach relies solely on basic web analytics to track page visits and anecdotal feedback submitted via a public GitHub repository. As recommended in the AI Technical Standard, robust monitoring tools and automated alerting should be implemented to track system performance, error rates, and security events in real-time, ensuring that critical systems remain operational and secure.
+
+*Citations: [AI Technical Standard, DTA-Tech-Standards!r127]*
+
 ## 6.8
 
 Not applicable. The APS Markdown Conversion Service is designed as a simple, self-service web utility for public servants across all APS agencies, rather than a system requiring specialized operators. There are no dedicated 'AI system operators' to train. However, to ensure safe and effective use, clear user guidance and warnings against uploading sensitive or classified information will be displayed on the user interface, and feedback is facilitated via a public GitHub repository with automated PII scanning.
-
-*Citations: [OECD AI in Public Audit, p.48], [AI Technical Standard, DTA-Tech-Standards!r37]*
-
-## Gaps
-
-- **6.4**: The outline does not state whether testing of the deterministic parsing libraries or the web interface has been completed or planned.
-- **6.5**: The outline does not specify whether a pilot phase is planned before full deployment across the APS.
-- **6.6**: The outline does not detail any performance monitoring or evaluation plans for the conversion service.
