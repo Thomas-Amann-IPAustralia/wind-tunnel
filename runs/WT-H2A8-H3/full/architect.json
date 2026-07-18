@@ -1,0 +1,152 @@
+{
+  "overview": "The implementation of the APS Markdown Conversion Service follows a phased approach, prioritizing security, accessibility, and strict data ephemerality. The architecture centers on a stateless, containerized web application that processes inputs entirely in volatile memory. Network egress controls and strict input validation form the primary defense against Server-Side Request Forgery (SSRF) and malicious payloads. Sequencing begins with establishing a multidisciplinary team and consulting stakeholders, followed by core development of the ephemeral parser and security controls. The system will then undergo rigorous acceptance testing and a limited pilot phase before full cross-agency deployment, supported by real-time monitoring and an administrative kill-switch.",
+  "steps": [
+    {
+      "title": "Establish Governance and Multidisciplinary Team",
+      "detail": "Appoint an Accountable Official and Accountable Use Case Owner. Form a multidisciplinary project team comprising UX designers, accessibility specialists, policy/legal professionals, and technical developers. Establish an automated pipeline to export lifecycle records (administrative, development, and governance) from GitHub into the agency's approved records management system (e.g., AFDA Express Version 2) to ensure compliance with the Archives Act.",
+      "traces_to": [
+        {
+          "specialist": "legal",
+          "section": "11.1",
+          "mitigation": "Designate an Accountable Official and Accountable Use Case Owner."
+        },
+        {
+          "specialist": "ethics",
+          "section": "10.1",
+          "mitigation": "Establish a multidisciplinary team including UX, accessibility, and policy/legal professionals."
+        },
+        {
+          "specialist": "data_governance",
+          "section": "8.3",
+          "mitigation": "Establish a formal process to export and capture lifecycle records from GitHub into an approved records management system."
+        }
+      ]
+    },
+    {
+      "title": "Conduct Stakeholder Consultation and Define Accessibility Standards",
+      "detail": "Engage IT security teams to vet cross-departmental data handling and consult representative end-users, including those using assistive technologies. Define fairness explicitly around accessibility: configure the deterministic parsers to preserve alt text and semantic headers. Conduct formal accessibility and human rights reviews to ensure outputs comply with the Disability Discrimination Act 1992 (Cth).",
+      "traces_to": [
+        {
+          "specialist": "ethics",
+          "section": "8.1",
+          "mitigation": "Conduct structured engagement with IT security teams and representative end-users during design and testing."
+        },
+        {
+          "specialist": "ethics",
+          "section": "5.1",
+          "mitigation": "Define fairness in terms of accessibility, ensuring parsers do not strip critical features like alt text or semantic headers."
+        },
+        {
+          "specialist": "legal",
+          "section": "10.2",
+          "mitigation": "Conduct accessibility and human rights reviews to ensure compliance with obligations such as the Disability Discrimination Act."
+        }
+      ]
+    },
+    {
+      "title": "Implement Ephemeral Architecture and Egress Controls",
+      "detail": "Deploy the application using containerized environments configured with `tmpfs` mounts to ensure all document processing occurs strictly in volatile memory, with immediate purging post-conversion. To prevent SSRF, implement strict network-level egress controls blocking the parser from accessing internal or private IP ranges.\n\n```yaml\n# Example Kubernetes NetworkPolicy snippet for egress control\napiVersion: networking.k8s.io/v1\nkind: NetworkPolicy\nmetadata:\n  name: deny-internal-egress\nspec:\n  podSelector:\n    matchLabels:\n      app: markdown-parser\n  policyTypes:\n  - Egress\n  egress:\n  - to:\n    - ipBlock:\n        cidr: 0.0.0.0/0\n        except:\n        - 10.0.0.0/8\n        - 172.16.0.0/12\n        - 192.168.0.0/16\n        - 169.254.169.254/32\n```",
+      "traces_to": [
+        {
+          "specialist": "it_security",
+          "section": "7.3",
+          "mitigation": "Implement network-level egress controls to restrict fetching internal/private IPs and process files in volatile memory."
+        },
+        {
+          "specialist": "privacy",
+          "section": "7.1",
+          "mitigation": "Process documents in volatile memory and purge immediately to ensure no persistent storage."
+        }
+      ]
+    },
+    {
+      "title": "Enforce Input Validation and UI Disclosures",
+      "detail": "Implement strict input validation and sanitisation on all URL and file uploads to prevent malicious execution. On the user interface, display a clear disclosure that the tool uses deterministic parsing (avoiding LLMs entirely). Add prominent warnings instructing users not to upload sensitive or classified information, and advise them to ensure input files are accurate and complete for reliable parsing.",
+      "traces_to": [
+        {
+          "specialist": "it_security",
+          "section": "7.3",
+          "mitigation": "Enforce strict input validation and sanitisation protocols on user uploads and URLs."
+        },
+        {
+          "specialist": "ethics",
+          "section": "8.4",
+          "mitigation": "Display a clear UI disclosure explaining the use of deterministic parsing and the avoidance of LLM processing."
+        },
+        {
+          "specialist": "solution_architect",
+          "section": "6.8",
+          "mitigation": "Display clear user guidance and warnings against uploading sensitive or classified information."
+        },
+        {
+          "specialist": "data_governance",
+          "section": "6.1",
+          "mitigation": "Provide user guidance to ensure input files are accurate, complete, and conform to expected formats."
+        }
+      ]
+    },
+    {
+      "title": "Configure GitHub Feedback Safeguards and Open Source Release",
+      "detail": "Release the source code to a public GitHub repository to allow external scrutiny. Configure the issue tracker to enforce a 250-character limit on feedback submissions. Deploy and rigorously test an automated GitHub Action to scan for and redact PII in incoming issues. Schedule regular audits of this feedback channel to ensure no personal information is inadvertently collected or disclosed.",
+      "traces_to": [
+        {
+          "specialist": "ethics",
+          "section": "8.2",
+          "mitigation": "Make the source code publicly available on GitHub for external inspection and transparency."
+        },
+        {
+          "specialist": "privacy",
+          "section": "7.1",
+          "mitigation": "Rigorously test and audit the GitHub feedback mechanism, including the 250-character limit and automated PII scanning."
+        }
+      ]
+    },
+    {
+      "title": "Develop Admin Kill-Switch and Incident Response Plan",
+      "detail": "Build an administrative interface featuring a 'kill-switch' that allows IT security teams to immediately suspend the entire service or disable specific parsing libraries if a vulnerability is detected. Draft Standard Operating Procedures (SOPs) and a cyber security incident response plan detailing roles and responsibilities for system disengagement.",
+      "traces_to": [
+        {
+          "specialist": "it_security",
+          "section": "6.7",
+          "mitigation": "Implement an administrative interface and 'kill-switch', and develop SOPs and an incident response plan."
+        }
+      ]
+    },
+    {
+      "title": "Conduct Acceptance Testing and Accessibility Auditing",
+      "detail": "Develop an audit toolkit to quantitatively and qualitatively measure the accessibility of the Markdown outputs. Before deployment, conduct comprehensive acceptance testing covering security (SSRF, malicious uploads), reliability (formatting corruption), and accessibility to verify system requirements and detect design flaws.",
+      "traces_to": [
+        {
+          "specialist": "ethics",
+          "section": "5.2",
+          "mitigation": "Implement a structured mechanism/audit toolkit to measure the fairness and accessibility of outputs."
+        },
+        {
+          "specialist": "solution_architect",
+          "section": "6.4",
+          "mitigation": "Conduct acceptance testing (security, reliability, accessibility) to detect flaws before deployment."
+        }
+      ]
+    },
+    {
+      "title": "Deploy Pilot and Implement Real-Time Monitoring",
+      "detail": "Roll out the conversion service to a limited pilot group of APS users to identify undetected parsing errors or usability issues. Concurrently, deploy robust monitoring tools and automated alerting to track system performance, error rates, and security events in real-time. Proceed to full cross-agency deployment only after pilot success criteria are met.",
+      "traces_to": [
+        {
+          "specialist": "solution_architect",
+          "section": "6.5",
+          "mitigation": "Conduct a pilot with a limited group of APS users before full deployment."
+        },
+        {
+          "specialist": "solution_architect",
+          "section": "6.6",
+          "mitigation": "Implement robust monitoring tools and automated alerting to track system performance, error rates, and security events."
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "model": "gemini-3.1-pro-preview",
+    "prompt_version": "v1"
+  }
+}
