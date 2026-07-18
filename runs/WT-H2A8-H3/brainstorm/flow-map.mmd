@@ -1,0 +1,43 @@
+flowchart TD
+    subgraph User ["Public Servant (APS)"]
+        A[Public Servant]
+    end
+
+    subgraph Frontend ["Web Interface"]
+        B[Input Form]
+        C[Download / Copy Area]
+        D[Report Issue Link]
+    end
+
+    subgraph Backend ["Ephemeral Service (RAM Only)"]
+        E[Request Handler]
+        F[(Volatile Memory)]
+        G[Deterministic Parser]
+        H[Purge Trigger]
+    end
+
+    subgraph External ["External Sources"]
+        I[Target Web Server]
+    end
+
+    subgraph Feedback ["Feedback System"]
+        J[GitHub Repository]
+        K[PII Scanner Action]
+    end
+
+    A -->|1. Pastes URL / Uploads file| B
+    B -->|2. Initiates conversion| E
+    E -->|3. Fetches content| I
+    I -->|4. Returns raw HTML| E
+    E -->|5. Stores temporarily| F
+    F -->|6. Extracts & cleans content| G
+    G -->|7. Writes Markdown| F
+    F -->|8. Sends Markdown payload| C
+    C -->|9. Downloads file| A
+    C -->|10. Signals completion| H
+    H -->|11. Wipes memory| F
+
+    A -->|12. Submits issue < 250 chars| D
+    D -->|13. Posts issue| J
+    J -->|14. Scans & redacts PII| K
+    K -->|15. Commits clean issue| J
