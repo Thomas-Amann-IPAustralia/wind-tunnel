@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T23:57:10Z",
+  "updated_at": "2026-07-18T23:57:46Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -12,7 +12,7 @@
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
-    "full.specialist.ethics": "active",
+    "full.specialist.ethics": "complete",
     "full.specialist.legal": "pending",
     "full.specialist.data_governance": "pending",
     "full.specialist.solution_architect": "pending",
@@ -1076,9 +1076,93 @@
         "doc": "VAISS",
         "locator": "s 10"
       }
+    },
+    {
+      "id": "evt_000106",
+      "ts": "2026-07-18T23:57:11Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000107",
+      "ts": "2026-07-18T23:57:11Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000108",
+      "ts": "2026-07-18T23:57:11Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.23"
+      }
+    },
+    {
+      "id": "evt_000109",
+      "ts": "2026-07-18T23:57:11Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000110",
+      "ts": "2026-07-18T23:57:11Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000111",
+      "ts": "2026-07-18T23:57:11Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000112",
+      "ts": "2026-07-18T23:57:11Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000113",
+      "ts": "2026-07-18T23:57:46Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_complete",
+      "detail": "Ethics & Fairness specialist complete"
     }
   ],
-  "log_cursor": 105,
+  "log_cursor": 113,
   "questions": null,
   "failure": null,
   "expected_ranges": {
