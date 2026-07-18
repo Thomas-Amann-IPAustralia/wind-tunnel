@@ -4,13 +4,13 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T23:55:45Z",
+  "updated_at": "2026-07-18T23:56:12Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
-    "full.specialist.it_security": "active",
+    "full.specialist.it_security": "complete",
     "full.specialist.privacy": "pending",
     "full.specialist.ethics": "pending",
     "full.specialist.legal": "pending",
@@ -319,9 +319,181 @@
         "doc": "AI in OT Principles",
         "locator": "p.20"
       }
+    },
+    {
+      "id": "evt_000035",
+      "ts": "2026-07-18T23:55:46Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000036",
+      "ts": "2026-07-18T23:55:46Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000037",
+      "ts": "2026-07-18T23:55:46Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000038",
+      "ts": "2026-07-18T23:55:46Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.14"
+      }
+    },
+    {
+      "id": "evt_000039",
+      "ts": "2026-07-18T23:55:46Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000040",
+      "ts": "2026-07-18T23:55:46Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000041",
+      "ts": "2026-07-18T23:55:46Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000042",
+      "ts": "2026-07-18T23:55:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.14"
+      }
+    },
+    {
+      "id": "evt_000043",
+      "ts": "2026-07-18T23:55:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000044",
+      "ts": "2026-07-18T23:55:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000045",
+      "ts": "2026-07-18T23:55:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000046",
+      "ts": "2026-07-18T23:55:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.43"
+      }
+    },
+    {
+      "id": "evt_000047",
+      "ts": "2026-07-18T23:55:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000048",
+      "ts": "2026-07-18T23:55:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000049",
+      "ts": "2026-07-18T23:55:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000050",
+      "ts": "2026-07-18T23:56:12Z",
+      "agent": "full.specialist.it_security",
+      "type": "stage_complete",
+      "detail": "IT Security specialist complete"
     }
   ],
-  "log_cursor": 34,
+  "log_cursor": 50,
   "questions": null,
   "failure": null,
   "expected_ranges": {

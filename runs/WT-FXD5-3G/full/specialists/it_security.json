@@ -1,0 +1,67 @@
+{
+  "specialist": "it_security",
+  "sections": {
+    "6.7": "Yes. The ATO is establishing clear processes for human intervention and safe disengagement of the ATO Deduction Assistant. Because the system is public-facing and advisory, the ATO will implement a kill-switch capability to immediately disconnect all inbound connections to the AI model or disable the chat interface on the ATO portal if an unresolvable issue, major hallucination, or security compromise is identified (Deploying AI Securely, p.5). Failsafe mechanisms are being integrated into existing incident response and business continuity processes, allowing the system to fail gracefully by reverting to non-AI alternatives, such as a static FAQ wizard or interactive decision tree (AI in OT Principles, p.20). Furthermore, incident management procedures will be updated to reflect AI-specific failure modes, and responders will be trained to assess and remediate AI-related incidents (Secure AI Dev Guidelines, p.14). A structured feedback loop with ATO policy teams will also allow stakeholders to flag concerns and trigger manual intervention or model disengagement if necessary.",
+    "7.3": "Yes. Multiple security measures are being established to address the unique security risks arising from the operation of the public-facing LLM. To mitigate prompt injection and jailbreaking vulnerabilities—where malicious user prompts force the model to bypass safety guidelines or generate harmful content (OWASP LLM Top 10, p.7; ISM, p.171)—the ATO will implement robust input sanitization and output guardrails (Secure AI Dev Guidelines, p.10). The 'creativity' dial's parameters will be strictly bounded to prevent unpredictable outputs, and the system will be completely isolated from live taxpayer account data to maintain security boundaries. To detect and analyze security incidents, the ATO will configure comprehensive logging of all user interactions and model decisions (AI in OT Principles, p.19). These logs will be treated as sensitive data with strict access controls to protect user privacy (Secure AI Dev Guidelines, p.12). Finally, the ATO will conduct regular offensive security assessments, including AI red-teaming and penetration testing, to evaluate the system's resilience before and during active deployment (AI in OT Principles, p.19)."
+  },
+  "citations": {
+    "6.7": [
+      {
+        "short_name": "Deploying AI Securely",
+        "locator": "p.5"
+      },
+      {
+        "short_name": "AI in OT Principles",
+        "locator": "p.20"
+      },
+      {
+        "short_name": "Secure AI Dev Guidelines",
+        "locator": "p.14"
+      }
+    ],
+    "7.3": [
+      {
+        "short_name": "OWASP LLM Top 10",
+        "locator": "p.7"
+      },
+      {
+        "short_name": "ISM",
+        "locator": "p.171"
+      },
+      {
+        "short_name": "Secure AI Dev Guidelines",
+        "locator": "p.10"
+      },
+      {
+        "short_name": "AI in OT Principles",
+        "locator": "p.19"
+      },
+      {
+        "short_name": "Secure AI Dev Guidelines",
+        "locator": "p.12"
+      }
+    ]
+  },
+  "questions": {
+    "why": "To ensure robust security controls and data protection measures are aligned with ATO's operational environment.",
+    "items": [
+      {
+        "question_id": "it_security-1",
+        "text": "Where will the user interaction logs and prompt history be stored, and what specific data retention and sanitization policies will be applied to prevent the accidental storage of Tax File Numbers (TFNs) or sensitive personal financial details?",
+        "options": [],
+        "allow_free_text": true
+      },
+      {
+        "question_id": "it_security-2",
+        "text": "What specific technical mechanism or threshold will be used to restrict or disable the 'creativity' dial if a user attempts to exploit it to generate non-compliant tax advice?",
+        "options": [],
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
