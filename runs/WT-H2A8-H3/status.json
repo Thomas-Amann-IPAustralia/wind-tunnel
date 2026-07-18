@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T12:28:25Z",
+  "updated_at": "2026-07-18T12:29:15Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -18,7 +18,7 @@
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "complete",
-    "full.reviewer": "active",
+    "full.reviewer": "complete",
     "full.assembly": "pending"
   },
   "log": [
@@ -5875,9 +5875,23 @@
       "agent": "full.reviewer",
       "type": "stage_started",
       "detail": "Adjudicating reviewer started"
+    },
+    {
+      "id": "evt_000569",
+      "ts": "2026-07-18T12:28:26Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Reviewing cycle 2: auditing coverage, coherence and residual risk."
+    },
+    {
+      "id": "evt_000570",
+      "ts": "2026-07-18T12:29:15Z",
+      "agent": "full.reviewer",
+      "type": "stage_complete",
+      "detail": "Adjudicating reviewer complete"
     }
   ],
-  "log_cursor": 568,
+  "log_cursor": 570,
   "questions": null,
   "failure": null,
   "expected_ranges": {

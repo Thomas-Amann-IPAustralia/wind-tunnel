@@ -1,0 +1,51 @@
+{
+  "coherence_findings": [],
+  "amend_directives": [],
+  "unresolved": [],
+  "residual": {
+    "3.1": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rationale": "Implementing the proposed multidisciplinary team (10.1), defining fairness and accessibility standards (5.1), and conducting accessibility reviews (10.2) and acceptance testing (6.4) will proactively identify and resolve parsing issues that strip accessibility features. This reduces the likelihood of barriers to Unlikely, while the consequence remains Minor as any residual issues would be short-term and reversible."
+    },
+    "3.2": {
+      "consequence": "Insignificant",
+      "likelihood": "Rare",
+      "rationale": "The system is a deterministic parser with no decision-making capabilities. With the proposed acceptance testing (6.4) and accessibility reviews (10.2) in place, even theoretical parsing errors affecting specific language scripts will be caught prior to deployment, reducing the likelihood to Rare. The consequence remains Insignificant."
+    },
+    "3.3": {
+      "consequence": "Insignificant",
+      "likelihood": "Rare",
+      "rationale": "As a deterministic parser, the tool does not generate new content. The proposed testing (6.4) and pilot phase (6.5) will ensure the tool faithfully reproduces text without introducing artifacts, reducing the likelihood of perpetuating stereotypes to Rare. The consequence remains Insignificant."
+    },
+    "3.4": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rationale": "The implementation of standard operating procedures for human intervention (6.7), combined with acceptance testing (6.4), a pilot phase (6.5), and production monitoring (6.6), will catch and mitigate formatting corruption or parsing errors before they cause operational harm. This reduces the likelihood to Unlikely, with the consequence remaining Minor."
+    },
+    "3.5": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rationale": "The core ephemeral architecture minimizes data retention risks. For the public GitHub feedback mechanism, rigorously testing and auditing the 250-character limit and automated PII scanning, along with clear user warnings (7.1), will effectively mitigate the risk of accidental sensitive data disclosure. This reduces the likelihood to Unlikely, while the consequence remains Moderate."
+    },
+    "3.6": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rationale": "The proposed network-level egress controls, strict input validation (7.3), and ephemeral processing architecture, once validated through the recommended security testing (6.4), will secure cross-agency data handling and prevent unauthorized access to classified documents. This reduces the likelihood of a data breach to Unlikely, while the consequence remains Moderate."
+    },
+    "3.7": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rationale": "Enforcing network-level egress controls to prevent SSRF and strict input validation to block malicious file execution (7.3), combined with comprehensive security testing (6.4), will address the system vulnerabilities identified. This reduces the likelihood of exploitation to Unlikely. The consequence remains Moderate."
+    },
+    "3.8": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rationale": "By implementing the full suite of proposed mitigations—including security controls, privacy safeguards on the feedback channel, acceptance testing, and a pilot phase—the risk of a public failure or data leak is significantly minimized. This reduces the likelihood of reputational damage to Unlikely, with the consequence remaining Minor."
+    }
+  },
+  "provenance": {
+    "model": "gemini-3.1-pro-preview",
+    "prompt_version": "v1"
+  }
+}
