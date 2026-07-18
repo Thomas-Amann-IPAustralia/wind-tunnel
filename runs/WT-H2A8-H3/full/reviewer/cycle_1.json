@@ -1,0 +1,110 @@
+{
+  "coherence_findings": [
+    {
+      "summary": "Legal specialist claims accountability roles are designated, contradicting the threshold assessment.",
+      "sections": [
+        "11.1",
+        "Threshold 1.2",
+        "Threshold 1.3"
+      ],
+      "detail": "Section 11.1 claims that 'The agency has designated an Accountable Official and an Accountable Use Case Owner'. However, Threshold sections 1.2 and 1.3 explicitly state that these responsibilities are 'Not stated in the outline'."
+    },
+    {
+      "summary": "Privacy specialist invents the existence of a PTA/PIA on a SharePoint drive.",
+      "sections": [
+        "7.2",
+        "Outline"
+      ],
+      "detail": "Section 7.2 asserts that a privacy threshold assessment and/or privacy impact assessment are 'stored on the assessor's work SharePoint'. The use-case outline contains no such information, making this an unsupported invention."
+    }
+  ],
+  "amend_directives": [
+    {
+      "target_specialist": "legal",
+      "target_sections": [
+        "11.1"
+      ],
+      "conflicting_claims": [
+        {
+          "section": "11.1",
+          "claim": "The agency has designated an Accountable Official and an Accountable Use Case Owner for this utility...",
+          "ref": "(AI Use Policy v2.0, p. 11)"
+        },
+        {
+          "section": "Threshold 1.2",
+          "claim": "Not stated in the outline.",
+          "ref": "Threshold Assessment"
+        }
+      ],
+      "ruling": "Amend 11.1 to state that accountability roles have not yet been established or documented, aligning with the threshold assessment.",
+      "rationale": "The threshold assessment correctly reflects the outline, which does not mention the designation of an Accountable Official or Use Case Owner. The legal specialist must not invent facts outside the provided outline."
+    },
+    {
+      "target_specialist": "privacy",
+      "target_sections": [
+        "7.2"
+      ],
+      "conflicting_claims": [
+        {
+          "section": "7.2",
+          "claim": "The privacy threshold assessment and/or privacy impact assessment for the APS Markdown Conversion Service are stored on the assessor's work SharePoint.",
+          "ref": "None"
+        },
+        {
+          "section": "Outline",
+          "claim": "No mention of a PTA/PIA or SharePoint.",
+          "ref": "Outline"
+        }
+      ],
+      "ruling": "Amend 7.2 to reflect that no privacy threshold assessment or privacy impact assessment has been documented in the provided materials.",
+      "rationale": "Specialists must evaluate the provided outline and cannot invent the existence of external documents or SharePoint drives to satisfy assessment questions."
+    }
+  ],
+  "unresolved": [],
+  "residual": {
+    "3.1": {
+      "consequence": "Minor",
+      "likelihood": "Possible",
+      "rationale": "The ethics and legal specialists (5.1, 5.2, 10.2) confirm that no accessibility reviews or fairness measurements have been conducted, and the solution architect (6.4) confirms no testing has occurred. Without these mitigations, the risk of the parser stripping critical accessibility features remains unchanged."
+    },
+    "3.2": {
+      "consequence": "Insignificant",
+      "likelihood": "Unlikely",
+      "rationale": "The system relies entirely on deterministic parsing libraries without LLM or decision-making components. The inherent risk of unfair discrimination is already minimal, and the strict rule-based architecture maintains this low risk profile."
+    },
+    "3.3": {
+      "consequence": "Insignificant",
+      "likelihood": "Unlikely",
+      "rationale": "As a deterministic formatting tool, the system does not generate new content or modify meaning. The risk of perpetuating stereotypes is limited to faithfully reproducing existing source text, keeping the residual risk minimal."
+    },
+    "3.4": {
+      "consequence": "Minor",
+      "likelihood": "Possible",
+      "rationale": "The solution architect notes that no testing (6.4) or pilot phase (6.5) has been conducted. Consequently, the risk of formatting corruption or parsing errors leading to minor operational harm remains unmitigated."
+    },
+    "3.5": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "While the ephemeral architecture (7.1) reduces persistent storage risks, the planned GitHub feedback mechanism introduces PII disclosure risks. Because no testing has been conducted (6.4) on the automated PII scanning, this mitigation cannot yet be relied upon."
+    },
+    "3.6": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "The IT security specialist outlines planned egress controls (7.3), but the solution architect confirms a complete lack of security testing (6.4). Until these controls are implemented and verified, the risk of sensitive data exposure during processing remains."
+    },
+    "3.7": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "Planned input validation and SSRF mitigations (7.3) are offset by the absence of security testing (6.4) and production monitoring (6.6). Vulnerabilities in the parsing libraries or web interface could still be exploited."
+    },
+    "3.8": {
+      "consequence": "Minor",
+      "likelihood": "Possible",
+      "rationale": "The lack of testing (6.4), monitoring (6.6), and formal records management (8.3) means that if a security or parsing issue occurs, the agency's ability to respond effectively is limited, leaving reputational risks unmitigated."
+    }
+  },
+  "provenance": {
+    "model": "gemini-3.1-pro-preview",
+    "prompt_version": "v1"
+  }
+}

@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:44:01Z",
+  "updated_at": "2026-07-18T11:44:42Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -18,7 +18,7 @@
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "complete",
-    "full.reviewer": "active",
+    "full.reviewer": "complete",
     "full.assembly": "pending"
   },
   "log": [
@@ -4723,9 +4723,37 @@
       "agent": "full.reviewer",
       "type": "stage_started",
       "detail": "Adjudicating reviewer started"
+    },
+    {
+      "id": "evt_000453",
+      "ts": "2026-07-18T11:44:02Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Reviewing cycle 1: auditing coverage, coherence and residual risk."
+    },
+    {
+      "id": "evt_000454",
+      "ts": "2026-07-18T11:44:42Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Legal specialist claims accountability roles are designated, contradicting the threshold assessment."
+    },
+    {
+      "id": "evt_000455",
+      "ts": "2026-07-18T11:44:42Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Privacy specialist invents the existence of a PTA/PIA on a SharePoint drive."
+    },
+    {
+      "id": "evt_000456",
+      "ts": "2026-07-18T11:44:42Z",
+      "agent": "full.reviewer",
+      "type": "stage_complete",
+      "detail": "Adjudicating reviewer complete"
     }
   ],
-  "log_cursor": 452,
+  "log_cursor": 456,
   "questions": null,
   "failure": null,
   "expected_ranges": {
