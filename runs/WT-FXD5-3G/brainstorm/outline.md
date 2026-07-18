@@ -11,8 +11,8 @@ run_id: "WT-FXD5-3G"
 title: "ATO Deduction Assistant"
 summary: "A public-facing chatbot designed to help taxpayers understand deduction eligibility through conversational guidance."
 created_at: "2026-07-18T23:35:12Z"
-updated_at: "2026-07-18T23:36:44Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "ux_ui"]
+updated_at: "2026-07-18T23:39:15Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints"]
 ---
 
 <!-- section: problem -->
@@ -38,12 +38,12 @@ The system will process public tax policy documents and potentially anonymized u
 <!-- section: happy_path -->
 ## 5. Happy path
 
-*One ordinary, successful use — narrated start to finish.*
+A taxpayer accesses the portal, answers three triage questions to filter their deduction category, and then interacts with the chatbot. The bot provides guidance based on specific policy documents, citing the source, and directs the user to the official ATO website for final verification before they submit their return.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
 
-*What else could solve this, including at least one non-AI option.*
+Non-AI alternatives include an interactive decision tree or a static FAQ wizard. While these are highly accurate, they often fail to capture the nuance of unique taxpayer scenarios, which is why a RAG-based LLM is being explored.
 
 <!-- section: ux_ui -->
 ## 7. UX and interface
@@ -53,7 +53,7 @@ A web-based chat interface integrated into the existing ATO portal, likely featu
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-*The hard limits and strong preferences: technical, organisational, maintenance.*
+The system must remain strictly advisory, include prominent disclaimers, and ensure no integration with live taxpayer account data to maintain security and legal boundaries.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
