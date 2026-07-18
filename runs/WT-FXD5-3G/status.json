@@ -3,8 +3,8 @@
   "run_id": "WT-FXD5-3G",
   "run_code": "WT-FXD5-3G",
   "phase": "threshold",
-  "overall_state": "paused",
-  "updated_at": "2026-07-18T23:53:27Z",
+  "overall_state": "running",
+  "updated_at": "2026-07-18T23:55:11Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -119,9 +119,16 @@
       "agent": "threshold.rating_engine",
       "type": "stage_complete",
       "detail": "Rating engine complete"
+    },
+    {
+      "id": "evt_000015",
+      "ts": "2026-07-18T23:55:11Z",
+      "agent": "backend",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 14,
+  "log_cursor": 15,
   "questions": null,
   "failure": null,
   "expected_ranges": {
