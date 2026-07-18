@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:47:19Z",
+  "updated_at": "2026-07-18T11:48:05Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -18,7 +18,7 @@
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "complete",
-    "full.reviewer": "active",
+    "full.reviewer": "complete",
     "full.assembly": "pending"
   },
   "log": [
@@ -5006,9 +5006,44 @@
       "agent": "full.reviewer",
       "type": "stage_started",
       "detail": "Adjudicating reviewer started"
+    },
+    {
+      "id": "evt_000482",
+      "ts": "2026-07-18T11:47:20Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Reviewing cycle 1: auditing coverage, coherence and residual risk."
+    },
+    {
+      "id": "evt_000483",
+      "ts": "2026-07-18T11:48:05Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Contradiction regarding the designation of accountability roles."
+    },
+    {
+      "id": "evt_000484",
+      "ts": "2026-07-18T11:48:05Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Invention of a privacy assessment document not present in the outline."
+    },
+    {
+      "id": "evt_000485",
+      "ts": "2026-07-18T11:48:05Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Invention of disengagement processes and administrative mechanisms."
+    },
+    {
+      "id": "evt_000486",
+      "ts": "2026-07-18T11:48:05Z",
+      "agent": "full.reviewer",
+      "type": "stage_complete",
+      "detail": "Adjudicating reviewer complete"
     }
   ],
-  "log_cursor": 481,
+  "log_cursor": 486,
   "questions": null,
   "failure": null,
   "expected_ranges": {
