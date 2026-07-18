@@ -4,11 +4,11 @@
   "run_code": "WT-PX5H-3D",
   "phase": "threshold",
   "overall_state": "running",
-  "updated_at": "2026-07-18T06:17:14Z",
+  "updated_at": "2026-07-18T06:17:38Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
-    "threshold.reconciler": "active",
+    "threshold.reconciler": "complete",
     "threshold.rating_engine": "pending",
     "full.specialist.it_security": "pending",
     "full.specialist.privacy": "pending",
@@ -126,9 +126,16 @@
       "agent": "threshold.reconciler",
       "type": "stage_started",
       "detail": "Reconciler started"
+    },
+    {
+      "id": "evt_000016",
+      "ts": "2026-07-18T06:17:38Z",
+      "agent": "threshold.reconciler",
+      "type": "stage_complete",
+      "detail": "Reconciler complete"
     }
   ],
-  "log_cursor": 15,
+  "log_cursor": 16,
   "questions": null,
   "failure": null,
   "expected_ranges": {
