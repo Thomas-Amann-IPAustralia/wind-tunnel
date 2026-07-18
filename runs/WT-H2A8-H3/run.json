@@ -2,9 +2,9 @@
   "schema_version": 1,
   "run_id": "WT-H2A8-H3",
   "created_at": "2026-07-18T06:17:32Z",
-  "updated_at": "2026-07-18T11:49:04Z",
+  "updated_at": "2026-07-18T12:26:40Z",
   "stage": "REVIEW",
-  "stage_status": "failed",
+  "stage_status": "in_progress",
   "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "06f55d2eb379a688c2541407e82a1ef9fd1119a8",
@@ -24,9 +24,5 @@
     "sensitivity_ceiling": "OFFICIAL",
     "attested": false
   },
-  "last_error": {
-    "stage": "full.specialist.legal",
-    "message": "Something went wrong while reviewing the full assessment. Your run is safe — paste the run code WT-H2A8-H3 to resume from the last checkpoint.",
-    "technical": "AgentError: legal: amendment touched non-directed sections ['10.2', '12.1', '12.2', '9.1', '9.2'] — a directive may only change the sections it named (§11.3)."
-  }
+  "last_error": null
 }
