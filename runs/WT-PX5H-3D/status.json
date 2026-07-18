@@ -3,8 +3,8 @@
   "run_id": "WT-PX5H-3D",
   "run_code": "WT-PX5H-3D",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-18T06:17:42Z",
+  "overall_state": "paused",
+  "updated_at": "2026-07-18T06:17:45Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",

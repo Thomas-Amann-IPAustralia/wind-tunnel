@@ -2,12 +2,13 @@
   "schema_version": 1,
   "run_id": "WT-PX5H-3D",
   "created_at": "2026-07-18T01:41:12Z",
-  "updated_at": "2026-07-18T06:17:13Z",
-  "stage": "THRESHOLD_RECONCILING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-18T06:17:45Z",
+  "stage": "THRESHOLD_REVIEW",
+  "stage_status": "awaiting_user",
   "phase": "threshold",
   "checkpoints": {
-    "THRESHOLD_DRAFTING": "dbbb28ae51fbe7eb9b21c9bb240adbd38c7967be"
+    "THRESHOLD_DRAFTING": "dbbb28ae51fbe7eb9b21c9bb240adbd38c7967be",
+    "THRESHOLD_RECONCILING": "0f6ee35d7b7142ba048f4482a2ccd63d26234b3f"
   },
   "revisions": {
     "poc": 0,
