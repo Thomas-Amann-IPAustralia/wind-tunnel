@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:37:17Z",
+  "updated_at": "2026-07-18T11:37:33Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -16,7 +16,7 @@
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
-    "full.checkpoint": "waiting_user",
+    "full.checkpoint": "pending",
     "full.architect": "pending",
     "full.reviewer": "pending",
     "full.assembly": "pending"
@@ -3016,9 +3016,16 @@
       "agent": "backend",
       "type": "heartbeat",
       "detail": ""
+    },
+    {
+      "id": "evt_000290",
+      "ts": "2026-07-18T11:37:33Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 289,
+  "log_cursor": 290,
   "questions": null,
   "failure": null,
   "expected_ranges": {
