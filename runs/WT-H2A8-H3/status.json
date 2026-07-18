@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:37:53Z",
+  "updated_at": "2026-07-18T11:38:14Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -3212,9 +3212,97 @@
         "doc": "ISM",
         "locator": "p.43"
       }
+    },
+    {
+      "id": "evt_000309",
+      "ts": "2026-07-18T11:37:54Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.27"
+      }
+    },
+    {
+      "id": "evt_000310",
+      "ts": "2026-07-18T11:37:54Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.44"
+      }
+    },
+    {
+      "id": "evt_000311",
+      "ts": "2026-07-18T11:37:54Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.44"
+      }
+    },
+    {
+      "id": "evt_000312",
+      "ts": "2026-07-18T11:37:54Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.27"
+      }
+    },
+    {
+      "id": "evt_000313",
+      "ts": "2026-07-18T11:37:54Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.63"
+      }
+    },
+    {
+      "id": "evt_000314",
+      "ts": "2026-07-18T11:37:54Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.24"
+      }
+    },
+    {
+      "id": "evt_000315",
+      "ts": "2026-07-18T11:37:54Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.24"
+      }
+    },
+    {
+      "id": "evt_000316",
+      "ts": "2026-07-18T11:38:14Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.173"
+      }
     }
   ],
-  "log_cursor": 308,
+  "log_cursor": 316,
   "questions": null,
   "failure": null,
   "expected_ranges": {
