@@ -4,14 +4,14 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T23:56:30Z",
+  "updated_at": "2026-07-18T23:56:50Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
-    "full.specialist.privacy": "active",
+    "full.specialist.privacy": "complete",
     "full.specialist.ethics": "pending",
     "full.specialist.legal": "pending",
     "full.specialist.data_governance": "pending",
@@ -758,9 +758,60 @@
         "doc": "APP Guidelines",
         "locator": "p.20"
       }
+    },
+    {
+      "id": "evt_000076",
+      "ts": "2026-07-18T23:56:31Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.191"
+      }
+    },
+    {
+      "id": "evt_000077",
+      "ts": "2026-07-18T23:56:31Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.110"
+      }
+    },
+    {
+      "id": "evt_000078",
+      "ts": "2026-07-18T23:56:31Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000079",
+      "ts": "2026-07-18T23:56:31Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.224"
+      }
+    },
+    {
+      "id": "evt_000080",
+      "ts": "2026-07-18T23:56:50Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_complete",
+      "detail": "Privacy specialist complete"
     }
   ],
-  "log_cursor": 75,
+  "log_cursor": 80,
   "questions": null,
   "failure": null,
   "expected_ranges": {
