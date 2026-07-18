@@ -1,0 +1,54 @@
+{
+  "label": "generalist_b",
+  "sections": {
+    "1": "### 1.1 AI Use Case Profile\n- **Name**: ATO Deduction Assistant\n- **Summary**: A public-facing chatbot using Retrieval-Augmented Generation (RAG) and a user-adjustable 'creativity' dial to provide guidance on tax deduction eligibility while maintaining clear boundaries between advice and policy.\n\n### 1.2 Establishing Impact Assessment Responsibilities\n- *Not stated in the outline.*\n\n### 1.3 Additional Roles and Responsibilities\n- *Not stated in the outline.*\n\n### 1.4 AI Use Case Description\nThe ATO Deduction Assistant is a public-facing chatbot hosted by the ATO. It provides guidance on eligible tax deductions based on user-provided employment or expense details, using a Large Language Model (LLM) to interpret tax policy documents.\n\n### 1.5 In-Scope Use Case\nYes, the use case involves deploying a public-facing generative AI system to assist the public with navigating government policy.\n\n### 1.6 Type of AI Technology\nLarge Language Model (LLM) utilizing Retrieval-Augmented Generation (RAG).\n\n### 1.7 Usage Pattern\nPublic-facing interactive web-based chat interface.\n\n### 1.8 Administrative Decisions\nThe system is strictly advisory and does not make administrative decisions. It is designed to maintain zero instances of providing legally binding advice.\n\n### 1.9 Domain\nTaxation and public administration.\n\n### 1.10 Expert Contributions\n- *Not stated in the outline.*\n\n### 1.11 Impact Assessment Review Log\n- *Not stated in the outline.*",
+    "2": "### 2.1 Problem Definition\nTaxpayers often struggle to navigate complex deduction rules, leading to errors in their returns or unnecessary inquiries to the ATO.\n\n### 2.2 AI Use Case Purpose\nTo provide accessible, interactive guidance on tax deduction eligibility based on user-provided employment or expense details, helping taxpayers understand complex rules before submitting their returns.\n\n### 2.3 Non-AI Alternatives\nNon-AI alternatives considered include an interactive decision tree or a static FAQ wizard. While highly accurate, these alternatives often fail to capture the nuance of unique taxpayer scenarios, which is why a RAG-based LLM is being explored.\n\n### 2.4 Identifying Stakeholders\n- **Primary Users**: Individual taxpayers.\n- **Internal Stakeholders**: ATO support staff and policy teams responsible for the accuracy of the guidance.\n\n### 2.5 Expected Benefits\n- Reduction in general inquiry call volume to the ATO.\n- High rate of user click-throughs to official policy documentation.\n- Positive sentiment scores regarding the clarity of guidance provided.",
+    "4": "### 4.1 Assessing Officer Recommendation\nThe proposed ATO Deduction Assistant introduces a public-facing generative AI interface into a highly sensitive domain (taxation). While the system is designed to be strictly advisory and isolated from live taxpayer accounts, several novel elements—such as the user-adjustable 'creativity' dial—introduce unique risks regarding user comprehension and system reliability. \n\nTo manage these risks, it is recommended that the project team implement strict guardrails on the LLM's output parameters, conduct extensive red-teaming against prompt injection, and carefully evaluate whether the 'creativity' dial might inadvertently confuse users or undermine the perceived authority of the guidance. Furthermore, clear, prominent disclaimers must be paired with robust logging of user interactions to monitor for potential drift or hallucinated advice. A structured feedback loop with ATO policy teams should be established to continuously verify the accuracy of the RAG source documents."
+  },
+  "risks": {
+    "3.1": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "The chatbot is public-facing on the ATO portal. Introducing a 'creativity' dial as a UX element, while intended as a meta-signal for fallibility, may confuse users or create accessibility and inclusion barriers for individuals with lower digital literacy, cognitive disabilities, or those who require highly consistent and predictable interfaces."
+    },
+    "3.2": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "LLMs can exhibit subtle biases based on the phrasing of user queries or the training data. If the RAG system interprets tax policy differently or provides inconsistent guidance for certain occupations or demographic-linked financial scenarios, it could lead to perceived or actual unfair treatment, requiring manual intervention."
+    },
+    "3.3": {
+      "consequence": "Minor",
+      "likelihood": "Possible",
+      "rationale": "While tax policy documents are neutral, the LLM processes user-provided financial scenarios. There is a minor risk that the model could generate responses reflecting occupational or socioeconomic stereotypes based on the user's input, though these would likely be isolated incidents."
+    },
+    "3.4": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "If the chatbot provides incorrect or misleading guidance on deduction eligibility, taxpayers may file incorrect returns. This could result in financial penalties, audits, or distress. Even with disclaimers, users often place high trust in official government portals."
+    },
+    "3.5": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "Although the system is strictly isolated from actual taxpayer account data, users are prompted to input their own financial scenarios. There is a risk that users will input highly sensitive personal or financial information into the free-text chat interface, raising privacy and data handling concerns."
+    },
+    "3.6": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "The system processes user-provided financial scenarios. If these interactive sessions or prompt logs are compromised, leaked, or accessed by unauthorized parties, it could lead to a moderate compromise of sensitive user-disclosed financial data."
+    },
+    "3.7": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "Public-facing LLM interfaces are vulnerable to system-level exploits such as prompt injection or jailbreaking. An attacker could exploit these vulnerabilities to make the bot output inappropriate content, bypass policy boundaries, or leak system prompts."
+    },
+    "3.8": {
+      "consequence": "Major",
+      "likelihood": "Possible",
+      "rationale": "The ATO is a high-profile agency where public trust is critical. If the chatbot provides incorrect tax advice, or if the 'creativity' dial is perceived as gamifying tax compliance, it could attract significant media scrutiny, damage the agency's reputation, and undermine public confidence in official digital services."
+    }
+  },
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
