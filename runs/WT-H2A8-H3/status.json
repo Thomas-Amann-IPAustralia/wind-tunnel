@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "threshold",
   "overall_state": "running",
-  "updated_at": "2026-07-18T06:24:56Z",
+  "updated_at": "2026-07-18T06:25:14Z",
   "nodes": {
     "threshold.generalist_a": "pending",
     "threshold.generalist_b": "pending",
@@ -28,9 +28,16 @@
       "agent": "backend",
       "type": "heartbeat",
       "detail": ""
+    },
+    {
+      "id": "evt_000002",
+      "ts": "2026-07-18T06:25:14Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 1,
+  "log_cursor": 2,
   "questions": null,
   "failure": null,
   "expected_ranges": {
