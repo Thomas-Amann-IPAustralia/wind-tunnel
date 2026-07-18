@@ -3,8 +3,8 @@
   "run_id": "WT-H2A8-H3",
   "run_code": "WT-H2A8-H3",
   "phase": "full",
-  "overall_state": "running",
-  "updated_at": "2026-07-18T06:32:27Z",
+  "overall_state": "failed",
+  "updated_at": "2026-07-18T06:33:09Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
-    "full.specialist.legal": "active",
+    "full.specialist.legal": "failed",
     "full.specialist.data_governance": "pending",
     "full.specialist.solution_architect": "pending",
     "full.checkpoint": "pending",
@@ -1394,11 +1394,188 @@
         "doc": "AI Use Policy v2.0",
         "locator": "p.20"
       }
+    },
+    {
+      "id": "evt_000136",
+      "ts": "2026-07-18T06:32:28Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000137",
+      "ts": "2026-07-18T06:32:28Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000138",
+      "ts": "2026-07-18T06:32:28Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.56"
+      }
+    },
+    {
+      "id": "evt_000139",
+      "ts": "2026-07-18T06:32:28Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.36"
+      }
+    },
+    {
+      "id": "evt_000140",
+      "ts": "2026-07-18T06:32:28Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000141",
+      "ts": "2026-07-18T06:32:28Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000142",
+      "ts": "2026-07-18T06:32:28Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.40"
+      }
+    },
+    {
+      "id": "evt_000143",
+      "ts": "2026-07-18T06:32:35Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000144",
+      "ts": "2026-07-18T06:32:35Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.65"
+      }
+    },
+    {
+      "id": "evt_000145",
+      "ts": "2026-07-18T06:32:35Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000146",
+      "ts": "2026-07-18T06:32:35Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000147",
+      "ts": "2026-07-18T06:32:35Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.47"
+      }
+    },
+    {
+      "id": "evt_000148",
+      "ts": "2026-07-18T06:32:35Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ABA AI Year 2 Report",
+      "ref": {
+        "doc": "ABA AI Year 2 Report",
+        "locator": "p.32"
+      }
+    },
+    {
+      "id": "evt_000149",
+      "ts": "2026-07-18T06:32:35Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.93"
+      }
+    },
+    {
+      "id": "evt_000150",
+      "ts": "2026-07-18T06:32:35Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000151",
+      "ts": "2026-07-18T06:33:09Z",
+      "agent": "full.specialist.legal",
+      "type": "error",
+      "detail": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-H2A8-H3 to resume from the last checkpoint."
     }
   ],
-  "log_cursor": 135,
+  "log_cursor": 151,
   "questions": null,
-  "failure": null,
+  "failure": {
+    "stage": "full.specialist.legal",
+    "message": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-H2A8-H3 to resume from the last checkpoint.",
+    "run_code": "WT-H2A8-H3",
+    "technical": "AgentError: legal: sections contain out-of-scope keys ['12.2.1', '12.2.2'] (§9.3 structural write-scope)."
+  },
   "expected_ranges": {
     "threshold": [
       50,
