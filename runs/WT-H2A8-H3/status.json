@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T12:29:17Z",
+  "updated_at": "2026-07-18T12:29:18Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -19,7 +19,7 @@
     "full.checkpoint": "pending",
     "full.architect": "complete",
     "full.reviewer": "complete",
-    "full.assembly": "active"
+    "full.assembly": "complete"
   },
   "log": [
     {
@@ -5910,9 +5910,23 @@
       "agent": "full.assembly",
       "type": "stage_started",
       "detail": "Assembly started"
+    },
+    {
+      "id": "evt_000574",
+      "ts": "2026-07-18T12:29:18Z",
+      "agent": "full.assembly",
+      "type": "drafting",
+      "detail": "Assembling the notebook and the report."
+    },
+    {
+      "id": "evt_000575",
+      "ts": "2026-07-18T12:29:18Z",
+      "agent": "full.assembly",
+      "type": "stage_complete",
+      "detail": "Assembly complete"
     }
   ],
-  "log_cursor": 573,
+  "log_cursor": 575,
   "questions": null,
   "failure": null,
   "expected_ranges": {

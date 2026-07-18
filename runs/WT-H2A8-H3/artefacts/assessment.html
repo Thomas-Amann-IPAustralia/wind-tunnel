@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI impact assessment</title>
+<style>
+/* The Report register (TECH_SPEC §12.5, design §8): quiet authority — serif body,
+   sans headings, mono for data and citations. Fonts are role-based (design §3.3, §11):
+   IBM Plex where installed, otherwise a faithful serif/sans/mono system fallback, so the
+   render depends on no external font fetch. Colour is never the only cue (design §3.2):
+   every risk chip carries a leading shape glyph and its text label, legible in greyscale. */
+
+:root {
+  --serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --ink: #1a1a1a;
+  --muted: #55585c;
+  --rule: #d5d7da;
+  --panel: #f4f2ee;
+  --panel-border: #b9b3a7;
+  --link: #1c4f8f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #eceae6;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.report {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 3rem 2.5rem 5rem;
+  background: #fff;
+}
+
+/* Headings — sans, exact DTA numbering carried in the content itself. */
+h1, h2, h3, h4 { font-family: var(--sans); line-height: 1.25; color: var(--ink); }
+h1 { font-size: 1.7rem; font-weight: 600; margin: 2.6rem 0 1rem; padding-bottom: .4rem; border-bottom: 2px solid var(--ink); }
+h2 { font-size: 1.28rem; font-weight: 600; margin: 2rem 0 .6rem; }
+h3 { font-size: 1.08rem; font-weight: 600; margin: 1.4rem 0 .4rem; }
+p { margin: .6rem 0; }
+a { color: var(--link); }
+code { font-family: var(--mono); font-size: .9em; }
+
+/* Title block — the document announces what it is before section 1. */
+.title-block {
+  border: 1px solid var(--rule);
+  border-top: 5px solid var(--ink);
+  padding: 1.8rem 2rem 1.6rem;
+  margin-bottom: 1.5rem;
+}
+.title-block h1 { border: 0; margin: .2rem 0 .6rem; font-size: 2rem; }
+.title-block .draft-mark {
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #8a5a00;
+  margin: 0;
+}
+.title-block .rev { font-family: var(--sans); font-weight: 600; color: var(--muted); margin: 0 0 .4rem; }
+.title-block .meta { font-family: var(--mono); font-size: .85rem; color: var(--muted); margin: .2rem 0; }
+.title-block .disclaimer { font-family: var(--sans); font-size: .9rem; color: var(--muted); margin-top: .8rem; }
+
+.attribution { font-family: var(--sans); font-size: .82rem; color: var(--muted); margin: 0 0 .4rem; }
+
+/* Citations — a scannable first-class apparatus, mono, never buried. */
+.citations { font-family: var(--mono); font-size: .82rem; color: var(--muted); margin: .3rem 0 0; }
+
+/* Risk table + chips. Chips carry a shape glyph + label so greyscale/poor-projector
+   reading never depends on colour (design §3.2). */
+.risk-table { width: 100%; border-collapse: collapse; margin: .8rem 0; font-family: var(--sans); font-size: .92rem; }
+.risk-table th, .risk-table td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); }
+.risk-table th { font-weight: 600; border-bottom: 2px solid var(--ink); }
+.overall { font-family: var(--sans); font-weight: 600; margin: .8rem 0; }
+
+.chip { display: inline-block; font-family: var(--sans); font-weight: 600; font-size: .82rem; padding: .05rem .5rem; border-radius: 999px; border: 1.5px solid var(--ink); white-space: nowrap; }
+.chip::before { margin-right: .35rem; font-weight: 700; }
+.chip-low { background: #e7f2e7; } .chip-low::before { content: "●"; }
+.chip-medium { background: #fbf0d8; } .chip-medium::before { content: "◆"; }
+.chip-high { background: #f6dcd6; } .chip-high::before { content: "▲"; }
+
+.human-action, .gap-note { font-family: var(--sans); font-size: .9rem; }
+.human-action { border-left: 3px solid var(--panel-border); background: var(--panel); padding: .6rem .8rem; margin: 1rem 0; }
+.gap-note { color: #7a3b00; border-left: 3px solid #c98a3a; padding-left: .7rem; }
+
+/* Unresolved disagreement — calm, confident, a bordered panel in neutral tones, not an
+   error box. Styled to be found, not skimmed past (design §8). */
+.unresolved-intro { font-family: var(--sans); font-style: italic; color: var(--muted); margin: .6rem 0 1rem; }
+.unresolved-panel { border: 1px solid var(--panel-border); background: var(--panel); border-radius: 4px; padding: 1rem 1.2rem; margin: 1rem 0; }
+.unresolved-panel h3 { margin-top: 0; font-size: 1rem; }
+.unresolved-panel .position { margin: .4rem 0; }
+.unresolved-panel .why { font-style: italic; color: var(--muted); margin-top: .6rem; }
+
+/* Provenance — the audit trail, mono, a clean record. */
+.provenance { font-family: var(--mono); font-size: .82rem; color: var(--muted); background: #fafafa; border: 1px solid var(--rule); padding: 1rem 1.2rem; }
+.provenance ul { margin: .3rem 0; padding-left: 1.2rem; }
+.provenance .attestation { color: var(--ink); }
+
+.references .reference { font-size: .9rem; margin: .5rem 0; }
+.references .unresolved-ref { font-family: var(--sans); font-size: .8rem; color: #7a3b00; }
+
+.poc-frame { width: 100%; height: 30rem; border: 1px solid var(--rule); }
+
+.running-footer { display: none; }
+
+@media (max-width: 40rem) {
+  .report { padding: 1.5rem 1.1rem 3rem; }
+  body { font-size: 16px; }
+}
+
+/* Print — the standing disclaimer on every page, risk tables never split across a page
+   break, chips legible in greyscale (the shape glyph carries the level). */
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .report { max-width: none; padding: 0; }
+  .running-footer { display: block; position: fixed; bottom: 0; left: 0; right: 0; font-family: var(--sans); font-size: 8pt; color: #333; text-align: center; padding: .3rem; border-top: 1px solid var(--rule); }
+  .report { margin-bottom: 2rem; }
+  .risk-table, .unresolved-panel, .provenance { break-inside: avoid; page-break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+  .chip { border-color: #000; }
+  a { color: #000; text-decoration: underline; }
+}
+
+</style>
+</head>
+<body>
+<main class="report">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=c99f6ece"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="title-block">
+<p class="draft-mark">DRAFT — for SME review</p>
+<h1>AI impact assessment</h1>
+<p class="meta">Run <code>WT-H2A8-H3</code> · Generated 2026-07-18T12:29:18Z</p>
+<p class="disclaimer">Draft for SME review — not an approval, not legal advice.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=0b17867e"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Threshold-assessment-%E2%80%94-sections-1%E2%80%934">Threshold assessment — sections 1–4<a class="anchor-link" href="#Threshold-assessment-%E2%80%94-sections-1%E2%80%934">¶</a></h1><h1 id="Threshold-AI-impact-assessment-%E2%80%94-WT-H2A8-H3">Threshold AI impact assessment — WT-H2A8-H3<a class="anchor-link" href="#Threshold-AI-impact-assessment-%E2%80%94-WT-H2A8-H3">¶</a></h1><h2 id="1.-Basic-information">1. Basic information<a class="anchor-link" href="#1.-Basic-information">¶</a></h2><h3 id="1.1-AI-use-case-profile">1.1 AI use case profile<a class="anchor-link" href="#1.1-AI-use-case-profile">¶</a></h3><ul>
+<li><strong>Name</strong>: APS Markdown Conversion Service</li>
+<li><strong>Run ID</strong>: WT-H2A8-H3</li>
+</ul>
+<h3 id="1.2-Establishing-impact-assessment-responsibilities">1.2 Establishing impact assessment responsibilities<a class="anchor-link" href="#1.2-Establishing-impact-assessment-responsibilities">¶</a></h3><ul>
+<li>Not stated in the outline.</li>
+</ul>
+<h3 id="1.3-Additional-roles-and-responsibilities">1.3 Additional roles and responsibilities<a class="anchor-link" href="#1.3-Additional-roles-and-responsibilities">¶</a></h3><ul>
+<li>Not stated in the outline.</li>
+</ul>
+<h3 id="1.4-AI-use-case-description">1.4 AI use case description<a class="anchor-link" href="#1.4-AI-use-case-description">¶</a></h3><p>A cross-agency, ephemeral utility for public servants to convert diverse web and document formats into standardized Markdown. The system uses deterministic parsing libraries and explicitly avoids LLM-based processing entirely.</p>
+<h3 id="1.5-In-scope-use-case">1.5 In-scope use case<a class="anchor-link" href="#1.5-In-scope-use-case">¶</a></h3><p>Yes, the tool is designed for public servants across all APS agencies to convert web and document formats.</p>
+<h3 id="1.6-Type-of-AI-technology">1.6 Type of AI technology<a class="anchor-link" href="#1.6-Type-of-AI-technology">¶</a></h3><p>The system uses deterministic parsing libraries and explicitly avoids LLM-based processing. (Note: While the outline describes a deterministic parser rather than traditional AI, it is being evaluated under this threshold framework).</p>
+<h3 id="1.7-Usage-pattern">1.7 Usage pattern<a class="anchor-link" href="#1.7-Usage-pattern">¶</a></h3><p>Ephemeral web-based utility. Users input a URL or upload a file, and the system processes the content in volatile memory, purging it immediately upon completion.</p>
+<h3 id="1.8-Administrative-decisions">1.8 Administrative decisions<a class="anchor-link" href="#1.8-Administrative-decisions">¶</a></h3><p>Not stated in the outline.</p>
+<h3 id="1.9-Domain">1.9 Domain<a class="anchor-link" href="#1.9-Domain">¶</a></h3><p>Government administration, document processing, and cross-agency utility.</p>
+<h3 id="1.10-Expert-contributions">1.10 Expert contributions<a class="anchor-link" href="#1.10-Expert-contributions">¶</a></h3><p>Not stated in the outline.</p>
+<h3 id="1.11-Impact-assessment-review-log">1.11 Impact assessment review log<a class="anchor-link" href="#1.11-Impact-assessment-review-log">¶</a></h3><p>Not stated in the outline.</p>
+<h2 id="2.-Purpose-and-expected-benefits">2. Purpose and expected benefits<a class="anchor-link" href="#2.-Purpose-and-expected-benefits">¶</a></h2><h3 id="2.1-Problem-definition">2.1 Problem definition<a class="anchor-link" href="#2.1-Problem-definition">¶</a></h3><p>Public servants frequently struggle with information trapped in poorly formatted PDFs, legacy web pages, or inconsistent document structures, making it difficult to index, search, or reuse content effectively.</p>
+<h3 id="2.2-AI-use-case-purpose">2.2 AI use case purpose<a class="anchor-link" href="#2.2-AI-use-case-purpose">¶</a></h3><p>To provide a cross-agency, web-based conversion utility that accepts URLs or files and uses deterministic parsing libraries to transform content into standardized Markdown, facilitating easier content reuse and indexing.</p>
+<h3 id="2.3-Non-AI-alternatives">2.3 Non-AI alternatives<a class="anchor-link" href="#2.3-Non-AI-alternatives">¶</a></h3><p>Manual re-typing, traditional web scraping scripts (such as BeautifulSoup), or off-the-shelf document conversion software like Pandoc.</p>
+<h3 id="2.4-Identifying-stakeholders">2.4 Identifying stakeholders<a class="anchor-link" href="#2.4-Identifying-stakeholders">¶</a></h3><ul>
+<li><strong>Primary Users</strong>: Public servants across all APS agencies.</li>
+<li><strong>Stakeholders</strong>: Agency IT security teams who must vet the tool for cross-departmental data handling and compliance.</li>
+</ul>
+<h3 id="2.5-Expected-benefits">2.5 Expected benefits<a class="anchor-link" href="#2.5-Expected-benefits">¶</a></h3><p>Providing a net positive utility for document conversion across the APS, enabling more efficient workflows by providing clean Markdown and stripping navigation/ads, while maintaining a strictly stateless, ephemeral core that minimizes data retention risks.</p>
+<h2 id="3.-Inherent-risk-assessment">3. Inherent risk assessment<a class="anchor-link" href="#3.-Inherent-risk-assessment">¶</a></h2><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Consequence</th>
+<th>Likelihood</th>
+<th>Risk rating</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.1 Reducing service accessibility and inclusion</td>
+<td>Minor</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.2 Unfair discrimination</td>
+<td>Insignificant</td>
+<td>Unlikely</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>3.3 Stereotyping or demeaning representations</td>
+<td>Insignificant</td>
+<td>Unlikely</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>3.4 Harm</td>
+<td>Minor</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.5 Privacy concerns</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.6 Security concerns — data aspects</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.7 Security concerns — system aspects</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.8 Reputation or public confidence</td>
+<td>Minor</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3.9 Overall inherent risk rating (highest-wins): Medium</strong></p>
+<h3 id="3.1-Reducing-service-accessibility-and-inclusion">3.1 Reducing service accessibility and inclusion<a class="anchor-link" href="#3.1-Reducing-service-accessibility-and-inclusion">¶</a></h3><p>The tool converts web pages and documents to Markdown. If the deterministic parser fails to handle certain complex formats or strips accessibility features (such as alt text or semantic headers), it could create minor, short-term barriers for public servants relying on screen readers or trying to reuse the content. Since accessibility standards for the output Markdown are not explicitly detailed in the outline, we precautionarily assume a Minor consequence with a Possible likelihood.</p>
+<h3 id="3.2-Unfair-discrimination">3.2 Unfair discrimination<a class="anchor-link" href="#3.2-Unfair-discrimination">¶</a></h3><p>The system uses deterministic parsing libraries to convert document formats to Markdown and avoids LLM-based processing entirely. There is no decision-making, profiling, or natural language generation that could introduce bias or unfair discrimination. However, to remain precautionary, we acknowledge a minor possibility (Unlikely) that parsing errors could theoretically affect specific language scripts or localized formatting styles, resulting in Insignificant consequences.</p>
+<p><em>Divergence: Assessor A suggested a Rare likelihood, while Assessor B suggested Unlikely. The higher likelihood (Unlikely) stands to precautionarily account for theoretical parsing errors affecting specific language scripts.</em></p>
+<h3 id="3.3-Stereotyping-or-demeaning-representations">3.3 Stereotyping or demeaning representations<a class="anchor-link" href="#3.3-Stereotyping-or-demeaning-representations">¶</a></h3><p>The tool is a deterministic parser that converts input text directly to Markdown without generating new content or modifying meaning. If the source text contains stereotyping, the tool will faithfully reproduce it, but it does not generate or perpetuate new stereotypes. We select an Unlikely likelihood and Insignificant consequence to remain precautionary.</p>
+<p><em>Divergence: Assessor A suggested a Rare likelihood, while Assessor B suggested Unlikely. The higher likelihood (Unlikely) stands as a precautionary measure.</em></p>
+<h3 id="3.4-Harm">3.4 Harm<a class="anchor-link" href="#3.4-Harm">¶</a></h3><p>The system processes internal documents and public-facing web content. If a critical document is parsed incorrectly or suffers formatting corruption during conversion, and is relied upon without verification, it could lead to minor operational errors or misinformation within an agency. Precautionarily, we default the likelihood to Possible for a Minor consequence.</p>
+<h3 id="3.5-Privacy-concerns">3.5 Privacy concerns<a class="anchor-link" href="#3.5-Privacy-concerns">¶</a></h3><p>The tool processes internal documents which may contain sensitive or personal information (PII). Although the core architecture is ephemeral (processed in volatile memory and purged immediately), the public feedback mechanism via GitHub poses a risk of users accidentally submitting sensitive data. Despite the planned 250-character limit and automated PII scanning, a leak of sensitive data remains a Moderate consequence and is rated as Possible.</p>
+<h3 id="3.6-Security-concerns-%E2%80%94-data-aspects">3.6 Security concerns — data aspects<a class="anchor-link" href="#3.6-Security-concerns-%E2%80%94-data-aspects">¶</a></h3><p>The system processes internal documents across various APS agencies, which may have security classifications. If the cross-agency authentication or data isolation mechanisms fail, sensitive or classified internal documents could be exposed to unauthorized users. Although the architecture is ephemeral, the ingestion of classified documents via a cross-agency web tool presents a potential data security risk if intercepted. Precautionarily, we select a Moderate consequence and a Possible likelihood.</p>
+<h3 id="3.7-Security-concerns-%E2%80%94-system-aspects">3.7 Security concerns — system aspects<a class="anchor-link" href="#3.7-Security-concerns-%E2%80%94-system-aspects">¶</a></h3><p>The tool accepts URLs and file uploads, which introduces risks of Server-Side Request Forgery (SSRF) or malicious file uploads. A vulnerability in the deterministic parsing libraries or the web interface could be exploited to compromise the container or access the internal network. Since the outline does not detail specific security hardening, we precautionarily select a Moderate consequence and a Possible likelihood.</p>
+<h3 id="3.8-Reputation-or-public-confidence">3.8 Reputation or public confidence<a class="anchor-link" href="#3.8-Reputation-or-public-confidence">¶</a></h3><p>If the tool suffers a security breach, leaks data via the public GitHub feedback repository, or consistently fails to parse documents accurately, it could lead to a minor dent in public or inter-agency confidence in government-provided digital utilities. Precautionarily, we select a Minor consequence and a Possible likelihood.</p>
+<h2 id="4.-Threshold-assessment-outcome">4. Threshold assessment outcome<a class="anchor-link" href="#4.-Threshold-assessment-outcome">¶</a></h2><h3 id="4.1-Assessing-Officer-Recommendation">4.1 Assessing Officer Recommendation<a class="anchor-link" href="#4.1-Assessing-Officer-Recommendation">¶</a></h3><p>Based on the threshold assessment of the APS Markdown Conversion Service, the following recommendations are made to manage inherent risks:</p>
+<ol>
+<li><strong>Security Architecture and SSRF Controls</strong>: Although the system is designed to be ephemeral and processes data in volatile memory, it accepts user-uploaded files and external URLs. This introduces potential vectors for Server-Side Request Forgery (SSRF) and malicious file execution. A comprehensive security assessment of the deterministic parsing libraries and robust input validation must be implemented.</li>
+<li><strong>Privacy and Feedback Safeguards</strong>: The proposed feedback mechanism utilizes a public GitHub repository. Although a 250-character limit and an automated PII scanner are planned, there remains a risk of accidental disclosure of sensitive public service data. The automated GitHub Action must be rigorously tested and regularly audited, and clear user guidance must be displayed warning users not to upload sensitive information.</li>
+<li><strong>Cross-Agency Authentication</strong>: Ensure that the cross-agency authentication mechanism is robustly integrated and complies with federal identity security standards to prevent unauthorized access and enforce strict data isolation.</li>
+<li><strong>Verification of Output and Accessibility</strong>: Since deterministic parsers can occasionally misinterpret complex document layouts or strip accessibility features (e.g., alt text, semantic headers), clear user guidance should emphasize that converted Markdown outputs must be verified for accuracy. The parsing libraries should also be configured to preserve essential accessibility elements where possible.</li>
+</ol>
+<p>A full assessment is <strong>required</strong>.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=98fdb9ad"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Full-assessment-%E2%80%94-sections-5%E2%80%9312">Full assessment — sections 5–12<a class="anchor-link" href="#Full-assessment-%E2%80%94-sections-5%E2%80%9312">¶</a></h1><h2 id="5.1-%C2%B7-Defining-fairness">5.1 · Defining fairness<a class="anchor-link" href="#5.1-%C2%B7-Defining-fairness">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>No. The project does not currently have a formally documented definition of what constitutes a fair process or outcome. While the system is a deterministic parser rather than a decision-making AI, fairness in this context must be defined in terms of accessibility and inclusion—specifically, ensuring that the parser does not strip critical accessibility features (such as alt text or semantic headers) and that the output Markdown is compatible with screen readers used by diverse public servants, in line with Australia's AI Ethics Principles on fairness, which state that AI systems should be inclusive and accessible.</p>
+<p class="citations">Sources: [ADM Better Practice Guide, p.9]</p>
+<h2 id="5.2-%C2%B7-Measuring-fairness">5.2 · Measuring fairness<a class="anchor-link" href="#5.2-%C2%B7-Measuring-fairness">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>No. There is currently no structured mechanism to quantitatively or qualitatively measure the fairness or accessibility of the system's outputs. While a general feedback mechanism is planned via a public GitHub repository to report parsing issues, the project lacks a systematic validation process or audit toolkit to evaluate whether the parser consistently preserves accessibility features across different document formats or if it disproportionately degrades content relied upon by users with diverse needs.</p>
+<h2 id="6.1-%C2%B7-Data-suitability">6.1 · Data suitability<a class="anchor-link" href="#6.1-%C2%B7-Data-suitability">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>Yes. The system does not train or evaluate an AI model, as it relies entirely on deterministic parsing libraries rather than machine learning or LLMs (Threshold Assessment §1.4). However, for operation, it accepts user-provided URLs or uploaded files. This input data is suitable because it is directly selected by the public servant user who requires the conversion. Since the system is strictly ephemeral and processes data in volatile memory, purging it immediately upon completion, there is no persistent storage or reuse of this data (Outline §4). While traditional training data suitability checks do not apply, users should ensure that their input files are accurate, complete, and conform to expected formats to ensure reliable parsing outputs, as outlined in general data quality principles (Data Quality Checklist, p.1; Data Quality Checklist, p.2).</p>
+<p class="citations">Sources: [Data Quality Checklist, p.1]; [Data Quality Checklist, p.2]</p>
+<h2 id="6.2-%C2%B7-Indigenous-data">6.2 · Indigenous data<a class="anchor-link" href="#6.2-%C2%B7-Indigenous-data">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>Not applicable. The APS Markdown Conversion Service is a general-purpose, ephemeral utility that does not target, collect, or persistently store Indigenous data. It processes user-provided documents in volatile memory and purges them immediately upon completion (Outline §4). It does not maintain any data repositories or datasets. Therefore, the Framework for Governance of Indigenous Data is not directly applicable to the tool's core operations. However, if individual agencies use the tool to process documents containing Indigenous data, those agencies remain responsible for ensuring their broader data handling practices align with the Framework and Closing the Gap Priority Reforms (DDGS, p.13).</p>
+<p class="citations">Sources: [DDGS, p.13]</p>
+<h2 id="6.3-%C2%B7-Suitability-of-procured-AI-system">6.3 · Suitability of procured AI system<a class="anchor-link" href="#6.3-%C2%B7-Suitability-of-procured-AI-system">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>Not applicable. The APS Markdown Conversion Service does not procure or utilize an AI model. Instead, it relies entirely on deterministic parsing libraries to transform web and document formats into standardized Markdown. As detailed in the AI Suitability Assessment pattern, a heuristic-based or deterministic approach is often more appropriate than an AI-based system because it is easier and cheaper to develop, and provides better predictability, transparency, and reliability for structured document conversion tasks.</p>
+<p class="citations">Sources: [AI Suitability Assessment, §(document start)]</p>
+<h2 id="6.4-%C2%B7-Testing">6.4 · Testing<a class="anchor-link" href="#6.4-%C2%B7-Testing">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>No. No testing (such as security, reliability, or accessibility testing) has been conducted on the deterministic parsing libraries or the web interface. As outlined in the RAI Acceptance Testing pattern, conducting acceptance testing is a critical process to verify that system requirements are met and to detect design flaws before deployment. The lack of testing poses significant risks, particularly given the potential for Server-Side Request Forgery (SSRF), malicious file uploads, and formatting corruption identified in the threshold assessment.</p>
+<p class="citations">Sources: [RAI Acceptance Testing, §(document start)]</p>
+<h2 id="6.5-%C2%B7-Pilot">6.5 · Pilot<a class="anchor-link" href="#6.5-%C2%B7-Pilot">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>No. There are no plans to conduct a pilot of the Markdown conversion service with a limited group of APS users before full deployment. Deploying the utility directly to all APS agencies without an initial pilot phase increases the risk of undetected parsing errors, security vulnerabilities, or usability issues. As noted in international practices, scaling successful pilot projects incrementally helps build stable platforms and ensures operational readiness before full-scale deployment.</p>
+<p class="citations">Sources: [OECD AI in Public Audit, p.47]</p>
+<h2 id="6.6-%C2%B7-Monitoring">6.6 · Monitoring<a class="anchor-link" href="#6.6-%C2%B7-Monitoring">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>No. There is no formal plan or structured mechanism established to monitor and evaluate the performance of the conversion service in production. The current approach relies solely on basic web analytics to track page visits and anecdotal feedback submitted via a public GitHub repository. As recommended in the AI Technical Standard, robust monitoring tools and automated alerting should be implemented to track system performance, error rates, and security events in real-time, ensuring that critical systems remain operational and secure.</p>
+<p class="citations">Sources: [AI Technical Standard, DTA-Tech-Standards!r127]</p>
+<h2 id="6.7-%C2%B7-Preparedness-to-intervene-or-disengage">6.7 · Preparedness to intervene or disengage<a class="anchor-link" href="#6.7-%C2%B7-Preparedness-to-intervene-or-disengage">¶</a></h2><p class="attribution">Assessed by: IT Security specialist</p>
+<p>No. The project outline does not indicate that clear processes, administrative interfaces, or standard operating procedures (SOPs) for human intervention or safe disengagement have been established for the APS Markdown Conversion Service. To mitigate risks associated with parsing errors, system anomalies, or security vulnerabilities, establishing these mechanisms is a critical requirement prior to deployment. Specifically, the agency must develop SOPs and integrate human-in-the-loop oversight to allow IT security or system administrators to intervene, suspend the service, or roll back updates if unresolvable issues or security threats are identified (Deploying AI Securely, p.6; AI in OT Principles, p.19).</p>
+<p class="citations">Sources: [Deploying AI Securely, p.6]; [AI in OT Principles, p.19]</p>
+<h2 id="6.8-%C2%B7-Training-of-AI-system-operators">6.8 · Training of AI system operators<a class="anchor-link" href="#6.8-%C2%B7-Training-of-AI-system-operators">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>Not applicable. The APS Markdown Conversion Service is designed as a simple, self-service web utility for public servants across all APS agencies, rather than a system requiring specialized operators. There are no dedicated 'AI system operators' to train. However, to ensure safe and effective use, clear user guidance and warnings against uploading sensitive or classified information will be displayed on the user interface, and feedback is facilitated via a public GitHub repository with automated PII scanning.</p>
+<h2 id="7.1-%C2%B7-Minimise-and-protect-personal-information">7.1 · Minimise and protect personal information<a class="anchor-link" href="#7.1-%C2%B7-Minimise-and-protect-personal-information">¶</a></h2><p class="attribution">Assessed by: Privacy specialist</p>
+<p>Yes. The core architecture of the APS Markdown Conversion Service is designed to be strictly ephemeral, processing documents and URLs in volatile memory and purging them immediately upon completion. This 'privacy by design' approach aligns with APP 11 (security of personal information) by ensuring there is no persistent storage of user-uploaded files or converted outputs, thereby minimizing the risk of unauthorized access, loss, or disclosure (APP Guidelines, p.188; OAIC AI Selection Checklist, p.2). However, full compliance with APP 3 (collection) and APP 6 (disclosure) depends on the feedback mechanism. The proposed public GitHub repository feedback channel introduces a risk of accidental disclosure of personal information. While a 250-character limit and automated PII scanning are planned, these controls must be rigorously tested, regularly audited, and accompanied by clear, prominent user warnings to ensure that no personal information is collected or disclosed via this channel (OAIC AI Selection Checklist, p.2; OAIC AI Training Checklist, p.1).</p>
+<p class="citations">Sources: [APP Guidelines, p.188]; [OAIC AI Selection Checklist, p.2]; [OAIC AI Training Checklist, p.1]</p>
+<h2 id="7.2-%C2%B7-Privacy-threshold-and/or-impact-assessment">7.2 · Privacy threshold and/or impact assessment<a class="anchor-link" href="#7.2-%C2%B7-Privacy-threshold-and/or-impact-assessment">¶</a></h2><p class="attribution">Assessed by: Privacy specialist</p>
+<p>No privacy threshold assessment or privacy impact assessment has been documented or stored for the APS Markdown Conversion Service, as no such documentation is provided in the use-case outline or threshold assessment.</p>
+<h2 id="7.3-%C2%B7-Security-risks">7.3 · Security risks<a class="anchor-link" href="#7.3-%C2%B7-Security-risks">¶</a></h2><p class="attribution">Assessed by: IT Security specialist</p>
+<p>Yes. The system implements robust measures to address security risks arising from its operation. To mitigate Server-Side Request Forgery (SSRF) risks associated with fetching external URLs, the deployment environment will implement network-level egress controls, restricting the parser from fetching internal or private IP addresses. This aligns with secure sandboxing techniques that restrict network access to internal services and APIs. Additionally, the system's architecture is designed to be strictly ephemeral, processing all files and URLs in volatile memory and purging them immediately upon completion to prevent persistent data exposure. Strict input validation and sanitisation protocols will also be enforced on all user uploads and URL inputs to protect against malicious file execution and parser exploits.</p>
+<p class="citations">Sources: [OWASP LLM Top 10, p.40]</p>
+<h2 id="8.1-%C2%B7-Consultation">8.1 · Consultation<a class="anchor-link" href="#8.1-%C2%B7-Consultation">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>No. While the primary users (public servants across all APS agencies) and key stakeholders (agency IT security teams) have been identified, the project team has confirmed that no formal consultations have been conducted or scheduled, noting that it is viewed as a simple conversion tool. To align with better practice, structured engagement should be conducted with both IT security teams (to vet cross-departmental data handling) and representative end-users, including those who rely on assistive technologies, during the design and testing phases.</p>
+<p class="citations">Sources: [ADM Better Practice Guide, p.51]</p>
+<h2 id="8.2-%C2%B7-Public-visibility">8.2 · Public visibility<a class="anchor-link" href="#8.2-%C2%B7-Public-visibility">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>Yes. Appropriate information regarding the system's scope, goals, and technical implementation will be made publicly available. The project's development and issue-tracking are hosted on a public GitHub repository, and the source code will be open to outside inspection. This open-source approach provides high public visibility, allows external scrutiny of the deterministic parsing rules, and helps build trust across participating agencies.</p>
+<h2 id="8.3-%C2%B7-Maintain-appropriate-documentation-and-records">8.3 · Maintain appropriate documentation and records<a class="anchor-link" href="#8.3-%C2%B7-Maintain-appropriate-documentation-and-records">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>No. Although the system's operational data is strictly ephemeral and is purged immediately from volatile memory (Outline §4), the project plans to rely solely on GitHub history for maintaining administrative, development, and system governance records. Under the Archives Act 1983 and National Archives of Australia (NAA) guidance, relying on GitHub history alone is insufficient. AI systems and development platforms are not designed as recordkeeping systems and lack adequate records management functionality (NAA AI Records Guidance, §General principles for managing records generated by AI). Commonwealth records documenting the acquisition, development, deployment, configuration, and governance of systems must be captured and managed in an approved records management system, typically under AFDA Express Version 2 (NAA AI Records Guidance, §General principles for managing records generated by AI; NAA AI Records Guidance, §Records supporting development and implementation of AI systems). A formal process must be established to export and capture these lifecycle records from GitHub into the agency's approved records management system.</p>
+<p class="citations">Sources: [NAA AI Records Guidance, §General principles for managing records generated by AI]; [NAA AI Records Guidance, §Records supporting development and implementation of AI systems]</p>
+<h2 id="8.4-%C2%B7-Disclosing-AI-interactions-and-outputs">8.4 · Disclosing AI interactions and outputs<a class="anchor-link" href="#8.4-%C2%B7-Disclosing-AI-interactions-and-outputs">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>Yes. (8.4.1) Users will be inherently informed when they interact with the system, as the tool is a dedicated, user-initiated web utility where public servants must actively paste a URL or upload a file to receive a Markdown output. To ensure complete transparency, the user interface should display a clear disclosure explaining that the tool uses deterministic parsing libraries and explicitly avoids LLM-based processing, thereby setting accurate expectations regarding its capabilities and limitations. (8.4.2) This tool is an internal utility for public servants rather than a public-facing service interacting with the general public, making a public-facing non-AI alternative not applicable. However, for public servants, traditional non-automated alternatives (such as manual re-typing or using standard desktop software like Pandoc) remain fully available.</p>
+<h2 id="8.5-%C2%B7-Offer-appropriate-explanations">8.5 · Offer appropriate explanations<a class="anchor-link" href="#8.5-%C2%B7-Offer-appropriate-explanations">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>Not applicable. The system is a deterministic parser that performs direct, rule-based document conversion and does not generate decisions, recommendations, or insights. Consequently, there are no underlying decision-making factors, weights, or statistical models to explain. However, because the source code is publicly available on GitHub, the exact rules governing the conversion process are fully transparent and explainable to technical stakeholders.</p>
+<h2 id="9.1-%C2%B7-Notification-of-AI-affecting-rights">9.1 · Notification of AI affecting rights<a class="anchor-link" href="#9.1-%C2%B7-Notification-of-AI-affecting-rights">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Not applicable. The APS Markdown Conversion Service is an ephemeral document conversion utility that does not make, automate, or materially influence administrative actions or decisions that have legal or significant effects on individuals, groups, or communities. It functions solely as a formatting tool for public servants to convert diverse web and document formats into standardized Markdown, and does not perform any decision-making or profiling functions.</p>
+<h2 id="9.2-%C2%B7-Challenging-administrative-actions-influenced-by-AI">9.2 · Challenging administrative actions influenced by AI<a class="anchor-link" href="#9.2-%C2%B7-Challenging-administrative-actions-influenced-by-AI">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Not applicable. Because the system does not perform, automate, or materially influence administrative actions affecting rights or interests (as detailed in section 9.1), there are no administrative actions of this nature to challenge, rendering a challenge process not applicable.</p>
+<h2 id="10.1-%C2%B7-Incorporating-diversity">10.1 · Incorporating diversity<a class="anchor-link" href="#10.1-%C2%B7-Incorporating-diversity">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>No. The project team has confirmed that there is currently no design and development team, and consequently, diversity and multidisciplinary skills have not been incorporated into the project lifecycle. To safeguard against unintentional accessibility barriers and ensure compliance with public sector standards, the project should establish a multidisciplinary team that includes user experience designers, accessibility specialists, and policy/legal professionals alongside technical developers.</p>
+<p class="citations">Sources: [ADM Better Practice Guide, p.30]; [New Machinery of Government, p.57]; [AHRC HRT Report, §Designing for people with disability]</p>
+<h2 id="10.2-%C2%B7-Human-rights-obligations">10.2 · Human rights obligations<a class="anchor-link" href="#10.2-%C2%B7-Human-rights-obligations">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>No. No accessibility or human rights reviews have been conducted to ensure that the Markdown outputs comply with human rights obligations, such as those under the Disability Discrimination Act 1992 (Cth) (HTI State of AI Governance, p. 48, 68). Although the system is a deterministic parser, the threshold assessment notes potential risks of stripping accessibility features (such as alt text or semantic headers) during conversion, which could disadvantage individuals with disabilities (HTI State of AI Governance, p. 48).</p>
+<p class="citations">Sources: [HTI State of AI Governance, p. 48]; [HTI State of AI Governance, p. 68]</p>
+<h2 id="11.1-%C2%B7-Ensuring-accountability-during-the-lifecycle-of-the-AI-system">11.1 · Ensuring accountability during the lifecycle of the AI system<a class="anchor-link" href="#11.1-%C2%B7-Ensuring-accountability-during-the-lifecycle-of-the-AI-system">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>No. As noted in the threshold assessment (sections 1.2 and 1.3), an Accountable Official and an Accountable Use Case Owner have not yet been designated for this utility. To establish proper accountability mechanisms during the lifecycle of the AI system, the agency must designate an accountable official and an accountable use case owner in accordance with the Policy for the Responsible Use of AI in Government (AI Use Policy v2.0, p. 11). Once designated, the accountable official will be responsible for implementing the policy and maintaining a register of in-scope AI use cases, while the accountable use case owner will be responsible for the specific use case throughout its lifecycle (AI Use Policy v2.0, p. 11).</p>
+<p class="citations">Sources: [AI Use Policy v2.0, p. 11]</p>
+<h2 id="12.1-%C2%B7-Alignment-with-relevant-legal-frameworks">12.1 · Alignment with relevant legal frameworks<a class="anchor-link" href="#12.1-%C2%B7-Alignment-with-relevant-legal-frameworks">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Yes. The assessment has identified and documented the relevant overarching legal and regulatory frameworks, specifically the Privacy Act 1988 (Cth) (HTI State of AI Governance, p. 40) and the Policy for the Responsible Use of AI in Government (AI Use Policy v2.0, p. 11). Since this is a general, cross-agency utility rather than an agency-specific statutory program, there is no agency-specific enabling legislation to document.</p>
+<p class="citations">Sources: [HTI State of AI Governance, p. 40]; [AI Use Policy v2.0, p. 11]</p>
+<h2 id="12.2-%C2%B7-Legal-advice">12.2 · Legal advice<a class="anchor-link" href="#12.2-%C2%B7-Legal-advice">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>No.</p>
+<ul>
+<li>12.2.1: No need for legal advice has been identified or sought during this assessment process. Although the tool converts third-party web content, which could theoretically raise copyright or intellectual property implications under the Copyright Act 1968 (Cth) (HTI State of AI Governance, p. 40), no formal legal advice has been sought.</li>
+<li>12.2.2: Not applicable. No legal advice has been sought or stored.</li>
+</ul>
+<p class="citations">Sources: [HTI State of AI Governance, p. 40]</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=b07f7156"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Residual-risk-%E2%80%94-12.3-and-12.4">Residual risk — 12.3 and 12.4<a class="anchor-link" href="#Residual-risk-%E2%80%94-12.3-and-12.4">¶</a></h1><h2 id="12.3-Residual-risk-summary">12.3 Residual risk summary<a class="anchor-link" href="#12.3-Residual-risk-summary">¶</a></h2><table class="risk-table">
+<thead><tr><th>Area</th><th>Consequence</th><th>Likelihood</th><th>Residual rating</th></tr></thead><tbody>
+<tr><td>3.1</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.2</td><td>Insignificant</td><td>Rare</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.3</td><td>Insignificant</td><td>Rare</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.4</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.5</td><td>Moderate</td><td>Unlikely</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.6</td><td>Moderate</td><td>Unlikely</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.7</td><td>Moderate</td><td>Unlikely</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.8</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+</tbody></table>
+<p class="overall">12.4 Overall residual risk rating (highest-wins): <span class="chip chip-medium">Medium</span></p>
+<p class="human-action">12.5 — Internal governance body review is a human action where the agency's governance policy requires it.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=ba7e563b"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Implementation-Plan">Appendix — Implementation Plan<a class="anchor-link" href="#Appendix-%E2%80%94-Implementation-Plan">¶</a></h1><p>The implementation of the APS Markdown Conversion Service follows a phased approach, prioritizing security, accessibility, and strict data ephemerality. The architecture centers on a stateless, containerized web application that processes inputs entirely in volatile memory. Network egress controls and strict input validation form the primary defense against Server-Side Request Forgery (SSRF) and malicious payloads. Sequencing begins with establishing a multidisciplinary team and consulting stakeholders, followed by core development of the ephemeral parser and security controls. The system will then undergo rigorous acceptance testing and a limited pilot phase before full cross-agency deployment, supported by real-time monitoring and an administrative kill-switch.</p>
+<h2 id="Implementation-steps">Implementation steps<a class="anchor-link" href="#Implementation-steps">¶</a></h2><h3 id="1.-Establish-Governance-and-Multidisciplinary-Team">1. Establish Governance and Multidisciplinary Team<a class="anchor-link" href="#1.-Establish-Governance-and-Multidisciplinary-Team">¶</a></h3><p>Appoint an Accountable Official and Accountable Use Case Owner. Form a multidisciplinary project team comprising UX designers, accessibility specialists, policy/legal professionals, and technical developers. Establish an automated pipeline to export lifecycle records (administrative, development, and governance) from GitHub into the agency's approved records management system (e.g., AFDA Express Version 2) to ensure compliance with the Archives Act.</p>
+<p><em>Answers: [Legal &amp; Administrative Law specialist, §11.1] — Designate an Accountable Official and Accountable Use Case Owner.; [Ethics &amp; Fairness specialist, §10.1] — Establish a multidisciplinary team including UX, accessibility, and policy/legal professionals.; [Data Governance specialist, §8.3] — Establish a formal process to export and capture lifecycle records from GitHub into an approved records management system.</em></p>
+<h3 id="2.-Conduct-Stakeholder-Consultation-and-Define-Accessibility-Standards">2. Conduct Stakeholder Consultation and Define Accessibility Standards<a class="anchor-link" href="#2.-Conduct-Stakeholder-Consultation-and-Define-Accessibility-Standards">¶</a></h3><p>Engage IT security teams to vet cross-departmental data handling and consult representative end-users, including those using assistive technologies. Define fairness explicitly around accessibility: configure the deterministic parsers to preserve alt text and semantic headers. Conduct formal accessibility and human rights reviews to ensure outputs comply with the Disability Discrimination Act 1992 (Cth).</p>
+<p><em>Answers: [Ethics &amp; Fairness specialist, §8.1] — Conduct structured engagement with IT security teams and representative end-users during design and testing.; [Ethics &amp; Fairness specialist, §5.1] — Define fairness in terms of accessibility, ensuring parsers do not strip critical features like alt text or semantic headers.; [Legal &amp; Administrative Law specialist, §10.2] — Conduct accessibility and human rights reviews to ensure compliance with obligations such as the Disability Discrimination Act.</em></p>
+<h3 id="3.-Implement-Ephemeral-Architecture-and-Egress-Controls">3. Implement Ephemeral Architecture and Egress Controls<a class="anchor-link" href="#3.-Implement-Ephemeral-Architecture-and-Egress-Controls">¶</a></h3><p>Deploy the application using containerized environments configured with <code>tmpfs</code> mounts to ensure all document processing occurs strictly in volatile memory, with immediate purging post-conversion. To prevent SSRF, implement strict network-level egress controls blocking the parser from accessing internal or private IP ranges.</p>
+<div class="highlight"><pre><span></span><span class="c1"># Example Kubernetes NetworkPolicy snippet for egress control</span>
+<span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">networking.k8s.io/v1</span>
+<span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">NetworkPolicy</span>
+<span class="nt">metadata</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">deny-internal-egress</span>
+<span class="nt">spec</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">podSelector</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">matchLabels</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">markdown-parser</span>
+<span class="w">  </span><span class="nt">policyTypes</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Egress</span>
+<span class="w">  </span><span class="nt">egress</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">to</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">ipBlock</span><span class="p">:</span>
+<span class="w">        </span><span class="nt">cidr</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0.0.0/0</span>
+<span class="w">        </span><span class="nt">except</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0.0.0/8</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">172.16.0.0/12</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">192.168.0.0/16</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">169.254.169.254/32</span>
+</pre></div>
+<p><em>Answers: [IT Security specialist, §7.3] — Implement network-level egress controls to restrict fetching internal/private IPs and process files in volatile memory.; [Privacy specialist, §7.1] — Process documents in volatile memory and purge immediately to ensure no persistent storage.</em></p>
+<h3 id="4.-Enforce-Input-Validation-and-UI-Disclosures">4. Enforce Input Validation and UI Disclosures<a class="anchor-link" href="#4.-Enforce-Input-Validation-and-UI-Disclosures">¶</a></h3><p>Implement strict input validation and sanitisation on all URL and file uploads to prevent malicious execution. On the user interface, display a clear disclosure that the tool uses deterministic parsing (avoiding LLMs entirely). Add prominent warnings instructing users not to upload sensitive or classified information, and advise them to ensure input files are accurate and complete for reliable parsing.</p>
+<p><em>Answers: [IT Security specialist, §7.3] — Enforce strict input validation and sanitisation protocols on user uploads and URLs.; [Ethics &amp; Fairness specialist, §8.4] — Display a clear UI disclosure explaining the use of deterministic parsing and the avoidance of LLM processing.; [Solution Architect (sections), §6.8] — Display clear user guidance and warnings against uploading sensitive or classified information.; [Data Governance specialist, §6.1] — Provide user guidance to ensure input files are accurate, complete, and conform to expected formats.</em></p>
+<h3 id="5.-Configure-GitHub-Feedback-Safeguards-and-Open-Source-Release">5. Configure GitHub Feedback Safeguards and Open Source Release<a class="anchor-link" href="#5.-Configure-GitHub-Feedback-Safeguards-and-Open-Source-Release">¶</a></h3><p>Release the source code to a public GitHub repository to allow external scrutiny. Configure the issue tracker to enforce a 250-character limit on feedback submissions. Deploy and rigorously test an automated GitHub Action to scan for and redact PII in incoming issues. Schedule regular audits of this feedback channel to ensure no personal information is inadvertently collected or disclosed.</p>
+<p><em>Answers: [Ethics &amp; Fairness specialist, §8.2] — Make the source code publicly available on GitHub for external inspection and transparency.; [Privacy specialist, §7.1] — Rigorously test and audit the GitHub feedback mechanism, including the 250-character limit and automated PII scanning.</em></p>
+<h3 id="6.-Develop-Admin-Kill-Switch-and-Incident-Response-Plan">6. Develop Admin Kill-Switch and Incident Response Plan<a class="anchor-link" href="#6.-Develop-Admin-Kill-Switch-and-Incident-Response-Plan">¶</a></h3><p>Build an administrative interface featuring a 'kill-switch' that allows IT security teams to immediately suspend the entire service or disable specific parsing libraries if a vulnerability is detected. Draft Standard Operating Procedures (SOPs) and a cyber security incident response plan detailing roles and responsibilities for system disengagement.</p>
+<p><em>Answers: [IT Security specialist, §6.7] — Implement an administrative interface and 'kill-switch', and develop SOPs and an incident response plan.</em></p>
+<h3 id="7.-Conduct-Acceptance-Testing-and-Accessibility-Auditing">7. Conduct Acceptance Testing and Accessibility Auditing<a class="anchor-link" href="#7.-Conduct-Acceptance-Testing-and-Accessibility-Auditing">¶</a></h3><p>Develop an audit toolkit to quantitatively and qualitatively measure the accessibility of the Markdown outputs. Before deployment, conduct comprehensive acceptance testing covering security (SSRF, malicious uploads), reliability (formatting corruption), and accessibility to verify system requirements and detect design flaws.</p>
+<p><em>Answers: [Ethics &amp; Fairness specialist, §5.2] — Implement a structured mechanism/audit toolkit to measure the fairness and accessibility of outputs.; [Solution Architect (sections), §6.4] — Conduct acceptance testing (security, reliability, accessibility) to detect flaws before deployment.</em></p>
+<h3 id="8.-Deploy-Pilot-and-Implement-Real-Time-Monitoring">8. Deploy Pilot and Implement Real-Time Monitoring<a class="anchor-link" href="#8.-Deploy-Pilot-and-Implement-Real-Time-Monitoring">¶</a></h3><p>Roll out the conversion service to a limited pilot group of APS users to identify undetected parsing errors or usability issues. Concurrently, deploy robust monitoring tools and automated alerting to track system performance, error rates, and security events in real-time. Proceed to full cross-agency deployment only after pilot success criteria are met.</p>
+<p><em>Answers: [Solution Architect (sections), §6.5] — Conduct a pilot with a limited group of APS users before full deployment.; [Solution Architect (sections), §6.6] — Implement robust monitoring tools and automated alerting to track system performance, error rates, and security events.</em></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=f22d16db"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Recommended-next-steps">Appendix — Recommended next steps<a class="anchor-link" href="#Appendix-%E2%80%94-Recommended-next-steps">¶</a></h1><p>No gaps or unanswered questions were recorded.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=deb11448"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Provenance">Appendix — Provenance<a class="anchor-link" href="#Appendix-%E2%80%94-Provenance">¶</a></h1><div class="provenance">
+<p>Run id: <code>WT-H2A8-H3</code></p>
+<p>Created: <code>2026-07-18T06:17:32Z</code></p>
+<p>Generated: <code>2026-07-18T12:29:18Z</code></p>
+<p>Models and prompts per role:</p><ul>
+<li><code>architect</code>: gemini-3.1-pro-preview (prompt v1)</li>
+<li><code>reviewer</code>: gemini-3.1-pro-preview (prompt v1)</li>
+<li><code>specialist</code>: gemini-3.5-flash (prompt v1)</li>
+<li><code>threshold_generalist</code>: gemini-3.5-flash (prompt v1)</li>
+<li><code>threshold_reconciler</code>: gemini-3.1-pro-preview (prompt v1)</li>
+</ul>
+<p>Corpus manifest versions:</p><ul>
+<li><code>it_security</code>: 2026-07-15T14:44:12Z (13 documents)</li>
+<li><code>privacy</code>: 2026-07-15T14:44:22Z (8 documents)</li>
+<li><code>ethics</code>: 2026-07-15T14:44:36Z (17 documents)</li>
+<li><code>legal</code>: 2026-07-15T14:44:49Z (11 documents)</li>
+<li><code>data_governance</code>: 2026-07-15T14:44:53Z (5 documents)</li>
+<li><code>solution_architect</code>: 2026-07-15T14:44:54Z (56 documents)</li>
+</ul>
+<p class="attestation">Inputs were NOT attested by the submitting officer as at or below OFFICIAL.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=3e67ca5b"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="References">References<a class="anchor-link" href="#References">¶</a></h1><div class="references">
+<p class="reference"><strong>AI Suitability Assessment</strong> — CSIRO Data61 — 2023 <a href="https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/">https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/</a></p>
+<p class="reference"><strong>APP Guidelines</strong> — Australian Privacy Principles Guidelines (consolidated; Chapter 3 updated) — Office of the Australian Information Commissioner — consolidated <a href="https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines">https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines</a></p>
+<p class="reference"><strong>ADM Better Practice Guide</strong> — Automated Decision-Making Better Practice Guide — Commonwealth Ombudsman — March 2025 <a href="https://www.ombudsman.gov.au/__data/assets/pdf_file/0025/317437/Automated-Decision-Making-Better-Practice-Guide-March-2025.pdf">https://www.ombudsman.gov.au/__data/assets/pdf_file/0025/317437/Automated-Decision-Making-Better-Practice-Guide-March-2025.pdf</a></p>
+<p class="reference"><strong>DDGS</strong> — Data and Digital Government Strategy — Digital Transformation Agency and Department of Finance — v1.0 (December 2023) <a href="https://www.dataanddigital.gov.au/strategy">https://www.dataanddigital.gov.au/strategy</a></p>
+<p class="reference"><strong>Deploying AI Securely</strong> — Deploying AI Systems Securely: Best Practices for Deploying Secure and Resilient AI Systems — US National Security Agency (with CISA, FBI, ASD ACSC and partners) — 2024 <a href="https://www.cyber.gov.au/about-us/view-all-content/publications/deploying-ai-systems-securely">https://www.cyber.gov.au/about-us/view-all-content/publications/deploying-ai-systems-securely</a></p>
+<p class="reference"><strong>AHRC HRT Report</strong> — Human Rights and Technology Final Report — Australian Human Rights Commission — 2021 <a href="https://humanrights.gov.au/our-work/rights-and-freedoms/publications/human-rights-and-technology-final-report-2021">https://humanrights.gov.au/our-work/rights-and-freedoms/publications/human-rights-and-technology-final-report-2021</a></p>
+<p class="reference"><strong>NAA AI Records Guidance</strong> — Information management for records created using Artificial Intelligence (AI) technologies — National Archives of Australia — January 2025 <a href="https://www.naa.gov.au/information-management/information-management-basics/artificial-intelligence">https://www.naa.gov.au/information-management/information-management-basics/artificial-intelligence</a></p>
+<p class="reference"><strong>OWASP LLM Top 10</strong> — OWASP Top 10 for Large Language Model Applications — OWASP Foundation — 2025 <a href="https://genai.owasp.org/llm-top-10/">https://genai.owasp.org/llm-top-10/</a></p>
+<p class="reference"><strong>AI Use Policy v2.0</strong> — Policy for the responsible use of AI in government — Digital Transformation Agency — 2.0 <a href="https://www.dta.gov.au/policies-and-guidance/policy-responsible-use-ai-government">https://www.dta.gov.au/policies-and-guidance/policy-responsible-use-ai-government</a></p>
+<p class="reference"><strong>AI in OT Principles</strong> — Principles for the secure integration of artificial intelligence in operational technology — Australian Signals Directorate (with CISA and partners) — 2025 <a href="https://www.cyber.gov.au/about-us/view-all-content/publications">https://www.cyber.gov.au/about-us/view-all-content/publications</a></p>
+<p class="reference"><strong>OAIC AI Selection Checklist</strong> — Privacy considerations checklist: selecting an AI product — Office of the Australian Information Commissioner — 2024 <a href="https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-the-use-of-commercially-available-ai-products">https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-the-use-of-commercially-available-ai-products</a></p>
+<p class="reference"><strong>OAIC AI Training Checklist</strong> — Privacy considerations checklist: training a generative AI model — Office of the Australian Information Commissioner — 2024 <a href="https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models">https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models</a></p>
+<p class="reference"><strong>RAI Acceptance Testing</strong> — CSIRO Data61 — 2023 <a href="https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/">https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/</a></p>
+<p class="reference"><strong>Data Quality Checklist</strong> — Strengthen data quality: data quality checklist — National AI Centre — 2026 <a href="https://www.ai.gov.au/planning-ai/strengthen-data-quality">https://www.ai.gov.au/planning-ai/strengthen-data-quality</a></p>
+<p class="reference"><strong>AI Technical Standard</strong> — Technical Standard for Government's use of Artificial Intelligence (AI technical standard) — Digital Transformation Agency — 2025 <a href="https://www.digital.gov.au/policy/ai/standard">https://www.digital.gov.au/policy/ai/standard</a></p>
+<p class="reference"><strong>New Machinery of Government</strong> — The new machinery of government: using machine technology in administrative decision-making (front section) — NSW Ombudsman — November 2021 <a href="https://www.ombo.nsw.gov.au/news-and-publications/publications/reports/the-new-machinery-of-government-using-machine-technology-in-administrative-decision-making">https://www.ombo.nsw.gov.au/news-and-publications/publications/reports/the-new-machinery-of-government-using-machine-technology-in-administrative-decision-making</a></p>
+<p class="reference"><strong>HTI State of AI Governance</strong> — The State of AI Governance in Australia — Human Technology Institute, University of Technology Sydney — 31 May 2023 <a href="https://www.uts.edu.au/human-technology-institute/projects/state-ai-governance-australia">https://www.uts.edu.au/human-technology-institute/projects/state-ai-governance-australia</a></p>
+<p class="reference"><strong>OECD AI in Public Audit</strong> — The state of artificial intelligence in public audit: Evidence from selected countries and the European Union — OECD — 2026 (OECD Artificial Intelligence Papers No. 58) <a href="https://doi.org/10.1787/f4a6c658-en">https://doi.org/10.1787/f4a6c658-en</a></p>
+</div>
+</div>
+</div>
+</div>
+
+</main>
+<div class="running-footer" role="contentinfo">Draft for SME review — not an approval, not legal advice.</div>
+</body>
+</html>
