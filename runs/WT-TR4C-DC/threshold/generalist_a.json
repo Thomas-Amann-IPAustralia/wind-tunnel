@@ -1,0 +1,54 @@
+{
+  "label": "generalist_a",
+  "sections": {
+    "1": "### 1.1 AI Use Case Profile\n- **Name**: Canberra Business Navigator\n- **Summary**: A chatbot designed to guide small business owners through government registration, regulatory requirements, and funding opportunities.\n\n### 1.2 - 1.3 Responsibilities\n- Not stated in the outline.\n\n### 1.4 AI Use Case Description\nThe Canberra Business Navigator is a conversational AI assistant that acts as a navigator for small business owners in Canberra. It uses a large language model (LLM) to ingest and interpret public ACT government regulatory documents, legislation, and funding guidelines. Users can ask plain-language questions about their specific business obligations and opportunities, and the bot provides concise, plain-language summaries. If a query is ambiguous or the bot lacks a definitive answer, it provides links to official ACT government contact points and portals.\n\n### 1.5 In-Scope Use Case\nYes, the use case involves deploying a conversational AI tool to assist the public with navigating government regulatory information.\n\n### 1.6 Type of AI Technology\nLarge Language Model (LLM) / Generative AI.\n\n### 1.7 Usage Pattern\nConversational chatbot accessible via WhatsApp and integrated into the official Business.gov web portal.\n\n### 1.8 Administrative Decisions\nThe system does not make administrative decisions. It is strictly constrained to avoid providing legal advice or recommending specific commercial suppliers, framing all interactions as informational guidance.\n\n### 1.9 Domain\nBusiness regulation, government services, compliance, and funding.\n\n### 1.10 - 1.11 Expert Contributions & Review Log\n- Not stated in the outline.",
+    "2": "### 2.1 Problem Definition\nSmall business owners in Canberra struggle to navigate complex government registration requirements, regulatory obligations, and funding opportunities. This complexity leads to confusion and potential compliance gaps.\n\n### 2.2 AI Use Case Purpose\nTo provide a 24/7 conversational assistant that translates complex regulatory language into actionable, personalized, plain-language advice, helping users understand their obligations and opportunities.\n\n### 2.3 Non-AI Alternatives\n- Centralized government call centers (limited by operating hours).\n- Static, search-based knowledge bases (unable to interpret specific, nuanced business contexts).\n\n### 2.4 Identifying Stakeholders\n- **Primary Users**: Small business owners in Canberra.\n- **Key Stakeholders**: ACT government staff managing regulatory compliance, professional business advisors, and accountants whose workflows may be impacted by the tool.\n\n### 2.5 Expected Benefits\n- 24/7 accessibility to regulatory guidance.\n- Personalized, plain-language summaries grounded in authoritative content.\n- Improved compliance and reduced confusion for small businesses.\n- Target of at least 70% 'thumbs up' user satisfaction feedback within six months.\n- Target of 10% of total Business.gov portal traffic originating from chatbot referrals.",
+    "4": "### 4.1 Assessing Officer Recommendation\nThe Canberra Business Navigator represents a high-utility application of generative AI to improve the accessibility of government regulatory information. However, because the system provides guidance on critical regulatory and compliance matters (such as WHS obligations) directly to the public, there are inherent risks of hallucination, misinformation, and public trust erosion. \n\nTo manage these risks, it is recommended that the project team implement a robust Retrieval-Augmented Generation (RAG) architecture to strictly ground the LLM's responses in the provided authoritative documents. Comprehensive testing and validation of the bot's outputs must be conducted prior to launch, particularly concerning high-risk regulatory topics. Clear, prominent disclaimers must be integrated into both the WhatsApp and web interfaces to reinforce that the tool provides informational guidance, not legal advice. Furthermore, a continuous monitoring and feedback loop should be established to review chat logs (ensuring compliance with government information standards and privacy principles) and to iteratively refine the system's accuracy and accessibility."
+  },
+  "risks": {
+    "3.1": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "The tool is deployed via WhatsApp and a web portal to assist the public. If the LLM misinterprets queries or fails to provide accessible outputs, it could create barriers for business owners, particularly those with diverse language or accessibility needs. Applying a precautionary approach, we default to 'Possible' likelihood and 'Moderate' consequence as some groups could be impacted by incorrect or inaccessible guidance."
+    },
+    "3.2": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "Although the system uses public regulatory documents, LLMs can introduce subtle biases or prioritize certain types of businesses over others when summarizing opportunities or funding guidelines. Precautionary principles dictate that bias is a 'Possible' risk with 'Moderate' consequences requiring intervention if detected."
+    },
+    "3.3": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rationale": "The chatbot's domain is strictly limited to business registration, regulatory documents, and funding guidelines. While LLMs can generate unexpected outputs, the highly structured and professional nature of the source data makes demeaning representations 'Unlikely', with 'Minor' consequences if an isolated incident occurs."
+    },
+    "3.4": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "The chatbot provides guidance on regulatory obligations, including Work Health and Safety (WHS). If the bot hallucinates or provides incorrect compliance advice, a business could face regulatory penalties or operate unsafely. Under the precautionary principle, this is a 'Possible' likelihood with 'Moderate' consequences for the affected businesses."
+    },
+    "3.5": {
+      "consequence": "Minor",
+      "likelihood": "Possible",
+      "rationale": "The system itself only ingests public data and does not require private records. However, users may voluntarily input sensitive personal or business information into the WhatsApp or web chat. Since logs are retained for audit, this creates a 'Possible' risk of minor privacy exposure, with 'Minor' consequences."
+    },
+    "3.6": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rationale": "The AI system uses publicly available government documents, meaning the data itself has no security classification. The only data at risk is the interaction logs. Thus, security concerns regarding data aspects are 'Unlikely' to cause more than 'Minor' consequences."
+    },
+    "3.7": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "Public-facing conversational AI systems are vulnerable to prompt injection, jailbreaking, or being used to generate unauthorized content. This presents a 'Possible' risk where system vulnerabilities could lead to 'Moderate' consequences, such as the system being manipulated to provide false official advice."
+    },
+    "3.8": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "The chatbot is hosted on the official Business.gov portal and branded as an ACT Government tool. If it provides incorrect regulatory guidance or is manipulated publicly, it is 'Possible' that public confidence in government digital services will be dented, leading to 'Moderate' reputational consequences requiring remedial communication."
+    }
+  },
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
