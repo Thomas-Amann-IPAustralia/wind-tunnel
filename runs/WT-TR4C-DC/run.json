@@ -2,9 +2,9 @@
   "schema_version": 1,
   "run_id": "WT-TR4C-DC",
   "created_at": "2026-07-17T09:10:23Z",
-  "updated_at": "2026-07-18T00:35:33Z",
+  "updated_at": "2026-07-18T23:34:51Z",
   "stage": "THRESHOLD_RECONCILING",
-  "stage_status": "failed",
+  "stage_status": "in_progress",
   "phase": "threshold",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "07b9b8581fc42c4213d0419b983f936e2a3cdc77"
@@ -20,9 +20,5 @@
     "sensitivity_ceiling": "OFFICIAL",
     "attested": false
   },
-  "last_error": {
-    "stage": "threshold.reconciler",
-    "message": "Something went wrong while reconciling the threshold assessment. Your run is safe — paste the run code WT-TR4C-DC to resume from the last checkpoint.",
-    "technical": "LLMError: 'threshold_reconciler' (gemini-3.1-pro-preview) did not return valid JSON: Extra data: line 25 column 1 (char 10833). First 200 chars: '{\\n  \"sections\": {\\n    \"1\": \"### 1.1 AI Use Case Profile\\\\n- **Name**: Canberra Business Navigator\\\\n- **Summary**: A conversational AI assistant designed to guide small business owners through governmen'"
-  }
+  "last_error": null
 }

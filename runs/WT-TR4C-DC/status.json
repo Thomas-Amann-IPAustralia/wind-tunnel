@@ -3,8 +3,8 @@
   "run_id": "WT-TR4C-DC",
   "run_code": "WT-TR4C-DC",
   "phase": "threshold",
-  "overall_state": "failed",
-  "updated_at": "2026-07-18T00:35:33Z",
+  "overall_state": "running",
+  "updated_at": "2026-07-18T23:34:51Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -105,16 +105,18 @@
       "agent": "threshold.reconciler",
       "type": "error",
       "detail": "Something went wrong while reconciling the threshold assessment. Your run is safe — paste the run code WT-TR4C-DC to resume from the last checkpoint."
+    },
+    {
+      "id": "evt_000013",
+      "ts": "2026-07-18T23:34:51Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 12,
+  "log_cursor": 13,
   "questions": null,
-  "failure": {
-    "stage": "threshold.reconciler",
-    "message": "Something went wrong while reconciling the threshold assessment. Your run is safe — paste the run code WT-TR4C-DC to resume from the last checkpoint.",
-    "run_code": "WT-TR4C-DC",
-    "technical": "LLMError: 'threshold_reconciler' (gemini-3.1-pro-preview) did not return valid JSON: Extra data: line 25 column 1 (char 10833). First 200 chars: '{\\n  \"sections\": {\\n    \"1\": \"### 1.1 AI Use Case Profile\\\\n- **Name**: Canberra Business Navigator\\\\n- **Summary**: A conversational AI assistant designed to guide small business owners through governmen'"
-  },
+  "failure": null,
   "expected_ranges": {
     "threshold": [
       50,
