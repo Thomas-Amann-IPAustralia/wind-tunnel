@@ -184,6 +184,31 @@ describe("Chamber state routing", () => {
     expect(screen.queryByText(/GeminiTransport: 503/)).toBeNull();
   });
 
+  it("failed: 'Resume the run' re-dispatches from the last checkpoint", async () => {
+    serve(
+      baseDoc({
+        overall_state: "failed",
+        nodes: { "threshold.generalist_a": "failed" },
+        failure: {
+          stage: "threshold.generalist_a",
+          message: "Something went wrong while drafting.",
+          run_code: CODE,
+          technical: "LLMError: did not return valid JSON",
+        },
+      }),
+    );
+    vi.mocked(redispatchRun).mockResolvedValue({
+      run_id: CODE,
+      resume_from: "THRESHOLD_DRAFTING",
+      dispatched: true,
+    });
+    renderChamber();
+    const resume = await screen.findByRole("button", { name: /resume the run/i });
+    fireEvent.click(resume);
+    expect(await screen.findByText(/resume requested/i)).toBeTruthy();
+    expect(redispatchRun).toHaveBeenCalledWith(CODE);
+  });
+
   it("complete (full): shows the report with the revision affordance", async () => {
     serve(baseDoc({ phase: "full", overall_state: "complete" }));
     renderChamber();

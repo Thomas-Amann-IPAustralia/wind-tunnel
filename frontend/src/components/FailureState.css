@@ -40,6 +40,12 @@
   font-size: var(--text-sm);
 }
 
+.wt-failure__resume-error {
+  color: var(--chamber-ink);
+  font-size: var(--text-sm);
+  max-width: 44rem;
+}
+
 .wt-failure__technical {
   display: flex;
   flex-direction: column;

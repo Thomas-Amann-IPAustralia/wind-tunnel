@@ -78,3 +78,8 @@ Return a single JSON object, no prose outside it, exactly this shape:
 
 Every one of `3.1`–`3.8` must be present. Do not add a `rating` key. Do not add
 keys outside this schema.
+
+The section values are long markdown strings — take care that the object stays
+valid JSON: escape every double quote inside a string as `\"` and every newline
+as `\n`, put a comma between every pair of entries, and emit **nothing** outside
+the one JSON object (no prose, no code fence, nothing after the closing `}`).

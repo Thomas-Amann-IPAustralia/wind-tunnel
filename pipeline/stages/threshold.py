@@ -69,13 +69,21 @@ _RISK_TITLES = {
 
 def threshold_drafting(ctx: StageContext) -> None:
     """Two generalists (Flash) draft sections 1–4 independently (§5.1). Outputs
-    ``threshold/generalist_a.json`` and ``threshold/generalist_b.json``."""
+    ``threshold/generalist_a.json`` and ``threshold/generalist_b.json``.
+
+    Each generalist is individually idempotent (§5.3): a retry after a mid-stage
+    failure (say, B died after A's draft was pulse-committed) skips the finished
+    draft rather than paying for its LLM call again — the rebuilt status log
+    already narrates the completed node, so no event is re-emitted."""
     outline = ctx.outline()
     for node, label in ((NODE_A, "generalist_a"), (NODE_B, "generalist_b")):
+        relpath = f"threshold/{label}.json"
+        if ctx.path(relpath).is_file():
+            continue
         ctx.status.start_node(node)
         ctx.status.drafting(node, "drafting threshold sections 1–4")
         draft = run_generalist(ctx.llm, label, outline)
-        ctx.write_json(f"threshold/{label}.json", draft.to_dict())
+        ctx.write_json(relpath, draft.to_dict())
         ctx.status.complete_node(node)
 
 

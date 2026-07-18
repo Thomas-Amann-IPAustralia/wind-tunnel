@@ -32,6 +32,7 @@ import os
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
+from typing import Callable
 
 from statefile import RunState, Stage, StageStatus, utc_now_iso
 
@@ -234,7 +235,16 @@ def _event_id(ordinal: int) -> str:
 class StatusModel:
     """The status.json document (§6.1). Node/event coupling (§6.3) is enforced:
     ``active``/``complete``/``failed`` are only reachable via methods that append
-    the matching event, so the graph can never silently diverge from the log."""
+    the matching event, so the graph can never silently diverge from the log.
+
+    ``pulse`` — when set (the driver installs it, run.py) — is called after node
+    transitions and sub-activity events so the projection is *published* as the
+    run progresses, not only at stage checkpoints (§6.3 heartbeat cadence; the
+    SPA's animation watches the committed file, and a graph that only moves at
+    checkpoints reads as a hung run for the entire first stage). ``urgent=True``
+    (a node entering/leaving ``active``) always publishes; ``urgent=False``
+    (drafting/retrieval sub-activity) is throttled by the installer. Never part
+    of the serialised document."""
 
     run_id: str
     phase: str
@@ -246,6 +256,7 @@ class StatusModel:
     expected_ranges: dict | None = None
     updated_at: str = ""
     schema_version: int = SCHEMA_VERSION
+    pulse: Callable[[bool], None] | None = field(default=None, repr=False, compare=False)
 
     # -- construction -----------------------------------------------------------
 
@@ -361,7 +372,10 @@ class StatusModel:
         """An agent read a chunk (§6.3): ephemeral label on the node."""
         self._require_node(node_id)
         ref = {"doc": doc, "locator": locator} if doc or locator else None
-        return self._append(node_id, "retrieval", detail, ref, now)
+        evt = self._append(node_id, "retrieval", detail, ref, now)
+        if self.pulse is not None:
+            self.pulse(False)  # throttled — sub-activity feeds the animation (§7.2.5)
+        return evt
 
     def drafting(
         self,
@@ -374,7 +388,10 @@ class StatusModel:
         """Node sub-activity, e.g. "drafting §7.3" (§6.3)."""
         self._require_node(node_id)
         ref = {"section": section} if section else None
-        return self._append(node_id, "drafting", detail, ref, now)
+        evt = self._append(node_id, "drafting", detail, ref, now)
+        if self.pulse is not None:
+            self.pulse(False)  # throttled — sub-activity feeds the animation (§7.2.5)
+        return evt
 
     def question_raised(
         self,
@@ -423,7 +440,13 @@ class StatusModel:
         self._touch(now)
 
     def set_running(self, *, now: str | None = None) -> None:
-        """The "tunnel is running" signal — pair with the first heartbeat (§5.7)."""
+        """The "tunnel is running" signal — pair with the first heartbeat (§5.7).
+
+        Clears any failure payload: a resumed run is running again, and one poll
+        must never show both (§6.1 — one poll fully determines visible state).
+        Matches :func:`rebuild`, which only carries a failure while the run's
+        stage_status is failed."""
+        self.failure = None
         self.set_overall("running", now=now)
 
     def set_complete(self, *, now: str | None = None) -> None:
@@ -453,7 +476,13 @@ class StatusModel:
             "complete": f"{friendly_name(node_id)} complete",
             "failed": f"{friendly_name(node_id)} failed",
         }[state]
-        return self._append(node_id, event_type, detail or default_detail, None, now)
+        evt = self._append(node_id, event_type, detail or default_detail, None, now)
+        # Publish node transitions as they happen (§6.3 cadence). `failed` is
+        # excluded: the driver's failure path persists + commits immediately after,
+        # with the failure payload this method has not yet populated.
+        if state in ("active", "complete") and self.pulse is not None:
+            self.pulse(True)
+        return evt
 
     def _append(
         self, agent: str, event_type: str, detail: str, ref: dict | None, now: str | None

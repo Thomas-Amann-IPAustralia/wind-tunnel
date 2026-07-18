@@ -82,17 +82,24 @@ _ARTEFACTS: dict[str, tuple[str, str]] = {
     "flow-map.mmd": ("brainstorm/flow-map.mmd", "text/plain; charset=utf-8"),
 }
 
-# The dispatched stages a run can be re-kicked from (§5.7), mapped to the
-# ``resume_from`` the original dispatch used. SUBMITTED is a gate whose pipeline
-# entry is THRESHOLD_DRAFTING; every other stage here is entered by resuming from
-# itself. Paused (AWAITING_USER) and terminal stages are absent — they are not
-# waiting on a dispatch. (See ``/redispatch``.)
+# The dispatched stages a run can be (re-)kicked from (§5.7, §5.6), mapped to the
+# ``resume_from`` the dispatch uses. SUBMITTED is a gate whose pipeline entry is
+# THRESHOLD_DRAFTING; every other stage here is entered by resuming from itself.
+# Paused (AWAITING_USER) and terminal stages are absent — they are not waiting on
+# a dispatch. ARCHITECT/REVIEW/ASSEMBLY are never dispatch *targets* on the happy
+# path (the driver flows into them), but a run can fail or die mid-flight there,
+# and its retry resumes from exactly that stage — an earlier resume_from would
+# fast-forward through checkpointed stages into a wrong re-pause. (See
+# ``/redispatch``.)
 _REDISPATCH_RESUME_FROM: dict[statefile.Stage, str] = {
     statefile.Stage.SUBMITTED: "THRESHOLD_DRAFTING",
     statefile.Stage.THRESHOLD_DRAFTING: "THRESHOLD_DRAFTING",
     statefile.Stage.THRESHOLD_RECONCILING: "THRESHOLD_RECONCILING",
     statefile.Stage.FULL_DRAFTING: "FULL_DRAFTING",
     statefile.Stage.FULL_REVISING: "FULL_REVISING",
+    statefile.Stage.ARCHITECT: "ARCHITECT",
+    statefile.Stage.REVIEW: "REVIEW",
+    statefile.Stage.ASSEMBLY: "ASSEMBLY",
     statefile.Stage.USER_REVISION: "USER_REVISION",
 }
 
@@ -622,11 +629,15 @@ def create_app(
         prior work: the pipeline resumes idempotently from its last checkpoint (§5.3)
         and the governance workflow's per-run ``concurrency`` group serialises repeat
         dispatches (a second queues, never races), so this is safe to call more than
-        once. Valid only for a non-paused, non-terminal dispatched stage — the
-        ``resume_from`` is the one the original dispatch used."""
+        once. Valid for a non-paused, non-terminal dispatched stage — the
+        ``resume_from`` is the one the original dispatch used — and equally for a
+        **failed** run (§5.6): "resume from the last checkpoint" is this endpoint,
+        with the driver clearing the FAILED marker on entry and idempotent skip
+        (§5.3) protecting every checkpointed stage before the failed one."""
         run = _load_run(run_id)
         resume_from = _REDISPATCH_RESUME_FROM.get(run.stage)
-        if resume_from is None or run.stage_status is not statefile.StageStatus.IN_PROGRESS:
+        retryable = (statefile.StageStatus.IN_PROGRESS, statefile.StageStatus.FAILED)
+        if resume_from is None or run.stage_status not in retryable:
             raise HTTPException(
                 http_status.HTTP_409_CONFLICT,
                 f"Run {run_id} is not awaiting a governance dispatch "
