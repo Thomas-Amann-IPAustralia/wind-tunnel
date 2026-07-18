@@ -1,0 +1,2 @@
+{"role": "user", "text": "a chatbot built hosted and maintained by the ATO to help the public understand what they can deduct", "ts": "2026-07-18T23:36:44Z"}
+{"role": "assistant", "text": "That sounds like a high-impact way to reduce taxpayer anxiety and call center volume. I've assumed this will be a public-facing web interface; how do you plan to handle the risk of the model providing incorrect tax advice?", "ts": "2026-07-18T23:36:44Z"}

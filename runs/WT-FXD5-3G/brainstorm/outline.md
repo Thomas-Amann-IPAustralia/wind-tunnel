@@ -7,33 +7,33 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-FXD5-3G"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-FXD5-3G"
+title: "ATO Deduction Assistant"
+summary: "A public-facing chatbot designed to help taxpayers understand deduction eligibility through conversational guidance."
 created_at: "2026-07-18T23:35:12Z"
-updated_at: "2026-07-18T23:35:12Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-18T23:36:44Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "ux_ui"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Taxpayers often struggle to navigate complex deduction rules, leading to errors in their returns or unnecessary inquiries to the ATO.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+A public-facing chatbot hosted by the ATO that provides guidance on eligible tax deductions based on user-provided employment or expense details, using an LLM to interpret tax policy documents.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+Primary users are individual taxpayers; stakeholders include ATO support staff and policy teams responsible for the accuracy of the guidance.
 
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+The system will process public tax policy documents and potentially anonymized user-provided financial scenarios; it must be strictly isolated from actual taxpayer account data.
 
 <!-- section: happy_path -->
 ## 5. Happy path
@@ -48,7 +48,7 @@ resolved: []          # section ids populated so far; maintained by the backend 
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-*What the user sees and touches — or an honest "nothing; it's headless."*
+A web-based chat interface integrated into the existing ATO portal, likely featuring a disclaimer and links to official policy documentation for verification.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
