@@ -4,13 +4,13 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T06:29:09Z",
+  "updated_at": "2026-07-18T06:29:35Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
-    "full.specialist.it_security": "active",
+    "full.specialist.it_security": "complete",
     "full.specialist.privacy": "pending",
     "full.specialist.ethics": "pending",
     "full.specialist.legal": "pending",
@@ -407,9 +407,93 @@
         "doc": "PSPF PA001-2026",
         "locator": "p.4"
       }
+    },
+    {
+      "id": "evt_000043",
+      "ts": "2026-07-18T06:29:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000044",
+      "ts": "2026-07-18T06:29:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.24"
+      }
+    },
+    {
+      "id": "evt_000045",
+      "ts": "2026-07-18T06:29:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000046",
+      "ts": "2026-07-18T06:29:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000047",
+      "ts": "2026-07-18T06:29:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000048",
+      "ts": "2026-07-18T06:29:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000049",
+      "ts": "2026-07-18T06:29:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.23"
+      }
+    },
+    {
+      "id": "evt_000050",
+      "ts": "2026-07-18T06:29:35Z",
+      "agent": "full.specialist.it_security",
+      "type": "stage_complete",
+      "detail": "IT Security specialist complete"
     }
   ],
-  "log_cursor": 42,
+  "log_cursor": 50,
   "questions": null,
   "failure": null,
   "expected_ranges": {

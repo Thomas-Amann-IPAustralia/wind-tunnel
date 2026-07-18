@@ -1,0 +1,63 @@
+{
+  "specialist": "it_security",
+  "sections": {
+    "6.7": "No. Currently, there are no documented processes or administrative mechanisms (such as a 'kill-switch' or service suspension protocol) to safely disengage or intervene in the operation of the conversion utility if stakeholders raise valid concerns or if an unresolvable security issue is identified. While the tool is designed as a stateless, ephemeral utility with low operational risk, integrating a clear disengagement and bypass procedure into the agency's incident response plan is necessary to manage potential system failures or exploits gracefully.",
+    "7.3": "No. While the system implements architectural mitigations such as stateless, ephemeral processing in volatile memory and strict data isolation, it lacks specific operational security measures to address risks arising from its operation. Specifically, because the service fetches external URLs and parses user-uploaded files, it is highly vulnerable to Server-Side Request Forgery (SSRF), malicious file uploads, and parser exploits. Robust input validation and sanitisation protocols and secure API controls have not yet been fully established."
+  },
+  "citations": {
+    "6.7": [
+      {
+        "short_name": "AI in OT Principles",
+        "locator": "p.20"
+      },
+      {
+        "short_name": "ISM",
+        "locator": "p.24"
+      }
+    ],
+    "7.3": [
+      {
+        "short_name": "ISM",
+        "locator": "p.165"
+      },
+      {
+        "short_name": "ISM",
+        "locator": "p.231"
+      },
+      {
+        "short_name": "Deploying AI Securely",
+        "locator": "p.7"
+      }
+    ]
+  },
+  "questions": {
+    "why": "The outline lacks details on network-level controls for URL fetching and administrative override capabilities.",
+    "items": [
+      {
+        "question_id": "it_security-1",
+        "text": "Will the deployment environment implement network-level egress controls (e.g., restricting the parser from fetching internal/private IP addresses) to mitigate Server-Side Request Forgery (SSRF) risks?",
+        "options": [
+          "Yes",
+          "No",
+          "Under consideration"
+        ],
+        "allow_free_text": true
+      },
+      {
+        "question_id": "it_security-2",
+        "text": "Is there an administrative interface or 'kill-switch' planned that allows IT security teams to immediately suspend the service or disable specific parsers if a vulnerability or critical error is detected?",
+        "options": [
+          "Yes",
+          "No",
+          "Under consideration"
+        ],
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
