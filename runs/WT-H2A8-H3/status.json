@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:41:02Z",
+  "updated_at": "2026-07-18T11:41:25Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -3890,9 +3890,151 @@
       "agent": "full.specialist.legal",
       "type": "stage_started",
       "detail": "Legal & Administrative Law specialist started"
+    },
+    {
+      "id": "evt_000373",
+      "ts": "2026-07-18T11:41:03Z",
+      "agent": "full.specialist.legal",
+      "type": "revision",
+      "detail": "revising legal's sections in light of your answers",
+      "ref": {
+        "target": "legal"
+      }
+    },
+    {
+      "id": "evt_000374",
+      "ts": "2026-07-18T11:41:03Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000375",
+      "ts": "2026-07-18T11:41:03Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.68"
+      }
+    },
+    {
+      "id": "evt_000376",
+      "ts": "2026-07-18T11:41:03Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000377",
+      "ts": "2026-07-18T11:41:03Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000378",
+      "ts": "2026-07-18T11:41:03Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.17"
+      }
+    },
+    {
+      "id": "evt_000379",
+      "ts": "2026-07-18T11:41:03Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.81"
+      }
+    },
+    {
+      "id": "evt_000380",
+      "ts": "2026-07-18T11:41:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000381",
+      "ts": "2026-07-18T11:41:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000382",
+      "ts": "2026-07-18T11:41:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000383",
+      "ts": "2026-07-18T11:41:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ABA AI Year 2 Report",
+      "ref": {
+        "doc": "ABA AI Year 2 Report",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000384",
+      "ts": "2026-07-18T11:41:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.34"
+      }
+    },
+    {
+      "id": "evt_000385",
+      "ts": "2026-07-18T11:41:25Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.48"
+      }
     }
   ],
-  "log_cursor": 372,
+  "log_cursor": 385,
   "questions": null,
   "failure": null,
   "expected_ranges": {
