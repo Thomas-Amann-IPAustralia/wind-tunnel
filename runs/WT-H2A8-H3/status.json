@@ -4,13 +4,13 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T12:27:59Z",
+  "updated_at": "2026-07-18T12:28:00Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
-    "full.specialist.it_security": "complete",
+    "full.specialist.it_security": "active",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
@@ -5689,9 +5689,16 @@
       "agent": "full.specialist.legal",
       "type": "stage_complete",
       "detail": "Legal & Administrative Law specialist complete"
+    },
+    {
+      "id": "evt_000551",
+      "ts": "2026-07-18T12:28:00Z",
+      "agent": "full.specialist.it_security",
+      "type": "stage_started",
+      "detail": "IT Security specialist started"
     }
   ],
-  "log_cursor": 550,
+  "log_cursor": 551,
   "questions": null,
   "failure": null,
   "expected_ranges": {
