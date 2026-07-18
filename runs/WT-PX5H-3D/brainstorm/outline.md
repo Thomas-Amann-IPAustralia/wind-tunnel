@@ -11,8 +11,8 @@ run_id: "WT-PX5H-3D"
 title: "APS Tech Navigator"
 summary: "An AI-powered chatbot designed to help public servants identify and navigate technology solutions for their operational challenges."
 created_at: "2026-07-18T01:41:12Z"
-updated_at: "2026-07-18T01:45:24Z"
-resolved: ["problem", "solution", "users_stakeholders", "data"]
+updated_at: "2026-07-18T01:46:40Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path"]
 ---
 
 <!-- section: problem -->
@@ -38,7 +38,7 @@ The system will ingest and reference internal documentation classified up to OFF
 <!-- section: happy_path -->
 ## 5. Happy path
 
-*One ordinary, successful use — narrated start to finish.*
+A public servant opens the voice-enabled interface and describes a manual, repetitive process they are struggling with. The AI engages in a back-and-forth dialogue, asking clarifying questions to identify the core bottleneck. Once the need is clear, the AI synthesizes the conversation into a draft project brief or a list of recommended technical pathways, which the user can then review and refine.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
