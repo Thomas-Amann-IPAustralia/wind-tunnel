@@ -2,12 +2,13 @@
   "schema_version": 1,
   "run_id": "WT-TR4C-DC",
   "created_at": "2026-07-17T09:10:23Z",
-  "updated_at": "2026-07-18T23:34:51Z",
-  "stage": "THRESHOLD_RECONCILING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-18T23:35:34Z",
+  "stage": "THRESHOLD_REVIEW",
+  "stage_status": "awaiting_user",
   "phase": "threshold",
   "checkpoints": {
-    "THRESHOLD_DRAFTING": "07b9b8581fc42c4213d0419b983f936e2a3cdc77"
+    "THRESHOLD_DRAFTING": "07b9b8581fc42c4213d0419b983f936e2a3cdc77",
+    "THRESHOLD_RECONCILING": "e39a61a137b38a66b5f23c21b4ff4c9cd1e3b901"
   },
   "revisions": {
     "poc": 0,

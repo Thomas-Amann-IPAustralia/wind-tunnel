@@ -3,8 +3,8 @@
   "run_id": "WT-TR4C-DC",
   "run_code": "WT-TR4C-DC",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-18T23:35:32Z",
+  "overall_state": "paused",
+  "updated_at": "2026-07-18T23:35:34Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
