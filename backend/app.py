@@ -587,9 +587,20 @@ def create_app(
         return Response(content=result.content, media_type="application/json", headers=headers)
 
     @app.get("/api/runs/{run_id}/artefact/{name}")
-    def get_artefact(name: str, run_id: str = Depends(_valid_run_id)) -> Response:
+    def get_artefact(
+        name: str, run_id: str = Depends(_valid_run_id), download: bool = False
+    ) -> Response:
         """Download proxy. ``name`` is allow-listed against ``_ARTEFACTS``;
-        anything else is refused rather than resolved as a repo path (§7)."""
+        anything else is refused rather than resolved as a repo path (§7).
+
+        ``?download=1`` forces a save-to-disk via ``Content-Disposition:
+        attachment``. The SPA is served cross-origin from the backend (Pages vs
+        Render), and browsers silently ignore an anchor's ``download`` attribute
+        on a cross-origin link — so a notebook/markdown link would open inline as
+        raw text instead of downloading. The header is honoured regardless of
+        origin. The same names are also served inline (iframe ``src``, in-app
+        ``fetchArtefactText``), so the header is opt-in per request rather than
+        pinned to the artefact."""
         entry = _ARTEFACTS.get(name)
         if entry is None:
             raise HTTPException(
@@ -602,7 +613,8 @@ def create_app(
             raise HTTPException(
                 http_status.HTTP_404_NOT_FOUND, f"{name} not yet produced for run {run_id}."
             )
-        return Response(content=result.content, media_type=media_type)
+        headers = {"Content-Disposition": f'attachment; filename="{name}"'} if download else None
+        return Response(content=result.content, media_type=media_type, headers=headers)
 
     @app.post("/api/runs/{run_id}/submit")
     def submit_run(run_id: str = Depends(_valid_run_id)) -> dict:

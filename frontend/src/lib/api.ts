@@ -262,9 +262,15 @@ export function reviseRun(runCode: string, instructions: string): Promise<Revise
   });
 }
 
-/** The download proxy URL for an allow-listed artefact (§7). */
-export function artefactUrl(runCode: string, name: string): string {
-  return `${BACKEND_URL}/api/runs/${runCode}/artefact/${name}`;
+/** The download proxy URL for an allow-listed artefact (§7). Pass
+ * `{ download: true }` for save-to-disk links: the backend then sends
+ * `Content-Disposition: attachment`, which the browser honours even though the
+ * link is cross-origin (Pages → Render). An anchor's `download` attribute alone
+ * is silently ignored on cross-origin links, so a notebook/markdown link would
+ * otherwise open inline as raw text instead of downloading. */
+export function artefactUrl(runCode: string, name: string, opts?: { download?: boolean }): string {
+  const base = `${BACKEND_URL}/api/runs/${runCode}/artefact/${name}`;
+  return opts?.download ? `${base}?download=1` : base;
 }
 
 /** Fetch an artefact's text (threshold.md / assessment.html) for in-app rendering

@@ -1681,6 +1681,17 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
   the same content two owners that can drift (violates §3). Decided: the artefact *name* is the
   stable public contract (§7); it resolves to the canonical file. `artefacts/` holds only the
   assembly-stage deliverables. TECH_SPEC §2 corrected to match (CLAUDE.md §2).
+- **Artefact downloads are forced with `Content-Disposition`, not the anchor `download`
+  attribute (jupyter-download-formatting branch).** The SPA is served cross-origin from the
+  backend (Pages → Render), and browsers silently ignore an anchor's `download` attribute on a
+  cross-origin link — so the "Download notebook" / "Download (Markdown)" links just opened the
+  raw `.ipynb`/`.md` inline as text in a new tab (the WT-H2A8-H3 report bug). Decided: the
+  artefact proxy (`GET …/artefact/{name}`) takes an opt-in `?download=1` query flag and, when
+  set, sends `Content-Disposition: attachment; filename="<name>"`, which the browser honours
+  regardless of origin. The flag is per-request rather than pinned to the artefact name because
+  the same names are also served inline (iframe `src` for `assessment.html`/`poc.html`,
+  `fetchArtefactText` for in-app markdown rendering); `artefactUrl(code, name, { download: true })`
+  opts the three save-to-disk links in.
 - **The LLM seam retries; the agent layer does not (governance-fixes branch).** The
   documents are silent on failure handling below §5.6's calm-failure rule. Decided: transient
   HTTP retries live in the transport, malformed-JSON corrective re-asks live in

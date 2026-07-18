@@ -91,7 +91,11 @@ export function ThresholdReview({ runCode }: { runCode: string }) {
           >
             Conclude here
           </button>
-          <a className="wt-btn wt-btn--quiet" href={artefactUrl(runCode, "threshold.md")} download>
+          <a
+            className="wt-btn wt-btn--quiet"
+            href={artefactUrl(runCode, "threshold.md", { download: true })}
+            download
+          >
             Download (Markdown)
           </a>
         </div>
