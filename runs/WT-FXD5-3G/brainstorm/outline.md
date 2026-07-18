@@ -11,7 +11,7 @@ run_id: "WT-FXD5-3G"
 title: "ATO Deduction Assistant"
 summary: "A public-facing chatbot using RAG and a user-adjustable 'creativity' dial to provide guidance on tax deduction eligibility while maintaining clear boundaries between advice and policy."
 created_at: "2026-07-18T23:35:12Z"
-updated_at: "2026-07-18T23:44:01Z"
+updated_at: "2026-07-18T23:48:01Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -48,7 +48,7 @@ Non-AI alternatives include an interactive decision tree or a static FAQ wizard.
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-A web-based chat interface integrated into the existing ATO portal, likely featuring a disclaimer and links to official policy documentation for verification.
+A web-based chat interface integrated into the existing ATO portal, featuring a 'creativity' dial that serves as a meta-signal for system fallibility, alongside mandatory disclaimers and direct links to official policy documentation for verification.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
