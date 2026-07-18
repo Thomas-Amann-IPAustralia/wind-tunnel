@@ -3,8 +3,8 @@
   "run_id": "WT-H2A8-H3",
   "run_code": "WT-H2A8-H3",
   "phase": "full",
-  "overall_state": "running",
-  "updated_at": "2026-07-18T11:48:28Z",
+  "overall_state": "failed",
+  "updated_at": "2026-07-18T11:49:04Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
-    "full.specialist.legal": "active",
+    "full.specialist.legal": "failed",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
@@ -5224,11 +5224,155 @@
         "doc": "AI Use Policy v2.0",
         "locator": "p.20"
       }
+    },
+    {
+      "id": "evt_000504",
+      "ts": "2026-07-18T11:48:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.36"
+      }
+    },
+    {
+      "id": "evt_000505",
+      "ts": "2026-07-18T11:48:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000506",
+      "ts": "2026-07-18T11:48:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000507",
+      "ts": "2026-07-18T11:48:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.40"
+      }
+    },
+    {
+      "id": "evt_000508",
+      "ts": "2026-07-18T11:48:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.45"
+      }
+    },
+    {
+      "id": "evt_000509",
+      "ts": "2026-07-18T11:48:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000510",
+      "ts": "2026-07-18T11:48:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.56"
+      }
+    },
+    {
+      "id": "evt_000511",
+      "ts": "2026-07-18T11:48:40Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000512",
+      "ts": "2026-07-18T11:48:40Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.36"
+      }
+    },
+    {
+      "id": "evt_000513",
+      "ts": "2026-07-18T11:48:40Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.93"
+      }
+    },
+    {
+      "id": "evt_000514",
+      "ts": "2026-07-18T11:48:40Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000515",
+      "ts": "2026-07-18T11:48:40Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000516",
+      "ts": "2026-07-18T11:49:04Z",
+      "agent": "full.specialist.legal",
+      "type": "error",
+      "detail": "Something went wrong while reviewing the full assessment. Your run is safe — paste the run code WT-H2A8-H3 to resume from the last checkpoint."
     }
   ],
-  "log_cursor": 503,
+  "log_cursor": 516,
   "questions": null,
-  "failure": null,
+  "failure": {
+    "stage": "full.specialist.legal",
+    "message": "Something went wrong while reviewing the full assessment. Your run is safe — paste the run code WT-H2A8-H3 to resume from the last checkpoint.",
+    "run_code": "WT-H2A8-H3",
+    "technical": "AgentError: legal: amendment touched non-directed sections ['10.2', '12.1', '12.2', '9.1', '9.2'] — a directive may only change the sections it named (§11.3)."
+  },
   "expected_ranges": {
     "threshold": [
       50,
