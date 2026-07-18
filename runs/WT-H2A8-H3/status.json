@@ -4,7 +4,7 @@
   "run_code": "WT-H2A8-H3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-18T11:41:25Z",
+  "updated_at": "2026-07-18T11:41:45Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
-    "full.specialist.legal": "active",
+    "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
@@ -4032,9 +4032,93 @@
         "doc": "HTI State of AI Governance",
         "locator": "p.48"
       }
+    },
+    {
+      "id": "evt_000386",
+      "ts": "2026-07-18T11:41:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.68"
+      }
+    },
+    {
+      "id": "evt_000387",
+      "ts": "2026-07-18T11:41:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.45"
+      }
+    },
+    {
+      "id": "evt_000388",
+      "ts": "2026-07-18T11:41:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.67"
+      }
+    },
+    {
+      "id": "evt_000389",
+      "ts": "2026-07-18T11:41:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading Perry J (2021)",
+      "ref": {
+        "doc": "Perry J (2021)",
+        "locator": "¶24"
+      }
+    },
+    {
+      "id": "evt_000390",
+      "ts": "2026-07-18T11:41:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI & Australian Law",
+      "ref": {
+        "doc": "AI & Australian Law",
+        "locator": "§Bias, exclusion and access"
+      }
+    },
+    {
+      "id": "evt_000391",
+      "ts": "2026-07-18T11:41:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.32"
+      }
+    },
+    {
+      "id": "evt_000392",
+      "ts": "2026-07-18T11:41:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.36"
+      }
+    },
+    {
+      "id": "evt_000393",
+      "ts": "2026-07-18T11:41:45Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_complete",
+      "detail": "Legal & Administrative Law specialist complete"
     }
   ],
-  "log_cursor": 385,
+  "log_cursor": 393,
   "questions": null,
   "failure": null,
   "expected_ranges": {
