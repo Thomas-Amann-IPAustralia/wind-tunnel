@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Windtunnel — Assessment Telemetry</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0D13;
+  --canvas:#0B0F16;
+  --surface:#131822;
+  --surface-2:#0E1219;
+  --line:#222B3A;
+  --line-strong:#2F3A4E;
+  --ink:#E8EDF6;
+  --ink-2:#97A2B8;
+  --ink-3:#5C6779;
+  --run:#38BDF8;
+  --run-dim:rgba(56,189,248,.15);
+  --tool:#A78BFA;
+  --tool-dim:rgba(167,139,250,.14);
+  --done:#34D399;
+  --done-dim:rgba(52,211,153,.14);
+  --wait:#FBBF24;
+  --wait-dim:rgba(251,191,36,.14);
+  --wire:#2A3446;
+  --wire-post:#24303f;
+  --wire-tool:#453a6e;
+  --wire-loop:#4d4020;
+  --font-display:'Space Grotesk',sans-serif;
+  --font-ui:'Inter',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:var(--font-ui);font-size:14px;
+  display:flex;flex-direction:column;overflow:hidden;
+}
+
+/* ---------- header ---------- */
+#topbar{
+  height:52px;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
+  padding:0 18px;background:var(--surface-2);border-bottom:1px solid var(--line);z-index:60;position:relative;
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.brand svg{flex:0 0 auto}
+.brand-name{font-family:var(--font-display);font-weight:700;font-size:14px;letter-spacing:.14em}
+.brand-sub{font-size:11.5px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-sub b{color:var(--ink-2);font-weight:500}
+#run-stats{
+  display:flex;gap:18px;font-family:var(--font-mono);font-size:10.5px;color:var(--ink-3);
+}
+#run-stats span{display:flex;flex-direction:column;align-items:flex-end;gap:1px}
+#run-stats em{font-style:normal;color:var(--ink-2);font-size:12px}
+#run-stats label{font-size:8.5px;letter-spacing:.12em}
+.topbar-right{display:flex;align-items:center;gap:14px}
+#global-status{display:flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:10.5px;color:var(--ink-2);letter-spacing:.08em}
+#status-dot{width:7px;height:7px;border-radius:50%;background:var(--ink-3);transition:background .3s}
+#status-dot.running{background:var(--run);box-shadow:0 0 8px var(--run)}
+#status-dot.complete{background:var(--done);box-shadow:0 0 8px var(--done)}
+button.cta{
+  font-family:var(--font-display);font-weight:600;font-size:12px;letter-spacing:.03em;
+  padding:7px 16px;border-radius:6px;border:1px solid transparent;cursor:pointer;transition:all .15s;
+}
+#run-btn{background:var(--run);color:#04121d}
+#run-btn:hover{background:#5cc9fa}
+#run-btn:disabled{opacity:.45;cursor:default}
+#reset-btn{background:transparent;color:var(--ink-2);border-color:var(--line-strong)}
+#reset-btn:hover{color:var(--ink);border-color:var(--ink-3)}
+.hidden{display:none !important}
+button:focus-visible,.node:focus-visible,details summary:focus-visible{outline:2px solid var(--run);outline-offset:2px}
+
+/* ---------- stage / canvas ---------- */
+#stage{position:relative;flex:1 1 auto;overflow:hidden;background:var(--canvas)}
+#viewport{position:absolute;inset:0;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+#viewport.grabbing{cursor:grabbing}
+#workspace{
+  position:absolute;left:0;top:0;transform-origin:0 0;
+  background-image:radial-gradient(circle,rgba(126,146,178,.09) 1.4px,transparent 1.4px);
+  background-size:28px 28px;
+}
+svg#wires{position:absolute;left:0;top:0;pointer-events:none;z-index:10;overflow:visible}
+#chip-layer{position:absolute;inset:0;z-index:42;pointer-events:none}
+#node-layer{position:absolute;inset:0;z-index:20}
+
+/* group boxes + column labels */
+.group{
+  position:absolute;z-index:4;border:1px dashed rgba(96,112,140,.28);border-radius:14px;
+  background:rgba(122,142,176,.025);pointer-events:none;
+}
+.group>span{
+  position:absolute;top:-9px;left:16px;padding:0 8px;background:var(--canvas);
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.22em;color:var(--ink-3);
+}
+.col-label{
+  position:absolute;z-index:4;font-family:var(--font-mono);font-size:10px;
+  letter-spacing:.22em;color:var(--ink-3);pointer-events:none;
+}
+
+/* ---------- wires ---------- */
+.wire{fill:none;stroke:var(--wire);stroke-width:2.25;opacity:.9;transition:stroke .25s}
+.wire.w-tool{stroke:var(--wire-tool);stroke-width:2;stroke-dasharray:4 5}
+.wire.w-loop{stroke:var(--wire-loop);stroke-width:2;stroke-dasharray:6 7;opacity:.75}
+.wire.w-post{stroke:var(--wire-post);opacity:.7}
+.wire.active{stroke:var(--run);filter:drop-shadow(0 0 5px rgba(56,189,248,.55))}
+.wire.w-tool.active{stroke:var(--tool);filter:drop-shadow(0 0 5px rgba(167,139,250,.55))}
+.wire.w-loop.active{stroke:var(--wait);filter:drop-shadow(0 0 5px rgba(251,191,36,.5))}
+.wire.w-post.active{stroke:var(--done);filter:drop-shadow(0 0 5px rgba(52,211,153,.5))}
+.wire-pulse{
+  fill:none;stroke:#fff;stroke-width:1.4;stroke-dasharray:7 13;stroke-linecap:round;
+  animation:pulse-flow 1s linear infinite;
+}
+@keyframes pulse-flow{from{stroke-dashoffset:20}to{stroke-dashoffset:0}}
+
+/* ---------- nodes ---------- */
+.node{
+  position:absolute;width:280px;background:var(--surface);border:1px solid var(--line);
+  border-radius:9px;box-shadow:0 5px 16px rgba(0,0,0,.35);cursor:pointer;
+  transition:border-color .2s,box-shadow .2s;overflow:hidden;
+}
+.node::before{ /* status strip */
+  content:'';position:absolute;left:0;top:0;right:0;height:3px;background:var(--line-strong);
+  transition:background .25s;
+}
+.node:hover{border-color:var(--line-strong);box-shadow:0 8px 24px rgba(0,0,0,.5)}
+.node.pane-open{border-color:var(--ink-2);box-shadow:0 0 0 1.5px var(--ink-2),0 8px 24px rgba(0,0,0,.55)}
+.n-head{display:flex;align-items:center;gap:8px;padding:10px 12px 8px}
+.n-ico{flex:0 0 auto;display:flex;color:var(--ink-3)}
+.n-title{
+  flex:1 1 auto;font-family:var(--font-display);font-weight:600;font-size:12.5px;
+  color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.n-status{
+  flex:0 0 auto;font-family:var(--font-mono);font-weight:600;font-size:8.5px;letter-spacing:.09em;
+  padding:2.5px 7px;border-radius:4px;background:#1B2230;color:var(--ink-3);
+}
+.n-body{padding:0 12px 11px;display:flex;flex-direction:column;gap:6px}
+.n-role{font-size:11px;line-height:1.45;color:var(--ink-2)}
+.n-act{
+  font-family:var(--font-mono);font-size:10px;color:var(--ink-3);height:1.35em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .2s;
+}
+.n-meta{
+  display:flex;gap:12px;font-family:var(--font-mono);font-size:9.5px;color:var(--ink-3);
+  border-top:1px solid var(--line);padding-top:7px;
+}
+.n-meta .dots{letter-spacing:2px}
+
+/* state colouring */
+.node.state-running{border-color:rgba(56,189,248,.45);box-shadow:0 0 22px rgba(56,189,248,.13),0 5px 16px rgba(0,0,0,.35)}
+.node.state-running::before{background:var(--run)}
+.node.state-running .n-status{background:var(--run-dim);color:var(--run)}
+.node.state-running .n-act{color:var(--run)}
+.node.state-waiting::before{background:var(--wait)}
+.node.state-waiting{border-color:rgba(251,191,36,.4)}
+.node.state-waiting .n-status{background:var(--wait-dim);color:var(--wait)}
+.node.state-waiting .n-act{color:var(--wait)}
+.node.state-done::before{background:var(--done)}
+.node.state-done .n-status{background:var(--done-dim);color:var(--done)}
+
+/* tool nodes */
+.node.kind-tool{width:240px;background:#15121F}
+.node.kind-tool::before{background:#3a2f66}
+.node.kind-tool .n-ico{color:#7a68c9}
+.node.kind-tool .n-status{background:#221c3a;color:#8d7dd4}
+.node.kind-tool.state-running{border-color:rgba(167,139,250,.5);box-shadow:0 0 22px rgba(167,139,250,.14),0 5px 16px rgba(0,0,0,.35)}
+.node.kind-tool.state-running::before{background:var(--tool)}
+.node.kind-tool.state-running .n-status{background:var(--tool-dim);color:var(--tool)}
+.node.kind-tool.state-running .n-act{color:var(--tool)}
+.node.kind-tool .n-meta{border-top-color:#241f3c}
+
+/* pins */
+.pin{
+  position:absolute;width:9px;height:9px;border-radius:50%;top:50%;transform:translateY(-50%);
+  background:var(--surface-2);border:2px solid var(--ink-3);z-index:30;transition:all .25s;
+}
+.pin-in{left:-5px}.pin-out{right:-5px}
+.pin-bottom{left:50%;top:auto;bottom:-5px;transform:translateX(-50%)}
+.node.state-running .pin-in{background:var(--run);border-color:var(--run);box-shadow:0 0 6px var(--run)}
+.node.state-done .pin-out{background:var(--done);border-color:var(--done)}
+.node.state-waiting .pin-out,.node.state-waiting .pin-bottom{background:var(--wait);border-color:var(--wait)}
+
+/* chunk chips flying along retrieval wires */
+.chip{
+  position:absolute;left:0;top:0;z-index:42;pointer-events:none;
+  padding:2px 7px;border-radius:4px;transform:translate(-50%,-50%);
+  background:#231B44;border:1px solid #6C59C8;color:#CFC3FB;
+  font-family:var(--font-mono);font-weight:600;font-size:9px;letter-spacing:.04em;
+  offset-rotate:0deg;box-shadow:0 0 10px rgba(167,139,250,.35);
+  animation:chip-fly .95s cubic-bezier(.45,.05,.4,1) both;
+}
+@keyframes chip-fly{
+  from{offset-distance:100%;opacity:0}
+  12%{opacity:1}
+  to{offset-distance:0%;opacity:1}
+}
+
+/* ---------- side pane ---------- */
+#pane{
+  position:absolute;right:0;top:0;bottom:0;width:372px;z-index:55;
+  background:var(--surface-2);border-left:1px solid var(--line);
+  transform:translateX(100%);transition:transform .28s cubic-bezier(.3,.8,.3,1);
+  display:flex;flex-direction:column;box-shadow:-8px 0 30px rgba(0,0,0,.45);
+}
+#pane.open{transform:translateX(0)}
+#pane-head{
+  flex:0 0 auto;display:flex;align-items:center;gap:10px;padding:14px 16px;
+  border-bottom:1px solid var(--line);
+}
+#pane-kind{font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;color:var(--ink-3);
+  border:1px solid var(--line-strong);border-radius:4px;padding:2px 6px}
+#pane-title{flex:1;font-family:var(--font-display);font-weight:600;font-size:14px}
+#pane-close{background:none;border:none;color:var(--ink-3);cursor:pointer;padding:4px;border-radius:5px;display:flex}
+#pane-close:hover{color:var(--ink);background:#1B2230}
+#pane-body{flex:1 1 auto;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:18px}
+.p-sec>label{
+  display:block;font-family:var(--font-mono);font-size:9px;letter-spacing:.2em;
+  color:var(--ink-3);margin-bottom:8px;
+}
+.p-role{font-size:12px;line-height:1.55;color:var(--ink-2)}
+.p-badges{display:flex;gap:6px;flex-wrap:wrap}
+.p-badge{
+  font-family:var(--font-mono);font-size:10px;padding:3px 8px;border-radius:5px;
+  background:#1B2230;border:1px solid var(--line-strong);color:var(--ink-2);
+}
+.p-badge.model{background:var(--tool-dim);border-color:#3a2f66;color:#B9A8F5}
+.p-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.p-metric{background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:9px 11px}
+.p-metric label{display:block;font-family:var(--font-mono);font-size:8.5px;letter-spacing:.14em;color:var(--ink-3);margin-bottom:4px}
+.p-metric b{font-family:var(--font-mono);font-weight:600;font-size:15px;color:var(--ink)}
+.p-metric b.blue{color:var(--run)} .p-metric b.violet{color:var(--tool)}
+/* retrieved-context chunk list */
+.ck-list{display:flex;flex-direction:column;gap:6px}
+.ck-empty{font-size:11.5px;color:var(--ink-3);font-style:italic}
+details.ck{background:var(--surface);border:1px solid var(--line);border-radius:7px;overflow:hidden}
+details.ck summary{
+  list-style:none;display:flex;align-items:center;gap:8px;padding:7px 10px;cursor:pointer;
+}
+details.ck summary::-webkit-details-marker{display:none}
+details.ck summary:hover{background:#171d29}
+.ck-id{
+  font-family:var(--font-mono);font-weight:700;font-size:9.5px;color:#CFC3FB;
+  background:#231B44;border:1px solid #4a3d8f;border-radius:4px;padding:2px 6px;flex:0 0 auto;
+}
+.ck-doc{flex:1;font-size:10.5px;color:var(--ink-2);line-height:1.3;min-width:0}
+.ck-doc small{display:block;color:var(--ink-3);font-size:9.5px}
+.ck-score{flex:0 0 44px;height:3px;border-radius:2px;background:#1B2230;overflow:hidden}
+.ck-score i{display:block;height:100%;background:var(--tool);border-radius:2px}
+.ck-snip{padding:2px 10px 10px;font-size:11px;line-height:1.55;color:var(--ink-2);border-top:1px dashed var(--line)}
+.ck-snip b{color:var(--ink-3);font-weight:500;font-size:9.5px;font-family:var(--font-mono)}
+/* questions */
+.q-list{display:flex;flex-direction:column;gap:6px}
+.q-item{
+  font-size:11.5px;line-height:1.5;color:var(--ink-2);padding:7px 10px 7px 26px;position:relative;
+  background:var(--surface);border:1px solid var(--line);border-radius:7px;
+}
+.q-item::before{content:'?';position:absolute;left:9px;top:7px;font-family:var(--font-mono);color:var(--wait);font-weight:700}
+/* prompt + queries */
+details.p-fold{border:1px solid var(--line);border-radius:7px;background:var(--surface)}
+details.p-fold summary{
+  list-style:none;cursor:pointer;padding:8px 11px;font-family:var(--font-mono);
+  font-size:9.5px;letter-spacing:.12em;color:var(--ink-3);
+}
+details.p-fold summary::-webkit-details-marker{display:none}
+details.p-fold summary:hover{color:var(--ink-2)}
+details.p-fold[open] summary{border-bottom:1px solid var(--line)}
+.p-code{
+  font-family:var(--font-mono);font-size:10.5px;line-height:1.65;color:#9AA5BB;
+  padding:10px 11px;white-space:pre-wrap;max-height:220px;overflow-y:auto;
+}
+.pq-list{display:flex;flex-direction:column;gap:5px}
+.pq{font-family:var(--font-mono);font-size:10px;color:var(--ink-2);padding:6px 9px;background:var(--surface);border:1px solid var(--line);border-radius:6px}
+.pq b{color:#B9A8F5;font-weight:600}
+/* composer sections */
+.sec-list{display:flex;flex-direction:column;gap:4px}
+.sec-item{display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--ink-3);padding:4px 2px}
+.sec-item i{
+  width:13px;height:13px;flex:0 0 auto;border-radius:50%;border:1.5px solid var(--line-strong);
+  display:flex;align-items:center;justify-content:center;font-size:8px;font-style:normal;color:#04121d;
+}
+.sec-item.done{color:var(--ink-2)}
+.sec-item.done i{background:var(--done);border-color:var(--done)}
+.sec-item.now{color:var(--run)}
+.sec-item.now i{border-color:var(--run)}
+/* coverage meter */
+.cov-bar{height:5px;border-radius:3px;background:#1B2230;overflow:hidden;margin-top:8px}
+.cov-bar i{display:block;height:100%;width:0%;background:var(--done);border-radius:3px;transition:width .4s}
+
+/* ---------- floating controls ---------- */
+#zoom-ctl{
+  position:absolute;right:16px;bottom:14px;z-index:50;display:flex;align-items:center;gap:2px;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:3px;
+  box-shadow:0 4px 14px rgba(0,0,0,.4);
+}
+#zoom-ctl button{
+  background:none;border:none;color:var(--ink-2);cursor:pointer;border-radius:5px;
+  width:28px;height:26px;display:flex;align-items:center;justify-content:center;font-size:14px;
+}
+#zoom-ctl button:hover{background:#1B2230;color:var(--ink)}
+#zoom-pct{font-family:var(--font-mono);font-size:10px;color:var(--ink-3);width:40px;text-align:center}
+#minimap{
+  position:absolute;left:16px;bottom:14px;z-index:50;background:var(--surface-2);
+  border:1px solid var(--line);border-radius:8px;padding:5px;cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.4);
+}
+#minimap canvas{display:block;border-radius:4px}
+
+/* ---------- event ticker ---------- */
+#ticker{
+  flex:0 0 auto;background:var(--surface-2);border-top:1px solid var(--line);z-index:60;position:relative;
+  display:flex;flex-direction:column;
+}
+#ticker-bar{display:flex;align-items:center;gap:10px;height:34px;padding:0 14px;flex:0 0 auto}
+#ticker-toggle{
+  background:none;border:none;color:var(--ink-3);cursor:pointer;display:flex;align-items:center;
+  padding:3px;border-radius:4px;transition:transform .2s;
+}
+#ticker-toggle:hover{color:var(--ink)}
+#ticker.open #ticker-toggle{transform:rotate(180deg)}
+#ticker-latest{
+  flex:1;font-family:var(--font-mono);font-size:10.5px;color:var(--ink-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#legend{display:flex;gap:14px;font-family:var(--font-mono);font-size:9px;color:var(--ink-3);letter-spacing:.05em}
+#legend i{display:inline-block;width:14px;height:2px;border-radius:1px;vertical-align:middle;margin-right:5px}
+#ticker-log{
+  display:none;flex:0 0 auto;height:150px;overflow-y:auto;padding:6px 14px 10px;
+  border-top:1px solid var(--line);flex-direction:column;gap:3px;
+}
+#ticker.open #ticker-log{display:flex}
+.ev{font-family:var(--font-mono);font-size:10.5px;line-height:1.6;color:var(--ink-2);display:flex;gap:9px}
+.ev time{color:var(--ink-3);flex:0 0 auto}
+.ev .tag{flex:0 0 74px;font-weight:600}
+.tag-SYS{color:var(--ink-3)} .tag-AGENT{color:var(--run)} .tag-RETRIEVE{color:var(--tool)}
+.tag-HUMAN{color:var(--wait)} .tag-DRAFT{color:var(--done)} .tag-VERIFY{color:#2DD4BF} .tag-WARN{color:#FB923C}
+
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#242c3c;border-radius:4px}
+::-webkit-scrollbar-thumb:hover{background:#313c52}
+
+@media (prefers-reduced-motion:reduce){
+  .wire-pulse{animation:none}
+  .chip{animation-duration:.01s}
+  #pane{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header id="topbar">
+  <div class="brand">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="1.8" stroke-linecap="round">
+      <path d="M3 8h11a2.5 2.5 0 1 0-2.5-2.5"/><path d="M3 12h16a2.5 2.5 0 1 1-2.5 2.5"/><path d="M3 16h8a2.5 2.5 0 1 1-2.5 2.5"/>
+    </svg>
+    <div>
+      <div class="brand-name">WINDTUNNEL</div>
+      <div class="brand-sub">AI impact assessment · live run telemetry · <b>RUN-2026-0719-04</b></div>
+    </div>
+  </div>
+  <div id="run-stats" aria-live="off">
+    <span><em id="stat-elapsed">00:00</em><label>ELAPSED</label></span>
+    <span><em id="stat-tokens">0</em><label>TOKENS</label></span>
+    <span><em id="stat-calls">0</em><label>TOOL CALLS</label></span>
+    <span><em id="stat-chunks">0</em><label>CHUNKS</label></span>
+  </div>
+  <div class="topbar-right">
+    <div id="global-status"><span id="status-dot"></span><span id="status-text">IDLE</span></div>
+    <button class="cta" id="run-btn">Run assessment</button>
+    <button class="cta hidden" id="reset-btn">Reset run</button>
+  </div>
+</header>
+
+<div id="stage">
+  <div id="viewport">
+    <div id="workspace">
+      <div id="group-layer"></div>
+      <svg id="wires"></svg>
+      <div id="node-layer"></div>
+      <div id="chip-layer"></div>
+    </div>
+  </div>
+
+  <div id="minimap" title="Jump to a region"><canvas id="mini-canvas" width="216" height="70"></canvas></div>
+
+  <div id="zoom-ctl">
+    <button id="zoom-out" aria-label="Zoom out">−</button>
+    <span id="zoom-pct">100%</span>
+    <button id="zoom-in" aria-label="Zoom in">+</button>
+    <button id="zoom-fit" aria-label="Fit graph to view" title="Fit to view">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+    </button>
+  </div>
+
+  <aside id="pane" aria-label="Node details">
+    <div id="pane-head">
+      <span id="pane-kind">AGENT</span>
+      <h2 id="pane-title">Details</h2>
+      <button id="pane-close" aria-label="Close details">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="pane-body"></div>
+  </aside>
+</div>
+
+<footer id="ticker">
+  <div id="ticker-bar">
+    <button id="ticker-toggle" aria-label="Toggle event log">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 15l6-6 6 6"/></svg>
+    </button>
+    <div id="ticker-latest">Event log — press Run assessment to begin.</div>
+    <div id="legend">
+      <span><i style="background:var(--run)"></i>HANDOFF</span>
+      <span><i style="background:var(--tool)"></i>RETRIEVAL</span>
+      <span><i style="background:var(--wait)"></i>CLARIFICATION</span>
+      <span><i style="background:var(--done)"></i>FINDINGS</span>
+    </div>
+  </div>
+  <div id="ticker-log" aria-live="off"></div>
+</footer>
+<script>
+/* =====================================================================
+   Windtunnel — multi-agent AIA drafting telemetry (simulated demo)
+   Node graph in workspace coordinates; pan/zoom via CSS transform.
+   ===================================================================== */
+
+// ---------------------------------------------------------------- layout
+const AGENT_W = 280, TOOL_W = 240;
+const WS_W = 4500, WS_H = 1400;
+const SPEC_X = 1560, SPEC_Y0 = 40, SPEC_PITCH = 205;
+const TOOL_X = 1935, TOOL_DY = 104;
+const JOIN_X = 2290;              // specialist wires run straight to here before curving
+const specY = i => SPEC_Y0 + i * SPEC_PITCH;
+
+const SPECS = ['privacy','ethics','security','legal','data','arch'];
+
+// ---------------------------------------------------------------- nodes
+const NODES = [
+  { id:'intake', kind:'agent', x:80, y:541, title:'Intake parser',
+    role:'Parses the submission and extracts a structured system profile.',
+    model:'Claude Haiku 4.5',
+    prompt:'Parse the free-text submission into a structured system profile: purpose, users, data classes, decision points, automation level. Flag missing fields. Output JSON only.',
+    acts:['reading submission…','extracting system profile…','tagging data classes…','profile validated'] },
+
+  { id:'assessA', kind:'agent', x:440, y:421, title:'Threshold assessor A',
+    role:'Independent first-pass triage — risk surface rubric.',
+    model:'Claude Haiku 4.5',
+    prompt:'You are one of two independent triage assessors. Apply rubric A (risk surface: affected people, decision consequence, data sensitivity) to the system profile. Draft preliminary threshold answers with a confidence score per item.',
+    acts:['applying rubric A…','scoring decision consequence…','weighing data sensitivity…','drafting threshold answers…'] },
+
+  { id:'assessB', kind:'agent', x:440, y:661, title:'Threshold assessor B',
+    role:'Independent first-pass triage — context &amp; benefit rubric.',
+    model:'Claude Haiku 4.5',
+    prompt:'You are one of two independent triage assessors. Apply rubric B (context: public value, reversibility, human involvement) to the system profile. Draft preliminary threshold answers with a confidence score per item.',
+    acts:['applying rubric B…','assessing reversibility…','estimating public value…','drafting threshold answers…'] },
+
+  { id:'reconcile', kind:'agent', x:800, y:541, title:'Reconciler',
+    role:'Merges both triage passes and resolves disagreements.',
+    model:'Claude Sonnet 4.6',
+    prompt:'Compare assessor A and B outputs item by item. Where they disagree, resolve using the stricter reading and record the disagreement. Output a unified threshold document with a dissent log.',
+    acts:['diffing assessor outputs…','resolving item 7 disagreement…','recording dissent log…','unifying threshold doc…'] },
+
+  { id:'threshold', kind:'engine', x:1160, y:541, title:'Threshold engine',
+    role:'Deterministic risk-tier calculation. Decides assessment depth.',
+    model:'Deterministic rubric (non-LLM)',
+    prompt:'Weighted scoring over the reconciled threshold document. Tier boundaries fixed by the framework. No model involvement — fully reproducible.',
+    acts:['computing weighted score…','checking tier boundaries…'] },
+
+  // -------- specialist college (each pairs with a corpus below-right)
+  { id:'privacy', kind:'spec', x:SPEC_X, y:specY(0), title:'Privacy specialist', tool:'kb_privacy', passes:2,
+    role:'Personal information handling, APP compliance, PIA triggers.',
+    model:'Claude Sonnet 4.6',
+    prompt:'Assess handling of personal information against the Privacy Act 1988 and OAIC guidance. Every finding must cite retrieved chunk ids. Return JSON: {findings:[{text, severity, citations[]}], questions[]}.',
+    acts:['mapping data flows…','checking APP obligations…','drafting privacy findings…','citing retrieved chunks…'] },
+  { id:'ethics', kind:'spec', x:SPEC_X, y:specY(1), title:'Ethics &amp; fairness specialist', tool:'kb_ethics', passes:2,
+    role:'AI Ethics Principles alignment, bias vectors, contestability.',
+    model:'Claude Sonnet 4.6',
+    prompt:'Evaluate the system against Australia\u2019s AI Ethics Principles. Identify bias vectors in training data and decision points lacking contestability. Cite chunk ids for every finding. Return JSON as per the shared schema.',
+    acts:['tracing bias vectors…','testing contestability paths…','aligning to ethics principles…','drafting fairness findings…'] },
+  { id:'security', kind:'spec', x:SPEC_X, y:specY(2), title:'Security specialist', tool:'kb_security', passes:2,
+    role:'ISM controls, Essential Eight posture, model-specific threats.',
+    model:'Claude Sonnet 4.6',
+    prompt:'Review the architecture against ISM guidelines and Essential Eight maturity targets. Consider AI-specific threats: prompt injection, training-data poisoning, model exfiltration. Cite chunk ids for every finding.',
+    acts:['checking ISM control coverage…','probing injection surface…','reviewing E8 maturity…','drafting security findings…'] },
+  { id:'legal', kind:'spec', x:SPEC_X, y:specY(3), title:'Legal &amp; admin law specialist', tool:'kb_legal', passes:2,
+    role:'Administrative law, ADM safeguards, records obligations.',
+    model:'Claude Sonnet 4.6',
+    prompt:'Assess against administrative law requirements for automated decision-making, the whole-of-government AI policy, and records obligations. Cite chunk ids for every finding. Flag anything requiring formal legal advice.',
+    acts:['checking ADM safeguards…','reviewing records obligations…','mapping review rights…','drafting legal findings…'] },
+  { id:'data', kind:'spec', x:SPEC_X, y:specY(4), title:'Data governance specialist', tool:'kb_data', passes:2,
+    role:'Lineage, retention, metadata standards, sharing controls.',
+    model:'Claude Sonnet 4.6',
+    prompt:'Trace data lineage from intake to disposal. Verify metadata tagging against AGLS and retention against the records authority. Cite chunk ids for every finding.',
+    acts:['tracing lineage…','checking retention classes…','validating metadata tags…','drafting governance findings…'] },
+  { id:'arch', kind:'spec', x:SPEC_X, y:specY(5), title:'Technical architecture specialist', tool:'kb_arch', passes:2,
+    role:'Hosting certification, patterns, failure modes, monitoring.',
+    model:'Claude Sonnet 4.6',
+    prompt:'Review the solution architecture against hosting certification requirements and approved patterns. Assess failure modes, drift monitoring and rollback paths. Cite chunk ids for every finding.',
+    acts:['matching approved patterns…','stress-testing failure modes…','checking hosting certification…','drafting architecture findings…'] },
+
+  // -------- knowledge plane (corpora)
+  { id:'kb_privacy', kind:'tool', x:TOOL_X, y:specY(0)+TOOL_DY, title:'Privacy corpus',
+    role:'Privacy Act, APPs, OAIC guidance — vector index.',
+    model:'bge-base-en-v1.5', stats:'1,482 chunks · 36 docs',
+    prompt:'Semantic index over the Privacy Act 1988, APP guidelines and OAIC guidance. Serves top-k chunks with cosine similarity scores; chunk ids are stable and citable.' },
+  { id:'kb_ethics', kind:'tool', x:TOOL_X, y:specY(1)+TOOL_DY, title:'Ethics corpus',
+    role:'AI Ethics Principles, assurance framework — vector index.',
+    model:'bge-base-en-v1.5', stats:'914 chunks · 22 docs',
+    prompt:'Semantic index over Australia\u2019s AI Ethics Principles, the national AI assurance framework and supporting guidance.' },
+  { id:'kb_security', kind:'tool', x:TOOL_X, y:specY(2)+TOOL_DY, title:'Security KB',
+    role:'ISM, Essential Eight, PSPF — vector index.',
+    model:'bge-base-en-v1.5', stats:'2,208 chunks · 51 docs',
+    prompt:'Semantic index over the Information Security Manual, Essential Eight guidance and PSPF policies.' },
+  { id:'kb_legal', kind:'tool', x:TOOL_X, y:specY(3)+TOOL_DY, title:'Legislation graph',
+    role:'Acts, ADM guidance, AI policy — hybrid graph + vector.',
+    model:'bge-base-en-v1.5 + graph', stats:'1,760 chunks · 44 docs',
+    prompt:'Hybrid store: legislation graph for cross-references plus a vector index over ADM better-practice guidance and the whole-of-government AI policy.' },
+  { id:'kb_data', kind:'tool', x:TOOL_X, y:specY(4)+TOOL_DY, title:'Data standards RAG',
+    role:'AGLS, DATA Scheme, records authorities — vector index.',
+    model:'bge-base-en-v1.5', stats:'1,102 chunks · 29 docs',
+    prompt:'Semantic index over AGLS metadata standard, the Data Availability and Transparency Act and agency records authorities.' },
+  { id:'kb_arch', kind:'tool', x:TOOL_X, y:specY(5)+TOOL_DY, title:'Architecture patterns',
+    role:'Hosting certification, approved patterns — vector index.',
+    model:'bge-base-en-v1.5', stats:'846 chunks · 18 docs',
+    prompt:'Semantic index over the Hosting Certification Framework, secure cloud strategy and the internal approved-pattern library.' },
+
+  // -------- human loop + synthesis + assurance + output
+  { id:'qa', kind:'agent', x:2570, y:541, title:'Q&amp;A consolidation', humanGate:true,
+    role:'Deduplicates specialist questions; holds for the submitter.',
+    model:'Claude Haiku 4.5',
+    prompt:'Collect questions raised by all specialists. Deduplicate, group by theme, and format a single concise questionnaire for the submitter. When responses arrive, route each answer to the specialists that asked.',
+    acts:['collecting questions…','deduplicating…','grouping by theme…','formatting questionnaire…'] },
+
+  { id:'composer', kind:'agent', x:2990, y:541, title:'Synthesis composer',
+    role:'Assembles specialist findings into the draft AIA, section by section.',
+    model:'Claude Sonnet 4.6',
+    prompt:'Wait for all pass-2 findings and the Q&A record. Draft each AIA section in framework order, quoting findings verbatim where possible and preserving every citation id. Do not introduce claims that lack a citation.',
+    acts:['ordering findings…','drafting section…','carrying citations forward…','cross-referencing sections…'] },
+
+  { id:'verifier', kind:'engine', x:3370, y:541, title:'Citation verifier',
+    role:'Checks every claim in the draft traces to a retrieved chunk id.',
+    model:'Rule engine + embedding match',
+    prompt:'For each claim in the draft: locate its citation ids, confirm the chunks exist in the run\u2019s retrieval registry, and score claim\u2013chunk support. Flag uncited or weakly supported claims back to the composer.',
+    acts:['indexing claims…','matching citations…','scoring support…'] },
+
+  { id:'review', kind:'human', x:3750, y:541, title:'Adjudicator sign-off',
+    role:'Human review gate. Nothing ships without a person.',
+    model:'Human adjudicator',
+    prompt:'Present the verified draft, the dissent log and all flags to the human adjudicator. The run cannot complete without explicit sign-off.',
+    acts:['preparing review packet…'] },
+
+  { id:'export', kind:'output', x:4130, y:541, title:'Assembly &amp; export',
+    role:'Renders the signed-off draft to a distributable document.',
+    model:'docx renderer (non-LLM)',
+    prompt:'Compile approved sections, citation appendix and run telemetry summary into the final document.',
+    acts:['rendering document…','building citation appendix…'] },
+];
+
+const EDGES = [
+  { from:'intake', to:'assessA', type:'flow' },
+  { from:'intake', to:'assessB', type:'flow' },
+  { from:'assessA', to:'reconcile', type:'flow' },
+  { from:'assessB', to:'reconcile', type:'flow' },
+  { from:'reconcile', to:'threshold', type:'flow' },
+  ...SPECS.map(s => ({ from:'threshold', to:s, type:'flow' })),
+  ...SPECS.map(s => ({ from:s, to:'kb_'+s.replace('arch','arch'), type:'tool' })),
+  ...SPECS.map(s => ({ from:s, to:'qa', type:'q' })),
+  ...SPECS.map(s => ({ from:'qa', to:s, type:'loop' })),
+  ...SPECS.map(s => ({ from:s, to:'composer', type:'post' })),
+  { from:'qa', to:'composer', type:'flow' },
+  { from:'composer', to:'verifier', type:'flow' },
+  { from:'verifier', to:'review', type:'flow' },
+  { from:'review', to:'export', type:'flow' },
+].map((e,i) => ({ ...e, i, active:false }));
+// fix tool edge targets (spec id -> kb id)
+EDGES.forEach(e => { if (e.type==='tool') e.to = 'kb_' + e.from; });
+
+// ---------------------------------------------------------------- corpora
+const CHUNKS = {
+  kb_privacy: [
+    {id:'PRIV-0142',doc:'Privacy Act 1988 (Cth)',sec:'APP 11 — security of personal information',score:.91,snip:'Entities must take reasonable steps to protect personal information from misuse, interference, loss and unauthorised access or disclosure.'},
+    {id:'PRIV-0087',doc:'Privacy Act 1988 (Cth)',sec:'APP 6 — use or disclosure',score:.88,snip:'Personal information collected for a primary purpose may only be used or disclosed for a secondary purpose in limited circumstances.'},
+    {id:'PRIV-0031',doc:'Privacy Act 1988 (Cth)',sec:'APP 5 — notification of collection',score:.84,snip:'At or before collection, individuals must be notified of the purposes of collection and the consequences of not providing information.'},
+    {id:'PRIV-0210',doc:'Privacy Act 1988 (Cth)',sec:'APP 8 — cross-border disclosure',score:.81,snip:'Before disclosing personal information overseas, an entity must take reasonable steps to ensure the recipient does not breach the APPs.'},
+    {id:'PRIV-0355',doc:'OAIC PIA guide',sec:'When a PIA is required',score:.86,snip:'A privacy impact assessment should be undertaken for any project involving new or changed handling of personal information.'},
+    {id:'PRIV-0402',doc:'OAIC guidance',sec:'De-identification decision framework',score:.79,snip:'De-identification is context-dependent; re-identification risk must be assessed against the data environment, not the dataset alone.'},
+    {id:'PRIV-0298',doc:'Privacy Act 1988 (Cth)',sec:'APP 1 — open and transparent management',score:.77,snip:'Entities must have a clearly expressed and up-to-date policy about their management of personal information.'},
+    {id:'PRIV-0466',doc:'OAIC guidance',sec:'Automated decision-making and privacy',score:.83,snip:'Where personal information feeds automated decisions, collection notices should explain the automation and its consequences.'},
+  ],
+  kb_ethics: [
+    {id:'ETH-0012',doc:'AI Ethics Principles',sec:'Fairness',score:.92,snip:'AI systems should be inclusive and accessible, and should not involve or result in unfair discrimination against individuals or groups.'},
+    {id:'ETH-0027',doc:'AI Ethics Principles',sec:'Transparency and explainability',score:.89,snip:'There should be transparency and responsible disclosure so people can understand when they are being significantly impacted by AI.'},
+    {id:'ETH-0033',doc:'AI Ethics Principles',sec:'Contestability',score:.87,snip:'When an AI system significantly impacts a person, there should be a timely process to allow people to challenge the use or outcomes.'},
+    {id:'ETH-0041',doc:'AI Ethics Principles',sec:'Accountability',score:.85,snip:'Those responsible for the different phases of the AI system lifecycle should be identifiable and accountable for the outcomes.'},
+    {id:'ETH-0058',doc:'AI assurance framework',sec:'Cornerstone: fairness assessment',score:.82,snip:'Fairness assessment should consider both the training corpus and the operational population, including groups absent from training data.'},
+    {id:'ETH-0064',doc:'AI Ethics Principles',sec:'Human-centred values',score:.8,snip:'AI systems should respect human rights, diversity, and the autonomy of individuals throughout their lifecycle.'},
+    {id:'ETH-0071',doc:'AI assurance framework',sec:'Statement of transparency',score:.84,snip:'Agencies should publish a transparency statement describing their approach to AI adoption and the safeguards applied.'},
+    {id:'ETH-0089',doc:'AI Ethics Principles',sec:'Reliability and safety',score:.78,snip:'AI systems should reliably operate in accordance with their intended purpose throughout their lifecycle.'},
+  ],
+  kb_security: [
+    {id:'SEC-0114',doc:'Information Security Manual',sec:'Guidelines for software development',score:.9,snip:'Development, testing and production environments should be segregated, with production data protected from lower environments.'},
+    {id:'SEC-0186',doc:'Essential Eight',sec:'Application control — ML2',score:.87,snip:'Application control should be implemented on internet-facing servers to restrict execution to an approved set.'},
+    {id:'SEC-0203',doc:'Information Security Manual',sec:'Guidelines for system monitoring',score:.85,snip:'Event logs should be centrally stored and protected from unauthorised modification and deletion.'},
+    {id:'SEC-0007',doc:'AI threat guidance',sec:'Prompt injection mitigations',score:.64,snip:'Untrusted content processed by a model should be treated as data, with privileged actions gated outside the model boundary.'},
+    {id:'SEC-0251',doc:'PSPF',sec:'Policy 11 — robust ICT systems',score:.83,snip:'Entities must ensure ICT systems handling government information are secure throughout their lifecycle.'},
+    {id:'SEC-0290',doc:'Information Security Manual',sec:'Guidelines for gateways',score:.8,snip:'Gateways should inspect and filter traffic between security domains, with deny-by-default rulesets.'},
+    {id:'SEC-0312',doc:'Essential Eight',sec:'Restrict administrative privileges',score:.79,snip:'Privileged access should be validated when first requested and revalidated on a regular basis.'},
+    {id:'SEC-0344',doc:'AI threat guidance',sec:'Training data poisoning',score:.76,snip:'Provenance controls and outlier screening reduce the risk of adversarial contamination of fine-tuning corpora.'},
+  ],
+  kb_legal: [
+    {id:'LEG-0021',doc:'AI in government policy',sec:'Accountable official',score:.9,snip:'Agencies must designate accountable officials responsible for implementation of the policy and AI use within the agency.'},
+    {id:'LEG-0045',doc:'Ombudsman ADM guide',sec:'Lawful authority for automation',score:.88,snip:'Automated systems that make or materially assist decisions require clear legislative authority for the decision being automated.'},
+    {id:'LEG-0067',doc:'ADJR Act 1977',sec:'Reviewable decisions',score:.84,snip:'Decisions of an administrative character made under an enactment are subject to judicial review on defined grounds.'},
+    {id:'LEG-0089',doc:'Archives Act 1983',sec:'Commonwealth records',score:.81,snip:'Records made or received by an agency in the conduct of its affairs are Commonwealth records and must not be destroyed without authority.'},
+    {id:'LEG-0102',doc:'Ombudsman ADM guide',sec:'Audit trails for automated decisions',score:.86,snip:'Systems should record the material facts, rules applied and outputs for each automated decision to enable review.'},
+    {id:'LEG-0134',doc:'FOI Act 1982',sec:'Access to documents',score:.77,snip:'Documents of an agency, including operational material used in decision-making, may be subject to access requests.'},
+    {id:'LEG-0150',doc:'AI in government policy',sec:'Mandatory transparency',score:.83,snip:'Agencies must make publicly available a statement outlining their approach to AI adoption and use.'},
+    {id:'LEG-0178',doc:'Ombudsman ADM guide',sec:'Human oversight of automation',score:.8,snip:'A person with appropriate authority and expertise should be able to intervene in, or override, automated outcomes.'},
+  ],
+  kb_data: [
+    {id:'DATA-0019',doc:'AGLS metadata standard',sec:'Mandatory elements',score:.89,snip:'Creator, date, title and identifier are mandatory descriptive elements for government resources.'},
+    {id:'DATA-0042',doc:'DAT Act 2022',sec:'Data sharing purposes',score:.86,snip:'Sharing of public sector data under the scheme is permitted only for delivery of services, informing policy, or research.'},
+    {id:'DATA-0063',doc:'Records authority',sec:'Retention class — assessments',score:.84,snip:'Assessment and review records are to be retained for the specified period after action completed, then destroyed with authority.'},
+    {id:'DATA-0088',doc:'Data governance framework',sec:'Lineage requirements',score:.82,snip:'Datasets used in analytical or automated processes should carry machine-readable lineage back to authoritative sources.'},
+    {id:'DATA-0107',doc:'AGLS metadata standard',sec:'Audience and function elements',score:.78,snip:'Function and audience elements support discovery and appraisal of records across agency boundaries.'},
+    {id:'DATA-0129',doc:'DAT Act 2022',sec:'Data sharing principles',score:.8,snip:'Sharing must be assessed against the project, people, setting, data and output principles before agreement.'},
+    {id:'DATA-0155',doc:'Data governance framework',sec:'Quality dimensions',score:.76,snip:'Fitness for purpose should be assessed across accuracy, completeness, timeliness and coherence dimensions.'},
+    {id:'DATA-0171',doc:'Records authority',sec:'Transfer of digital records',score:.74,snip:'Digital records selected as national archives are to be transferred in approved formats with required metadata.'},
+  ],
+  kb_arch: [
+    {id:'ARCH-0011',doc:'Hosting Certification Framework',sec:'Certification levels',score:.9,snip:'Systems handling government data should use hosting providers certified at a level commensurate with data sensitivity.'},
+    {id:'ARCH-0036',doc:'Secure cloud strategy',sec:'Shared responsibility',score:.85,snip:'Agencies retain accountability for security outcomes regardless of the cloud shared-responsibility split.'},
+    {id:'ARCH-0058',doc:'Pattern library',sec:'Model gateway pattern',score:.88,snip:'All model calls route through a gateway enforcing authentication, logging, rate limits and content policy checks.'},
+    {id:'ARCH-0074',doc:'Pattern library',sec:'Human-in-the-loop checkpoint',score:.86,snip:'Approved pattern: asynchronous queue with human approval step before any externally visible action is taken.'},
+    {id:'ARCH-0095',doc:'Pattern library',sec:'Drift monitoring',score:.81,snip:'Production models require input-distribution and output-quality monitors with alerting thresholds agreed at go-live.'},
+    {id:'ARCH-0112',doc:'Secure cloud strategy',sec:'Data residency',score:.79,snip:'Data residency requirements should be assessed for each data class, including model inputs, logs and derived artefacts.'},
+    {id:'ARCH-0130',doc:'Hosting Certification Framework',sec:'Supply chain assessment',score:.77,snip:'Certification includes assessment of ownership, control and supply-chain risk of the hosting provider.'},
+    {id:'ARCH-0148',doc:'Pattern library',sec:'Rollback and kill-switch',score:.83,snip:'Every automated capability requires a tested rollback path and an operational kill-switch with a named owner.'},
+  ],
+};
+
+const QUERIES = {
+  kb_privacy:['personal information retention obligations','collection notice automated decisions','cross-border disclosure requirements'],
+  kb_ethics:['fairness assessment operational population','contestability significant impact','transparency statement requirements'],
+  kb_security:['prompt injection mitigations model boundary','essential eight internet-facing services','event logging central storage'],
+  kb_legal:['lawful authority automated decisions','audit trail requirements ADM','records obligations assessment artefacts'],
+  kb_data:['lineage authoritative sources','retention class assessment records','data sharing principles applicability'],
+  kb_arch:['hosting certification data sensitivity','human in the loop approval pattern','drift monitoring thresholds'],
+};
+
+const QUESTIONS = {
+  privacy:['Will trade mark applicant details from intake forms be retained after the pre-screening result is produced?','Is any personal information sent to third-party image APIs during similarity scoring?'],
+  ethics:['Can applicants see why their image was flagged as similar, and challenge that outcome before examination?'],
+  security:['Will the image embedding service be internet-facing, or accessible only from the examination network?','Who holds administrative access to the model gateway in production?'],
+  legal:['Does the pre-screening result materially influence the examiner\u2019s decision, or is it advisory only?'],
+  data:['What is the intended retention period for generated image embeddings and similarity scores?'],
+  arch:['Is there a tested rollback path if the similarity model degrades after a retrain?'],
+};
+
+const SECTIONS = [
+  'Purpose and system context','Expected benefits and public value','Risk threshold determination',
+  'Fairness and human impact','Privacy and data protection','Security posture',
+  'Transparency and contestability','Human oversight and accountability','Mitigations and recommendations',
+];
+
+</script>
+<script>
+/* ================================ engine ================================ */
+const byId = id => document.getElementById(id);
+const stage = byId('stage'), viewport = byId('viewport'), workspace = byId('workspace');
+const wiresEl = byId('wires'), nodeLayer = byId('node-layer'), chipLayer = byId('chip-layer');
+const plain = s => (s||'').replace(/&amp;/g,'&');
+const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+const CHIP_OK = CSS.supports('offset-path','path("M 0 0 L 10 10")');
+
+const state = { token:0 };
+const geo = {}, toolPathD = {};
+
+function initState(){
+  state.token++;
+  state.timers = []; state.intervals = [];
+  state.running = false; state.paneId = null; state.t0 = null;
+  state.totals = { tokens:0, calls:0, chunks:0 };
+  state.nodes = {};
+  NODES.forEach(n => {
+    state.nodes[n.id] = { ...n, status: n.kind==='tool' ? 'idle' : 'queued',
+      pass:1, tokens:0, toolCalls:0, chunks:[], questions:[], queries:[], servedIds:[], served:0, qi:0,
+      secDone:0, claims:0, flags:0, result:null };
+  });
+  EDGES.forEach(e => e.active = false);
+}
+const st = id => state.nodes[id];
+function after(ms, fn){ const tk = state.token; state.timers.push(setTimeout(()=>{ if(tk===state.token) fn(); }, ms)); }
+function clearTimers(){ state.timers.forEach(clearTimeout); state.intervals.forEach(clearInterval); state.timers=[]; state.intervals=[]; }
+
+/* ------------------------------- rendering ------------------------------ */
+const ICONS = {
+  agent:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="5" width="14" height="14" rx="3"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg>',
+  spec:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>',
+  tool:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5.5" rx="8" ry="3"/><path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>',
+  engine:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17V7l6 5 6-5v10"/><path d="M20 7v10"/></svg>',
+  human:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>',
+  output:'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2h9l5 5v15H6z"/><path d="M14 2v6h6"/></svg>'
+};
+
+function statusLabel(n){
+  if(n.status==='queued') return 'QUEUED';
+  if(n.status==='idle') return 'IDLE';
+  if(n.status==='running') return n.kind==='tool' ? 'SERVING' : 'RUNNING';
+  if(n.status==='done') return 'DONE';
+  if(n.status==='waiting'){
+    if(n.id==='qa') return 'AWAITING USER';
+    if(n.kind==='human') return 'AWAITING SIGN-OFF';
+    return 'Q&A SENT';
+  }
+  return n.status.toUpperCase();
+}
+
+function metaHTML(n){
+  if(n.kind==='spec') return `<span class="dots" id="dots-${n.id}">&#9679;&#9675;</span><span id="tok-${n.id}">0 tok</span><span id="ckn-${n.id}">0 chunks</span>`;
+  if(n.kind==='tool') return `<span>${n.stats}</span><span id="srv-${n.id}">0 served</span>`;
+  if(n.kind==='agent') return `<span id="tok-${n.id}">0 tok</span><span>${n.humanGate?'holds for submitter':'single pass'}</span>`;
+  if(n.kind==='engine') return `<span>deterministic · reproducible</span>`;
+  if(n.kind==='human') return `<span>human decision — never automated</span>`;
+  return `<span>artefact output</span>`;
+}
+
+function renderNodes(){
+  nodeLayer.innerHTML = '';
+  Object.values(state.nodes).forEach(n => {
+    const el = document.createElement('div');
+    el.className = `node kind-${n.kind} state-${n.status}`;
+    el.id = 'node-' + n.id;
+    el.tabIndex = 0;
+    el.style.left = n.x + 'px'; el.style.top = n.y + 'px';
+    const hasIn  = EDGES.some(e => e.to === n.id && e.type !== 'loop');
+    const hasOut = EDGES.some(e => e.from === n.id && e.type !== 'loop');
+    el.innerHTML = `
+      ${hasIn ? '<div class="pin pin-in"></div>' : ''}
+      <div class="n-head">
+        <span class="n-ico">${ICONS[n.kind]}</span>
+        <span class="n-title">${n.title}</span>
+        <span class="n-status" id="pill-${n.id}">${statusLabel(n)}</span>
+      </div>
+      <div class="n-body">
+        <div class="n-role">${n.role}</div>
+        <div class="n-act" id="act-${n.id}">&rsaquo; standing by</div>
+        <div class="n-meta" id="meta-${n.id}">${metaHTML(n)}</div>
+      </div>
+      ${hasOut ? '<div class="pin pin-out"></div>' : ''}
+      ${n.id==='qa' ? '<div class="pin pin-bottom"></div>' : ''}`;
+    el.addEventListener('click', () => openPane(n.id));
+    el.addEventListener('keydown', e => { if(e.key==='Enter') openPane(n.id); });
+    nodeLayer.appendChild(el);
+  });
+}
+
+function renderGroups(){
+  const g = byId('group-layer');
+  const collegeBottom = specY(5) + TOOL_DY + 130;
+  g.innerHTML = `
+    <div class="group" style="left:1516px;top:6px;width:702px;height:${collegeBottom}px"><span>SPECIALIST COLLEGE &middot; KNOWLEDGE PLANE</span></div>
+    <div class="group" style="left:2538px;top:498px;width:344px;height:206px"><span>HUMAN IN THE LOOP</span></div>
+    <div class="col-label" style="left:80px;top:514px">INTAKE</div>
+    <div class="col-label" style="left:440px;top:394px">TRIAGE &times;2</div>
+    <div class="col-label" style="left:800px;top:514px">RECONCILE</div>
+    <div class="col-label" style="left:1160px;top:514px">THRESHOLD</div>
+    <div class="col-label" style="left:2990px;top:514px">SYNTHESIS</div>
+    <div class="col-label" style="left:3370px;top:514px">ASSURANCE</div>
+    <div class="col-label" style="left:3750px;top:514px">SIGN-OFF</div>
+    <div class="col-label" style="left:4130px;top:514px">OUTPUT</div>`;
+}
+
+function measure(){
+  Object.values(state.nodes).forEach(n => {
+    const el = byId('node-' + n.id);
+    geo[n.id] = { x:n.x, y:n.y, w:el.offsetWidth, h:el.offsetHeight };
+  });
+}
+
+/* -------------------------------- wires -------------------------------- */
+function edgePath(e){
+  const a = geo[e.from], b = geo[e.to];
+  const x0 = a.x + a.w, y0 = a.y + a.h/2, x1 = b.x, y1 = b.y + b.h/2;
+  if(e.type === 'tool'){
+    const c = Math.max((x1 - x0) * .7, 40);
+    return `M ${x0} ${y0} C ${x0+c} ${y0}, ${x1-c} ${y1}, ${x1} ${y1}`;
+  }
+  if(e.type === 'loop'){
+    const qa = geo['qa'];
+    const sx = qa.x + qa.w/2, sy = qa.y + qa.h;
+    const c2y = Math.min(y1 + 340, WS_H - 60);
+    return `M ${sx} ${sy} C ${sx-90} ${sy+660}, 1195 ${c2y}, ${x1-2} ${y1+7}`;
+  }
+  if(st(e.from) && st(e.from).kind === 'spec'){
+    const c = 220;
+    return `M ${x0} ${y0} L ${JOIN_X} ${y0} C ${JOIN_X+c} ${y0}, ${x1-c} ${y1}, ${x1} ${y1}`;
+  }
+  const dx = Math.max(Math.abs(x1 - x0) * .5, 70);
+  return `M ${x0} ${y0} C ${x0+dx} ${y0}, ${x1-dx} ${y1}, ${x1} ${y1}`;
+}
+
+function drawEdges(){
+  let s = '';
+  EDGES.forEach(e => {
+    const d = edgePath(e);
+    if(e.type === 'tool') toolPathD[e.from] = d;
+    s += `<path class="wire w-${e.type}${e.active?' active':''}" d="${d}"/>`;
+    if(e.active) s += `<path class="wire-pulse" d="${d}"/>`;
+  });
+  wiresEl.innerHTML = s;
+}
+
+function flash(pred, dur = 1700){
+  EDGES.forEach(e => { if(pred(e)) e.active = true; });
+  drawEdges();
+  after(dur, () => { EDGES.forEach(e => { if(pred(e)) e.active = false; }); drawEdges(); });
+}
+
+/* ------------------------------ pan / zoom ------------------------------ */
+const view = { x:0, y:0, s:.6 };
+function apply(){
+  workspace.style.transform = `translate(${view.x}px,${view.y}px) scale(${view.s})`;
+  byId('zoom-pct').textContent = Math.round(view.s * 100) + '%';
+  drawMini();
+}
+function zoomAt(cx, cy, f){
+  const r = stage.getBoundingClientRect();
+  const px = cx - r.left, py = cy - r.top;
+  const ns = clamp(view.s * f, 0.12, 1.8);
+  const k = ns / view.s;
+  view.x = px - (px - view.x) * k;
+  view.y = py - (py - view.y) * k;
+  view.s = ns;
+  apply();
+}
+function fitView(){
+  const r = stage.getBoundingClientRect();
+  const s = clamp(Math.min((r.width - 90) / WS_W, (r.height - 80) / WS_H), 0.12, 1);
+  view.s = s;
+  view.x = (r.width - WS_W * s) / 2;
+  view.y = (r.height - WS_H * s) / 2;
+  apply();
+}
+stage.addEventListener('wheel', e => {
+  if(e.target.closest('#pane')) return;
+  e.preventDefault();
+  zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0013));
+}, { passive:false });
+
+let drag = null, moved = 0;
+viewport.addEventListener('pointerdown', e => {
+  if(e.target.closest('.node')) return;
+  drag = { x:e.clientX, y:e.clientY, vx:view.x, vy:view.y };
+  moved = 0;
+  viewport.setPointerCapture(e.pointerId);
+  viewport.classList.add('grabbing');
+});
+viewport.addEventListener('pointermove', e => {
+  if(!drag) return;
+  moved += Math.abs(e.movementX||0) + Math.abs(e.movementY||0);
+  view.x = drag.vx + (e.clientX - drag.x);
+  view.y = drag.vy + (e.clientY - drag.y);
+  apply();
+});
+viewport.addEventListener('pointerup', () => {
+  viewport.classList.remove('grabbing');
+  if(drag && moved < 5) closePane();
+  drag = null;
+});
+viewport.addEventListener('pointercancel', () => { drag = null; viewport.classList.remove('grabbing'); });
+byId('zoom-in').addEventListener('click', () => { const r = stage.getBoundingClientRect(); zoomAt(r.left + r.width/2, r.top + r.height/2, 1.25); });
+byId('zoom-out').addEventListener('click', () => { const r = stage.getBoundingClientRect(); zoomAt(r.left + r.width/2, r.top + r.height/2, .8); });
+byId('zoom-fit').addEventListener('click', fitView);
+
+/* ------------------------------- minimap -------------------------------- */
+const mini = byId('mini-canvas'), mctx = mini.getContext('2d');
+const mScale = Math.min(216 / WS_W, 70 / WS_H);
+const mOffX = (216 - WS_W * mScale) / 2, mOffY = (70 - WS_H * mScale) / 2;
+const STATUS_COLOR = { queued:'#33405a', idle:'#3a2f66', running:'#38BDF8', waiting:'#FBBF24', done:'#34D399' };
+function drawMini(){
+  mctx.clearRect(0, 0, 216, 70);
+  mctx.fillStyle = '#0B0F16'; mctx.fillRect(0, 0, 216, 70);
+  Object.values(state.nodes).forEach(n => {
+    const g = geo[n.id]; if(!g) return;
+    mctx.fillStyle = (n.kind==='tool' && n.status==='running') ? '#A78BFA' : STATUS_COLOR[n.status] || '#33405a';
+    mctx.fillRect(mOffX + g.x * mScale, mOffY + g.y * mScale, Math.max(g.w * mScale, 3), Math.max(g.h * mScale, 2.5));
+  });
+  const r = stage.getBoundingClientRect();
+  mctx.strokeStyle = 'rgba(232,237,246,.65)'; mctx.lineWidth = 1;
+  mctx.strokeRect(mOffX + (-view.x / view.s) * mScale, mOffY + (-view.y / view.s) * mScale,
+                  (r.width / view.s) * mScale, (r.height / view.s) * mScale);
+}
+mini.addEventListener('click', e => {
+  const rect = mini.getBoundingClientRect();
+  const wx = (e.clientX - rect.left - mOffX) / mScale;
+  const wy = (e.clientY - rect.top - mOffY) / mScale;
+  const r = stage.getBoundingClientRect();
+  view.x = r.width/2 - wx * view.s;
+  view.y = r.height/2 - wy * view.s;
+  apply();
+});
+
+/* ----------------------------- node updates ----------------------------- */
+function setAct(id, txt){ const el = byId('act-' + id); if(el) el.innerHTML = '&rsaquo; ' + txt; }
+function updateNode(n){
+  const el = byId('node-' + n.id); if(!el) return;
+  el.className = `node kind-${n.kind} state-${n.status}` + (state.paneId === n.id ? ' pane-open' : '');
+  byId('pill-' + n.id).textContent = statusLabel(n);
+  if(n.kind === 'spec'){
+    byId('dots-' + n.id).innerHTML = n.pass === 2 ? '&#9679;&#9679;' : '&#9679;&#9675;';
+    byId('ckn-' + n.id).textContent = n.chunks.length + ' chunks';
+    byId('tok-' + n.id).textContent = n.tokens.toLocaleString() + ' tok';
+  }
+  if(n.kind === 'agent') byId('tok-' + n.id).textContent = n.tokens.toLocaleString() + ' tok';
+  if(n.kind === 'tool') byId('srv-' + n.id).textContent = n.served + ' served';
+  const ps = byId('pp-status'); if(state.paneId === n.id && ps) ps.textContent = statusLabel(n);
+  drawMini();
+}
+function statTotals(){
+  byId('stat-tokens').textContent = state.totals.tokens.toLocaleString();
+  byId('stat-calls').textContent = state.totals.calls;
+  byId('stat-chunks').textContent = state.totals.chunks;
+}
+
+/* ------------------------------ event feed ------------------------------ */
+function eTime(){
+  if(!state.t0) return '00:00';
+  const s = Math.floor((Date.now() - state.t0) / 1000);
+  return String(Math.floor(s/60)).padStart(2,'0') + ':' + String(s%60).padStart(2,'0');
+}
+function pushEvent(tag, text){
+  const log = byId('ticker-log');
+  const t = eTime();
+  const el = document.createElement('div');
+  el.className = 'ev';
+  el.innerHTML = `<time>${t}</time><span class="tag tag-${tag}">${tag}</span><span></span>`;
+  el.lastElementChild.textContent = text;
+  log.prepend(el);
+  while(log.children.length > 250) log.lastElementChild.remove();
+  byId('ticker-latest').textContent = `${t}  [${tag}]  ${text}`;
+}
+
+/* ---------------------------- chunk retrieval --------------------------- */
+function flyChunk(specId, chunk, i){
+  if(!CHIP_OK) return;
+  const d = toolPathD[specId]; if(!d) return;
+  const el = document.createElement('div');
+  el.className = 'chip';
+  el.textContent = chunk.id;
+  el.style.offsetPath = `path("${d}")`;
+  el.style.animationDelay = (i * 160) + 'ms';
+  el.addEventListener('animationend', () => el.remove());
+  chipLayer.appendChild(el);
+  after(2600, () => el.remove()); // safety net
+}
+function scheduleRetrievals(n){
+  const plan = n.pass === 1 ? [{t:900,k:3},{t:3800,k:2}] : [{t:1000,k:2}];
+  plan.forEach(p => after(p.t, () => { if(st(n.id).status === 'running') doRetrieve(n, p.k); }));
+}
+function doRetrieve(n, k){
+  const tool = st(n.tool), pool = CHUNKS[n.tool];
+  const seen = new Set(n.chunks.map(c => c.id));
+  let picks = pool.filter(c => !seen.has(c.id)).slice(0, k);
+  if(picks.length < k) picks = picks.concat(pool.slice(0, k - picks.length));
+  const q = QUERIES[n.tool][n.qi++ % QUERIES[n.tool].length];
+  tool.status = 'running';
+  tool.queries.unshift(q);
+  updateNode(tool);
+  setAct(tool.id, `similarity search &middot; top-k ${k} &middot; \u201C${q}\u201D`);
+  n.toolCalls++; state.totals.calls++; statTotals(); paneLive(n.id);
+  flash(e => e.type === 'tool' && e.from === n.id, 1400);
+  after(620, () => {
+    picks.forEach((c, i) => flyChunk(n.id, c, i));
+    after(1000 + picks.length * 160, () => {
+      picks.forEach(c => {
+        if(!n.chunks.find(x => x.id === c.id)){
+          n.chunks.unshift(c); state.totals.chunks++;
+          tool.served++; tool.servedIds.unshift(c.id);
+        }
+      });
+      updateNode(n); updateNode(tool); statTotals();
+      paneChunks(n, picks); paneLive(n.id);
+      pushEvent('RETRIEVE', `${plain(n.title)} \u2190 ${plain(tool.title)}: ${picks.map(c => c.id).join(', ')}`);
+      after(500, () => {
+        if(st(tool.id).status === 'running'){ tool.status = 'idle'; updateNode(tool); setAct(tool.id, 'standing by'); }
+      });
+    });
+  });
+}
+
+/* ------------------------------ simulation ------------------------------ */
+function startActs(n){
+  const tk = state.token;
+  const h = setInterval(() => {
+    if(tk !== state.token || st(n.id).status !== 'running'){ clearInterval(h); return; }
+    if(n.acts) setAct(n.id, n.acts[Math.floor(Math.random() * n.acts.length)]);
+    if(n.kind === 'agent' || n.kind === 'spec'){
+      const t = 8 + Math.floor(Math.random() * 46);
+      n.tokens += t; state.totals.tokens += t;
+      if(n.kind === 'spec') byId('tok-' + n.id).textContent = n.tokens.toLocaleString() + ' tok';
+      else { const e = byId('tok-' + n.id); if(e) e.textContent = n.tokens.toLocaleString() + ' tok'; }
+      statTotals(); paneLive(n.id);
+    }
+  }, 750 + Math.random() * 550);
+  state.intervals.push(h);
+}
+
+function canStart(n){
+  if(n.kind === 'tool') return false;
+  switch(n.id){
+    case 'intake': return true;
+    case 'qa': return SPECS.every(s => st(s).status === 'waiting');
+    case 'composer': return st('qa').status === 'done' && SPECS.every(s => st(s).status === 'done');
+    default: {
+      const ins = EDGES.filter(e => e.to === n.id && e.type === 'flow');
+      return ins.length > 0 && ins.every(e => st(e.from).status === 'done');
+    }
+  }
+}
+function tick(){
+  if(!state.running) return;
+  Object.values(state.nodes).forEach(n => {
+    if(n.kind !== 'tool' && n.status === 'queued' && canStart(n)) startNode(n);
+  });
+  drawMini();
+}
+
+function startNode(n){
+  n.status = 'running';
+  updateNode(n);
+  if(n.acts) setAct(n.id, n.acts[0]);
+  pushEvent('AGENT', `${plain(n.title)} started${n.kind === 'spec' ? ` (pass ${n.pass})` : ''}`);
+  startActs(n);
+  if(n.kind === 'spec') scheduleRetrievals(n);
+
+  switch(n.id){
+    case 'intake': after(2000, () => complete(n)); break;
+    case 'assessA': after(3300 + Math.random()*600, () => complete(n)); break;
+    case 'assessB': after(3300 + Math.random()*600, () => complete(n)); break;
+    case 'reconcile': after(3000, () => complete(n)); break;
+    case 'threshold':
+      after(2200, () => {
+        n.result = 'ELEVATED';
+        setAct(n.id, 'tier: ELEVATED &mdash; full assessment');
+        pushEvent('SYS', 'Risk tier computed: ELEVATED — specialist college engaged');
+        if(state.paneId === n.id) openPane(n.id);
+        complete(n);
+      });
+      break;
+    case 'qa':
+      after(2600, () => {
+        n.status = 'waiting'; updateNode(n);
+        const total = SPECS.reduce((a, s) => a + st(s).questions.length, 0);
+        setAct(n.id, `awaiting user &middot; ${total} questions sent`);
+        pushEvent('HUMAN', `${total} consolidated questions sent to the submitter`);
+        if(state.paneId === 'qa') openPane('qa');
+        after(3600, () => {
+          pushEvent('HUMAN', 'Responses received (simulated) — routing answers to specialists');
+          complete(n);
+        });
+      });
+      break;
+    case 'review':
+      after(1200, () => {
+        n.status = 'waiting'; updateNode(n);
+        setAct(n.id, 'awaiting adjudicator&hellip;');
+        pushEvent('HUMAN', 'Review packet ready — awaiting adjudicator sign-off');
+        if(state.paneId === 'review') openPane('review');
+        after(3200, () => {
+          pushEvent('HUMAN', 'Adjudicator sign-off recorded (simulated)');
+          complete(n);
+        });
+      });
+      break;
+    case 'composer': {
+      const tk = state.token;
+      const h = setInterval(() => {
+        if(tk !== state.token || st('composer').status !== 'running'){ clearInterval(h); return; }
+        if(n.secDone < SECTIONS.length){
+          setAct(n.id, `drafting: ${SECTIONS[n.secDone].toLowerCase()}&hellip;`);
+          n.secDone++;
+          pushEvent('DRAFT', `Section drafted: ${SECTIONS[n.secDone-1]}`);
+          paneSections();
+        }
+        if(n.secDone >= SECTIONS.length){ clearInterval(h); complete(n); }
+      }, 640);
+      state.intervals.push(h);
+      break;
+    }
+    case 'verifier': {
+      n.claimsTotal = SPECS.reduce((a, s) => a + st(s).chunks.length, 0);
+      const tk = state.token;
+      const h = setInterval(() => {
+        if(tk !== state.token || st('verifier').status !== 'running'){ clearInterval(h); return; }
+        n.claims = Math.min(n.claims + 1, n.claimsTotal);
+        setAct(n.id, `matching citations &middot; ${n.claims}/${n.claimsTotal}`);
+        if(n.claims === Math.floor(n.claimsTotal * .6) && !n.flags){
+          n.flags = 1;
+          pushEvent('WARN', 'Low-support citation flagged: SEC-0007 (score 0.64) — claim tightened before inclusion');
+        }
+        paneVerify();
+        if(n.claims >= n.claimsTotal){
+          clearInterval(h);
+          pushEvent('VERIFY', `Citation coverage ${n.claims}/${n.claimsTotal} — every claim traces to retrieved chunks`);
+          complete(n);
+        }
+      }, 110);
+      state.intervals.push(h);
+      break;
+    }
+    case 'export': after(2100, () => complete(n)); break;
+    default: // specialists
+      after(n.pass === 1 ? 7200 + Math.random()*1400 : 4200 + Math.random()*900, () => complete(n));
+  }
+}
+
+function complete(n){
+  if(!state.running) return;
+  if(n.kind === 'spec' && n.pass === 1){
+    n.status = 'waiting';
+    n.questions = QUESTIONS[n.id] || [];
+    updateNode(n);
+    setAct(n.id, `sent ${n.questions.length} question${n.questions.length===1?'':'s'} to Q&amp;A`);
+    pushEvent('AGENT', `${plain(n.title)} finished pass 1 — ${n.questions.length} clarification${n.questions.length===1?'':'s'} raised`);
+    flash(e => e.type === 'q' && e.from === n.id, 1500);
+    if(state.paneId === n.id) openPane(n.id);
+    tick();
+    return;
+  }
+  n.status = 'done';
+  updateNode(n);
+  if(n.kind === 'spec'){
+    setAct(n.id, 'findings submitted');
+    flash(e => e.type === 'post' && e.from === n.id, 1700);
+    pushEvent('DRAFT', `${plain(n.title)} pass 2 findings submitted (${n.chunks.length} citations)`);
+  } else if(n.id === 'qa'){
+    setAct(n.id, 'answers distributed');
+    SPECS.forEach(s => { const sp = st(s); sp.status = 'queued'; sp.pass = 2; updateNode(sp); setAct(s, 'answers received — revising&hellip;'); });
+    flash(e => e.type === 'loop', 2100);
+    flash(e => e.type === 'flow' && e.from === 'qa', 1700);
+    pushEvent('AGENT', 'Specialist college re-engaged for pass 2');
+  } else if(n.id === 'export'){
+    setAct(n.id, 'AIA-DRAFT-2026-0719-04.docx ready');
+  } else {
+    if(n.id !== 'threshold') setAct(n.id, 'complete');
+    flash(e => e.type === 'flow' && e.from === n.id, 1500);
+    if(n.id !== 'intake' && n.id !== 'threshold') pushEvent('AGENT', `${plain(n.title)} complete`);
+  }
+  if(state.paneId === n.id) openPane(n.id);
+  if(n.id === 'export') finishRun(); else tick();
+}
+
+/* ---------------------------- run lifecycle ----------------------------- */
+function startRun(){
+  if(state.running) return;
+  state.running = true;
+  state.t0 = Date.now();
+  const tk = state.token;
+  const h = setInterval(() => {
+    if(tk !== state.token){ clearInterval(h); return; }
+    if(state.running) byId('stat-elapsed').textContent = eTime();
+  }, 500);
+  state.intervals.push(h);
+  byId('status-dot').className = 'running';
+  byId('status-text').textContent = 'PROCESSING GRAPH';
+  const rb = byId('run-btn'); rb.disabled = true; rb.textContent = 'Running\u2026';
+  pushEvent('SYS', 'Run started — all telemetry on this canvas is simulated for the demo');
+  pushEvent('SYS', 'Subject: “Trade mark image similarity pre-screening service” (sample submission)');
+  tick();
+}
+function finishRun(){
+  state.running = false;
+  byId('status-dot').className = 'complete';
+  byId('status-text').textContent = 'ASSESSMENT COMPLETE';
+  byId('run-btn').classList.add('hidden');
+  byId('reset-btn').classList.remove('hidden');
+  pushEvent('SYS', `Draft assembled: AIA-DRAFT-2026-0719-04.docx — ${state.totals.chunks} chunks cited, ${state.totals.calls} tool calls, ${state.totals.tokens.toLocaleString()} tokens`);
+}
+function resetRun(){
+  clearTimers();
+  initState();
+  renderNodes(); measure(); drawEdges(); drawMini();
+  closePane();
+  byId('status-dot').className = '';
+  byId('status-text').textContent = 'IDLE';
+  byId('stat-elapsed').textContent = '00:00';
+  statTotals();
+  const rb = byId('run-btn');
+  rb.classList.remove('hidden'); rb.disabled = false; rb.textContent = 'Run assessment';
+  byId('reset-btn').classList.add('hidden');
+  pushEvent('SYS', 'Run reset — graph returned to idle');
+}
+byId('run-btn').addEventListener('click', startRun);
+byId('reset-btn').addEventListener('click', resetRun);
+
+/* ------------------------------ side pane ------------------------------- */
+const KIND_LABEL = { agent:'AGENT', spec:'SPECIALIST', tool:'CORPUS', engine:'ENGINE', human:'HUMAN', output:'OUTPUT' };
+const metric = (label, val, cls='', id='') => `<div class="p-metric"><label>${label}</label><b class="${cls}" ${id?`id="${id}"`:''}>${val}</b></div>`;
+const ckHTML = c => `<details class="ck" data-ck="${c.id}"><summary><span class="ck-id">${c.id}</span><span class="ck-doc">${c.doc}<small>${c.sec}</small></span><span class="ck-score"><i style="width:${Math.round(c.score*100)}%"></i></span></summary><div class="ck-snip"><b>similarity ${c.score.toFixed(2)}</b><br>${c.snip}</div></details>`;
+
+function paneHTML(n){
+  let h = `<div class="p-sec"><div class="p-role">${n.role}</div></div>`;
+  h += `<div class="p-sec"><label>IDENTITY</label><div class="p-badges"><span class="p-badge model">${n.model}</span>${n.stats?`<span class="p-badge">${n.stats}</span>`:''}</div></div>`;
+
+  if(n.kind === 'spec'){
+    h += `<div class="p-sec"><div class="p-grid">
+      ${metric('PASS', n.pass + ' / 2', '', 'pp-pass')}
+      ${metric('STATUS', statusLabel(n), '', 'pp-status')}
+      ${metric('TOKENS', n.tokens.toLocaleString(), 'blue', 'pp-tokens')}
+      ${metric('CHUNKS RETRIEVED', n.chunks.length, 'violet', 'pp-chunks')}
+    </div></div>`;
+    h += `<div class="p-sec"><label>RETRIEVED CONTEXT — CITABLE CHUNK IDS</label><div class="ck-list" id="pp-cklist">`;
+    h += n.chunks.length ? n.chunks.map(ckHTML).join('') : `<div class="ck-empty">No retrievals yet — chunks surface here with stable ids the moment this specialist pulls context.</div>`;
+    h += `</div></div>`;
+    if(n.questions.length){
+      h += `<div class="p-sec"><label>QUESTIONS RAISED FOR THE SUBMITTER</label><div class="q-list">` +
+           n.questions.map(q => `<div class="q-item">${q}</div>`).join('') + `</div></div>`;
+    }
+  } else if(n.kind === 'tool'){
+    h += `<div class="p-sec"><div class="p-grid">
+      ${metric('SEARCHES', n.queries.length, 'violet', 'pp-calls')}
+      ${metric('CHUNKS SERVED', n.served, 'violet', 'pp-served')}
+    </div></div>`;
+    h += `<div class="p-sec"><label>RECENT QUERIES (PARAPHRASED)</label><div class="pq-list" id="pp-qlist">`;
+    h += n.queries.length ? n.queries.slice(0,6).map(q => `<div class="pq"><b>top-k</b> \u201C${q}\u201D</div>`).join('') : `<div class="ck-empty">No searches yet this run.</div>`;
+    h += `</div></div>`;
+    if(n.servedIds.length){
+      h += `<div class="p-sec"><label>CHUNKS SERVED THIS RUN</label><div class="p-badges">` +
+           n.servedIds.map(id => `<span class="ck-id">${id}</span>`).join('') + `</div></div>`;
+    }
+  } else if(n.id === 'threshold'){
+    h += `<div class="p-sec"><div class="p-grid">
+      ${metric('RISK TIER', n.result || '—', n.result ? 'blue' : '', 'pp-tier')}
+      ${metric('STATUS', statusLabel(n), '', 'pp-status')}
+    </div></div>`;
+  } else if(n.id === 'composer'){
+    h += `<div class="p-sec"><div class="p-grid">
+      ${metric('SECTIONS', n.secDone + ' / ' + SECTIONS.length, 'blue', 'pp-secn')}
+      ${metric('TOKENS', n.tokens.toLocaleString(), 'blue', 'pp-tokens')}
+    </div></div>`;
+    h += `<div class="p-sec"><label>DRAFT COVERAGE</label><div class="sec-list">` +
+      SECTIONS.map((s, i) => `<div class="sec-item${i < n.secDone ? ' done' : (i === n.secDone && n.status === 'running' ? ' now' : '')}" id="ps-${i}"><i>${i < n.secDone ? '&#10003;' : ''}</i>${s}</div>`).join('') +
+      `</div></div>`;
+  } else if(n.id === 'verifier'){
+    const tot = n.claimsTotal || '—';
+    h += `<div class="p-sec"><div class="p-grid">
+      ${metric('CLAIMS CHECKED', n.claims + ' / ' + tot, 'blue', 'pp-claims')}
+      ${metric('FLAGS', n.flags, n.flags ? 'violet' : '', 'pp-flags')}
+    </div>
+    <label style="margin-top:14px">CITATION COVERAGE</label>
+    <div class="cov-bar"><i id="pp-cov" style="width:${n.claimsTotal ? Math.round(n.claims / n.claimsTotal * 100) : 0}%"></i></div></div>`;
+  } else if(n.id === 'export'){
+    h += `<div class="p-sec"><div class="p-grid">
+      ${metric('STATUS', statusLabel(n), '', 'pp-status')}
+      ${metric('ARTEFACT', n.status === 'done' ? 'AIA-DRAFT&hellip;.docx' : '—', n.status === 'done' ? 'blue' : '')}
+    </div></div>`;
+  } else {
+    let extra = '';
+    if(n.id === 'qa'){
+      const total = SPECS.reduce((a, s) => a + st(s).questions.length, 0);
+      extra = metric('QUESTIONS HELD', total, 'blue', 'pp-qn');
+    } else {
+      extra = metric('TOKENS', n.tokens.toLocaleString(), 'blue', 'pp-tokens');
+    }
+    h += `<div class="p-sec"><div class="p-grid">${metric('STATUS', statusLabel(n), '', 'pp-status')}${extra}</div></div>`;
+  }
+
+  const promptLabel = n.kind === 'tool' ? 'INDEX NOTES' : (n.kind === 'engine' ? 'RULE NOTES' : 'SYSTEM PROMPT');
+  h += `<div class="p-sec"><details class="p-fold"><summary>${promptLabel} — EXPAND</summary><div class="p-code">${n.prompt}</div></details></div>`;
+  return h;
+}
+
+function openPane(id){
+  state.paneId = id;
+  const n = st(id);
+  document.querySelectorAll('.node.pane-open').forEach(x => x.classList.remove('pane-open'));
+  byId('node-' + id).classList.add('pane-open');
+  byId('pane-kind').textContent = KIND_LABEL[n.kind];
+  byId('pane-title').innerHTML = n.title;
+  byId('pane-body').innerHTML = paneHTML(n);
+  byId('pane').classList.add('open');
+}
+function closePane(){
+  state.paneId = null;
+  byId('pane').classList.remove('open');
+  document.querySelectorAll('.node.pane-open').forEach(x => x.classList.remove('pane-open'));
+}
+byId('pane-close').addEventListener('click', closePane);
+window.addEventListener('keydown', e => { if(e.key === 'Escape') closePane(); });
+
+function paneLive(id){
+  if(state.paneId !== id) return;
+  const n = st(id);
+  const set = (pid, v) => { const el = byId(pid); if(el) el.textContent = v; };
+  set('pp-tokens', n.tokens.toLocaleString());
+  set('pp-pass', n.pass + ' / 2');
+  set('pp-chunks', n.chunks.length);
+  set('pp-status', statusLabel(n));
+}
+function paneChunks(n, picks){
+  if(state.paneId === n.id){
+    const list = byId('pp-cklist');
+    if(list){
+      const empty = list.querySelector('.ck-empty'); if(empty) empty.remove();
+      picks.forEach(c => {
+        if(!list.querySelector(`[data-ck="${c.id}"]`)) list.insertAdjacentHTML('afterbegin', ckHTML(c));
+      });
+    }
+  } else if(state.paneId === n.tool){
+    openPane(n.tool);
+  }
+}
+function paneSections(){
+  if(state.paneId !== 'composer') return;
+  const n = st('composer');
+  const set = byId('pp-secn'); if(set) set.textContent = n.secDone + ' / ' + SECTIONS.length;
+  SECTIONS.forEach((_, i) => {
+    const el = byId('ps-' + i); if(!el) return;
+    el.className = 'sec-item' + (i < n.secDone ? ' done' : (i === n.secDone && n.status === 'running' ? ' now' : ''));
+    el.firstElementChild.innerHTML = i < n.secDone ? '&#10003;' : '';
+  });
+}
+function paneVerify(){
+  if(state.paneId !== 'verifier') return;
+  const n = st('verifier');
+  const c = byId('pp-claims'); if(c) c.textContent = n.claims + ' / ' + n.claimsTotal;
+  const f = byId('pp-flags'); if(f) f.textContent = n.flags;
+  const bar = byId('pp-cov'); if(bar) bar.style.width = (n.claimsTotal ? Math.round(n.claims / n.claimsTotal * 100) : 0) + '%';
+}
+
+/* ------------------------------- ticker --------------------------------- */
+byId('ticker-toggle').addEventListener('click', () => byId('ticker').classList.toggle('open'));
+
+/* --------------------------------- init --------------------------------- */
+workspace.style.width = WS_W + 'px';
+workspace.style.height = WS_H + 'px';
+wiresEl.setAttribute('width', WS_W);
+wiresEl.setAttribute('height', WS_H);
+
+initState();
+renderGroups();
+renderNodes();
+measure();
+drawEdges();
+fitView();
+window.addEventListener('resize', () => { drawMini(); });
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measure(); drawEdges(); drawMini(); });
+</script>
+</body>
+</html>
