@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-H2A8-H3"
 title: "APS Markdown Conversion Service"
-summary: "A cross-agency utility for public servants to convert diverse web and document formats into standardized Markdown while maintaining strict data isolation."
+summary: "A cross-agency, ephemeral utility for public servants to convert diverse web and document formats into standardized Markdown without persistent data storage."
 created_at: "2026-07-18T06:17:32Z"
-updated_at: "2026-07-18T06:18:57Z"
+updated_at: "2026-07-18T06:19:55Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -33,7 +33,7 @@ Primary users are public servants across all APS agencies; stakeholders include 
 <!-- section: data -->
 ## 4. Data
 
-The system processes public-facing web content and internal documents, which may contain sensitive or PII-heavy information depending on the source.
+The system processes public-facing web content and internal documents. To minimize risk, the architecture is designed to be ephemeral: data is processed in volatile memory and purged immediately upon completion, with no persistent storage of user-uploaded files or converted outputs.
 
 <!-- section: happy_path -->
 ## 5. Happy path
