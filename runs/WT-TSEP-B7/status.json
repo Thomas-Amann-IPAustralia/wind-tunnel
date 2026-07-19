@@ -4,7 +4,7 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:48:16Z",
+  "updated_at": "2026-07-19T10:48:54Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -18,7 +18,7 @@
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "complete",
-    "full.reviewer": "active",
+    "full.reviewer": "complete",
     "full.assembly": "pending"
   },
   "log": [
@@ -4048,9 +4048,30 @@
       "agent": "full.reviewer",
       "type": "stage_started",
       "detail": "Adjudicating reviewer started"
+    },
+    {
+      "id": "evt_000388",
+      "ts": "2026-07-19T10:48:17Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Reviewing cycle 1: auditing coverage, coherence and residual risk."
+    },
+    {
+      "id": "evt_000389",
+      "ts": "2026-07-19T10:48:54Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Contradiction regarding the retention versus deletion of highly sensitive uploaded legal documents."
+    },
+    {
+      "id": "evt_000390",
+      "ts": "2026-07-19T10:48:54Z",
+      "agent": "full.reviewer",
+      "type": "stage_complete",
+      "detail": "Adjudicating reviewer complete"
     }
   ],
-  "log_cursor": 387,
+  "log_cursor": 390,
   "questions": null,
   "failure": null,
   "expected_ranges": {
