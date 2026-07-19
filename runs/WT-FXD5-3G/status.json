@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:09:59Z",
+  "updated_at": "2026-07-19T00:10:01Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -19,7 +19,7 @@
     "full.checkpoint": "pending",
     "full.architect": "complete",
     "full.reviewer": "complete",
-    "full.assembly": "active"
+    "full.assembly": "complete"
   },
   "log": [
     {
@@ -4270,9 +4270,23 @@
       "agent": "full.assembly",
       "type": "stage_started",
       "detail": "Assembly started"
+    },
+    {
+      "id": "evt_000410",
+      "ts": "2026-07-19T00:10:01Z",
+      "agent": "full.assembly",
+      "type": "drafting",
+      "detail": "Assembling the notebook and the report."
+    },
+    {
+      "id": "evt_000411",
+      "ts": "2026-07-19T00:10:01Z",
+      "agent": "full.assembly",
+      "type": "stage_complete",
+      "detail": "Assembly complete"
     }
   ],
-  "log_cursor": 409,
+  "log_cursor": 411,
   "questions": null,
   "failure": null,
   "expected_ranges": {
