@@ -3,8 +3,8 @@
   "run_id": "WT-TSEP-B7",
   "run_code": "WT-TSEP-B7",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-19T10:37:20Z",
+  "overall_state": "paused",
+  "updated_at": "2026-07-19T10:37:22Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
