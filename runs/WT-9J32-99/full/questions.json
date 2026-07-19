@@ -1,0 +1,149 @@
+{
+  "batch_id": "q-1",
+  "specialists": [
+    {
+      "node_id": "full.specialist.it_security",
+      "friendly": "IT Security specialist",
+      "why": "To clarify the security posture of the SQLite database and logs containing potentially sensitive data.",
+      "items": [
+        {
+          "question_id": "it_security-1",
+          "text": "Are the SQLite databases and system logs encrypted at rest, and what access controls are enforced on the host environment?",
+          "options": [],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.privacy",
+      "friendly": "Privacy specialist",
+      "why": "The assessment requires clarification on whether personal information is processed and where the privacy compliance documentation is stored.",
+      "items": [
+        {
+          "question_id": "privacy-1",
+          "text": "Does the structured data ingested from SQL databases and CSVs contain any personal or sensitive information?",
+          "options": [
+            "Yes",
+            "No",
+            "Unsure"
+          ],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "privacy-2",
+          "text": "Where are the Privacy Threshold Assessment and/or Privacy Impact Assessment for this project stored?",
+          "options": null,
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.ethics",
+      "friendly": "Ethics & Fairness specialist",
+      "why": "To resolve ambiguities regarding data sensitivity, stakeholder engagement, and team composition for the Tripwire pipeline.",
+      "items": [
+        {
+          "question_id": "ethics-1",
+          "text": "Does the structured data ingested from CSVs and SQL databases contain any personally identifiable information (PII) or demographic attributes that could trigger algorithmic bias?",
+          "options": null,
+          "allow_free_text": true
+        },
+        {
+          "question_id": "ethics-2",
+          "text": "Have the identified stakeholders, specifically the IT Security Advisors and business owners, been consulted regarding the pipeline's fail-closed design and operational thresholds?",
+          "options": null,
+          "allow_free_text": true
+        },
+        {
+          "question_id": "ethics-3",
+          "text": "Are there plans to include individuals with diverse backgrounds or multidisciplinary expertise (such as legal or policy experts) in the system's ongoing calibration and review team?",
+          "options": null,
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.legal",
+      "friendly": "Legal & Administrative Law specialist",
+      "why": "These questions clarify whether legal consultation, human rights alignment, and formal accountability roles under the AI Use Policy have been established, which are not detailed in the current outline.",
+      "items": [
+        {
+          "question_id": "legal-1",
+          "text": "Has the project team consulted with agency legal advisors or human rights experts regarding the data processed by the Tripwire pipeline?",
+          "options": [
+            "Yes, formal advice has been obtained",
+            "Yes, informal consultation has occurred",
+            "No, but consultation is planned",
+            "No consultation has occurred or is planned"
+          ],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "legal-2",
+          "text": "Have an Accountable Official and an Accountable Use Case Owner been formally designated for the Tripwire pipeline in accordance with the Policy for the responsible use of AI in government?",
+          "options": [
+            "Yes, both have been designated",
+            "Only the Accountable Official has been designated",
+            "Only the Accountable Use Case Owner has been designated",
+            "No, but designation is in progress",
+            "No designation has occurred"
+          ],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "legal-3",
+          "text": "Are there any agency-specific legislative provisions or regulatory instruments that govern the data sources (SQL databases and CSVs) monitored by Tripwire?",
+          "options": [
+            "Yes (please specify in free text)",
+            "No, only general administrative and privacy laws apply",
+            "Unsure"
+          ],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.data_governance",
+      "friendly": "Data Governance specialist",
+      "why": "Clarification on data contents and records management planning is required to ensure compliance with privacy, Indigenous data governance, and archival standards.",
+      "items": [
+        {
+          "question_id": "data_governance-1",
+          "text": "Does the structured data ingested from SQL databases and CSVs contain any personal information, demographic fields, or data relating to Aboriginal and Torres Strait Islander people?",
+          "options": null,
+          "allow_free_text": true
+        },
+        {
+          "question_id": "data_governance-2",
+          "text": "Has a Business System Assessment Framework (BSAF) review or formal records management plan been scheduled to ensure the SQLite database and logs comply with the Archives Act 1983?",
+          "options": null,
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.solution_architect",
+      "friendly": "Solution Architect (sections)",
+      "why": "To ensure operational readiness and precise calibration of the pipeline during the pilot phase.",
+      "items": [
+        {
+          "question_id": "solution_architect-1",
+          "text": "What specific training or onboarding program, if any, will be provided to data operators to familiarise them with the bi-encoder/cross-encoder architectures and runbooks prior to the observation mode?",
+          "options": null,
+          "allow_free_text": true
+        },
+        {
+          "question_id": "solution_architect-2",
+          "text": "Will the 4-8 week observation mode use historical production data, or will it run in parallel with the live manual reconciliation process?",
+          "options": null,
+          "allow_free_text": true
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "total": 13,
+    "answered": 0,
+    "skipped": 0
+  }
+}
