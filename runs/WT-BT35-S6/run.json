@@ -2,10 +2,10 @@
   "schema_version": 1,
   "run_id": "WT-BT35-S6",
   "created_at": "2026-07-19T13:02:53Z",
-  "updated_at": "2026-07-19T13:08:19Z",
-  "stage": "THRESHOLD_REVIEW",
-  "stage_status": "awaiting_user",
-  "phase": "threshold",
+  "updated_at": "2026-07-19T13:08:31Z",
+  "stage": "FULL_DRAFTING",
+  "stage_status": "in_progress",
+  "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "867f7bb057c78992f98720b100d6f7614f55ae9f",
     "THRESHOLD_RECONCILING": "24b344eef68183163debcbae6deb12b9d4a071dd"
