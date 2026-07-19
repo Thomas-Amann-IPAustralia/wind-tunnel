@@ -1,7 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { allNodes, EDGES, NODE_H, NODE_W, nodeById, workspaceSize } from "../lib/topology";
-import type { GraphNode } from "../lib/topology";
+import {
+  allKbNodes,
+  allNodes,
+  EDGES,
+  KB_EDGES,
+  KB_H,
+  KB_W,
+  NODE_H,
+  NODE_W,
+  nodeById,
+  kbNodeById,
+  SPEC_JOIN_X,
+  workspaceSize,
+} from "../lib/topology";
+import type { GraphNode, KbNode, NodeKind } from "../lib/topology";
 import type { NodeState } from "../lib/types";
 import "./PipelineGraph.css";
 
@@ -11,6 +24,13 @@ import "./PipelineGraph.css";
  * clickable canvas of the real pipeline (`lib/topology`), driven by the whole-graph
  * `nodes` map from one status poll (CLAUDE.md §3). Each stage is a card you can open
  * to read, in plain language, what it is and what it's doing right now.
+ *
+ * The **knowledge plane** rides alongside the specialist college: each specialist is
+ * paired 1:1 with the knowledge base it reads from (KB_NODES), joined by a retrieval
+ * wire. Those shelves are presentational — not status nodes — so their state is
+ * derived from the paired specialist (still one poll). This is the PoC's most
+ * important element restored: the user sees *which* body of authority grounds each
+ * expert, and watches sources flow off the shelf as it reads.
  *
  * State is carried by **label + shape + position**, never colour alone (§9): every
  * node names its state in words and the activity log states every event in words
@@ -41,9 +61,23 @@ function edgeFlow(from: NodeState, to: NodeState): EdgeFlow {
   return "pending";
 }
 
+/** How a shelf reads, from its paired specialist's state: `serving` while the
+ * specialist is actively reading, `read` once it's finished, else `idle`. */
+type KbState = "idle" | "serving" | "read";
+function kbState(specState: NodeState): KbState {
+  if (specState === "active") return "serving";
+  if (specState === "complete") return "read";
+  return "idle";
+}
+
 function clamp(v: number, lo: number, hi: number): number {
   return Math.min(hi, Math.max(lo, v));
 }
+
+// Chunk chips (the PoC's chunks flying off a shelf) ride the retrieval wire via
+// CSS offset-path — enhancement only, gated on support and reduced motion.
+const CHIP_OK =
+  typeof CSS !== "undefined" && CSS.supports?.("offset-path", 'path("M 0 0 L 10 10")');
 
 export function PipelineGraph({
   nodes,
@@ -148,6 +182,8 @@ export function PipelineGraph({
             transform: `translate(${view.x}px, ${view.y}px) scale(${view.s})`,
           }}
         >
+          <GraphFrames />
+
           <svg
             className="wt-graph__wires"
             width={ws.width}
@@ -157,7 +193,7 @@ export function PipelineGraph({
           >
             {EDGES.map((edge) => {
               const flow = edgeFlow(nodes[edge.from] ?? "pending", nodes[edge.to] ?? "pending");
-              const d = wirePath(edge.from, edge.to);
+              const d = edgePath(edge.from, edge.to);
               if (!d) return null;
               return (
                 <g key={`${edge.from}->${edge.to}`}>
@@ -166,7 +202,34 @@ export function PipelineGraph({
                 </g>
               );
             })}
+            {KB_EDGES.map((edge) => {
+              const ks = kbState(nodes[edge.from] ?? "pending");
+              const d = edgePath(edge.from, edge.to);
+              if (!d) return null;
+              return (
+                <path
+                  key={`${edge.from}~${edge.to}`}
+                  className={`wt-kbwire wt-kbwire--${ks}`}
+                  d={d}
+                />
+              );
+            })}
           </svg>
+
+          {/* Chunk chips fly off a shelf while its specialist reads — enhancement. */}
+          {CHIP_OK ? (
+            <div className="wt-graph__chips" aria-hidden="true">
+              {KB_EDGES.map((edge) => {
+                if (kbState(nodes[edge.from] ?? "pending") !== "serving") return null;
+                if (!subActivity[edge.from]) return null;
+                const d = edgePath(edge.from, edge.to);
+                if (!d) return null;
+                return (
+                  <span key={edge.to} className="wt-chip" style={{ offsetPath: `path("${d}")` }} />
+                );
+              })}
+            </div>
+          ) : null}
 
           {allNodes().map((node) => (
             <NodeCard
@@ -175,6 +238,16 @@ export function PipelineGraph({
               state={nodes[node.id] ?? "pending"}
               subActivity={subActivity[node.id]}
               selected={selectedId === node.id}
+              onSelect={onSelect}
+            />
+          ))}
+
+          {allKbNodes().map((kb) => (
+            <KbCard
+              key={kb.id}
+              kb={kb}
+              state={kbState(nodes[kb.specialistId] ?? "pending")}
+              selected={selectedId === kb.id}
               onSelect={onSelect}
             />
           ))}
@@ -205,26 +278,122 @@ export function PipelineGraph({
       </div>
 
       <p className="wt-graph__hint">
-        Drag to move around, scroll to zoom, and select any stage to see — in plain terms — what it
-        is and what it&rsquo;s doing.
+        Drag to move around, scroll to zoom, and select any stage — or a knowledge base — to see, in
+        plain terms, what it is and what it&rsquo;s doing.
       </p>
     </div>
   );
 }
 
+/** Faint group frames + captions behind the nodes — the PoC's labelled structure:
+ * the two phases, and the college with its knowledge plane. Pure layout chrome. */
+function GraphFrames() {
+  const specs = allKbNodes();
+  const kbLeft = specs[0]?.pos.x ?? 0;
+  const collegeNodes = allNodes().filter((n) => n.id.startsWith("full.specialist."));
+  const collegeLeft = Math.min(...collegeNodes.map((n) => n.pos.x));
+  const collegeTop = Math.min(...collegeNodes.map((n) => n.pos.y));
+  const collegeRight = kbLeft + KB_W;
+  const collegeBottom = Math.max(...specs.map((n) => n.pos.y + KB_H));
+  const pad = 26;
+  return (
+    <div className="wt-graph__frames" aria-hidden="true">
+      <div
+        className="wt-graph__group"
+        style={{
+          left: collegeLeft - pad,
+          top: collegeTop - pad - 8,
+          width: collegeRight - collegeLeft + pad * 2,
+          height: collegeBottom - collegeTop + pad * 2 + 8,
+        }}
+      >
+        <span className="wt-graph__group-label">The specialist college · knowledge plane</span>
+      </div>
+      <span className="wt-graph__phase" style={{ left: 0, top: -44 }}>
+        Threshold assessment
+      </span>
+      <span className="wt-graph__phase" style={{ left: collegeLeft - pad, top: -44 }}>
+        Full assessment
+      </span>
+    </div>
+  );
+}
+
+/** The rectangle a wire endpoint anchors to — a pipeline node or a shelf. Anchors
+ * to the fixed card footprint (never measured), so wires are deterministic. */
+function rectOf(id: string): { x: number; y: number; w: number; h: number } | null {
+  const n = nodeById(id);
+  if (n) return { x: n.pos.x, y: n.pos.y, w: NODE_W, h: NODE_H };
+  const k = kbNodeById(id);
+  if (k) return { x: k.pos.x, y: k.pos.y, w: KB_W, h: KB_H };
+  return null;
+}
+
 /** The cubic path for a wire: right-centre of the source to left-centre of the
- * target. Anchors to the fixed card footprint (never measured), so wires are
- * deterministic across environments. */
-function wirePath(fromId: string, toId: string): string | null {
-  const a = nodeById(fromId);
-  const b = nodeById(toId);
+ * target. A specialist's onward handoff to the checkpoint first runs horizontally
+ * past the knowledge plane (to SPEC_JOIN_X) so it clears the shelves, then curves —
+ * the PoC's routing. Everything else is a plain right-to-left cubic. */
+function edgePath(fromId: string, toId: string): string | null {
+  const a = rectOf(fromId);
+  const b = rectOf(toId);
   if (!a || !b) return null;
-  const x0 = a.pos.x + NODE_W;
-  const y0 = a.pos.y + NODE_H / 2;
-  const x1 = b.pos.x;
-  const y1 = b.pos.y + NODE_H / 2;
+  const x0 = a.x + a.w;
+  const y0 = a.y + a.h / 2;
+  const x1 = b.x;
+  const y1 = b.y + b.h / 2;
+  if (fromId.startsWith("full.specialist.") && toId === "full.checkpoint") {
+    const c = 120;
+    return `M ${x0} ${y0} L ${SPEC_JOIN_X} ${y0} C ${SPEC_JOIN_X + c} ${y0}, ${x1 - c} ${y1}, ${x1} ${y1}`;
+  }
   const dx = Math.max(Math.abs(x1 - x0) * 0.5, 60);
   return `M ${x0} ${y0} C ${x0 + dx} ${y0}, ${x1 - dx} ${y1}, ${x1} ${y1}`;
+}
+
+/** A small inline icon per node kind — a visual anchor for the lay reader (the PoC
+ * gives every node an icon). Decorative; the name and state word carry meaning. */
+function NodeIcon({ kind }: { kind: NodeKind | "kb" }) {
+  const common = {
+    width: 13,
+    height: 13,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true,
+  };
+  switch (kind) {
+    case "compute": // deterministic engine — a waveform/gears cue
+      return (
+        <svg {...common}>
+          <path d="M4 17V7l6 5 6-5v10" />
+          <path d="M20 7v10" />
+        </svg>
+      );
+    case "pause": // the human checkpoint — a person
+      return (
+        <svg {...common}>
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5" />
+        </svg>
+      );
+    case "kb": // a corpus — a database cylinder
+      return (
+        <svg {...common}>
+          <ellipse cx="12" cy="5.5" rx="8" ry="3" />
+          <path d="M4 5.5v13c0 1.7 3.6 3 8 3s8-1.3 8-3v-13" />
+          <path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3" />
+        </svg>
+      );
+    default: // an AI agent/specialist — a node square
+      return (
+        <svg {...common}>
+          <rect x="5" y="5" width="14" height="14" rx="3" />
+          <path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3" />
+        </svg>
+      );
+  }
 }
 
 function NodeCard({
@@ -252,7 +421,9 @@ function NodeCard({
     >
       <span className="wt-gnode__strip" aria-hidden="true" />
       <span className="wt-gnode__head">
-        <span className="wt-gnode__dot" aria-hidden="true" />
+        <span className="wt-gnode__ico" aria-hidden="true">
+          <NodeIcon kind={node.kind} />
+        </span>
         <span className="wt-gnode__name">{node.friendly}</span>
         <span className="wt-gnode__state">{STATE_LABEL[state]}</span>
       </span>
@@ -266,6 +437,46 @@ function NodeCard({
           <span className="wt-gnode__engine">{node.engine}</span>
         )}
       </span>
+    </button>
+  );
+}
+
+const KB_STATE_LABEL: Record<KbState, string> = {
+  idle: "not read yet",
+  serving: "being read",
+  read: "read",
+};
+
+function KbCard({
+  kb,
+  state,
+  selected,
+  onSelect,
+}: {
+  kb: KbNode;
+  state: KbState;
+  selected: boolean;
+  onSelect: (id: string | null) => void;
+}) {
+  return (
+    <button
+      type="button"
+      className={`wt-gnode wt-kbnode wt-kbnode--${state}${selected ? " is-selected" : ""}`}
+      style={{ left: kb.pos.x, top: kb.pos.y, width: KB_W, height: KB_H }}
+      data-state={state}
+      aria-pressed={selected}
+      aria-label={`${kb.friendly} — a knowledge base, ${KB_STATE_LABEL[state]}. ${kb.blurb} Select for detail.`}
+      onClick={() => onSelect(selected ? null : kb.id)}
+    >
+      <span className="wt-gnode__strip" aria-hidden="true" />
+      <span className="wt-gnode__head">
+        <span className="wt-gnode__ico" aria-hidden="true">
+          <NodeIcon kind="kb" />
+        </span>
+        <span className="wt-gnode__name">{kb.friendly}</span>
+        <span className="wt-kbnode__state">{KB_STATE_LABEL[state]}</span>
+      </span>
+      <span className="wt-kbnode__foot wt-mono">{kb.docCount} sources · knowledge base</span>
     </button>
   );
 }

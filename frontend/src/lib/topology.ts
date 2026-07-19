@@ -122,21 +122,24 @@ const SPECIALISTS: ReadonlyArray<{
 // -- layout grid ---------------------------------------------------------------
 // Left-to-right flow, matching the real pipeline: the two threshold assessors →
 // reconciler → rating engine, then the engine blooms into the six-specialist
-// college → checkpoint → architect → reviewer → assembly. Columns are pitched so
-// wires read as unambiguous handoffs; the specialist column spreads vertically so
-// the "bloom" fans out from a single point (§7.2.2).
+// college → checkpoint → architect → reviewer → assembly. Each specialist pairs
+// 1:1 with the knowledge base it reads (the "knowledge plane", KB_NODES below),
+// which sits just to its right — so the gap between the college and the checkpoint
+// is widened to hold that column. Columns are pitched so wires read as unambiguous
+// handoffs; the specialist column spreads vertically so the "bloom" fans out from a
+// single point (§7.2.2).
 const COL = {
   intake: 0,
   reconcile: 300,
   rating: 600,
-  spec: 920,
-  check: 1240,
-  arch: 1540,
-  rev: 1840,
-  asm: 2140,
+  spec: 940,
+  check: 1620,
+  arch: 1920,
+  rev: 2220,
+  asm: 2520,
 };
 const SPEC_Y0 = 20;
-const SPEC_PITCH = 132;
+const SPEC_PITCH = 150;
 const specY = (i: number) => SPEC_Y0 + i * SPEC_PITCH;
 // Centre of the specialist column, so the threshold lane and the tail align to it.
 const MID_Y = (specY(0) + specY(SPECIALISTS.length - 1)) / 2;
@@ -314,7 +317,132 @@ export const EDGES: readonly GraphEdge[] = [
   { from: "full.reviewer", to: "full.assembly" },
 ];
 
-/** Every node id in graph order — the complete key set of `status.json.nodes`. */
+// -- The knowledge plane -------------------------------------------------------
+// One knowledge base per specialist — the shelf of official government sources it
+// reads from and must cite. This is real: `instrument/sections.json` `kb_specialists`
+// maps each of the six drafting specialists 1:1 to its own `kb/<specialist>.sqlite`
+// index (TECH_SPEC §8.3). The PoC depicts these as their own nodes wired to each
+// specialist, and that is the transparency this restores: the user sees *which*
+// body of authority each expert is grounded in.
+//
+// KB nodes are **presentational only** — deliberately NOT part of `status.json`
+// `nodes` (so `allNodeIds()` stays the pinned mirror of `status.py`). A shelf has no
+// state of its own in the pipeline; its visible state is *derived* from the paired
+// specialist's state and the run's real retrieval events, so it is still fully
+// determined by one poll (CLAUDE.md §3). `docCount` mirrors the committed
+// `kb/<specialist>.manifest.json` `document_count` — stable, pre-built artefacts
+// rebuilt only by the ingestion workflow, so this is a by-hand mirror like the node
+// ids above, not a live count.
+export const KB_W = 214;
+export const KB_H = 82;
+
+/** Knowledge-plane column x and the vertical tuck below each specialist's handoff
+ * line, so a shelf sits clear of the specialist's onward wire to the checkpoint. */
+const KB_COL = COL.spec + NODE_W + 76;
+const KB_DY = 72;
+/** Where a specialist's onward wire turns toward the checkpoint — just past the
+ * knowledge plane, so its horizontal run clears the shelves (mirrors the PoC's
+ * JOIN_X). Consumed by the graph's wire routing. */
+export const SPEC_JOIN_X = KB_COL + KB_W + 50;
+
+/** A knowledge-base node — a corpus a specialist reads. Presentational; see above. */
+export interface KbNode {
+  /** `kb.<specialist>` — a graph id, never a `status.json` node id. */
+  id: string;
+  /** The `full.specialist.*` node this shelf serves (drives its derived state). */
+  specialistId: string;
+  friendly: string;
+  pos: { x: number; y: number };
+  blurb: string;
+  /** Lay one-liner naming the authorities on the shelf. */
+  contains: string;
+  /** A short paragraph a non-engineer can follow. */
+  explain: string;
+  /** Real document count, mirrored from `kb/<specialist>.manifest.json`. */
+  docCount: number;
+}
+
+// What each shelf holds, in lay terms, and its real document count (from the
+// committed KB manifests). Descriptive only — the machine-checkable corpus↔specialist
+// map has one owner (`instrument/sections.json` `kb_specialists`).
+const KB_META: Record<string, { contains: string; docCount: number }> = {
+  it_security: {
+    contains:
+      "the Information Security Manual, the Essential Eight, the Cloud Controls Matrix and AI-security guidance",
+    docCount: 13,
+  },
+  privacy: {
+    contains:
+      "the Privacy Act 1988, the Australian Privacy Principles guidelines and OAIC guidance",
+    docCount: 8,
+  },
+  ethics: {
+    contains:
+      "Australia's AI Ethics Principles, the AI assurance frameworks and human-rights guidance",
+    docCount: 17,
+  },
+  legal: {
+    contains:
+      "administrative-law and automated-decision guidance and the whole-of-government AI policy",
+    docCount: 11,
+  },
+  data_governance: {
+    contains: "the Archives Act, records authorities and data-quality and data-strategy guidance",
+    docCount: 5,
+  },
+  solution_architect: {
+    contains:
+      "hosting-certification, approved-pattern and AI suitability and technical-standard material",
+    docCount: 56,
+  },
+};
+
+/** A short shelf name from the specialist's friendly name ("Privacy specialist"
+ * → "Privacy"), used to name and describe the paired knowledge base. */
+function shelfName(friendly: string): string {
+  return friendly.replace(/\s*\(sections\)\s*$/i, "").replace(/\s*specialist\s*$/i, "");
+}
+
+export const KB_NODES: readonly KbNode[] = SPECIALISTS.map((s, i) => {
+  const meta = KB_META[s.id];
+  const shelf = shelfName(s.friendly);
+  return {
+    id: `kb.${s.id}`,
+    specialistId: `full.specialist.${s.id}`,
+    friendly: `${shelf} sources`,
+    pos: { x: KB_COL, y: specY(i) + KB_DY },
+    blurb: `The shelf of official sources the ${shelf} specialist reads from.`,
+    contains: meta.contains,
+    docCount: meta.docCount,
+    explain: `A searchable library of ${meta.docCount} official government documents — ${meta.contains}. The ${shelf} specialist searches this shelf as it works, and every finding it makes has to cite the exact source it came from, so nothing is asserted without a reference you can check.`,
+  };
+});
+
+/** The retrieval wires — each specialist to the knowledge base it reads. Distinct
+ * from the pipeline's handoff EDGES: this is a specialist *consulting* a source,
+ * not work flowing onward. */
+export const KB_EDGES: readonly GraphEdge[] = SPECIALISTS.map((s) => ({
+  from: `full.specialist.${s.id}`,
+  to: `kb.${s.id}`,
+}));
+
+/** Every knowledge-base node, in specialist order. */
+export function allKbNodes(): readonly KbNode[] {
+  return KB_NODES;
+}
+
+/** The knowledge-base node for an id, or undefined. */
+export function kbNodeById(id: string): KbNode | undefined {
+  return KB_NODES.find((n) => n.id === id);
+}
+
+/** The knowledge base a given specialist reads, or undefined for a non-specialist. */
+export function kbForSpecialist(specialistId: string): KbNode | undefined {
+  return KB_NODES.find((n) => n.specialistId === specialistId);
+}
+
+/** Every node id in graph order — the complete key set of `status.json.nodes`.
+ * Knowledge-plane nodes are deliberately excluded — they are not status nodes. */
 export function allNodeIds(): string[] {
   return TOPOLOGY.flatMap((b) => b.clusters.flatMap((c) => c.nodes.map((n) => n.id)));
 }
@@ -329,11 +457,18 @@ export function nodeById(id: string): GraphNode | undefined {
   return allNodes().find((n) => n.id === id);
 }
 
-/** The overall workspace size the layout occupies (for the canvas viewport). */
+/** The overall workspace size the layout occupies (for the canvas viewport) —
+ * spanning both the pipeline nodes and the knowledge plane. */
 export function workspaceSize(): { width: number; height: number } {
   const nodes = allNodes();
-  const width = Math.max(...nodes.map((n) => n.pos.x + NODE_W));
-  const height = Math.max(...nodes.map((n) => n.pos.y + NODE_H));
+  const width = Math.max(
+    ...nodes.map((n) => n.pos.x + NODE_W),
+    ...KB_NODES.map((n) => n.pos.x + KB_W),
+  );
+  const height = Math.max(
+    ...nodes.map((n) => n.pos.y + NODE_H),
+    ...KB_NODES.map((n) => n.pos.y + KB_H),
+  );
   return { width, height };
 }
 
