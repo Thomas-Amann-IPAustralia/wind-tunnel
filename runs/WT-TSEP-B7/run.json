@@ -2,13 +2,14 @@
   "schema_version": 1,
   "run_id": "WT-TSEP-B7",
   "created_at": "2026-07-19T10:35:04Z",
-  "updated_at": "2026-07-19T10:37:38Z",
-  "stage": "FULL_DRAFTING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-19T10:39:53Z",
+  "stage": "FULL_CHECKPOINT",
+  "stage_status": "awaiting_user",
   "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "d51eb5c759108e91c33c9269c29863400885b21d",
-    "THRESHOLD_RECONCILING": "89db9028f6b96901848bf38bfb8ed0f95bb77c02"
+    "THRESHOLD_RECONCILING": "89db9028f6b96901848bf38bfb8ed0f95bb77c02",
+    "FULL_DRAFTING": "5139ab74cd6e732ea98dde887d391e2899e12444"
   },
   "revisions": {
     "poc": 0,
