@@ -7,55 +7,55 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-9J32-99"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-9J32-99"
+title: "Tripwire Data Integrity Pipeline"
+summary: "An automated, auditable, and self-calibrating data monitoring system designed to replace manual reconciliation with a multi-stage, high-confidence verification pipeline."
 created_at: "2026-07-19T13:35:13Z"
-updated_at: "2026-07-19T13:35:13Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-19T13:35:32Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Manual data reconciliation and quality monitoring are prone to error, lack transparency, and suffer from fragmented ownership, making it difficult to maintain high-confidence data pipelines.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+Tripwire is an automated, auditable data monitoring pipeline that uses a multi-stage verification process (bi-encoder and cross-encoder gates) to validate data chunks, with a fail-closed design and an 'observation mode' for empirical calibration.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+Primary users are data operators and system maintainers; stakeholders include IT Security Advisors and business owners who rely on the integrity of the monitored data.
 
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+The system processes structured data from multiple sources, including CSVs and SQL databases, requiring high-precision filtering and timestamp normalization.
 
 <!-- section: happy_path -->
 ## 5. Happy path
 
-*One ordinary, successful use — narrated start to finish.*
+Data is ingested, passed through the multi-stage verification pipeline, and if it meets the pre-set confidence thresholds, it is cleared for use; if it fails or triggers an uncertainty verdict, the system alerts the operator via the defined runbooks.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
 
-*What else could solve this, including at least one non-AI option.*
+Manual auditing (rejected due to scale/error rate), hard-coded rule-based systems (rejected due to lack of flexibility), and standard off-the-shelf monitoring tools (rejected due to the need for custom, high-confidence verification logic).
 
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-*What the user sees and touches — or an honest "nothing; it's headless."*
+Headless; the system operates as an automated backend pipeline with logs, health alerts, and runbooks for operator intervention.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-*The hard limits and strong preferences: technical, organisational, maintenance.*
+Must maintain a single source of schema truth, fail loudly rather than silently, and operate within strict CI concurrency limits to prevent SQLite state corruption.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-*How you'd know, six months in, that it worked.*
+Successful completion of the 4-8 week observation mode with calibrated score distributions, zero silent failures, and the ability for an operator to diagnose and resolve issues using the provided runbooks without original author intervention.
