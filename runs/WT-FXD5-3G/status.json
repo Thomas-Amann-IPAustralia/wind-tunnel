@@ -3,8 +3,8 @@
   "run_id": "WT-FXD5-3G",
   "run_code": "WT-FXD5-3G",
   "phase": "full",
-  "overall_state": "complete",
-  "updated_at": "2026-07-19T00:10:02Z",
+  "overall_state": "running",
+  "updated_at": "2026-07-19T00:16:29Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -4284,9 +4284,16 @@
       "agent": "full.assembly",
       "type": "stage_complete",
       "detail": "Assembly complete"
+    },
+    {
+      "id": "evt_000412",
+      "ts": "2026-07-19T00:16:29Z",
+      "agent": "backend",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 411,
+  "log_cursor": 412,
   "questions": null,
   "failure": null,
   "expected_ranges": {

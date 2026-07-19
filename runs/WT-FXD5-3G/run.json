@@ -2,9 +2,9 @@
   "schema_version": 1,
   "run_id": "WT-FXD5-3G",
   "created_at": "2026-07-18T23:35:12Z",
-  "updated_at": "2026-07-19T00:10:02Z",
-  "stage": "COMPLETE",
-  "stage_status": "complete",
+  "updated_at": "2026-07-19T00:16:29Z",
+  "stage": "USER_REVISION",
+  "stage_status": "in_progress",
   "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "8229f9d455681eece119853c3152b6cb7ae4499a",
@@ -19,7 +19,7 @@
     "poc": 0,
     "flow_map": 0,
     "threshold": 0,
-    "full": 0
+    "full": 1
   },
   "review_cycles": 1,
   "attestation": {
