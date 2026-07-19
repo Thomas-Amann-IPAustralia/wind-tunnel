@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:18:20Z",
+  "updated_at": "2026-07-19T00:18:33Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -15,7 +15,7 @@
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
-    "full.specialist.solution_architect": "active",
+    "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "complete",
     "full.reviewer": "complete",
@@ -4941,9 +4941,268 @@
       "agent": "full.specialist.solution_architect",
       "type": "stage_started",
       "detail": "Solution Architect (sections) started"
+    },
+    {
+      "id": "evt_000476",
+      "ts": "2026-07-19T00:18:21Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "revision",
+      "detail": "amending 6.5 for your revision request",
+      "ref": {
+        "target": "solution_architect"
+      }
+    },
+    {
+      "id": "evt_000477",
+      "ts": "2026-07-19T00:18:21Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000478",
+      "ts": "2026-07-19T00:18:21Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.43"
+      }
+    },
+    {
+      "id": "evt_000479",
+      "ts": "2026-07-19T00:18:21Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000480",
+      "ts": "2026-07-19T00:18:21Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.47"
+      }
+    },
+    {
+      "id": "evt_000481",
+      "ts": "2026-07-19T00:18:21Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.25"
+      }
+    },
+    {
+      "id": "evt_000482",
+      "ts": "2026-07-19T00:18:21Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000483",
+      "ts": "2026-07-19T00:18:23Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000484",
+      "ts": "2026-07-19T00:18:23Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.26"
+      }
+    },
+    {
+      "id": "evt_000485",
+      "ts": "2026-07-19T00:18:23Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.47"
+      }
+    },
+    {
+      "id": "evt_000486",
+      "ts": "2026-07-19T00:18:23Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Continuous Deployment for RAI",
+      "ref": {
+        "doc": "Continuous Deployment for RAI",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000487",
+      "ts": "2026-07-19T00:18:23Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.33"
+      }
+    },
+    {
+      "id": "evt_000488",
+      "ts": "2026-07-19T00:18:23Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r8"
+      }
+    },
+    {
+      "id": "evt_000489",
+      "ts": "2026-07-19T00:18:23Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.26"
+      }
+    },
+    {
+      "id": "evt_000490",
+      "ts": "2026-07-19T00:18:23Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.22"
+      }
+    },
+    {
+      "id": "evt_000491",
+      "ts": "2026-07-19T00:18:25Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r118"
+      }
+    },
+    {
+      "id": "evt_000492",
+      "ts": "2026-07-19T00:18:25Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Continuous Deployment for RAI",
+      "ref": {
+        "doc": "Continuous Deployment for RAI",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000493",
+      "ts": "2026-07-19T00:18:25Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r18"
+      }
+    },
+    {
+      "id": "evt_000494",
+      "ts": "2026-07-19T00:18:25Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000495",
+      "ts": "2026-07-19T00:18:25Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.47"
+      }
+    },
+    {
+      "id": "evt_000496",
+      "ts": "2026-07-19T00:18:25Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.33"
+      }
+    },
+    {
+      "id": "evt_000497",
+      "ts": "2026-07-19T00:18:25Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r8"
+      }
+    },
+    {
+      "id": "evt_000498",
+      "ts": "2026-07-19T00:18:25Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000499",
+      "ts": "2026-07-19T00:18:33Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_complete",
+      "detail": "Solution Architect (sections) complete"
     }
   ],
-  "log_cursor": 475,
+  "log_cursor": 499,
   "questions": null,
   "failure": null,
   "expected_ranges": {

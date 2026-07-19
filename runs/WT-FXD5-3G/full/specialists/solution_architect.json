@@ -4,7 +4,8 @@
     "6.3": "Yes. While the specific LLM model to be procured is not yet finalized, the ATO is conducting an AI Suitability Assessment to evaluate the appropriateness of using a generative AI model for this use case. This process pattern helps ensure that the RAG-based LLM adds genuine value and is more suitable than non-AI alternatives (such as interactive decision trees or static FAQ wizards) which fail to capture the nuance of unique taxpayer scenarios.",
     "6.4": "No. The AI system has not yet been tested sufficiently as it is currently in the design and assessment phase. However, a comprehensive testing plan is being established. This plan will include robust adversarial testing (red team testing) to identify weaknesses in security and privacy measures, specifically targeting risks like prompt injection, jailbreaking, and input attacks. Additionally, the system will undergo Responsible AI (RAI) acceptance testing to detect design flaws and verify that ethical requirements are met before deployment.",
     "6.6": "Yes. The ATO is establishing a comprehensive plan to monitor and evaluate the performance of the AI system post-deployment. This plan will leverage a continuous monitoring framework, such as a Continuous RAI Validator, to track model drift, data quality, and close-domain hallucinations. Furthermore, monitoring will track individual agent behaviors, prompt performance, token usage, latency, and potential security exploits (such as injection attacks or unauthorized use) to ensure the system operates strictly within its designated advisory boundaries.",
-    "6.8": "Yes. The ATO will establish a structured process to ensure that operators, support staff, and stakeholders of the AI system are sufficiently skilled and trained. In alignment with government standards, the ATO will provide regular training programs covering the latest tools, methodologies, and ethical guidelines. This training will be tailored to specific roles, ensuring that individuals responsible for managing, operating, and overseeing the AI system undergo specialized AI ethics training, potentially utilizing interactive workshops or sandpit environments for hands-on experience."
+    "6.8": "Yes. The ATO will establish a structured process to ensure that operators, support staff, and stakeholders of the AI system are sufficiently skilled and trained. In alignment with government standards, the ATO will provide regular training programs covering the latest tools, methodologies, and ethical guidelines. This training will be tailored to specific roles, ensuring that individuals responsible for managing, operating, and overseeing the AI system undergo specialized AI ethics training, potentially utilizing interactive workshops or sandpit environments for hands-on experience.",
+    "6.5": "Yes. The ATO Deduction Assistant will be tested as a pilot with a small cohort of taxpayers prior to full deployment. This pilot phase aligns with the Australian Government's AI Technical Standard requirement to apply strategies for phased roll-out, which recommends rolling out to a subset of users to gradually introduce changes and detect issues before full deployment (AI Technical Standard, DTA-Tech-Standards!r118). Implementing a pilot phase serves as a phased deployment strategy to reduce ethical and operational risks, allowing the project team to monitor the system's performance, evaluate the user-adjustable 'creativity' dial, and ensure the RAG pipeline functions safely and reliably before scaling up (Continuous Deployment for RAI, §(document start))."
   },
   "citations": {
     "6.3": [
@@ -42,18 +43,23 @@
         "short_name": "OECD AI in Public Audit",
         "locator": "p.48"
       }
+    ],
+    "6.5": [
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r118"
+      },
+      {
+        "short_name": "Continuous Deployment for RAI",
+        "locator": "§(document start)"
+      }
     ]
   },
   "questions": {
     "why": "",
     "items": []
   },
-  "gaps": [
-    {
-      "section": "6.5",
-      "reason": "The project outline does not specify if a pilot is planned, and the checkpoint question regarding the pilot phase was left unanswered."
-    }
-  ],
+  "gaps": [],
   "provenance": {
     "model": "gemini-3.5-flash",
     "prompt_version": "v1"

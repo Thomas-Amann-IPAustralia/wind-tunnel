@@ -24,6 +24,8 @@ Yes. The ATO will establish a structured process to ensure that operators, suppo
 
 *Citations: [AI Technical Standard, DTA-Tech-Standards!r8], [OECD AI in Public Audit, p.48]*
 
-## Gaps
+## 6.5
 
-- **6.5**: The project outline does not specify if a pilot is planned, and the checkpoint question regarding the pilot phase was left unanswered.
+Yes. The ATO Deduction Assistant will be tested as a pilot with a small cohort of taxpayers prior to full deployment. This pilot phase aligns with the Australian Government's AI Technical Standard requirement to apply strategies for phased roll-out, which recommends rolling out to a subset of users to gradually introduce changes and detect issues before full deployment (AI Technical Standard, DTA-Tech-Standards!r118). Implementing a pilot phase serves as a phased deployment strategy to reduce ethical and operational risks, allowing the project team to monitor the system's performance, evaluate the user-adjustable 'creativity' dial, and ensure the RAG pipeline functions safely and reliably before scaling up (Continuous Deployment for RAI, §(document start)).
+
+*Citations: [AI Technical Standard, DTA-Tech-Standards!r118], [Continuous Deployment for RAI, §(document start)]*
