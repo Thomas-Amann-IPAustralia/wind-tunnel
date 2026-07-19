@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:08:43Z",
+  "updated_at": "2026-07-19T00:09:26Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -17,7 +17,7 @@
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
-    "full.architect": "active",
+    "full.architect": "complete",
     "full.reviewer": "pending",
     "full.assembly": "pending"
   },
@@ -4207,9 +4207,23 @@
       "agent": "full.architect",
       "type": "stage_started",
       "detail": "Solution Architect (appendix) started"
+    },
+    {
+      "id": "evt_000401",
+      "ts": "2026-07-19T00:08:44Z",
+      "agent": "full.architect",
+      "type": "drafting",
+      "detail": "Writing an implementation plan that answers the risks the specialists raised."
+    },
+    {
+      "id": "evt_000402",
+      "ts": "2026-07-19T00:09:26Z",
+      "agent": "full.architect",
+      "type": "stage_complete",
+      "detail": "Solution Architect (appendix) complete"
     }
   ],
-  "log_cursor": 400,
+  "log_cursor": 402,
   "questions": null,
   "failure": null,
   "expected_ranges": {
