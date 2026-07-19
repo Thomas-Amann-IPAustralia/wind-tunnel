@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:16:47Z",
+  "updated_at": "2026-07-19T00:16:48Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -18,7 +18,7 @@
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "complete",
-    "full.reviewer": "complete",
+    "full.reviewer": "active",
     "full.assembly": "complete"
   },
   "log": [
@@ -4298,9 +4298,23 @@
       "agent": "pipeline",
       "type": "heartbeat",
       "detail": ""
+    },
+    {
+      "id": "evt_000414",
+      "ts": "2026-07-19T00:16:48Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000415",
+      "ts": "2026-07-19T00:16:48Z",
+      "agent": "full.reviewer",
+      "type": "stage_started",
+      "detail": "Adjudicating reviewer started"
     }
   ],
-  "log_cursor": 413,
+  "log_cursor": 415,
   "questions": null,
   "failure": null,
   "expected_ranges": {
