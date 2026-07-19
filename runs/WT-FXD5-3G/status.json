@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:06:18Z",
+  "updated_at": "2026-07-19T00:07:00Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -12,7 +12,7 @@
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
-    "full.specialist.ethics": "active",
+    "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
@@ -2949,9 +2949,268 @@
       "agent": "full.specialist.ethics",
       "type": "stage_started",
       "detail": "Ethics & Fairness specialist started"
+    },
+    {
+      "id": "evt_000283",
+      "ts": "2026-07-19T00:06:19Z",
+      "agent": "full.specialist.ethics",
+      "type": "revision",
+      "detail": "revising ethics's sections in light of your answers",
+      "ref": {
+        "target": "ethics"
+      }
+    },
+    {
+      "id": "evt_000284",
+      "ts": "2026-07-19T00:06:19Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§Experience of government services"
+      }
+    },
+    {
+      "id": "evt_000285",
+      "ts": "2026-07-19T00:06:19Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§Improving private sector use of accessible Digital Communication Technology"
+      }
+    },
+    {
+      "id": "evt_000286",
+      "ts": "2026-07-19T00:06:19Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§A new Standard under the Disability Discrimination Act"
+      }
+    },
+    {
+      "id": "evt_000287",
+      "ts": "2026-07-19T00:06:19Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§Summary"
+      }
+    },
+    {
+      "id": "evt_000288",
+      "ts": "2026-07-19T00:06:19Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§Conclusion"
+      }
+    },
+    {
+      "id": "evt_000289",
+      "ts": "2026-07-19T00:06:19Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§A new Standard under the Disability Discrimination Act"
+      }
+    },
+    {
+      "id": "evt_000290",
+      "ts": "2026-07-19T00:06:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000291",
+      "ts": "2026-07-19T00:06:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§AI Ethics Principles at a glance"
+      }
+    },
+    {
+      "id": "evt_000292",
+      "ts": "2026-07-19T00:06:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000293",
+      "ts": "2026-07-19T00:06:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000294",
+      "ts": "2026-07-19T00:06:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§The rise of AI and ethics"
+      }
+    },
+    {
+      "id": "evt_000295",
+      "ts": "2026-07-19T00:06:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000296",
+      "ts": "2026-07-19T00:06:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000297",
+      "ts": "2026-07-19T00:06:22Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000298",
+      "ts": "2026-07-19T00:06:30Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000299",
+      "ts": "2026-07-19T00:06:30Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.29"
+      }
+    },
+    {
+      "id": "evt_000300",
+      "ts": "2026-07-19T00:06:30Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000301",
+      "ts": "2026-07-19T00:06:30Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000302",
+      "ts": "2026-07-19T00:06:30Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000303",
+      "ts": "2026-07-19T00:06:30Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.25"
+      }
+    },
+    {
+      "id": "evt_000304",
+      "ts": "2026-07-19T00:06:30Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000305",
+      "ts": "2026-07-19T00:06:30Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000306",
+      "ts": "2026-07-19T00:07:00Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_complete",
+      "detail": "Ethics & Fairness specialist complete"
     }
   ],
-  "log_cursor": 282,
+  "log_cursor": 306,
   "questions": null,
   "failure": null,
   "expected_ranges": {
