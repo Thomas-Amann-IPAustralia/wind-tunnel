@@ -2,14 +2,18 @@
   "schema_version": 1,
   "run_id": "WT-TSEP-B7",
   "created_at": "2026-07-19T10:35:04Z",
-  "updated_at": "2026-07-19T10:44:49Z",
-  "stage": "FULL_REVISING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-19T10:48:59Z",
+  "stage": "COMPLETE",
+  "stage_status": "complete",
   "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "d51eb5c759108e91c33c9269c29863400885b21d",
     "THRESHOLD_RECONCILING": "89db9028f6b96901848bf38bfb8ed0f95bb77c02",
-    "FULL_DRAFTING": "5139ab74cd6e732ea98dde887d391e2899e12444"
+    "FULL_DRAFTING": "5139ab74cd6e732ea98dde887d391e2899e12444",
+    "FULL_REVISING": "d04338b8003e34823a7f6e945674390e6a231118",
+    "ARCHITECT": "3f5f435ce029f3995e5b3e1c9558fde48a13dee5",
+    "REVIEW": "b0b6913c0b29d7767f1bae9219009d7e92b27683",
+    "ASSEMBLY": "584c73b6294ed9f86f1012c5ff0fd22b5852215d"
   },
   "revisions": {
     "poc": 0,
@@ -17,7 +21,7 @@
     "threshold": 0,
     "full": 0
   },
-  "review_cycles": 0,
+  "review_cycles": 1,
   "attestation": {
     "sensitivity_ceiling": "OFFICIAL",
     "attested": false
