@@ -1,0 +1,1547 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI impact assessment</title>
+<style>
+/* The Report register (TECH_SPEC §12.5, design §8): quiet authority — serif body,
+   sans headings, mono for data and citations. Fonts are role-based (design §3.3, §11):
+   IBM Plex where installed, otherwise a faithful serif/sans/mono system fallback, so the
+   render depends on no external font fetch. Colour is never the only cue (design §3.2):
+   every risk chip carries a leading shape glyph and its text label, legible in greyscale. */
+
+:root {
+  --serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --ink: #1a1a1a;
+  --muted: #55585c;
+  --rule: #d5d7da;
+  --panel: #f4f2ee;
+  --panel-border: #b9b3a7;
+  --link: #1c4f8f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #eceae6;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.report {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 3rem 2.5rem 5rem;
+  background: #fff;
+}
+
+/* Headings — sans, exact DTA numbering carried in the content itself. */
+h1, h2, h3, h4 { font-family: var(--sans); line-height: 1.25; color: var(--ink); }
+h1 { font-size: 1.7rem; font-weight: 600; margin: 2.6rem 0 1rem; padding-bottom: .4rem; border-bottom: 2px solid var(--ink); }
+h2 { font-size: 1.28rem; font-weight: 600; margin: 2rem 0 .6rem; }
+h3 { font-size: 1.08rem; font-weight: 600; margin: 1.4rem 0 .4rem; }
+p { margin: .6rem 0; }
+a { color: var(--link); }
+code { font-family: var(--mono); font-size: .9em; }
+
+/* Title block — the document announces what it is before section 1. */
+.title-block {
+  border: 1px solid var(--rule);
+  border-top: 5px solid var(--ink);
+  padding: 1.8rem 2rem 1.6rem;
+  margin-bottom: 1.5rem;
+}
+.title-block h1 { border: 0; margin: .2rem 0 .6rem; font-size: 2rem; }
+.title-block .draft-mark {
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #8a5a00;
+  margin: 0;
+}
+.title-block .rev { font-family: var(--sans); font-weight: 600; color: var(--muted); margin: 0 0 .4rem; }
+.title-block .meta { font-family: var(--mono); font-size: .85rem; color: var(--muted); margin: .2rem 0; }
+.title-block .disclaimer { font-family: var(--sans); font-size: .9rem; color: var(--muted); margin-top: .8rem; }
+
+.attribution { font-family: var(--sans); font-size: .82rem; color: var(--muted); margin: 0 0 .4rem; }
+
+/* Citations — a scannable first-class apparatus, mono, never buried. */
+.citations { font-family: var(--mono); font-size: .82rem; color: var(--muted); margin: .3rem 0 0; }
+
+/* Risk table + chips. Chips carry a shape glyph + label so greyscale/poor-projector
+   reading never depends on colour (design §3.2). */
+.risk-table { width: 100%; border-collapse: collapse; margin: .8rem 0; font-family: var(--sans); font-size: .92rem; }
+.risk-table th, .risk-table td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); }
+.risk-table th { font-weight: 600; border-bottom: 2px solid var(--ink); }
+.overall { font-family: var(--sans); font-weight: 600; margin: .8rem 0; }
+
+.chip { display: inline-block; font-family: var(--sans); font-weight: 600; font-size: .82rem; padding: .05rem .5rem; border-radius: 999px; border: 1.5px solid var(--ink); white-space: nowrap; }
+.chip::before { margin-right: .35rem; font-weight: 700; }
+.chip-low { background: #e7f2e7; } .chip-low::before { content: "●"; }
+.chip-medium { background: #fbf0d8; } .chip-medium::before { content: "◆"; }
+.chip-high { background: #f6dcd6; } .chip-high::before { content: "▲"; }
+
+.human-action, .gap-note { font-family: var(--sans); font-size: .9rem; }
+.human-action { border-left: 3px solid var(--panel-border); background: var(--panel); padding: .6rem .8rem; margin: 1rem 0; }
+.gap-note { color: #7a3b00; border-left: 3px solid #c98a3a; padding-left: .7rem; }
+
+/* Unresolved disagreement — calm, confident, a bordered panel in neutral tones, not an
+   error box. Styled to be found, not skimmed past (design §8). */
+.unresolved-intro { font-family: var(--sans); font-style: italic; color: var(--muted); margin: .6rem 0 1rem; }
+.unresolved-panel { border: 1px solid var(--panel-border); background: var(--panel); border-radius: 4px; padding: 1rem 1.2rem; margin: 1rem 0; }
+.unresolved-panel h3 { margin-top: 0; font-size: 1rem; }
+.unresolved-panel .position { margin: .4rem 0; }
+.unresolved-panel .why { font-style: italic; color: var(--muted); margin-top: .6rem; }
+
+/* Provenance — the audit trail, mono, a clean record. */
+.provenance { font-family: var(--mono); font-size: .82rem; color: var(--muted); background: #fafafa; border: 1px solid var(--rule); padding: 1rem 1.2rem; }
+.provenance ul { margin: .3rem 0; padding-left: 1.2rem; }
+.provenance .attestation { color: var(--ink); }
+
+.references .reference { font-size: .9rem; margin: .5rem 0; }
+.references .unresolved-ref { font-family: var(--sans); font-size: .8rem; color: #7a3b00; }
+
+.poc-frame { width: 100%; height: 30rem; border: 1px solid var(--rule); }
+
+.running-footer { display: none; }
+
+@media (max-width: 40rem) {
+  .report { padding: 1.5rem 1.1rem 3rem; }
+  body { font-size: 16px; }
+}
+
+/* Print — the standing disclaimer on every page, risk tables never split across a page
+   break, chips legible in greyscale (the shape glyph carries the level). */
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .report { max-width: none; padding: 0; }
+  .running-footer { display: block; position: fixed; bottom: 0; left: 0; right: 0; font-family: var(--sans); font-size: 8pt; color: #333; text-align: center; padding: .3rem; border-top: 1px solid var(--rule); }
+  .report { margin-bottom: 2rem; }
+  .risk-table, .unresolved-panel, .provenance { break-inside: avoid; page-break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+  .chip { border-color: #000; }
+  a { color: #000; text-decoration: underline; }
+}
+
+</style>
+</head>
+<body>
+<main class="report">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=ee248df5"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="title-block">
+<p class="draft-mark">DRAFT — for SME review</p>
+<h1>AI impact assessment</h1>
+<p class="rev">Revision 1 of 2</p>
+<p class="meta">Run <code>WT-FXD5-3G</code> · Generated 2026-07-19T00:19:00Z</p>
+<p class="disclaimer">Draft for SME review — not an approval, not legal advice.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=8d5cfec8"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Threshold-assessment-%E2%80%94-sections-1%E2%80%934">Threshold assessment — sections 1–4<a class="anchor-link" href="#Threshold-assessment-%E2%80%94-sections-1%E2%80%934">¶</a></h1><h1 id="Threshold-AI-impact-assessment-%E2%80%94-WT-FXD5-3G">Threshold AI impact assessment — WT-FXD5-3G<a class="anchor-link" href="#Threshold-AI-impact-assessment-%E2%80%94-WT-FXD5-3G">¶</a></h1><h2 id="1.-Basic-information">1. Basic information<a class="anchor-link" href="#1.-Basic-information">¶</a></h2><h3 id="1.1-AI-use-case-profile">1.1 AI use case profile<a class="anchor-link" href="#1.1-AI-use-case-profile">¶</a></h3><ul>
+<li><strong>Name</strong>: ATO Deduction Assistant</li>
+<li><strong>Run ID</strong>: WT-FXD5-3G</li>
+<li><strong>Summary</strong>: A public-facing chatbot using RAG and a user-adjustable 'creativity' dial to provide guidance on tax deduction eligibility while maintaining clear boundaries between advice and policy.</li>
+</ul>
+<h3 id="1.2-Establishing-impact-assessment-responsibilities">1.2 Establishing impact assessment responsibilities<a class="anchor-link" href="#1.2-Establishing-impact-assessment-responsibilities">¶</a></h3><ul>
+<li><em>Not stated in the outline.</em></li>
+</ul>
+<h3 id="1.3-Additional-roles-and-responsibilities">1.3 Additional roles and responsibilities<a class="anchor-link" href="#1.3-Additional-roles-and-responsibilities">¶</a></h3><ul>
+<li><em>Not stated in the outline.</em></li>
+</ul>
+<h3 id="1.4-AI-use-case-description">1.4 AI use case description<a class="anchor-link" href="#1.4-AI-use-case-description">¶</a></h3><p>The ATO Deduction Assistant is a public-facing chatbot hosted by the ATO. It provides guidance on eligible tax deductions based on user-provided employment or expense details. The system utilizes a Large Language Model (LLM) to interpret tax policy documents and features a Retrieval-Augmented Generation (RAG) architecture. The user interface includes a web-based chat integrated into the existing ATO portal, featuring a 'creativity' dial that serves as a meta-signal for system fallibility, alongside mandatory disclaimers and direct links to official policy documentation for verification.</p>
+<h3 id="1.5-In-scope-use-case">1.5 In-scope use case<a class="anchor-link" href="#1.5-In-scope-use-case">¶</a></h3><p>Yes, the system is a public-facing advisory tool designed to assist individual taxpayers with tax deduction guidance.</p>
+<h3 id="1.6-Type-of-AI-technology">1.6 Type of AI technology<a class="anchor-link" href="#1.6-Type-of-AI-technology">¶</a></h3><ul>
+<li>Large Language Model (LLM)</li>
+<li>Retrieval-Augmented Generation (RAG)</li>
+</ul>
+<h3 id="1.7-Usage-pattern">1.7 Usage pattern<a class="anchor-link" href="#1.7-Usage-pattern">¶</a></h3><p>Public-facing interactive web-based chat interface integrated into the ATO portal.</p>
+<h3 id="1.8-Administrative-decisions">1.8 Administrative decisions<a class="anchor-link" href="#1.8-Administrative-decisions">¶</a></h3><p>No. The system is strictly advisory, includes prominent disclaimers, and has no integration with live taxpayer account data to ensure it does not make legally binding administrative decisions.</p>
+<h3 id="1.9-Domain">1.9 Domain<a class="anchor-link" href="#1.9-Domain">¶</a></h3><p>Taxation and Public Administration.</p>
+<h3 id="1.10-Expert-contributions">1.10 Expert contributions<a class="anchor-link" href="#1.10-Expert-contributions">¶</a></h3><ul>
+<li><em>Not stated in the outline.</em></li>
+</ul>
+<h3 id="1.11-Impact-assessment-review-log">1.11 Impact assessment review log<a class="anchor-link" href="#1.11-Impact-assessment-review-log">¶</a></h3><ul>
+<li><em>Not stated in the outline.</em></li>
+</ul>
+<h2 id="2.-Purpose-and-expected-benefits">2. Purpose and expected benefits<a class="anchor-link" href="#2.-Purpose-and-expected-benefits">¶</a></h2><h3 id="2.1-Problem-definition">2.1 Problem definition<a class="anchor-link" href="#2.1-Problem-definition">¶</a></h3><p>Taxpayers often struggle to navigate complex deduction rules, leading to errors in their returns or unnecessary inquiries to the ATO.</p>
+<h3 id="2.2-AI-use-case-purpose">2.2 AI use case purpose<a class="anchor-link" href="#2.2-AI-use-case-purpose">¶</a></h3><p>To provide accessible, interactive guidance on tax deduction eligibility based on user-provided employment or expense details, helping taxpayers interpret complex tax policy documents before submitting their returns.</p>
+<h3 id="2.3-Non-AI-alternatives">2.3 Non-AI alternatives<a class="anchor-link" href="#2.3-Non-AI-alternatives">¶</a></h3><p>Non-AI alternatives considered include an interactive decision tree or a static FAQ wizard. While highly accurate, these alternatives often fail to capture the nuance of unique taxpayer scenarios, which is why a RAG-based LLM is being explored.</p>
+<h3 id="2.4-Identifying-stakeholders">2.4 Identifying stakeholders<a class="anchor-link" href="#2.4-Identifying-stakeholders">¶</a></h3><ul>
+<li><strong>Primary Users</strong>: Individual taxpayers.</li>
+<li><strong>Internal Stakeholders</strong>: ATO support staff and policy teams responsible for the accuracy of the guidance.</li>
+</ul>
+<h3 id="2.5-Expected-benefits">2.5 Expected benefits<a class="anchor-link" href="#2.5-Expected-benefits">¶</a></h3><ul>
+<li>Reduction in general inquiry call volume to the ATO.</li>
+<li>High rate of user click-throughs to official policy documentation.</li>
+<li>Positive sentiment scores regarding the clarity of guidance provided.</li>
+<li>Maintaining zero instances of the bot providing legally binding advice.</li>
+</ul>
+<h2 id="3.-Inherent-risk-assessment">3. Inherent risk assessment<a class="anchor-link" href="#3.-Inherent-risk-assessment">¶</a></h2><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Consequence</th>
+<th>Likelihood</th>
+<th>Risk rating</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.1 Reducing service accessibility and inclusion</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.2 Unfair discrimination</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.3 Stereotyping or demeaning representations</td>
+<td>Minor</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.4 Harm</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.5 Privacy concerns</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.6 Security concerns — data aspects</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.7 Security concerns — system aspects</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.8 Reputation or public confidence</td>
+<td>Major</td>
+<td>Possible</td>
+<td>High</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3.9 Overall inherent risk rating (highest-wins): High</strong></p>
+<h3 id="3.1-Reducing-service-accessibility-and-inclusion">3.1 Reducing service accessibility and inclusion<a class="anchor-link" href="#3.1-Reducing-service-accessibility-and-inclusion">¶</a></h3><p>The chatbot is public-facing on the ATO portal and intended for individual taxpayers. Introducing a 'creativity' dial as a UX element, while intended as a meta-signal for fallibility, may confuse users with lower digital or financial literacy, cognitive disabilities, or those who require highly consistent and predictable interfaces. This could create noticeable access barriers or lead to incorrect interpretations of tax eligibility for certain groups.</p>
+<h3 id="3.2-Unfair-discrimination">3.2 Unfair discrimination<a class="anchor-link" href="#3.2-Unfair-discrimination">¶</a></h3><p>Taxpayers present highly diverse financial and employment scenarios. LLMs can exhibit subtle biases based on the phrasing of user queries or the training data. If the RAG system interprets tax policy differently or provides inconsistent guidance for non-standard employment types (e.g., gig economy workers or sole traders) compared to standard wage earners, it could lead to perceived or actual unfair treatment, resulting in noticeable bias concerns requiring manual intervention.</p>
+<h3 id="3.3-Stereotyping-or-demeaning-representations">3.3 Stereotyping or demeaning representations<a class="anchor-link" href="#3.3-Stereotyping-or-demeaning-representations">¶</a></h3><p>While the system is grounded in neutral official ATO tax policy documents via RAG, the LLM processes user-provided financial scenarios. Because LLMs are generative, there is a possibility that the model could generate responses reflecting occupational or socioeconomic stereotypes based on the user's input. These would likely be isolated incidents with minor consequences, but they remain a foreseeable possibility.</p>
+<p><em>Divergence: Assessor A said Unlikely, Assessor B said Possible; the higher likelihood (Possible) stands because the LLM processes user-provided free-text financial scenarios, making isolated incidents of stereotyping a foreseeable possibility.</em></p>
+<h3 id="3.4-Harm">3.4 Harm<a class="anchor-link" href="#3.4-Harm">¶</a></h3><p>If the chatbot provides incorrect or misleading guidance on deduction eligibility (potentially exacerbated by a user turning up the 'creativity' dial), taxpayers may submit incorrect returns. Even with disclaimers, users often place high trust in official government portals. This could result in financial penalties, audits, and subsequent distress for individuals, representing noticeable harm.</p>
+<h3 id="3.5-Privacy-concerns">3.5 Privacy concerns<a class="anchor-link" href="#3.5-Privacy-concerns">¶</a></h3><p>Although the system is strictly isolated from live taxpayer account data, users interacting with a free-text chat interface are prompted to input their own financial scenarios. There is a foreseeable risk that users will input highly sensitive personal financial details or Tax File Numbers (TFNs) despite disclaimers, raising noticeable privacy and data handling concerns.</p>
+<h3 id="3.6-Security-concerns-%E2%80%94-data-aspects">3.6 Security concerns — data aspects<a class="anchor-link" href="#3.6-Security-concerns-%E2%80%94-data-aspects">¶</a></h3><p>The system processes user-provided financial scenarios. If these interactive sessions or prompt logs are compromised, leaked, or accessed by unauthorized parties, it could lead to a moderate compromise of sensitive user-disclosed financial data, raising privacy concerns that require investigation.</p>
+<p><em>Divergence: Assessor A said Minor/Unlikely, Assessor B said Moderate/Possible; the higher tiers (Moderate/Possible) stand because users may input sensitive financial information into the chat, and a compromise of these logs could lead to a moderate data compromise.</em></p>
+<h3 id="3.7-Security-concerns-%E2%80%94-system-aspects">3.7 Security concerns — system aspects<a class="anchor-link" href="#3.7-Security-concerns-%E2%80%94-system-aspects">¶</a></h3><p>Public-facing LLM interfaces are frequent targets for system-level exploits such as prompt injection or jailbreaking. A successful exploit could cause the system to bypass guardrails, output inappropriate content, or leak user session histories, presenting a contained but serious system security issue.</p>
+<h3 id="3.8-Reputation-or-public-confidence">3.8 Reputation or public confidence<a class="anchor-link" href="#3.8-Reputation-or-public-confidence">¶</a></h3><p>The ATO is a high-profile government agency where public trust is critical. Any public failure, hallucination, or incorrect tax guidance provided by an official ATO chatbot—especially one featuring an adjustable 'creativity' dial that could be perceived as gamifying tax compliance—would likely attract significant media scrutiny, damage the agency's reputation, and undermine public confidence in official digital services.</p>
+<h2 id="4.-Threshold-assessment-outcome">4. Threshold assessment outcome<a class="anchor-link" href="#4.-Threshold-assessment-outcome">¶</a></h2><h3 id="4.1-Assessing-officer-recommendation">4.1 Assessing officer recommendation<a class="anchor-link" href="#4.1-Assessing-officer-recommendation">¶</a></h3><p>It is recommended that the ATO Deduction Assistant project proceed with a highly precautionary implementation strategy. The proposed system introduces a public-facing generative AI interface into a highly sensitive domain (taxation). While the tool is strictly advisory and isolated from live taxpayer account data, its public-facing nature and the use of an LLM present inherent risks of generating inaccurate or misleading tax guidance.</p>
+<p>In particular, the inclusion of a user-adjustable 'creativity' dial—while intended as a meta-signal for fallibility—introduces unpredictable variance in LLM outputs that could confuse users, create accessibility barriers, or undermine the perceived authority of the guidance. Before deployment, robust guardrails must be established around the RAG pipeline, and the 'creativity' dial's parameters must be strictly bounded. Extensive red-teaming against prompt injection is required. Furthermore, clear, prominent disclaimers must be paired with robust logging of user interactions to monitor for potential drift or hallucinated advice. A structured feedback loop with ATO policy teams should be established to continuously verify the accuracy of the RAG source documents and ensure the system consistently directs users to official policy documents for final verification.</p>
+<p>A full assessment is <strong>required</strong>.</p>
+<p>Overall inherent risk is <strong>High</strong> — refer to an internal governance body (§12.5).</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=a20a1c3d"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Full-assessment-%E2%80%94-sections-5%E2%80%9312">Full assessment — sections 5–12<a class="anchor-link" href="#Full-assessment-%E2%80%94-sections-5%E2%80%9312">¶</a></h1><h2 id="5.1-%C2%B7-Defining-fairness">5.1 · Defining fairness<a class="anchor-link" href="#5.1-%C2%B7-Defining-fairness">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>No. The project outline does not indicate that a formal definition of fairness has been established for the ATO Deduction Assistant. However, the threshold assessment (Section 3.2) identifies key fairness risks, particularly that the system might provide inconsistent guidance for non-standard employment types (such as gig economy workers or sole traders) compared to standard wage earners. To align with Australia's AI Ethics Principles and the Voluntary AI Safety Standard (VAISS), the ATO must explicitly define and document what constitutes a fair process and outcome, ensuring the system is inclusive and accessible and does not result in unfair discrimination (AI Ethics Principles, §AI Ethics Principles at a glance [australia-s-ai-ethics-principles:00001]; VAISS, s 10 [voluntary-ai-safety-standard:00019]).</p>
+<p class="citations">Sources: [AI Ethics Principles, AI Ethics Principles at a glance]; [VAISS, s 10]</p>
+<h2 id="5.2-%C2%B7-Measuring-fairness">5.2 · Measuring fairness<a class="anchor-link" href="#5.2-%C2%B7-Measuring-fairness">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>No. There is currently no documented methodology for measuring the fairness of the chatbot's outcomes quantitatively or qualitatively. The success criteria in the outline focus on inquiry call volume, click-through rates, and general sentiment scores, but do not include specific metrics for fairness or bias detection. To manage the identified risks of algorithmic bias and inconsistent guidance (Threshold Assessment, Section 3.2), the ATO should establish clear, measurable acceptance criteria and evaluation metrics to identify and mitigate unwanted bias or discriminatory outputs, particularly for marginalised or non-standard taxpayer groups (VAISS, s 10 [voluntary-ai-safety-standard:00019]; Diversity &amp; Inclusion in AI, p.16 [2305-12728v1:00021]).</p>
+<p class="citations">Sources: [VAISS, s 10]; [Diversity &amp; Inclusion in AI, p.16]</p>
+<h2 id="6.1-%C2%B7-Data-suitability">6.1 · Data suitability<a class="anchor-link" href="#6.1-%C2%B7-Data-suitability">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>Yes. The ATO Deduction Assistant uses Retrieval-Augmented Generation (RAG) to ground its responses in official, public tax policy documents. This data is highly suitable because it represents the authoritative source of truth for tax deduction eligibility, ensuring the chatbot's guidance remains aligned with official ATO policy. To ensure suitability and reliability, the ATO will apply the National AI Centre's Data Quality Checklist (Data Quality Checklist, p.1). Specifically, the ATO will verify the accuracy of the policy documents against trusted internal sources (Accuracy) (Data Quality Checklist, p.1), ensure completeness of the document repository so that no critical deduction categories are missing (Completeness) (Data Quality Checklist, p.1), and maintain consistency across different tax policy sources (Consistency) (Data Quality Checklist, p.1). The ATO will also ensure timeliness by keeping the policy documents up to date for the current financial year (Timeliness) (Data Quality Checklist, p.2). Furthermore, the RAG architecture maintains strict traceability (lineage), allowing the system to prove which specific tax policy document influenced a given output and explain this to users (Traceability (lineage)) (Data Quality Checklist, p.3). Finally, the ATO will verify that the data coverage is sufficient to handle all expected taxpayer scenarios and groups, minimizing bias in the guidance provided (Data coverage/bias) (Data Quality Checklist, p.3).</p>
+<p class="citations">Sources: [Data Quality Checklist, p.1]; [Data Quality Checklist, p.2]; [Data Quality Checklist, p.3]</p>
+<h2 id="6.2-%C2%B7-Indigenous-data">6.2 · Indigenous data<a class="anchor-link" href="#6.2-%C2%B7-Indigenous-data">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>Not applicable. The ATO Deduction Assistant is designed to process public tax policy documents and user-provided financial scenarios to provide general tax deduction guidance. It does not target, collect, or use Indigenous data, nor do its outputs specifically relate to Indigenous people. However, if any future expansion of the system incorporates Indigenous data or impacts Indigenous communities, the ATO will ensure consistency with the Framework for the Governance of Indigenous Data to support Aboriginal and Torres Strait Islander agency over how their data is governed within the APS (DDGS, p.13) and protect Indigenous cultural and intellectual property (AI Use Policy v2.0, p.20).</p>
+<p class="citations">Sources: [DDGS, p.13]; [AI Use Policy v2.0, p.20]</p>
+<h2 id="6.3-%C2%B7-Suitability-of-procured-AI-system">6.3 · Suitability of procured AI system<a class="anchor-link" href="#6.3-%C2%B7-Suitability-of-procured-AI-system">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>Yes. While the specific LLM model to be procured is not yet finalized, the ATO is conducting an AI Suitability Assessment to evaluate the appropriateness of using a generative AI model for this use case. This process pattern helps ensure that the RAG-based LLM adds genuine value and is more suitable than non-AI alternatives (such as interactive decision trees or static FAQ wizards) which fail to capture the nuance of unique taxpayer scenarios.</p>
+<p class="citations">Sources: [AI Suitability Assessment, §(document start)]</p>
+<h2 id="6.4-%C2%B7-Testing">6.4 · Testing<a class="anchor-link" href="#6.4-%C2%B7-Testing">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>No. The AI system has not yet been tested sufficiently as it is currently in the design and assessment phase. However, a comprehensive testing plan is being established. This plan will include robust adversarial testing (red team testing) to identify weaknesses in security and privacy measures, specifically targeting risks like prompt injection, jailbreaking, and input attacks. Additionally, the system will undergo Responsible AI (RAI) acceptance testing to detect design flaws and verify that ethical requirements are met before deployment.</p>
+<p class="citations">Sources: [RAI Acceptance Testing, §(document start)]; [AI Technical Standard, DTA-Tech-Standards!r105]</p>
+<h2 id="6.5-%C2%B7-Pilot">6.5 · Pilot<a class="anchor-link" href="#6.5-%C2%B7-Pilot">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>Yes. The ATO Deduction Assistant will be tested as a pilot with a small cohort of taxpayers prior to full deployment. This pilot phase aligns with the Australian Government's AI Technical Standard requirement to apply strategies for phased roll-out, which recommends rolling out to a subset of users to gradually introduce changes and detect issues before full deployment (AI Technical Standard, DTA-Tech-Standards!r118). Implementing a pilot phase serves as a phased deployment strategy to reduce ethical and operational risks, allowing the project team to monitor the system's performance, evaluate the user-adjustable 'creativity' dial, and ensure the RAG pipeline functions safely and reliably before scaling up (Continuous Deployment for RAI, §(document start)).</p>
+<p class="citations">Sources: [AI Technical Standard, DTA-Tech-Standards!r118]; [Continuous Deployment for RAI, §(document start)]</p>
+<h2 id="6.6-%C2%B7-Monitoring">6.6 · Monitoring<a class="anchor-link" href="#6.6-%C2%B7-Monitoring">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>Yes. The ATO is establishing a comprehensive plan to monitor and evaluate the performance of the AI system post-deployment. This plan will leverage a continuous monitoring framework, such as a Continuous RAI Validator, to track model drift, data quality, and close-domain hallucinations. Furthermore, monitoring will track individual agent behaviors, prompt performance, token usage, latency, and potential security exploits (such as injection attacks or unauthorized use) to ensure the system operates strictly within its designated advisory boundaries.</p>
+<p class="citations">Sources: [Continuous RAI Validator, §(document start)]; [Agentic AI Addendum, p.31]</p>
+<h2 id="6.7-%C2%B7-Preparedness-to-intervene-or-disengage">6.7 · Preparedness to intervene or disengage<a class="anchor-link" href="#6.7-%C2%B7-Preparedness-to-intervene-or-disengage">¶</a></h2><p class="attribution">Assessed by: IT Security specialist</p>
+<p>Yes. The ATO is establishing clear processes for human intervention and safe disengagement of the ATO Deduction Assistant. Because the system is public-facing and advisory, the ATO will implement protocols for immediate intervention, including a kill-switch capability to quickly take the system offline or disable the chat interface on the ATO portal if an unresolvable issue, major hallucination, or security compromise is identified (LLMSVS, §Control objective). Failsafe mechanisms are being integrated into existing incident response and business continuity processes, allowing the system to fail gracefully by reverting to non-AI alternatives, such as a static FAQ wizard or interactive decision tree (AI in OT Principles, p.19). Rollback capabilities will be prepared to ensure that if a model update introduces problems or if the system is compromised, the ATO can quickly revert to the last known good state (Deploying AI Securely, p.6). Furthermore, incident management procedures will be updated to reflect AI-specific failure modes, and responders will be trained to assess and address AI-related incidents (Secure AI Dev Guidelines, p.14). A structured feedback loop with ATO policy teams will also allow stakeholders to flag concerns and trigger manual intervention or model disengagement if necessary.</p>
+<p class="citations">Sources: [LLMSVS, §Control objective]; [AI in OT Principles, p.19]; [Deploying AI Securely, p.6]; [Secure AI Dev Guidelines, p.14]</p>
+<h2 id="6.8-%C2%B7-Training-of-AI-system-operators">6.8 · Training of AI system operators<a class="anchor-link" href="#6.8-%C2%B7-Training-of-AI-system-operators">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>Yes. The ATO will establish a structured process to ensure that operators, support staff, and stakeholders of the AI system are sufficiently skilled and trained. In alignment with government standards, the ATO will provide regular training programs covering the latest tools, methodologies, and ethical guidelines. This training will be tailored to specific roles, ensuring that individuals responsible for managing, operating, and overseeing the AI system undergo specialized AI ethics training, potentially utilizing interactive workshops or sandpit environments for hands-on experience.</p>
+<p class="citations">Sources: [AI Technical Standard, DTA-Tech-Standards!r8]; [OECD AI in Public Audit, p.48]</p>
+<h2 id="7.1-%C2%B7-Minimise-and-protect-personal-information">7.1 · Minimise and protect personal information<a class="anchor-link" href="#7.1-%C2%B7-Minimise-and-protect-personal-information">¶</a></h2><p class="attribution">Assessed by: Privacy specialist</p>
+<p>Yes. The ATO Deduction Assistant can comply with the Australian Privacy Principles (APPs), provided that robust data minimisation, filtering, and security controls are implemented. Crucially, all user interaction logs and processed data will be stored strictly on Australian soil. This onshore data storage commitment is a key privacy control that supports compliance with APP 8 by ensuring that no personal information is disclosed to overseas recipients (APP Guidelines, p.122; OAIC PIA Tool, §APP 8 — Cross-border disclosure of personal information). Because the chatbot features a free-text interface, there is a risk that taxpayers may input unsolicited personal information, such as Tax File Numbers (TFNs) or sensitive financial details. To ensure compliance with APP 11, the ATO must implement robust access security and monitoring controls to protect against internal and external risks, ensuring that personal information is only accessed by authorised persons on a strict need-to-know basis (OAIC PIA Tool, §APP 11 — Security of personal information). This includes implementing real-time data minimisation techniques, such as automated scrubbing or masking of TFNs and other personal identifiers from user prompts before they are processed by the LLM. Furthermore, if any personal information is shared with third-party service providers, enforceable contractual arrangements must be put in place to protect the information and monitor compliance with APP 6 (OAIC PIA Tool, §APP 6 — Use or disclosure of personal information).</p>
+<p class="citations">Sources: [APP Guidelines, p.122]; [OAIC PIA Tool, §APP 8 — Cross-border disclosure of personal information]; [OAIC PIA Tool, §APP 11 — Security of personal information]; [OAIC PIA Tool, §APP 6 — Use or disclosure of personal information]</p>
+<h2 id="7.2-%C2%B7-Privacy-threshold-and/or-impact-assessment">7.2 · Privacy threshold and/or impact assessment<a class="anchor-link" href="#7.2-%C2%B7-Privacy-threshold-and/or-impact-assessment">¶</a></h2><p class="attribution">Assessed by: Privacy specialist</p>
+<p class="gap-note">Gap — The specific storage repository or document management system path for the privacy threshold and impact assessments is not specified in the use-case outline, and the checkpoint question was left unanswered.</p>
+<h2 id="7.3-%C2%B7-Security-risks">7.3 · Security risks<a class="anchor-link" href="#7.3-%C2%B7-Security-risks">¶</a></h2><p class="attribution">Assessed by: IT Security specialist</p>
+<p>Yes. Multiple security measures are being established to address the security risks arising from the operation of the public-facing LLM.</p>
+<p>To address jurisdictional, governance, privacy, and security risks associated with offshore hosting and foreign legal frameworks, all data—including prompt logs, RAG source documents, and model interactions—will be stored exclusively on Australian soil (ISM, p.31; AI in OT Principles, p.12). This sovereign hosting strategy ensures the ATO maintains complete control over the data, mitigating risks of covert foreign data collection or sudden changes in foreign laws (ISM, p.31; AI in OT Principles, p.12).</p>
+<p>To protect the RAG architecture and prevent data leakage, the ATO will implement strict access controls and authentication for external storage components, such as vector databases and caches, enforcing the principle of least privilege (LLMSVS, §Control objective). The system will also implement controls to detect and prevent the leakage of sensitive data from internal knowledge bases, ensuring users cannot coerce the LLM into leaking restricted information (LLMSVS, §Control objective). Furthermore, conversational memory mechanisms will be configured to ensure prior prompts from different users are never mixed (LLMSVS, §Control objective).</p>
+<p>To secure data at rest, in transit, and during processing, the ATO will utilize robust encryption protocols, such as AES-256, and store data in certified storage devices (AI Data Security CSI, p.7). The system will be completely isolated from live taxpayer account data to maintain security boundaries. Finally, to ensure the integrity of security monitoring, the ATO will implement robust logging of model behavior and system events, utilizing immutable backup storage systems to ensure that log data cannot be altered or tampered with (Deploying AI Securely, p.9).</p>
+<p class="citations">Sources: [ISM, p.31]; [AI in OT Principles, p.12]; [LLMSVS, §Control objective]; [AI Data Security CSI, p.7]; [Deploying AI Securely, p.9]</p>
+<h2 id="8.1-%C2%B7-Consultation">8.1 · Consultation<a class="anchor-link" href="#8.1-%C2%B7-Consultation">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>No. While the threshold assessment (Section 2.4) identifies primary users (individual taxpayers) and internal stakeholders (ATO support staff and policy teams), the project outline does not indicate that active consultation has yet taken place with these groups. Under VAISS Guardrail 10, it is critical to engage with stakeholders throughout the AI lifecycle, particularly at the earliest stages, to identify potential harms and evaluate their needs, circumstances, and experiences (VAISS, s 10 [voluntary-ai-safety-standard:00018]). The ATO should establish structured consultation processes to gather feedback from these stakeholder groups before deployment.</p>
+<p class="citations">Sources: [VAISS, s 10]</p>
+<h2 id="8.2-%C2%B7-Public-visibility">8.2 · Public visibility<a class="anchor-link" href="#8.2-%C2%B7-Public-visibility">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>Yes. The chatbot will be hosted publicly on the ATO portal, and the user interface will feature mandatory disclaimers, direct links to official policy documentation for verification, and a 'creativity' dial serving as a meta-signal for system fallibility (Outline, Section 7). This aligns with transparency principles by disclosing the system's advisory nature and limitations. To fully satisfy transparency and accountability standards, the ATO should also maintain a public record or document the system's scope, capabilities, limitations, and expected contexts of use (VAISS, s 10 [voluntary-ai-safety-standard:00018]; AI Ethics Principles, §AI Ethics Principles at a glance [australia-s-ai-ethics-principles:00001]).</p>
+<p class="citations">Sources: [VAISS, s 10]; [AI Ethics Principles, AI Ethics Principles at a glance]</p>
+<h2 id="8.3-%C2%B7-Maintain-appropriate-documentation-and-records">8.3 · Maintain appropriate documentation and records<a class="anchor-link" href="#8.3-%C2%B7-Maintain-appropriate-documentation-and-records">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>Yes. The ATO will establish processes to maintain comprehensive documentation and records throughout the lifecycle of the ATO Deduction Assistant, in accordance with National Archives of Australia (NAA) guidance. All AI-generated content created or received constitutes Commonwealth records under the Archives Act 1983 and must be managed as such (NAA AI Records Guidance, §General principles for managing records generated by AI). Since AI systems generally lack adequate records management functionality, the ATO will capture and retain these records in an approved records management system (NAA AI Records Guidance, §General principles for managing records generated by AI). The ATO will take a risk-based approach to determine which AI outputs, prompts, inputs, and sources must be retained to support transparency and accountability (NAA AI Records Guidance, §General principles for managing records generated by AI; NAA AI Records Guidance, §Disposal of generative AI assistant prompts and inputs). This includes retaining the prompts and inputs where necessary to provide credible evidence of how outputs were generated (NAA AI Records Guidance, §Disposal of generative AI assistant prompts and inputs). Furthermore, the ATO will document and retain records of system design, development, testing, and operational specifications (NAA AI Records Guidance, §Managing AI technologies incorporated into business systems). Although the ATO has not yet confirmed whether a Business System Assessment Framework (BSAF) assessment has been scheduled or conducted, the ATO acknowledges that undertaking a BSAF process is a recommended first step to identify and manage AI-generated records and ensure adequate records management functionality is in place (NAA AI Records Guidance, §Managing AI technologies incorporated into business systems). Finally, the ATO will ensure that the management of these records is addressed in its information governance framework and that relevant staff receive adequate training on their records management responsibilities (NAA AI Records Guidance, §General principles for managing records generated by AI).</p>
+<p class="citations">Sources: [NAA AI Records Guidance, §General principles for managing records generated by AI]; [NAA AI Records Guidance, §Disposal of generative AI assistant prompts and inputs]; [NAA AI Records Guidance, §Managing AI technologies incorporated into business systems]</p>
+<h2 id="8.4-%C2%B7-Disclosing-AI-interactions-and-outputs">8.4 · Disclosing AI interactions and outputs<a class="anchor-link" href="#8.4-%C2%B7-Disclosing-AI-interactions-and-outputs">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>Yes.</p>
+<p>8.4.1: Yes, users will be clearly informed when they are interacting with an AI system. The web-based chat interface integrated into the ATO portal will feature prominent, mandatory disclaimers and a 'creativity' dial that acts as a meta-signal for system fallibility (Outline, Section 7), ensuring transparent disclosure of the AI's role (VAISS, s 10 [voluntary-ai-safety-standard:00015]).</p>
+<p>8.4.2: Yes, members of the public interacting with the system will be provided with the ability to request a non-AI alternative. The outline notes that taxpayers can use existing non-AI alternatives such as static FAQ wizards, interactive decision trees, or direct contact with ATO support staff (Outline, Sections 3, 6), ensuring that users are not forced to rely solely on the AI chatbot for guidance.</p>
+<p class="citations">Sources: [VAISS, s 10]</p>
+<h2 id="8.5-%C2%B7-Offer-appropriate-explanations">8.5 · Offer appropriate explanations<a class="anchor-link" href="#8.5-%C2%B7-Offer-appropriate-explanations">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>Yes. The chatbot is designed to provide guidance based on specific tax policy documents and will cite the exact source of its information, directing users to the official ATO website for final verification (Outline, Section 5). This RAG-based citation mechanism allows users to understand the basis of the chatbot's recommendations and verify the underlying factors, supporting the principle of transparency and explainability (AI Ethics Principles, §AI Ethics Principles at a glance [australia-s-ai-ethics-principles:00001]; VAISS, s 10 [voluntary-ai-safety-standard:00015]).</p>
+<p class="citations">Sources: [AI Ethics Principles, AI Ethics Principles at a glance]; [VAISS, s 10]</p>
+<h2 id="9.1-%C2%B7-Notification-of-AI-affecting-rights">9.1 · Notification of AI affecting rights<a class="anchor-link" href="#9.1-%C2%B7-Notification-of-AI-affecting-rights">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Not applicable. The ATO Deduction Assistant is strictly advisory, includes prominent disclaimers, and is completely isolated from live taxpayer account data. It does not make, automate, or materially influence any administrative decisions or actions that have a legal or significant effect on individuals, groups, or communities. Therefore, notification under this section is not triggered. According to better practice guidelines, notification is typically required when automated systems are used to make decisions that materially impact on individuals' legal or other significant rights, which is not the case for this purely advisory chatbot.</p>
+<p class="citations">Sources: [ADM Better Practice Guide, p.42]</p>
+<h2 id="9.2-%C2%B7-Challenging-administrative-actions-influenced-by-AI">9.2 · Challenging administrative actions influenced by AI<a class="anchor-link" href="#9.2-%C2%B7-Challenging-administrative-actions-influenced-by-AI">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Not applicable. Because the chatbot is strictly advisory and does not make or influence administrative actions (as discussed in section 9.1), there are no AI-influenced administrative decisions to challenge. However, taxpayers retain their standard rights to challenge any subsequent formal tax assessments or decisions through the ATO's existing, established objection and review processes.</p>
+<h2 id="10.1-%C2%B7-Incorporating-diversity">10.1 · Incorporating diversity<a class="anchor-link" href="#10.1-%C2%B7-Incorporating-diversity">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>No. The project outline and threshold assessment do not provide details regarding the composition of the project team or whether diverse skills, experiences, and backgrounds have been incorporated. To ensure a human-centred approach and prevent unintended outcomes, the ATO should assemble a multidisciplinary team—including policy owners, legal experts, tax specialists, and user experience designers—and involve diverse stakeholder cohorts in co-design and testing (Diversity &amp; Inclusion in AI, p.10 [2305-12728v1:00013]; ADM Better Practice Guide, p.29-30 [automated-decision-making-better-practice-guide-march-2025:00057, automated-decision-making-better-practice-guide-march-2025:00058]).</p>
+<p class="citations">Sources: [Diversity &amp; Inclusion in AI, p.10]; [ADM Better Practice Guide, p.29-30]</p>
+<h2 id="10.2-%C2%B7-Human-rights-obligations">10.2 · Human rights obligations<a class="anchor-link" href="#10.2-%C2%B7-Human-rights-obligations">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>No. While the threshold assessment identifies potential risks to service accessibility, inclusion, and the potential for occupational or socioeconomic stereotyping, the current project outline does not indicate that formal consultation with human rights advisors has yet occurred. It is highly recommended that the ATO consults its internal legal and policy teams or the Australian Human Rights Commission during the detailed design phase to ensure alignment with human rights obligations, particularly regarding non-discrimination and accessibility, as automated systems must comply with human rights obligations and should be designed with multidisciplinary input.</p>
+<p class="citations">Sources: [ADM Better Practice Guide, p.8]; [ADM Better Practice Guide, p.13]</p>
+<h2 id="11.1-%C2%B7-Ensuring-accountability-during-the-lifecycle-of-the-AI-system">11.1 · Ensuring accountability during the lifecycle of the AI system<a class="anchor-link" href="#11.1-%C2%B7-Ensuring-accountability-during-the-lifecycle-of-the-AI-system">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>No. At this initial assessment stage, the project outline does not specify whether formal responsibility and accountability mechanisms have been established. To align with whole-of-government requirements under the Policy for the responsible use of AI in government, the ATO must designate an Accountable Official and an Accountable Use Case Owner, and establish clear human oversight protocols before the system is deployed.</p>
+<p class="citations">Sources: [AI Use Policy v2.0, p.11]</p>
+<h2 id="12.1-%C2%B7-Alignment-with-relevant-legal-frameworks">12.1 · Alignment with relevant legal frameworks<a class="anchor-link" href="#12.1-%C2%B7-Alignment-with-relevant-legal-frameworks">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Yes. The relevant legal and regulatory frameworks—including federal taxation laws (such as the Income Tax Assessment Acts), the Privacy Act 1988 (Cth), and public administration frameworks—have been identified as applicable to this use case. However, the specific legislative provisions and policy documents that the RAG system will interpret must be fully documented and mapped during the detailed design phase to ensure the system's outputs remain legally accurate and consistent with official policy, in line with better practice guidance on mapping decision-making paths and identifying legislative authority.</p>
+<p class="citations">Sources: [ADM Better Practice Guide, p.12]</p>
+<h2 id="12.2-%C2%B7-Legal-advice">12.2 · Legal advice<a class="anchor-link" href="#12.2-%C2%B7-Legal-advice">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Yes. Given the system's High inherent risk rating, the public-facing nature of the LLM, and the potential for incorrect guidance to cause financial harm or penalties for taxpayers, the need for legal advice has been identified. This advice is required to assess administrative law risks (such as the rule against dictation or fettering discretion), privacy compliance, and the legal robustness of the disclaimers.</p>
+<p>12.2.2: Not applicable. As the project is in the scoping and assessment phase, formal legal advice has not yet been obtained. Once received, the legal advice will be stored in the ATO's secure corporate document management system (e.g., Content Manager) under the project's dedicated case file.</p>
+<p class="citations">Sources: [ADM Better Practice Guide, p.13]</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=be7f3b91"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Residual-risk-%E2%80%94-12.3-and-12.4">Residual risk — 12.3 and 12.4<a class="anchor-link" href="#Residual-risk-%E2%80%94-12.3-and-12.4">¶</a></h1><h2 id="12.3-Residual-risk-summary">12.3 Residual risk summary<a class="anchor-link" href="#12.3-Residual-risk-summary">¶</a></h2><table class="risk-table">
+<thead><tr><th>Area</th><th>Consequence</th><th>Likelihood</th><th>Residual rating</th></tr></thead><tbody>
+<tr><td>3.1</td><td>Minor</td><td>Possible</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.2</td><td>Moderate</td><td>Possible</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.3</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.4</td><td>Moderate</td><td>Unlikely</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.5</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.6</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.7</td><td>Moderate</td><td>Unlikely</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.8</td><td>Moderate</td><td>Possible</td><td class="chip chip-medium">Medium</td></tr>
+</tbody></table>
+<p class="overall">12.4 Overall residual risk rating (highest-wins): <span class="chip chip-medium">Medium</span></p>
+<p class="human-action">12.5 — Internal governance body review is a human action where the agency's governance policy requires it.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=2945f72b"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Implementation-Plan">Appendix — Implementation Plan<a class="anchor-link" href="#Appendix-%E2%80%94-Implementation-Plan">¶</a></h1><p>The implementation of the ATO Deduction Assistant follows a highly precautionary, phased approach to safely introduce a public-facing generative AI interface into a sensitive domain. The architecture relies on a Retrieval-Augmented Generation (RAG) pattern strictly bounded to official ATO policy documents, completely isolated from live taxpayer data.</p>
+<div class="jp-Mermaid"><pre class="mermaid">
+graph TD
+  A[User Input] --&gt; B[Privacy Scrubber Middleware]
+  B --&gt; C{Input Guardrails}
+  C --&gt;|Pass| D[LLM / RAG Engine]
+  C --&gt;|Fail| E[Reject Prompt]
+  D --&gt; F[Policy Document Vector DB]
+  D --&gt; G{Output Guardrails}
+  G --&gt;|Pass| H[Chat UI with Citations]
+  G --&gt;|Fail| I[Safe Fallback Response]
+  H --&gt; J[Comprehensive Logging &amp; RMS]
+</pre></div><p>The sequencing begins with establishing governance, legal clearances, and fairness metrics (Phase 1). This is followed by data preparation, mapping policy documents, and building the core RAG and privacy-scrubbing architecture (Phase 2). Phase 3 focuses on rigorous security implementation, including bounded UI controls, kill-switches, and extensive red-teaming. Finally, Phase 4 covers deployment, staff training, and the activation of continuous monitoring frameworks to ensure ongoing compliance and safety.</p>
+<h2 id="Implementation-steps">Implementation steps<a class="anchor-link" href="#Implementation-steps">¶</a></h2><h3 id="1.-Establish-multidisciplinary-governance-and-accountability">1. Establish multidisciplinary governance and accountability<a class="anchor-link" href="#1.-Establish-multidisciplinary-governance-and-accountability">¶</a></h3><p>Appoint an Accountable Official and an Accountable Use Case Owner for the system. Assemble a multidisciplinary project team comprising policy owners, legal experts, tax specialists, and user experience designers to oversee the design and deployment.</p>
+<p><em>Answers: [Legal &amp; Administrative Law specialist, §11.1] — Designate an Accountable Official and an Accountable Use Case Owner, and establish clear human oversight protocols.; [Ethics &amp; Fairness specialist, §10.1] — Assemble a multidisciplinary team including policy owners, legal experts, tax specialists, and user experience designers.</em></p>
+<h3 id="2.-Obtain-legal-clearances-and-conduct-Privacy-Impact-Assessment">2. Obtain legal clearances and conduct Privacy Impact Assessment<a class="anchor-link" href="#2.-Obtain-legal-clearances-and-conduct-Privacy-Impact-Assessment">¶</a></h3><p>Conduct a comprehensive Privacy Impact Assessment (PIA) adopting a privacy-by-design approach. Concurrently, obtain formal legal advice regarding administrative law risks, privacy compliance, and the legal robustness of the system's disclaimers. Consult internal legal teams or the AHRC regarding human rights obligations (non-discrimination and accessibility). Store all formal advice in the ATO's secure corporate document management system (e.g., Content Manager).</p>
+<p><em>Answers: [Privacy specialist, §7.1] — Complete a comprehensive privacy impact assessment (PIA).; [Legal &amp; Administrative Law specialist, §12.2] — Obtain formal legal advice to assess administrative law risks, privacy compliance, and disclaimer robustness, stored in a secure document management system.; [Legal &amp; Administrative Law specialist, §10.2] — Consult internal legal and policy teams or the AHRC to ensure alignment with human rights obligations.</em></p>
+<h3 id="3.-Define-fairness-metrics-and-conduct-stakeholder-consultation">3. Define fairness metrics and conduct stakeholder consultation<a class="anchor-link" href="#3.-Define-fairness-metrics-and-conduct-stakeholder-consultation">¶</a></h3><p>Explicitly define and document what constitutes a fair process and outcome for the chatbot. Establish measurable acceptance criteria and evaluation metrics to detect unwanted bias, specifically ensuring consistent guidance for non-standard employment types (e.g., gig economy workers). Conduct structured consultation processes with primary users (taxpayers) and internal stakeholders (ATO support staff) to gather feedback on these metrics before deployment.</p>
+<p><em>Answers: [Ethics &amp; Fairness specialist, §5.1] — Explicitly define and document what constitutes a fair process and outcome, ensuring no unfair discrimination for non-standard employment types.; [Ethics &amp; Fairness specialist, §5.2] — Establish clear, measurable acceptance criteria and evaluation metrics to identify and mitigate unwanted bias.; [Ethics &amp; Fairness specialist, §8.1] — Establish structured consultation processes to gather feedback from primary users and internal stakeholders before deployment.</em></p>
+<h3 id="4.-Map-policy-documents-and-ensure-RAG-data-quality">4. Map policy documents and ensure RAG data quality<a class="anchor-link" href="#4.-Map-policy-documents-and-ensure-RAG-data-quality">¶</a></h3><p>Document and map the specific legislative provisions and policy documents that the RAG system will interpret. Apply the National AI Centre's Data Quality Checklist to the document repository to verify accuracy against trusted internal sources, completeness of deduction categories, consistency, timeliness for the current financial year, traceability, and sufficient data coverage.</p>
+<p><em>Answers: [Legal &amp; Administrative Law specialist, §12.1] — Document and map specific legislative provisions and policy documents during the detailed design phase.; [Data Governance specialist, §6.1] — Apply the National AI Centre's Data Quality Checklist to verify accuracy, completeness, consistency, timeliness, traceability, and data coverage.</em></p>
+<h3 id="5.-Implement-real-time-privacy-scrubbing-and-data-isolation">5. Implement real-time privacy scrubbing and data isolation<a class="anchor-link" href="#5.-Implement-real-time-privacy-scrubbing-and-data-isolation">¶</a></h3><p>Ensure the system architecture is completely isolated from live taxpayer account data. Implement a middleware layer to perform real-time data minimisation on user prompts before they reach the LLM.</p>
+<div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">scrub_user_prompt</span><span class="p">(</span><span class="n">prompt_text</span><span class="p">):</span>
+    <span class="c1"># Mask Tax File Numbers (TFNs)</span>
+    <span class="n">tfn_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">'\b\d</span><span class="si">{3}</span><span class="s1">[- ]?\d</span><span class="si">{3}</span><span class="s1">[- ]?\d</span><span class="si">{3}</span><span class="s1">\b'</span>
+    <span class="n">scrubbed</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">tfn_pattern</span><span class="p">,</span> <span class="s1">'[REDACTED_TFN]'</span><span class="p">,</span> <span class="n">prompt_text</span><span class="p">)</span>
+    <span class="c1"># Additional regex/NLP masking for sensitive financial identifiers goes here</span>
+    <span class="k">return</span> <span class="n">scrubbed</span>
+</pre></div>
+<p><em>Answers: [Privacy specialist, §7.1] — Implement real-time data minimisation techniques, such as automated scrubbing or masking of TFNs and other personal identifiers from user prompts.; [IT Security specialist, §7.3] — Completely isolate the system from live taxpayer account data to maintain security boundaries.</em></p>
+<h3 id="6.-Build-RAG-citation-mechanism">6. Build RAG citation mechanism<a class="anchor-link" href="#6.-Build-RAG-citation-mechanism">¶</a></h3><p>Configure the RAG generation pipeline to append exact source citations to every response. The system must provide direct hyperlinks to the official ATO website for the specific policy document used, instructing the user to perform final verification there.</p>
+<p><em>Answers: [Ethics &amp; Fairness specialist, §8.5] — Implement a RAG-based citation mechanism that cites the exact source and directs users to the official ATO website for final verification.</em></p>
+<h3 id="7.-Configure-UI,-disclaimers,-and-bounded-creativity-dial">7. Configure UI, disclaimers, and bounded creativity dial<a class="anchor-link" href="#7.-Configure-UI,-disclaimers,-and-bounded-creativity-dial">¶</a></h3><p>Integrate the chat interface into the ATO portal. Implement prominent, mandatory disclaimers clarifying the system's advisory nature. Implement the 'creativity' dial, but strictly bound its underlying LLM parameters (e.g., capping the <code>temperature</code> and <code>top_p</code> values) to prevent unpredictable or hallucinated outputs. Ensure the UI provides a clear, accessible option for users to request a non-AI alternative (e.g., static FAQ wizard).</p>
+<p><em>Answers: [Ethics &amp; Fairness specialist, §8.4] — Feature prominent, mandatory disclaimers, a 'creativity' dial as a meta-signal, and the ability to request a non-AI alternative.; [IT Security specialist, §7.3] — Strictly bound the 'creativity' dial's parameters to prevent unpredictable outputs.</em></p>
+<h3 id="8.-Implement-security-guardrails-and-failsafes">8. Implement security guardrails and failsafes<a class="anchor-link" href="#8.-Implement-security-guardrails-and-failsafes">¶</a></h3><p>Deploy robust input sanitization and output guardrails to detect and block prompt injection and jailbreaking attempts. Implement a 'kill-switch' capability in the ATO portal to quickly disable the chat interface and revert users to a static FAQ wizard or interactive decision tree in the event of a major hallucination or security compromise. Prepare rollback capabilities to revert to the last known good state if a model update fails.</p>
+<p><em>Answers: [IT Security specialist, §7.3] — Implement robust input sanitization and output guardrails to mitigate prompt injection and jailbreaking vulnerabilities.; [IT Security specialist, §6.7] — Implement protocols for immediate intervention, including a kill-switch capability, failsafe mechanisms to revert to non-AI alternatives, and rollback capabilities.</em></p>
+<h3 id="9.-Configure-comprehensive-logging-and-records-management">9. Configure comprehensive logging and records management<a class="anchor-link" href="#9.-Configure-comprehensive-logging-and-records-management">¶</a></h3><p>Configure comprehensive logging of all user interactions, prompts, and model decisions. Apply strict access controls to these logs to protect user privacy. Capture and retain these records in an approved records management system in accordance with NAA guidance, taking a risk-based approach to retention. Conduct a Business System Assessment Framework (BSAF) assessment. Finally, publish a public record documenting the system's scope, capabilities, limitations, and expected contexts of use.</p>
+<p><em>Answers: [IT Security specialist, §7.3] — Configure comprehensive logging of all user interactions and model decisions, treated as sensitive data with strict access controls.; [Data Governance specialist, §8.3] — Capture and retain records in an approved records management system, take a risk-based approach to retention, and undertake a BSAF assessment.; [Ethics &amp; Fairness specialist, §8.2] — Maintain a public record or document the system's scope, capabilities, limitations, and expected contexts of use.</em></p>
+<h3 id="10.-Conduct-red-teaming-and-RAI-acceptance-testing">10. Conduct red-teaming and RAI acceptance testing<a class="anchor-link" href="#10.-Conduct-red-teaming-and-RAI-acceptance-testing">¶</a></h3><p>Execute a comprehensive testing plan prior to deployment. Conduct regular offensive security assessments, including AI red-teaming and penetration testing, specifically targeting prompt injection and input attacks. Perform Responsible AI (RAI) acceptance testing to verify that ethical requirements and fairness metrics are met.</p>
+<p><em>Answers: [IT Security specialist, §7.3] — Conduct regular offensive security assessments, including AI red-teaming and penetration testing.; [Solution Architect (sections), §6.4] — Establish a comprehensive testing plan including robust adversarial testing (red team testing) and Responsible AI (RAI) acceptance testing.</em></p>
+<h3 id="11.-Train-staff-and-update-incident-response-procedures">11. Train staff and update incident response procedures<a class="anchor-link" href="#11.-Train-staff-and-update-incident-response-procedures">¶</a></h3><p>Update existing incident management procedures to reflect AI-specific failure modes. Provide specialized AI ethics training, interactive workshops, and sandpit environments for operators, support staff, and incident responders to ensure they are equipped to manage and oversee the system.</p>
+<p><em>Answers: [IT Security specialist, §6.7] — Update incident management procedures to reflect AI-specific failure modes and train responders to assess and address AI-related incidents.; [Solution Architect (sections), §6.8] — Provide regular training programs, including specialized AI ethics training and interactive workshops/sandpit environments for operators and support staff.</em></p>
+<h3 id="12.-Deploy-continuous-monitoring-and-feedback-loops">12. Deploy continuous monitoring and feedback loops<a class="anchor-link" href="#12.-Deploy-continuous-monitoring-and-feedback-loops">¶</a></h3><p>Post-deployment, activate a Continuous RAI Validator to track model drift, data quality, close-domain hallucinations, token usage, latency, and potential security exploits. Establish a structured feedback loop with ATO policy teams to continuously verify RAG accuracy, flag concerns, and trigger manual intervention or model disengagement if necessary.</p>
+<p><em>Answers: [Solution Architect (sections), §6.6] — Leverage a continuous monitoring framework (Continuous RAI Validator) to track model drift, hallucinations, agent behaviors, token usage, and security exploits.; [IT Security specialist, §6.7] — Establish a structured feedback loop with ATO policy teams to flag concerns and trigger manual intervention or model disengagement.</em></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=598be5b6"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Recommended-next-steps">Appendix — Recommended next steps<a class="anchor-link" href="#Appendix-%E2%80%94-Recommended-next-steps">¶</a></h1><p>Where the assessment could not be completed from the available evidence, the point is recorded here as a concrete next step for the project team — not a failure of the assessment.</p>
+<ul>
+<li><strong>§7.2</strong> <em>(Privacy specialist)</em>: The specific storage repository or document management system path for the privacy threshold and impact assessments is not specified in the use-case outline, and the checkpoint question was left unanswered.</li>
+<li><strong>Unanswered checkpoint question</strong> (it_security-1): Where will the user interaction logs and prompt history be stored, and what specific data retention and sanitization policies will be applied to prevent the accidental storage of Tax File Numbers (TFNs) or sensitive personal financial details?</li>
+<li><strong>Unanswered checkpoint question</strong> (it_security-2): What specific technical mechanism or threshold will be used to restrict or disable the 'creativity' dial if a user attempts to exploit it to generate non-compliant tax advice?</li>
+<li><strong>Unanswered checkpoint question</strong> (privacy-1): Where will the completed privacy threshold assessment (PTA) and privacy impact assessment (PIA) for the ATO Deduction Assistant be officially stored?</li>
+<li><strong>Unanswered checkpoint question</strong> (ethics-1): Has the ATO established a multidisciplinary project team that includes legal, policy, and accessibility experts to oversee the chatbot's development?</li>
+<li><strong>Unanswered checkpoint question</strong> (ethics-2): Are there plans to conduct a pilot study or user testing with a diverse cohort of taxpayers, including those with low digital literacy or non-standard employment types?</li>
+<li><strong>Unanswered checkpoint question</strong> (ethics-3): Will the chatbot's interface support accessibility standards (such as WCAG) to ensure inclusion for users with disabilities?</li>
+<li><strong>Unanswered checkpoint question</strong> (legal-1): Has the ATO formally designated an Accountable Use Case Owner and an Accountable Official for the ATO Deduction Assistant under the AI Use Policy?</li>
+<li><strong>Unanswered checkpoint question</strong> (legal-2): Has the ATO consulted with its internal legal services branch or external counsel regarding the legal efficacy of the chatbot's disclaimers and the 'creativity' dial?</li>
+<li><strong>Unanswered checkpoint question</strong> (legal-3): Where will the formal legal advice and human rights impact assessments for this project be stored once they are finalized?</li>
+<li><strong>Unanswered checkpoint question</strong> (data_governance-1): Has the ATO scheduled or conducted a Business System Assessment Framework (BSAF) assessment for the ATO Deduction Assistant to ensure its records management functionality is sufficient?</li>
+<li><strong>Unanswered checkpoint question</strong> (sol_arch-1): Is there a planned pilot phase for the ATO Deduction Assistant before full public deployment, and if so, what are the scope and duration of this pilot?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=08bc2514"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Proof-of-concept">Appendix — Proof of concept<a class="anchor-link" href="#Appendix-%E2%80%94-Proof-of-concept">¶</a></h1><iframe cell-id='20bc61db"' class="cell border-box-sizing text_cell rendered" sandbox="" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title&gt;ATO Deduction Assistant - Proof of Concept&lt;/title&gt;
+  &lt;style&gt;
+    /* Global Styles &amp; Variables */
+    :root {
+      --ato-blue-dark: #002c54;
+      --ato-blue-light: #0085a1;
+      --ato-gold: #ffc72c;
+      --ato-gold-dark: #d97706;
+      --bg-light: #f4f6f8;
+      --text-dark: #222222;
+      --text-muted: #555555;
+      --border-color: #d1d5db;
+      --success-green: #15803d;
+      --warning-amber: #b45309;
+    }
+
+&lt;pre&gt;&lt;code&gt;* {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, &amp;quot;Segoe UI&amp;quot;, Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+  line-height: 1.5;
+}
+
+/* Limitations Banner (First in reading order) */
+.poc-limitations {
+  background-color: #fffbeb;
+  border-bottom: 4px solid var(--ato-gold-dark);
+  padding: 1.5rem;
+  color: #78350f;
+}
+.poc-limitations-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.poc-limitations h2 {
+  margin-top: 0;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ato-gold-dark);
+}
+.poc-limitations ul {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1.5rem;
+}
+.poc-limitations li {
+  margin-bottom: 0.25rem;
+}
+
+/* Header */
+.ato-header {
+  background-color: var(--ato-blue-dark);
+  color: #ffffff;
+  padding: 1rem 2rem;
+  border-bottom: 4px solid var(--ato-gold);
+}
+.ato-header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ato-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.ato-logo-crest {
+  background-color: var(--ato-gold);
+  color: var(--ato-blue-dark);
+  font-weight: bold;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+.ato-logo-text h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.ato-logo-text p {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.9;
+}
+.badge-demo {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* Main Layout */
+.main-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+@media (max-width: 900px) {
+  .main-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Left Column: Controls &amp;amp; Triage */
+.panel {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.panel-title {
+  margin-top: 0;
+  font-size: 1.1rem;
+  color: var(--ato-blue-dark);
+  border-bottom: 2px solid var(--bg-light);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Triage Form Elements */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+.form-control {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background-color: #fff;
+}
+.form-control:focus {
+  outline: none;
+  border-color: var(--ato-blue-light);
+  box-shadow: 0 0 0 3px rgba(0, 133, 161, 0.15);
+}
+.radio-group {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.25rem;
+}
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: normal;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn {
+  display: inline-block;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--ato-blue-light);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-align: center;
+}
+.btn:hover {
+  background-color: #006d85;
+}
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: var(--text-dark);
+  margin-top: 0.5rem;
+}
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+/* Creativity Dial Styles */
+.dial-container {
+  background: #f8fafc;
+  border: 1px dashed var(--border-color);
+  border-radius: 6px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+.dial-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.dial-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+}
+.dial-badge {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-weight: bold;
+}
+.badge-strict { background-color: #dcfce7; color: #166534; }
+.badge-balanced { background-color: #e0f2fe; color: #0369a1; }
+.badge-creative { background-color: #fef3c7; color: #92400e; }
+
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 5px;
+  background: #cbd5e1;
+  outline: none;
+  margin: 1rem 0;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ato-blue-light);
+  cursor: pointer;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.dial-explanation {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  line-height: 1.4;
+}
+
+/* Right Column: Chat Interface */
+.chat-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 650px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Locked Overlay for Chat */
+.chat-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  text-align: center;
+  transition: opacity 0.3s ease;
+}
+.chat-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.overlay-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.chat-header {
+  background-color: #f8fafc;
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.chat-header-info h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--ato-blue-dark);
+}
+.chat-header-info p {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* Chat Messages Area */
+.chat-messages {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  background-color: #fafbfc;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.message {
+  max-width: 85%;
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  position: relative;
+}
+.message-user {
+  background-color: var(--ato-blue-light);
+  color: #ffffff;
+  align-self: flex-end;
+  border-bottom-right-radius: 1px;
+}
+.message-bot {
+  background-color: #ffffff;
+  color: var(--text-dark);
+  align-self: flex-start;
+  border-bottom-left-radius: 1px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+/* Citation &amp;amp; Verification Box inside Bot Message */
+.citation-box {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.8rem;
+}
+.citation-title {
+  font-weight: bold;
+  color: var(--ato-blue-dark);
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.citation-link {
+  color: var(--ato-blue-light);
+  text-decoration: underline;
+  cursor: pointer;
+  display: inline-block;
+  margin-right: 0.75rem;
+}
+.citation-link:hover {
+  color: var(--ato-blue-dark);
+}
+
+/* Warning Badge for High Creativity */
+.warning-badge {
+  background-color: #fffbeb;
+  border: 1px solid #fef3c7;
+  color: #b45309;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* Quick Scenarios Panel */
+.quick-scenarios {
+  padding: 0.75rem 1rem;
+  background-color: #f1f5f9;
+  border-top: 1px solid var(--border-color);
+}
+.quick-scenarios-title {
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+.scenario-chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.chip {
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: var(--ato-blue-dark);
+  font-weight: 500;
+}
+.chip:hover {
+  background-color: var(--ato-blue-light);
+  color: #ffffff;
+  border-color: var(--ato-blue-light);
+}
+
+/* Chat Input Area */
+.chat-input-area {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  background-color: #ffffff;
+  display: flex;
+  gap: 0.5rem;
+}
+.chat-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+.chat-input:focus {
+  outline: none;
+  border-color: var(--ato-blue-light);
+}
+.btn-send {
+  background-color: var(--ato-blue-dark);
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 0 1.25rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-send:hover {
+  background-color: #001b33;
+}
+
+/* Disclaimer Footer inside Chat */
+.chat-disclaimer {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 0.5rem 1rem;
+  background-color: #f8fafc;
+  border-top: 1px solid #f1f5f9;
+}
+
+/* Utility classes */
+.text-center { text-align: center; }
+.mt-1 { margin-top: 0.25rem; }
+.mt-2 { margin-top: 0.5rem; }
+.bold { font-weight: bold; }&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;&lt;/p&gt;
+&lt;p&gt;&lt;!-- 1. LIMITATIONS BANNER (First in reading order, class=&quot;poc-limitations&quot;) --&gt;
+&lt;div class=&quot;poc-limitations&quot;&gt;
+&lt;div class=&quot;poc-limitations-container&quot;&gt;
+&lt;h2&gt;⚠️ Demonstration Prototype — Limitations &amp; Scope&lt;/h2&gt;
+&lt;p&gt;This is an interactive user interface mockup designed to illustrate the proposed ATO Deduction Assistant concept. Please note the following boundaries of this demonstration:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;No Real Tax Advice:&lt;/strong&gt; All guidance, calculations, and policy interpretations shown are simulated and must not be used for actual tax preparation.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;No Live Data Integration:&lt;/strong&gt; This prototype is entirely self-contained. It does not connect to real taxpayer accounts, active ATO databases, or live case management systems.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Simulated AI &amp; RAG:&lt;/strong&gt; There is no active Large Language Model (LLM) or Retrieval-Augmented Generation (RAG) backend. Responses are pre-scripted to demonstrate how the &quot;creativity dial&quot; and source citations would function.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Static Policy References:&lt;/strong&gt; Cited tax rulings (e.g., TR 2020/1) are illustrative placeholders and do not reflect real-time policy updates.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/p&gt;
+&lt;p&gt;&lt;!-- ATO Header Mockup --&gt;
+&lt;header class=&quot;ato-header&quot;&gt;
+&lt;div class=&quot;ato-header-container&quot;&gt;
+&lt;div class=&quot;ato-logo&quot;&gt;
+&lt;div class=&quot;ato-logo-crest&quot;&gt;ATO&lt;/div&gt;
+&lt;div class=&quot;ato-logo-text&quot;&gt;
+&lt;h1&gt;Australian Taxation Office&lt;/h1&gt;
+&lt;p&gt;Australian Government&lt;/p&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;badge-demo&quot;&gt;Concept Proof&lt;/div&gt;
+&lt;/div&gt;
+&lt;/header&gt;&lt;/p&gt;
+&lt;p&gt;&lt;!-- Main Content Grid --&gt;
+&lt;main class=&quot;main-container&quot;&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;!-- Left Column: Triage &amp;amp; Settings --&amp;gt;
+&amp;lt;div&amp;gt;
+  &amp;lt;!-- Triage Panel --&amp;gt;
+  &amp;lt;div class=&amp;quot;panel&amp;quot; id=&amp;quot;triage-panel&amp;quot;&amp;gt;
+    &amp;lt;h2 class=&amp;quot;panel-title&amp;quot;&amp;gt;
+      &amp;lt;span&amp;gt;📋&amp;lt;/span&amp;gt; 1. Pre-Chat Triage
+    &amp;lt;/h2&amp;gt;
+    &amp;lt;p style=&amp;quot;font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;&amp;quot;&amp;gt;
+      To help us narrow down relevant tax rulings, please answer these three quick questions.
+    &amp;lt;/p&amp;gt;
+    
+    &amp;lt;form id=&amp;quot;triage-form&amp;quot; onsubmit=&amp;quot;event.preventDefault(); handleTriageSubmit();&amp;quot;&amp;gt;
+      &amp;lt;div class=&amp;quot;form-group&amp;quot;&amp;gt;
+        &amp;lt;label for=&amp;quot;triage-occupation&amp;quot;&amp;gt;Primary Occupation&amp;lt;/label&amp;gt;
+        &amp;lt;select id=&amp;quot;triage-occupation&amp;quot; class=&amp;quot;form-control&amp;quot; required&amp;gt;
+          &amp;lt;option value=&amp;quot;&amp;quot; disabled selected&amp;gt;Select your industry...&amp;lt;/option&amp;gt;
+          &amp;lt;option value=&amp;quot;IT Professional&amp;quot;&amp;gt;IT &amp;amp; Technology Professional&amp;lt;/option&amp;gt;
+          &amp;lt;option value=&amp;quot;Healthcare Worker&amp;quot;&amp;gt;Healthcare &amp;amp; Nursing&amp;lt;/option&amp;gt;
+          &amp;lt;option value=&amp;quot;Tradesperson&amp;quot;&amp;gt;Trades &amp;amp; Construction&amp;lt;/option&amp;gt;
+          &amp;lt;option value=&amp;quot;Sales Representative&amp;quot;&amp;gt;Sales &amp;amp; Retail Representative&amp;lt;/option&amp;gt;
+        &amp;lt;/select&amp;gt;
+      &amp;lt;/div&amp;gt;
+
+      &amp;lt;div class=&amp;quot;form-group&amp;quot;&amp;gt;
+        &amp;lt;label for=&amp;quot;triage-expense&amp;quot;&amp;gt;Expense Category&amp;lt;/label&amp;gt;
+        &amp;lt;select id=&amp;quot;triage-expense&amp;quot; class=&amp;quot;form-control&amp;quot; required&amp;gt;
+          &amp;lt;option value=&amp;quot;&amp;quot; disabled selected&amp;gt;Select expense type...&amp;lt;/option&amp;gt;
+          &amp;lt;option value=&amp;quot;Home Office &amp;amp; Internet&amp;quot;&amp;gt;Home Office, Internet &amp;amp; Phone&amp;lt;/option&amp;gt;
+          &amp;lt;option value=&amp;quot;Clothing &amp;amp; Uniforms&amp;quot;&amp;gt;Work Clothing &amp;amp; Protective Gear&amp;lt;/option&amp;gt;
+          &amp;lt;option value=&amp;quot;Tools &amp;amp; Equipment&amp;quot;&amp;gt;Tools &amp;amp; Equipment Purchases&amp;lt;/option&amp;gt;
+          &amp;lt;option value=&amp;quot;Travel &amp;amp; Vehicle&amp;quot;&amp;gt;Work-Related Travel &amp;amp; Vehicle&amp;lt;/option&amp;gt;
+        &amp;lt;/select&amp;gt;
+      &amp;lt;/div&amp;gt;
+
+      &amp;lt;div class=&amp;quot;form-group&amp;quot;&amp;gt;
+        &amp;lt;label&amp;gt;Do you have receipts or written evidence?&amp;lt;/label&amp;gt;
+        &amp;lt;div class=&amp;quot;radio-group&amp;quot;&amp;gt;
+          &amp;lt;label class=&amp;quot;radio-label&amp;quot;&amp;gt;
+            &amp;lt;input type=&amp;quot;radio&amp;quot; name=&amp;quot;triage-evidence&amp;quot; value=&amp;quot;Yes&amp;quot; checked&amp;gt; Yes, all
+          &amp;lt;/label&amp;gt;
+          &amp;lt;label class=&amp;quot;radio-label&amp;quot;&amp;gt;
+            &amp;lt;input type=&amp;quot;radio&amp;quot; name=&amp;quot;triage-evidence&amp;quot; value=&amp;quot;Some&amp;quot;&amp;gt; Some
+          &amp;lt;/label&amp;gt;
+          &amp;lt;label class=&amp;quot;radio-label&amp;quot;&amp;gt;
+            &amp;lt;input type=&amp;quot;radio&amp;quot; name=&amp;quot;triage-evidence&amp;quot; value=&amp;quot;No&amp;quot;&amp;gt; No
+          &amp;lt;/label&amp;gt;
+        &amp;lt;/div&amp;gt;
+      &amp;lt;/div&amp;gt;
+
+      &amp;lt;button type=&amp;quot;submit&amp;quot; class=&amp;quot;btn&amp;quot;&amp;gt;Unlock Assistant Chat&amp;lt;/button&amp;gt;
+    &amp;lt;/form&amp;gt;
+
+    &amp;lt;div id=&amp;quot;triage-summary&amp;quot; style=&amp;quot;display: none;&amp;quot;&amp;gt;
+      &amp;lt;div style=&amp;quot;background-color: #f0fdf4; border: 1px solid #bbf7d0; padding: 0.75rem; border-radius: 4px; margin-bottom: 1rem;&amp;quot;&amp;gt;
+        &amp;lt;p style=&amp;quot;margin: 0; font-size: 0.85rem; color: #166534; font-weight: 600;&amp;quot;&amp;gt;
+          ✓ Triage Completed
+        &amp;lt;/p&amp;gt;
+        &amp;lt;p id=&amp;quot;summary-text&amp;quot; style=&amp;quot;margin: 0.25rem 0 0 0; font-size: 0.8rem; color: #14532d;&amp;quot;&amp;gt;&amp;lt;/p&amp;gt;
+      &amp;lt;/div&amp;gt;
+      &amp;lt;button class=&amp;quot;btn btn-secondary&amp;quot; onclick=&amp;quot;resetTriage()&amp;quot;&amp;gt;Reset Triage&amp;lt;/button&amp;gt;
+    &amp;lt;/div&amp;gt;
+  &amp;lt;/div&amp;gt;
+
+  &amp;lt;!-- Creativity Dial Panel --&amp;gt;
+  &amp;lt;div class=&amp;quot;panel&amp;quot;&amp;gt;
+    &amp;lt;h2 class=&amp;quot;panel-title&amp;quot;&amp;gt;
+      &amp;lt;span&amp;gt;⚙️&amp;lt;/span&amp;gt; 2. Assistant Parameters
+    &amp;lt;/h2&amp;gt;
+    &amp;lt;p style=&amp;quot;font-size: 0.85rem; color: var(--text-muted);&amp;quot;&amp;gt;
+      Adjust the LLM&amp;#x27;s interpretation style. This serves as a meta-signal of system strictness versus interpretive flexibility.
+    &amp;lt;/p&amp;gt;
+
+    &amp;lt;div class=&amp;quot;dial-container&amp;quot;&amp;gt;
+      &amp;lt;div class=&amp;quot;dial-header&amp;quot;&amp;gt;
+        &amp;lt;span class=&amp;quot;dial-label&amp;quot;&amp;gt;Creativity Dial&amp;lt;/span&amp;gt;
+        &amp;lt;span id=&amp;quot;dial-badge&amp;quot; class=&amp;quot;dial-badge badge-strict&amp;quot;&amp;gt;Strict&amp;lt;/span&amp;gt;
+      &amp;lt;/div&amp;gt;
+      
+      &amp;lt;input type=&amp;quot;range&amp;quot; min=&amp;quot;1&amp;quot; max=&amp;quot;3&amp;quot; value=&amp;quot;1&amp;quot; class=&amp;quot;slider&amp;quot; id=&amp;quot;creativity-slider&amp;quot; oninput=&amp;quot;updateDial(this.value)&amp;quot;&amp;gt;
+      
+      &amp;lt;div class=&amp;quot;slider-labels&amp;quot;&amp;gt;
+        &amp;lt;span&amp;gt;Strict (Policy-Locked)&amp;lt;/span&amp;gt;
+        &amp;lt;span&amp;gt;Balanced&amp;lt;/span&amp;gt;
+        &amp;lt;span&amp;gt;Creative (Interpretive)&amp;lt;/span&amp;gt;
+      &amp;lt;/div&amp;gt;
+
+      &amp;lt;div class=&amp;quot;dial-explanation&amp;quot; id=&amp;quot;dial-explanation&amp;quot;&amp;gt;
+        &amp;lt;strong&amp;gt;Strict Mode:&amp;lt;/strong&amp;gt; Restricts responses strictly to direct quotes and explicit rules from ATO Tax Rulings. Zero extrapolation. Safest, but may not address highly specific personal scenarios.
+      &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+  &amp;lt;/div&amp;gt;
+
+  &amp;lt;!-- Advisory Disclaimer --&amp;gt;
+  &amp;lt;div style=&amp;quot;padding: 0 1rem; font-size: 0.8rem; color: var(--text-muted);&amp;quot;&amp;gt;
+    &amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Legal Disclaimer:&amp;lt;/strong&amp;gt; This assistant provides general guidance based on ATO public rulings. It is not legally binding. You must verify all claims against official policy before submitting your tax return.&amp;lt;/p&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;
+
+&amp;lt;!-- Right Column: Chat Interface --&amp;gt;
+&amp;lt;div&amp;gt;
+  &amp;lt;div class=&amp;quot;chat-wrapper&amp;quot;&amp;gt;
+    
+    &amp;lt;!-- Locked Overlay --&amp;gt;
+    &amp;lt;div class=&amp;quot;chat-overlay&amp;quot; id=&amp;quot;chat-overlay&amp;quot;&amp;gt;
+      &amp;lt;div class=&amp;quot;overlay-icon&amp;quot;&amp;gt;🔒&amp;lt;/div&amp;gt;
+      &amp;lt;h3&amp;gt;Complete Triage to Begin&amp;lt;/h3&amp;gt;
+      &amp;lt;p style=&amp;quot;max-width: 320px; font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem;&amp;quot;&amp;gt;
+        Please fill out the 3-step triage form on the left to unlock the Deduction Assistant.
+      &amp;lt;/p&amp;gt;
+    &amp;lt;/div&amp;gt;
+
+    &amp;lt;!-- Chat Header --&amp;gt;
+    &amp;lt;div class=&amp;quot;chat-header&amp;quot;&amp;gt;
+      &amp;lt;div class=&amp;quot;chat-header-info&amp;quot;&amp;gt;
+        &amp;lt;h3&amp;gt;ATO Deduction Assistant&amp;lt;/h3&amp;gt;
+        &amp;lt;p id=&amp;quot;chat-status&amp;quot;&amp;gt;Awaiting triage...&amp;lt;/p&amp;gt;
+      &amp;lt;/div&amp;gt;
+      &amp;lt;div style=&amp;quot;display: flex; align-items: center; gap: 0.5rem;&amp;quot;&amp;gt;
+        &amp;lt;span style=&amp;quot;width: 8px; height: 8px; background-color: #22c55e; border-radius: 50%;&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;
+        &amp;lt;span style=&amp;quot;font-size: 0.75rem; font-weight: 600; color: var(--text-muted);&amp;quot;&amp;gt;RAG-Enabled&amp;lt;/span&amp;gt;
+      &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+
+    &amp;lt;!-- Chat Messages --&amp;gt;
+    &amp;lt;div class=&amp;quot;chat-messages&amp;quot; id=&amp;quot;chat-messages&amp;quot;&amp;gt;
+      &amp;lt;!-- Messages will be dynamically inserted here --&amp;gt;
+    &amp;lt;/div&amp;gt;
+
+    &amp;lt;!-- Quick Scenarios (Contextual suggestions) --&amp;gt;
+    &amp;lt;div class=&amp;quot;quick-scenarios&amp;quot; id=&amp;quot;quick-scenarios&amp;quot; style=&amp;quot;display: none;&amp;quot;&amp;gt;
+      &amp;lt;div class=&amp;quot;quick-scenarios-title&amp;quot;&amp;gt;Suggested Questions for your scenario:&amp;lt;/div&amp;gt;
+      &amp;lt;div class=&amp;quot;scenario-chips&amp;quot; id=&amp;quot;scenario-chips&amp;quot;&amp;gt;
+        &amp;lt;!-- Chips dynamically generated based on triage selection --&amp;gt;
+      &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+
+    &amp;lt;!-- Chat Input --&amp;gt;
+    &amp;lt;div class=&amp;quot;chat-input-area&amp;quot;&amp;gt;
+      &amp;lt;input type=&amp;quot;text&amp;quot; id=&amp;quot;chat-input-field&amp;quot; class=&amp;quot;chat-input&amp;quot; placeholder=&amp;quot;Ask a question about your deduction...&amp;quot; disabled onkeydown=&amp;quot;if(event.key === &amp;#x27;Enter&amp;#x27;) handleCustomMessageSubmit();&amp;quot;&amp;gt;
+      &amp;lt;button class=&amp;quot;btn-send&amp;quot; id=&amp;quot;chat-send-btn&amp;quot; disabled onclick=&amp;quot;handleCustomMessageSubmit()&amp;quot;&amp;gt;Send&amp;lt;/button&amp;gt;
+    &amp;lt;/div&amp;gt;
+
+    &amp;lt;!-- Chat Footer Disclaimer --&amp;gt;
+    &amp;lt;div class=&amp;quot;chat-disclaimer&amp;quot;&amp;gt;
+      Guidance is advisory only. Always cross-reference with official ATO publications.
+    &amp;lt;/div&amp;gt;
+  &amp;lt;/div&amp;gt;
+&amp;lt;/div&amp;gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/main&gt;&lt;/p&gt;
+&lt;p&gt;&lt;script&gt;
+// State Management
+let state = {
+triageCompleted: false,
+occupation: '',
+expenseCategory: '',
+evidence: 'Yes',
+creativityLevel: 1, // 1 = Strict, 2 = Balanced, 3 = Creative
+};&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;// Pre-baked responses database mapping to [Occupation][ExpenseCategory][CreativityLevel]
+const mockDatabase = {
+  &amp;quot;Home Office &amp;amp; Internet&amp;quot;: {
+    1: { // Strict
+      text: &amp;quot;Under **TR 2020/1**, you can claim a deduction for the work-related portion of your internet expenses. You must maintain a diary for a representative 4-week period to prove your usage pattern. No claims can be made without written evidence if your total claim exceeds $300.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 2020/1 - Work-related expenses&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Home Office Guide (Strict)&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    },
+    2: { // Balanced
+      text: &amp;quot;You can claim your home internet if you work from home. Usually, taxpayers estimate their work usage (e.g., 60%) based on a 4-week diary. Keep your bills! If your claim is small, the ATO has simplified methods, but keeping records is always safest.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 2020/1 - Work-related expenses&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Home Office Guide&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    },
+    3: { // Creative
+      text: &amp;quot;Yes, absolutely! If you&amp;#x27;re working from home, your internet is a vital tool. You might also want to think about other connected expenses like your phone plan, router depreciation, or even a portion of your electricity. While strict rules require diaries, a reasonable estimate based on your daily hours is a great starting point!&amp;quot;,
+      warning: &amp;quot;High Creativity Mode: This response includes interpretive suggestions. Please verify these suggestions against official policy below.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 2020/1 - Work-related expenses&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Home Office Guide&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;Guide to Depreciation of Assets&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    }
+  },
+  &amp;quot;Clothing &amp;amp; Uniforms&amp;quot;: {
+    1: { // Strict
+      text: &amp;quot;Under **TR 97/12**, you can only claim a deduction for work clothing if it is a compulsory uniform, protective clothing, or occupation-specific (e.g., chef&amp;#x27;s pants). Conventional clothing (like plain black trousers for retail) is strictly non-deductible, even if your employer mandates it.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 97/12 - Work uniform guidelines&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Protective Clothing Guide&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    },
+    2: { // Balanced
+      text: &amp;quot;You can claim clothing if it protects you from injury or is a registered compulsory uniform. For example, steel-cap boots or high-vis shirts are deductible. Standard business suits or plain retail clothes are not deductible, even if you only wear them to work.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 97/12 - Work uniform guidelines&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Protective Clothing Guide&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    },
+    3: { // Creative
+      text: &amp;quot;Generally, only protective or compulsory uniforms qualify. However, if your job requires unique physical activity that destroys regular clothing rapidly, or if you require specialized outdoor gear (like heavy-duty sun-protection hats for outdoor sales), there may be grounds for a claim. Be sure to document how the clothing directly mitigates a work-specific hazard!&amp;quot;,
+      warning: &amp;quot;High Creativity Mode: This response includes interpretive suggestions. Please verify these suggestions against official policy below.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 97/12 - Work uniform guidelines&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Protective Clothing Guide&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    }
+  },
+  &amp;quot;Tools &amp;amp; Equipment&amp;quot;: {
+    1: { // Strict
+      text: &amp;quot;Under **TR 2021/4**, you can claim a direct deduction for tools or equipment costing up to $300. For items costing more than $300, you must decline the value over time (depreciation). You must have a receipt and prove the item is used directly for your work.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 2021/4 - Depreciation of work tools&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Guide to Tool Deductions&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    },
+    2: { // Balanced
+      text: &amp;quot;If you bought tools or equipment for work, you can claim them. If an item cost under $300, you claim the whole cost now. If it cost more, you&amp;#x27;ll need to spread the claim over several years. Remember to reduce the claim if you also use the tools for private DIY projects.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 2021/4 - Depreciation of work tools&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Guide to Tool Deductions&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    },
+    3: { // Creative
+      text: &amp;quot;You can claim tools, software, and electronic equipment! If you bought a high-end device or tool, consider claiming not just the item, but also any accessories, protective cases, or software subscriptions required to run it. If you use it 80% for work and 20% for personal use, you can still claim a substantial 80% portion!&amp;quot;,
+      warning: &amp;quot;High Creativity Mode: This response includes interpretive suggestions. Please verify these suggestions against official policy below.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 2021/4 - Depreciation of work tools&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Guide to Tool Deductions&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;Software &amp;amp; Subscription Deductions&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    }
+  },
+  &amp;quot;Travel &amp;amp; Vehicle&amp;quot;: {
+    1: { // Strict
+      text: &amp;quot;Under **TR 2021/1**, travel between home and work is strictly private and non-deductible. You can only claim travel if you are traveling directly between two separate workplaces, or if you are required to carry bulky tools that cannot be safely stored at work.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 2021/1 - Work-related car expenses&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Vehicle Claims Guide&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    },
+    2: { // Balanced
+      text: &amp;quot;Generally, normal daily commutes aren&amp;#x27;t deductible. However, if you travel during the day for meetings, visit clients, or carry heavy equipment that your workplace doesn&amp;#x27;t have secure storage for, you can claim those kilometers. Keep a logbook or use the cents-per-km method.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 2021/1 - Work-related car expenses&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Vehicle Claims Guide&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    },
+    3: { // Creative
+      text: &amp;quot;While standard commutes are private, you might be able to claim travel if your home is considered a basic workplace (e.g., you start your day working from home and then travel to a client site). Additionally, tolls and parking fees incurred during work-related trips can be claimed alongside your vehicle expenses!&amp;quot;,
+      warning: &amp;quot;High Creativity Mode: This response includes interpretive suggestions. Please verify these suggestions against official policy below.&amp;quot;,
+      citations: [
+        { title: &amp;quot;TR 2021/1 - Work-related car expenses&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;ATO Vehicle Claims Guide&amp;quot;, url: &amp;quot;#&amp;quot; },
+        { title: &amp;quot;Tolls and Parking Policy Guide&amp;quot;, url: &amp;quot;#&amp;quot; }
+      ]
+    }
+  }
+};
+
+// Preset questions based on category
+const presetQuestions = {
+  &amp;quot;Home Office &amp;amp; Internet&amp;quot;: [
+    &amp;quot;Can I claim 100% of my home internet?&amp;quot;,
+    &amp;quot;What records do I need to keep for WFH?&amp;quot;,
+    &amp;quot;Can I claim my mobile phone plan?&amp;quot;
+  ],
+  &amp;quot;Clothing &amp;amp; Uniforms&amp;quot;: [
+    &amp;quot;Can I claim my steel-cap boots?&amp;quot;,
+    &amp;quot;What counts as a compulsory uniform?&amp;quot;,
+    &amp;quot;Can I claim laundry expenses?&amp;quot;
+  ],
+  &amp;quot;Tools &amp;amp; Equipment&amp;quot;: [
+    &amp;quot;Can I claim a laptop over $300?&amp;quot;,
+    &amp;quot;What if I use my tools for private use too?&amp;quot;,
+    &amp;quot;Can I claim software subscriptions?&amp;quot;
+  ],
+  &amp;quot;Travel &amp;amp; Vehicle&amp;quot;: [
+    &amp;quot;Can I claim travel from home to work?&amp;quot;,
+    &amp;quot;How does the cents-per-km method work?&amp;quot;,
+    &amp;quot;What if I carry heavy tools in my car?&amp;quot;
+  ]
+};
+
+// Initialize UI
+function updateDial(value) {
+  state.creativityLevel = parseInt(value);
+  const badge = document.getElementById(&amp;#x27;dial-badge&amp;#x27;);
+  const explanation = document.getElementById(&amp;#x27;dial-explanation&amp;#x27;);
+  
+  if (state.creativityLevel === 1) {
+    badge.textContent = &amp;quot;Strict&amp;quot;;
+    badge.className = &amp;quot;dial-badge badge-strict&amp;quot;;
+    explanation.innerHTML = &amp;quot;&amp;lt;strong&amp;gt;Strict Mode:&amp;lt;/strong&amp;gt; Restricts responses strictly to direct quotes and explicit rules from ATO Tax Rulings. Zero extrapolation. Safest, but may not address highly specific personal scenarios.&amp;quot;;
+  } else if (state.creativityLevel === 2) {
+    badge.textContent = &amp;quot;Balanced&amp;quot;;
+    badge.className = &amp;quot;dial-badge badge-balanced&amp;quot;;
+    explanation.innerHTML = &amp;quot;&amp;lt;strong&amp;gt;Balanced Mode:&amp;lt;/strong&amp;gt; Combines strict policy rules with common taxpayer scenarios. Provides helpful context while maintaining clear boundaries.&amp;quot;;
+  } else {
+    badge.textContent = &amp;quot;Creative&amp;quot;;
+    badge.className = &amp;quot;dial-badge badge-creative&amp;quot;;
+    explanation.innerHTML = &amp;quot;&amp;lt;strong&amp;gt;Creative Mode:&amp;lt;/strong&amp;gt; Attempts to map unusual or complex scenarios to existing policy. Higher risk of incorrect guidance. &amp;lt;em&amp;gt;Always verify these suggestions.&amp;lt;/em&amp;gt;&amp;quot;;
+  }
+
+  // If chat is active, append a system message indicating parameter change
+  if (state.triageCompleted) {
+    appendSystemMessage(`System parameters updated: Now operating in ${badge.textContent} Mode.`);
+  }
+}
+
+function handleTriageSubmit() {
+  state.occupation = document.getElementById(&amp;#x27;triage-occupation&amp;#x27;).value;
+  state.expenseCategory = document.getElementById(&amp;#x27;triage-expense&amp;#x27;).value;
+  state.evidence = document.querySelector(&amp;#x27;input[name=&amp;quot;triage-evidence&amp;quot;]:checked&amp;#x27;).value;
+  state.triageCompleted = true;
+
+  // Update Triage UI
+  document.getElementById(&amp;#x27;triage-form&amp;#x27;).style.display = &amp;#x27;none&amp;#x27;;
+  document.getElementById(&amp;#x27;triage-summary&amp;#x27;).style.display = &amp;#x27;block&amp;#x27;;
+  document.getElementById(&amp;#x27;summary-text&amp;#x27;).innerHTML = `
+    &amp;lt;strong&amp;gt;Occupation:&amp;lt;/strong&amp;gt; ${state.occupation}&amp;lt;br&amp;gt;
+    &amp;lt;strong&amp;gt;Category:&amp;lt;/strong&amp;gt; ${state.expenseCategory}&amp;lt;br&amp;gt;
+    &amp;lt;strong&amp;gt;Evidence:&amp;lt;/strong&amp;gt; ${state.evidence}
+  `;
+
+  // Unlock Chat
+  document.getElementById(&amp;#x27;chat-overlay&amp;#x27;).classList.add(&amp;#x27;hidden&amp;#x27;);
+  document.getElementById(&amp;#x27;chat-status&amp;#x27;).textContent = `Assisting: ${state.occupation} (${state.expenseCategory})`;
+  document.getElementById(&amp;#x27;chat-input-field&amp;#x27;).disabled = false;
+  document.getElementById(&amp;#x27;chat-send-btn&amp;#x27;).disabled = false;
+
+  // Setup Quick Scenarios
+  setupQuickScenarios();
+
+  // Trigger initial bot greeting
+  sendBotGreeting();
+}
+
+function resetTriage() {
+  state.triageCompleted = false;
+  document.getElementById(&amp;#x27;triage-form&amp;#x27;).style.display = &amp;#x27;block&amp;#x27;;
+  document.getElementById(&amp;#x27;triage-summary&amp;#x27;).style.display = &amp;#x27;none&amp;#x27;;
+  document.getElementById(&amp;#x27;triage-form&amp;#x27;).reset();
+
+  // Lock Chat
+  document.getElementById(&amp;#x27;chat-overlay&amp;#x27;).classList.remove(&amp;#x27;hidden&amp;#x27;);
+  document.getElementById(&amp;#x27;chat-status&amp;#x27;).textContent = &amp;quot;Awaiting triage...&amp;quot;;
+  document.getElementById(&amp;#x27;chat-input-field&amp;#x27;).disabled = true;
+  document.getElementById(&amp;#x27;chat-send-btn&amp;#x27;).disabled = true;
+  document.getElementById(&amp;#x27;quick-scenarios&amp;#x27;).style.display = &amp;#x27;none&amp;#x27;;
+  
+  // Clear Chat Messages
+  document.getElementById(&amp;#x27;chat-messages&amp;#x27;).innerHTML = &amp;#x27;&amp;#x27;;
+}
+
+function setupQuickScenarios() {
+  const container = document.getElementById(&amp;#x27;quick-scenarios&amp;#x27;);
+  const chipsContainer = document.getElementById(&amp;#x27;scenario-chips&amp;#x27;);
+  chipsContainer.innerHTML = &amp;#x27;&amp;#x27;;
+
+  const questions = presetQuestions[state.expenseCategory] || [];
+  questions.forEach(q =&amp;gt; {
+    const chip = document.createElement(&amp;#x27;button&amp;#x27;);
+    chip.className = &amp;#x27;chip&amp;#x27;;
+    chip.textContent = q;
+    chip.onclick = () =&amp;gt; handlePresetClick(q);
+    chipsContainer.appendChild(chip);
+  });
+
+  container.style.display = &amp;#x27;block&amp;#x27;;
+}
+
+function sendBotGreeting() {
+  const messagesContainer = document.getElementById(&amp;#x27;chat-messages&amp;#x27;);
+  messagesContainer.innerHTML = &amp;#x27;&amp;#x27;; // Clear previous
+
+  const greeting = `Hello! I see you are a **${state.occupation}** asking about **${state.expenseCategory}** expenses (Evidence status: *${state.evidence}*). &lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;How can I assist you with your deduction eligibility today? You can type a question or select one of the suggested scenarios below.`;&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;  appendMessage(greeting, &amp;#x27;bot&amp;#x27;);
+}
+
+function handlePresetClick(questionText) {
+  appendMessage(questionText, &amp;#x27;user&amp;#x27;);
+  simulateBotResponse(questionText);
+}
+
+function handleCustomMessageSubmit() {
+  const input = document.getElementById(&amp;#x27;chat-input-field&amp;#x27;);
+  const text = input.value.trim();
+  if (!text) return;
+
+  appendMessage(text, &amp;#x27;user&amp;#x27;);
+  input.value = &amp;#x27;&amp;#x27;;
+
+  simulateBotResponse(text);
+}
+
+function simulateBotResponse(userQuery) {
+  // Show a temporary typing indicator
+  const typingId = appendSystemMessage(&amp;quot;Assistant is searching policy database...&amp;quot;);
+
+  setTimeout(() =&amp;gt; {
+    // Remove typing indicator
+    const indicator = document.getElementById(typingId);
+    if (indicator) indicator.remove();
+
+    // Retrieve pre-baked response based on category and creativity level
+    const categoryData = mockDatabase[state.expenseCategory];
+    const responseData = categoryData ? categoryData[state.creativityLevel] : null;
+
+    if (responseData) {
+      appendBotResponse(responseData);
+    } else {
+      // Fallback generic response
+      appendBotResponse({
+        text: `I received your question: &amp;quot;${userQuery}&amp;quot;. In a production system, the RAG model would search ATO databases for specific rulings matching this query. Since this is a prototype, please try clicking one of the suggested scenario chips below for a tailored demonstration.`,
+        citations: [
+          { title: &amp;quot;ATO General Deduction Rules&amp;quot;, url: &amp;quot;#&amp;quot; }
+        ]
+      });
+    }
+  }, 800);
+}
+
+function appendMessage(text, sender) {
+  const container = document.getElementById(&amp;#x27;chat-messages&amp;#x27;);
+  const msgDiv = document.createElement(&amp;#x27;div&amp;#x27;);
+  msgDiv.className = `message message-${sender}`;
+  
+  // Basic markdown-to-HTML replacement for bold text
+  let formattedText = text.replace(/\*\*(.*?)\*\*/g, &amp;#x27;&amp;lt;strong&amp;gt;$1&amp;lt;/strong&amp;gt;&amp;#x27;);
+  formattedText = formattedText.replace(/\*(.*?)\*/g, &amp;#x27;&amp;lt;em&amp;gt;$1&amp;lt;/em&amp;gt;&amp;#x27;);
+  msgDiv.innerHTML = formattedText.replace(/\n/g, &amp;#x27;&amp;lt;br&amp;gt;&amp;#x27;);
+
+  container.appendChild(msgDiv);
+  container.scrollTop = container.scrollHeight;
+}
+
+function appendBotResponse(data) {
+  const container = document.getElementById(&amp;#x27;chat-messages&amp;#x27;);
+  const msgDiv = document.createElement(&amp;#x27;div&amp;#x27;);
+  msgDiv.className = &amp;#x27;message message-bot&amp;#x27;;
+
+  let htmlContent = &amp;#x27;&amp;#x27;;
+
+  // If high creativity warning exists
+  if (data.warning) {
+    htmlContent += `
+      &amp;lt;div class=&amp;quot;warning-badge&amp;quot;&amp;gt;
+        &amp;lt;span&amp;gt;⚠️&amp;lt;/span&amp;gt;
+        &amp;lt;span&amp;gt;${data.warning}&amp;lt;/span&amp;gt;
+      &amp;lt;/div&amp;gt;
+    `;
+  }
+
+  // Format body text
+  let formattedText = data.text.replace(/\*\*(.*?)\*\*/g, &amp;#x27;&amp;lt;strong&amp;gt;$1&amp;lt;/strong&amp;gt;&amp;#x27;);
+  formattedText = formattedText.replace(/\*(.*?)\*/g, &amp;#x27;&amp;lt;em&amp;gt;$1&amp;lt;/em&amp;gt;&amp;#x27;);
+  htmlContent += `&amp;lt;div&amp;gt;${formattedText.replace(/\n/g, &amp;#x27;&amp;lt;br&amp;gt;&amp;#x27;)}&amp;lt;/div&amp;gt;`;
+
+  // Add Citations
+  if (data.citations &amp;amp;&amp;amp; data.citations.length &amp;gt; 0) {
+    htmlContent += `
+      &amp;lt;div class=&amp;quot;citation-box&amp;quot;&amp;gt;
+        &amp;lt;div class=&amp;quot;citation-title&amp;quot;&amp;gt;📄 Cited Sources &amp;amp; Verification:&amp;lt;/div&amp;gt;
+        &amp;lt;div&amp;gt;
+    `;
+    data.citations.forEach(cit =&amp;gt; {
+      htmlContent += `&amp;lt;a class=&amp;quot;citation-link&amp;quot; href=&amp;quot;${cit.url}&amp;quot; onclick=&amp;quot;alert(&amp;#x27;This would link directly to the official ATO Legal Database entry for: ${cit.title}&amp;#x27;); return false;&amp;quot;&amp;gt;${cit.title} ↗&amp;lt;/a&amp;gt;`;
+    });
+    htmlContent += `
+        &amp;lt;/div&amp;gt;
+        &amp;lt;div style=&amp;quot;margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-muted);&amp;quot;&amp;gt;
+          &amp;lt;em&amp;gt;Verify this guidance on the official &amp;lt;a href=&amp;quot;#&amp;quot; style=&amp;quot;color: var(--ato-blue-light);&amp;quot; onclick=&amp;quot;alert(&amp;#x27;Redirecting to official ATO verification portal...&amp;#x27;); return false;&amp;quot;&amp;gt;ATO Website&amp;lt;/a&amp;gt; before lodging.&amp;lt;/em&amp;gt;
+        &amp;lt;/div&amp;gt;
+      &amp;lt;/div&amp;gt;
+    `;
+  }
+
+  msgDiv.innerHTML = htmlContent;
+  container.appendChild(msgDiv);
+  container.scrollTop = container.scrollHeight;
+}
+
+function appendSystemMessage(text) {
+  const container = document.getElementById(&amp;#x27;chat-messages&amp;#x27;);
+  const id = &amp;#x27;sys-&amp;#x27; + Date.now();
+  const msgDiv = document.createElement(&amp;#x27;div&amp;#x27;);
+  msgDiv.id = id;
+  msgDiv.style.alignSelf = &amp;#x27;center&amp;#x27;;
+  msgDiv.style.fontSize = &amp;#x27;0.8rem&amp;#x27;;
+  msgDiv.style.color = &amp;#x27;var(--text-muted)&amp;#x27;;
+  msgDiv.style.backgroundColor = &amp;#x27;#f1f5f9&amp;#x27;;
+  msgDiv.style.padding = &amp;#x27;0.25rem 0.75rem&amp;#x27;;
+  msgDiv.style.borderRadius = &amp;#x27;12px&amp;#x27;;
+  msgDiv.style.fontStyle = &amp;#x27;italic&amp;#x27;;
+  msgDiv.textContent = text;
+
+  container.appendChild(msgDiv);
+  container.scrollTop = container.scrollHeight;
+  return id;
+}&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;&quot;&gt;&lt;/iframe&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;The proof of concept uses no real data, no real integrations, and simulated logic. Its limitations banner travels inside the file itself.&lt;/em&gt;&lt;/p&gt;
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id=" title="Proof of concept">&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;h1 id="Appendix-%E2%80%94-Provenance"&gt;Appendix &amp;#8212; Provenance&lt;a class="anchor-link" href="#Appendix-%E2%80%94-Provenance"&gt;&amp;#182;&lt;/a&gt;&lt;/h1&gt;&lt;div class="provenance"&gt;
+&lt;p&gt;Run id: &lt;code&gt;WT-FXD5-3G&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Created: &lt;code&gt;2026-07-18T23:35:12Z&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Generated: &lt;code&gt;2026-07-19T00:19:00Z&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;Models and prompts per role:&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;architect&lt;/code&gt;: gemini-3.1-pro-preview (prompt v1)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;reviewer&lt;/code&gt;: gemini-3.1-pro-preview (prompt v1)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;specialist&lt;/code&gt;: gemini-3.5-flash (prompt v1)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;threshold_generalist&lt;/code&gt;: gemini-3.5-flash (prompt v1)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;threshold_reconciler&lt;/code&gt;: gemini-3.1-pro-preview (prompt v1)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Corpus manifest versions:&lt;/p&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;it_security&lt;/code&gt;: 2026-07-15T14:44:12Z (13 documents)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;privacy&lt;/code&gt;: 2026-07-15T14:44:22Z (8 documents)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ethics&lt;/code&gt;: 2026-07-15T14:44:36Z (17 documents)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;legal&lt;/code&gt;: 2026-07-15T14:44:49Z (11 documents)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;data_governance&lt;/code&gt;: 2026-07-15T14:44:53Z (5 documents)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;solution_architect&lt;/code&gt;: 2026-07-15T14:44:54Z (56 documents)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p class="attestation"&gt;Inputs were NOT attested by the submitting officer as at or below OFFICIAL.&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="cell-id=1f39b885" class="cell border-box-sizing text_cell rendered"&gt;&lt;div class="prompt input_prompt"&gt;
+&lt;/div&gt;&lt;div class="inner_cell"&gt;
+&lt;div class="text_cell_render border-box-sizing rendered_html"&gt;
+&lt;h1 id="References"&gt;References&lt;a class="anchor-link" href="#References"&gt;&amp;#182;&lt;/a&gt;&lt;/h1&gt;&lt;div class="references"&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;Agentic AI Addendum&lt;/strong&gt; — Agentic AI addendum to the AI technical standard for Australian Government — Digital Transformation Agency — 2025 &lt;a href="https://www.digital.gov.au/policy/ai/standard"&gt;https://www.digital.gov.au/policy/ai/standard&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;AI Data Security CSI&lt;/strong&gt; — AI Data Security: Best Practices for Securing Data Used to Train &amp;amp; Operate AI Systems — US National Security Agency (with CISA, FBI and ASD ACSC) — May 2025 &lt;a href="https://www.cisa.gov/resources-tools/resources/ai-data-security"&gt;https://www.cisa.gov/resources-tools/resources/ai-data-security&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;AI Suitability Assessment&lt;/strong&gt; — CSIRO Data61 — 2023 &lt;a href="https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/"&gt;https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;AI Ethics Principles&lt;/strong&gt; — Australia&amp;#x27;s AI Ethics Principles — Department of Industry, Science and Resources — 2019 &lt;a href="https://www.industry.gov.au/publications/australias-artificial-intelligence-ethics-principles"&gt;https://www.industry.gov.au/publications/australias-artificial-intelligence-ethics-principles&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;APP Guidelines&lt;/strong&gt; — Australian Privacy Principles Guidelines (consolidated; Chapter 3 updated) — Office of the Australian Information Commissioner — consolidated &lt;a href="https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines"&gt;https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;ADM Better Practice Guide&lt;/strong&gt; — Automated Decision-Making Better Practice Guide — Commonwealth Ombudsman — March 2025 &lt;a href="https://www.ombudsman.gov.au/__data/assets/pdf_file/0025/317437/Automated-Decision-Making-Better-Practice-Guide-March-2025.pdf"&gt;https://www.ombudsman.gov.au/__data/assets/pdf_file/0025/317437/Automated-Decision-Making-Better-Practice-Guide-March-2025.pdf&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;Continuous Deployment for RAI&lt;/strong&gt; — CSIRO Data61 — 2023 &lt;a href="https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/"&gt;https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;Continuous RAI Validator&lt;/strong&gt; — CSIRO Data61 — 2023 &lt;a href="https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/"&gt;https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;DDGS&lt;/strong&gt; — Data and Digital Government Strategy — Digital Transformation Agency and Department of Finance — v1.0 (December 2023) &lt;a href="https://www.dataanddigital.gov.au/strategy"&gt;https://www.dataanddigital.gov.au/strategy&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;Deploying AI Securely&lt;/strong&gt; — Deploying AI Systems Securely: Best Practices for Deploying Secure and Resilient AI Systems — US National Security Agency (with CISA, FBI, ASD ACSC and partners) — 2024 &lt;a href="https://www.cyber.gov.au/about-us/view-all-content/publications/deploying-ai-systems-securely"&gt;https://www.cyber.gov.au/about-us/view-all-content/publications/deploying-ai-systems-securely&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;Diversity &amp;amp; Inclusion in AI&lt;/strong&gt; — Diversity and Inclusion in Artificial Intelligence — Didar Zowghi and Francesca da Rimini (CSIRO Data61) — v1 (2023) &lt;a href="https://arxiv.org/abs/2305.12728"&gt;https://arxiv.org/abs/2305.12728&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;Secure AI Dev Guidelines&lt;/strong&gt; — Guidelines for secure AI system development — UK National Cyber Security Centre and US CISA (with partners incl. ASD ACSC) — November 2023 &lt;a href="https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development"&gt;https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;NAA AI Records Guidance&lt;/strong&gt; — Information management for records created using Artificial Intelligence (AI) technologies — National Archives of Australia — January 2025 &lt;a href="https://www.naa.gov.au/information-management/information-management-basics/artificial-intelligence"&gt;https://www.naa.gov.au/information-management/information-management-basics/artificial-intelligence&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;ISM&lt;/strong&gt; — Information security manual — Australian Signals Directorate — June 2026 &lt;a href="https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism"&gt;https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;LLMSVS&lt;/strong&gt; — OWASP Large Language Model Security Verification Standard (LLMSVS) — OWASP Foundation — 2.0 &lt;a href="https://owasp.org/www-project-llm-security-verification-standard/"&gt;https://owasp.org/www-project-llm-security-verification-standard/&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;AI Use Policy v2.0&lt;/strong&gt; — Policy for the responsible use of AI in government — Digital Transformation Agency — 2.0 &lt;a href="https://www.dta.gov.au/policies-and-guidance/policy-responsible-use-ai-government"&gt;https://www.dta.gov.au/policies-and-guidance/policy-responsible-use-ai-government&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;AI in OT Principles&lt;/strong&gt; — Principles for the secure integration of artificial intelligence in operational technology — Australian Signals Directorate (with CISA and partners) — 2025 &lt;a href="https://www.cyber.gov.au/about-us/view-all-content/publications"&gt;https://www.cyber.gov.au/about-us/view-all-content/publications&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;OAIC PIA Tool&lt;/strong&gt; — Privacy Impact Assessment Tool — Office of the Australian Information Commissioner — May 2020 &lt;a href="https://www.oaic.gov.au/privacy/privacy-impact-assessments"&gt;https://www.oaic.gov.au/privacy/privacy-impact-assessments&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;RAI Acceptance Testing&lt;/strong&gt; — CSIRO Data61 — 2023 &lt;a href="https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/"&gt;https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;Data Quality Checklist&lt;/strong&gt; — Strengthen data quality: data quality checklist — National AI Centre — 2026 &lt;a href="https://www.ai.gov.au/planning-ai/strengthen-data-quality"&gt;https://www.ai.gov.au/planning-ai/strengthen-data-quality&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;AI Technical Standard&lt;/strong&gt; — Technical Standard for Government&amp;#x27;s use of Artificial Intelligence (AI technical standard) — Digital Transformation Agency — 2025 &lt;a href="https://www.digital.gov.au/policy/ai/standard"&gt;https://www.digital.gov.au/policy/ai/standard&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;OECD AI in Public Audit&lt;/strong&gt; — The state of artificial intelligence in public audit: Evidence from selected countries and the European Union — OECD — 2026 (OECD Artificial Intelligence Papers No. 58) &lt;a href="https://doi.org/10.1787/f4a6c658-en"&gt;https://doi.org/10.1787/f4a6c658-en&lt;/a&gt;&lt;/p&gt;
+&lt;p class="reference"&gt;&lt;strong&gt;VAISS&lt;/strong&gt; — Voluntary AI Safety Standard — Department of Industry, Science and Resources — 2024 &lt;a href="https://www.industry.gov.au/publications/voluntary-ai-safety-standard"&gt;https://www.industry.gov.au/publications/voluntary-ai-safety-standard&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+
+&lt;/div&gt;
+&lt;/div&gt;
+&lt;/div&gt;
+
+
+</iframe></div></div></div>
+</main>
+<div class="running-footer" role="contentinfo">Draft for SME review — not an approval, not legal advice.</div>
+</body>
+</html>
