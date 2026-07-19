@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:16:48Z",
+  "updated_at": "2026-07-19T00:17:09Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -18,7 +18,7 @@
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "complete",
-    "full.reviewer": "active",
+    "full.reviewer": "complete",
     "full.assembly": "complete"
   },
   "log": [
@@ -4312,9 +4312,33 @@
       "agent": "full.reviewer",
       "type": "stage_started",
       "detail": "Adjudicating reviewer started"
+    },
+    {
+      "id": "evt_000416",
+      "ts": "2026-07-19T00:16:49Z",
+      "agent": "full.reviewer",
+      "type": "revision",
+      "detail": "user revision 1 of 2",
+      "ref": {
+        "target": "reviewer"
+      }
+    },
+    {
+      "id": "evt_000417",
+      "ts": "2026-07-19T00:16:49Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Triaging your revision request into amend directives."
+    },
+    {
+      "id": "evt_000418",
+      "ts": "2026-07-19T00:17:09Z",
+      "agent": "full.reviewer",
+      "type": "stage_complete",
+      "detail": "Adjudicating reviewer complete"
     }
   ],
-  "log_cursor": 415,
+  "log_cursor": 418,
   "questions": null,
   "failure": null,
   "expected_ranges": {

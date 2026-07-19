@@ -1,0 +1,36 @@
+{
+  "amend_directives": [
+    {
+      "target_specialist": "it_security",
+      "target_sections": [
+        "7.3"
+      ],
+      "conflicting_claims": [],
+      "ruling": "Amend 7.3 to reflect that all data will be stored exclusively on Australian soil, enhancing data security and sovereignty controls.",
+      "rationale": "The user provided a specific data hosting constraint that mitigates security risks."
+    },
+    {
+      "target_specialist": "privacy",
+      "target_sections": [
+        "7.1"
+      ],
+      "conflicting_claims": [],
+      "ruling": "Amend 7.1 to note that data will be stored only on Australian soil, supporting compliance with privacy principles (such as those regarding cross-border data disclosures).",
+      "rationale": "The user's commitment to onshore data storage is a key privacy control."
+    },
+    {
+      "target_specialist": "solution_architect",
+      "target_sections": [
+        "6.5"
+      ],
+      "conflicting_claims": [],
+      "ruling": "Draft section 6.5 to confirm that the system will be tested as a pilot with a small cohort prior to full deployment.",
+      "rationale": "The user clarified that a pilot phase is planned, addressing the previously identified gap for section 6.5."
+    }
+  ],
+  "declined": [],
+  "provenance": {
+    "model": "gemini-3.1-pro-preview",
+    "prompt_version": "v1"
+  }
+}
