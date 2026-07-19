@@ -1,0 +1,41 @@
+# ethics — owned sections
+
+## 5.1
+
+No. The current project documentation for the Tripwire pipeline does not yet define what constitutes a fair process or outcome. As noted in the threshold assessment, because the specific contents of the structured data (CSVs and SQL databases) are not fully defined, there is a precautionary risk that biased semantic representations within the bi-encoder and cross-encoder gates could lead to unfair filtering or validation failures if demographic or personal data is processed. To address this, the project team should contextualise fairness to this operational use case by consulting domain experts and affected parties to determine how to define fair outcomes.
+
+*Citations: [NAIC RAI Tools, p.19]*
+
+## 5.2
+
+No. The project does not currently have an established way of measuring the fairness of system outcomes quantitatively or qualitatively. To mitigate potential bias, the project team should leverage the 4-8 week observation mode to specify and evaluate fairness metrics (such as group fairness or error distributions) using established software libraries like FairLearn or AIF360, ensuring that any potential disparate impacts are actively monitored and controlled.
+
+*Citations: [NAIC RAI Tools, p.20-21]*
+
+## 8.1
+
+No. While the primary users (data operators and system maintainers) and stakeholders (IT Security Advisors and business owners) have been identified, the outline does not confirm whether active consultation has yet taken place. Engaging these stakeholders early and throughout the lifecycle is critical to identifying potential operational harms and ensuring the system's feedback and redress processes are fit for purpose.
+
+*Citations: [VAISS, s 10]*
+
+## 8.2
+
+No. There is currently no plan to make information about the Tripwire pipeline publicly available, as it is a headless backend system designed for internal data monitoring and reconciliation. However, consistent with best practices for public sector transparency, the agency should consider recording high-level metadata about the system's purpose, scope, and safety checks in an internal or public AI register to establish clear visibility and maintain public confidence.
+
+*Citations: [NAIC RAI Tools, p.34]*
+
+## 8.4
+
+Not applicable. The Tripwire pipeline is a headless backend data monitoring system that operates automatically without a public-facing interface. Members of the public do not interact with the system, nor do they directly receive its outputs (8.4.1). Consequently, members of the public interacting with the system will not need or be provided with the ability to request a non-AI alternative (8.4.2). Therefore, these requirements are not applicable to this use case.
+
+## 8.5
+
+Yes. The system is designed to support explainability for its primary users (data operators and system maintainers). When the multi-stage verification pipeline triggers an uncertainty verdict or validation failure, it will generate detailed logs and health alerts. These outputs, combined with the defined runbooks, are specifically designed to enable operators to diagnose, understand, and resolve issues without requiring intervention from the original authors, thereby providing an effective mental model of the system's decision process.
+
+*Citations: [NAIC RAI Tools, p.33, 35]*
+
+## 10.1
+
+No. The current project documentation does not state whether a diverse team with appropriately varied skills, experiences, and backgrounds has been incorporated into the lifecycle of the Tripwire pipeline. To ensure robust governance and design, the project should establish a multidisciplinary team that includes technical, legal, policy, and service delivery experience.
+
+*Citations: [ADM Guide (earlier ed.), p.30]*
