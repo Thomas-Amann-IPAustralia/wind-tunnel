@@ -124,9 +124,7 @@ class RunState:
     checkpoints: dict[str, str] = field(default_factory=dict)
     revisions: dict[str, int] = field(default_factory=lambda: {a: 0 for a in REVISION_ARTEFACTS})
     review_cycles: int = 0
-    attestation: dict = field(
-        default_factory=lambda: {"sensitivity_ceiling": "OFFICIAL", "attested": False}
-    )
+    attestation: dict = field(default_factory=lambda: {"attested": False})
     last_error: dict | None = None
     schema_version: int = SCHEMA_VERSION
 
@@ -137,7 +135,6 @@ class RunState:
         cls,
         run_id: str,
         *,
-        sensitivity_ceiling: str = "OFFICIAL",
         attested: bool = False,
         now: str | None = None,
     ) -> RunState:
@@ -148,7 +145,7 @@ class RunState:
             run_id=run_id,
             created_at=ts,
             updated_at=ts,
-            attestation={"sensitivity_ceiling": sensitivity_ceiling, "attested": attested},
+            attestation={"attested": attested},
         )
 
     # -- transitions ------------------------------------------------------------

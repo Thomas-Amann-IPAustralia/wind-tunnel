@@ -22,10 +22,12 @@ behave like a serious one.
 ## ⚠️ Usage warning — read before submitting anything
 
 Everything you submit or that the system generates is stored in a **public**
-GitHub repository and is **world-readable**. There is no authentication. The
-sensitivity ceiling is **OFFICIAL** — do **not** enter OFFICIAL: Sensitive
-information, security-classified information, or personally identifiable
-information.
+GitHub repository and is **world-readable**. There is no authentication.
+Treat this like posting in the open: do **not** enter classified information,
+sensitive information, or personally identifiable information. This system
+carries no security accreditation and makes no claim about what sensitivity
+it can handle — the rule is simply not to put in anything you wouldn't be
+comfortable seeing made public.
 
 ## How it works
 

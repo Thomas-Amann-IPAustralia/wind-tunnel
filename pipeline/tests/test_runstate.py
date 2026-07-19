@@ -81,7 +81,7 @@ def test_new_run_defaults():
     assert r.phase is Phase.THRESHOLD
     assert r.revisions == {a: 0 for a in REVISION_ARTEFACTS}
     assert r.review_cycles == 0
-    assert r.attestation == {"sensitivity_ceiling": "OFFICIAL", "attested": False}
+    assert r.attestation == {"attested": False}
     assert r.last_error is None
     assert r.created_at == r.updated_at == "2026-07-11T00:00:00Z"
 

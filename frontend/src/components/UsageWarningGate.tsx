@@ -35,9 +35,9 @@ export function UsageWarningGate({ onAccept }: { onAccept: () => void }) {
               ◆
             </span>
             <span>
-              <strong>Keep it at OFFICIAL.</strong> Don&rsquo;t enter anything above OFFICIAL — no
-              OFFICIAL: Sensitive, nothing security classified, and no personal information about
-              identifiable people.
+              <strong>This is public.</strong> Everything you type or generate here is saved to a
+              world-readable GitHub repository. Anyone on the internet can read it — treat this like
+              posting in the open.
             </span>
           </li>
           <li>
@@ -45,9 +45,11 @@ export function UsageWarningGate({ onAccept }: { onAccept: () => void }) {
               ◆
             </span>
             <span>
-              <strong>This is public.</strong> Everything you type or generate here is saved to a
-              world-readable GitHub repository. Anyone on the internet can read it — treat this like
-              posting in the open.
+              <strong>Nothing sensitive.</strong> Don&rsquo;t enter classified information,
+              sensitive information, or personal information about identifiable people. This system
+              carries no security accreditation and makes no claim about what it can safely handle —
+              the rule is simply: don&rsquo;t put in anything you wouldn&rsquo;t be comfortable
+              seeing posted in the open.
             </span>
           </li>
           <li>

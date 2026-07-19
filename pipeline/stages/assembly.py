@@ -89,7 +89,6 @@ def gather_inputs(ctx: StageContext) -> dict:
         "created_at": run.created_at,
         "generated_at": ctx.now(),
         "attested": run.attestation.get("attested", False),
-        "sensitivity_ceiling": run.attestation.get("sensitivity_ceiling", "OFFICIAL"),
         "threshold_md": _read_optional(ctx, "threshold/threshold_assessment.md"),
         "full_sections": _build_full_sections(specialists),
         "residual": residual,
