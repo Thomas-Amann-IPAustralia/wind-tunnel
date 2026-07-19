@@ -2,13 +2,14 @@
   "schema_version": 1,
   "run_id": "WT-9J32-99",
   "created_at": "2026-07-19T13:35:13Z",
-  "updated_at": "2026-07-19T13:38:36Z",
-  "stage": "FULL_DRAFTING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-19T13:40:12Z",
+  "stage": "FULL_CHECKPOINT",
+  "stage_status": "awaiting_user",
   "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "95ae4a79c8e3e9b3c276d8ee516823b9a7061dc0",
-    "THRESHOLD_RECONCILING": "6c886b203565915b72885bbc4cfec90bf23dd897"
+    "THRESHOLD_RECONCILING": "6c886b203565915b72885bbc4cfec90bf23dd897",
+    "FULL_DRAFTING": "b4a918db8d6a89484516da41b71626f0e763f293"
   },
   "revisions": {
     "poc": 0,
