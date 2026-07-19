@@ -4,16 +4,16 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:45:58Z",
+  "updated_at": "2026-07-19T10:46:01Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
-    "full.specialist.it_security": "active",
+    "full.specialist.it_security": "complete",
     "full.specialist.privacy": "active",
     "full.specialist.ethics": "active",
-    "full.specialist.legal": "complete",
+    "full.specialist.legal": "active",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
@@ -3187,9 +3187,99 @@
         "doc": "Privacy Act 1988",
         "locator": "s 3"
       }
+    },
+    {
+      "id": "evt_000304",
+      "ts": "2026-07-19T10:46:00Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_started",
+      "detail": "Legal & Administrative Law specialist started"
+    },
+    {
+      "id": "evt_000305",
+      "ts": "2026-07-19T10:46:00Z",
+      "agent": "full.specialist.legal",
+      "type": "revision",
+      "detail": "revising legal's sections in light of your answers",
+      "ref": {
+        "target": "legal"
+      }
+    },
+    {
+      "id": "evt_000306",
+      "ts": "2026-07-19T10:46:00Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000307",
+      "ts": "2026-07-19T10:46:00Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000308",
+      "ts": "2026-07-19T10:46:00Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.50"
+      }
+    },
+    {
+      "id": "evt_000309",
+      "ts": "2026-07-19T10:46:00Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000310",
+      "ts": "2026-07-19T10:46:00Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000311",
+      "ts": "2026-07-19T10:46:00Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000312",
+      "ts": "2026-07-19T10:46:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "stage_complete",
+      "detail": "IT Security specialist complete"
     }
   ],
-  "log_cursor": 303,
+  "log_cursor": 312,
   "questions": null,
   "failure": null,
   "expected_ranges": {
