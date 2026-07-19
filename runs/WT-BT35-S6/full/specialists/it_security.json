@@ -1,0 +1,51 @@
+{
+  "specialist": "it_security",
+  "sections": {
+    "6.7": "No. While the system is designed with a human-in-the-loop pattern where managers must review, edit, and approve all AI-generated performance summaries before finalization, formal processes for human intervention or safely disengaging the AI system have not yet been fully established. To ensure reliability and safety, the project must establish clear protocols for managers or administrators to intervene, report anomalies, or bypass/disengage the AI system if unresolvable issues or stakeholder concerns arise. Implementing these processes aligns with best practices for maintaining human-in-the-loop oversight as a failsafe to boost reliability and correct anomalies.",
+    "7.3": "No. As the project is currently in the conceptual phase, specific security measures to address risks arising from the operation of the AI have not yet been fully implemented. However, the threshold assessment identifies key security concerns, including insecure local data caching on mobile devices, API exploits, and unauthorized access. To address these risks during development and deployment, the project will need to implement robust security controls. These should include strict access controls, secure API configurations, continuous monitoring of model behavior, and protecting sensitive assets such as feedback logs and model inputs."
+  },
+  "citations": {
+    "6.7": [
+      {
+        "short_name": "Deploying AI Securely",
+        "locator": "p.6"
+      },
+      {
+        "short_name": "AI in OT Principles",
+        "locator": "p.19"
+      }
+    ],
+    "7.3": [
+      {
+        "short_name": "Secure AI Dev Guidelines",
+        "locator": "p.12"
+      },
+      {
+        "short_name": "Deploying AI Securely",
+        "locator": "p.6"
+      }
+    ]
+  },
+  "questions": {
+    "why": "The conceptual outline lacks technical details regarding mobile data storage and hosting infrastructure, which are critical for assessing security risks.",
+    "items": [
+      {
+        "question_id": "it_security-1",
+        "text": "Will the mobile application store or cache performance data locally on the device, and what encryption standards will be applied to local storage?",
+        "options": null,
+        "allow_free_text": true
+      },
+      {
+        "question_id": "it_security-2",
+        "text": "What hosting environment or cloud service provider is proposed for the AI model and API endpoints?",
+        "options": null,
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
