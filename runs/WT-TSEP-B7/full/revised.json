@@ -1,0 +1,14 @@
+{
+  "revised": [
+    "it_security",
+    "privacy",
+    "ethics",
+    "legal",
+    "data_governance",
+    "solution_architect"
+  ],
+  "counts": {
+    "answered": 9,
+    "skipped": 4
+  }
+}
