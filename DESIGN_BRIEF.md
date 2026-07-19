@@ -172,8 +172,8 @@ Shown **before any input is accepted**, on first arrival, on the Console surface
 
 **Content, in plain language, three points the user actually has to hold:**
 
-1. **Keep it at OFFICIAL.** *Don't enter anything above OFFICIAL. No OFFICIAL: Sensitive, nothing security classified, and no personal information about identifiable people.*
-2. **This is public.** *Everything you type or generate here is saved to a public GitHub repository. Anyone on the internet can read it. Treat this like posting in the open.*
+1. **This is public.** *Everything you type or generate here is saved to a public GitHub repository. Anyone on the internet can read it. Treat this like posting in the open.*
+2. **Nothing sensitive.** *Don't enter classified information, sensitive information, or personal information about identifiable people. This system carries no security accreditation and makes no claim about what it can safely handle — the rule is simply: don't put in anything you wouldn't be comfortable seeing posted in the open.*
 3. **This is a draft tool.** *What you get back is a draft to give your subject-matter experts. It isn't an approval, and it isn't legal advice.*
 
 **Treatment.**
@@ -182,10 +182,11 @@ Shown **before any input is accepted**, on first arrival, on the Console surface
 ┌──────────────────────────────────────────────────────────┐
 │  Before you start                                        │  ← Archivo, calm not shouty
 │                                                          │
-│  ◆ Keep it at OFFICIAL — no sensitive, classified or     │  ← three points,
-│    personal information.                                 │     each with its own
-│  ◆ This is public — everything you enter is saved to a   │     line and a quiet
-│    world-readable GitHub repo.                           │     focus-coloured mark
+│  ◆ This is public — everything you enter is saved        │  ← three points,
+│    to a world-readable GitHub repo.                      │     each with its own
+│  ◆ Nothing sensitive — no classified, sensitive or       │     line and a quiet
+│    personal information. No claim is made about          │     focus-coloured mark
+│    what sensitivity this system can handle.              │
 │  ◆ Draft only — for your SMEs to review. Not an          │
 │    approval. Not legal advice.                           │
 │                                                          │
@@ -194,7 +195,7 @@ Shown **before any input is accepted**, on first arrival, on the Console surface
 ```
 
 - Prominence comes from **space, position and a single clear focus mark**, not from red borders or all-caps. It occupies the screen on first contact; it is not a dismissible corner toast.
-- The "public repo" point is the one users will underestimate, so it gets the plainest, most concrete wording ("*anyone on the internet can read it*").
+- The "public repo" point is the one users will underestimate, so it gets the plainest, most concrete wording ("*anyone on the internet can read it*") and leads the list — the warning is about public disclosure, not a claim about what sensitivity the system is rated to handle.
 - Acknowledgement is one explicit action (*I understand — continue*). The gate is shown once per session before input; it is not nagged thereafter (the standing disclaimer, below, carries the reminder quietly).
 - **Accessibility:** this is the first thing a screen reader meets — it is a labelled region announced on load, fully keyboard-operable, focus lands on the heading, and the continue action is reachable by tab immediately.
 

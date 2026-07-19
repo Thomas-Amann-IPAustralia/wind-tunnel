@@ -36,8 +36,8 @@ describe("App front door", () => {
     renderApp();
     expect(screen.getByRole("heading", { name: /a few things to know first/i })).toBeTruthy();
     // The three points the user must hold are present.
-    expect(screen.getByText(/keep it at official/i)).toBeTruthy();
     expect(screen.getByText(/this is public/i)).toBeTruthy();
+    expect(screen.getByText(/nothing sensitive/i)).toBeTruthy();
     // The landing is not reachable until the gate is passed.
     expect(screen.queryByRole("heading", { name: /test your ai idea/i })).toBeNull();
   });

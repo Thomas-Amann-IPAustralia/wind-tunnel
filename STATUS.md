@@ -2,7 +2,47 @@
 
 ## Current stage
 
-**This branch (`claude/concurrent-specialists-aqb0t9`): the specialists — and now the two
+**This branch (`claude/reword-public-availability-warning-8137wz`): reworded the usage warning
+to drop the "sensitivity ceiling is OFFICIAL" claim (PROJECT_BRIEF §3; TECH_SPEC §4/§12.2;
+DESIGN_BRIEF §4.1; CLAUDE.md §2).** Tom asked for the pre-input warning to disclose public
+availability and ask users to keep sensitive material out, **without** the system claiming any
+particular sensitivity level it is accredited to handle. The old copy ("Keep it at OFFICIAL —
+no OFFICIAL: Sensitive, nothing security classified…") asserted a ceiling Windtunnel has no basis
+to claim; the new copy leads with the actual, verifiable fact (everything is public and
+world-readable) and asks users to make their own judgement call ("don't put in anything you
+wouldn't be comfortable seeing posted in the open"), still explicitly ruling out classified,
+sensitive, and personal information. **This was a genuine document-and-code consistency fix, not
+just a copy change (CLAUDE.md §2):** the same "at or below OFFICIAL" claim was baked into the
+`run.json` `attestation` schema and rendered verbatim into every generated notebook/report's
+provenance cell — rewording only the gate would have left the audit trail still asserting a
+sensitivity ceiling the gate no longer claims. Fixed at the source:
+- **`PROJECT_BRIEF.md` §3** — the "sensitivity ceiling is OFFICIAL" decision reworded to a
+  public-disclosure-only warning; this revises a decision the brief had marked fixed, done here
+  on Tom's explicit instruction (governs intent, so the correction lands here first).
+- **`TECH_SPEC.md`** — the `run.json` `attestation` example dropped `sensitivity_ceiling`, now
+  just `{"attested": true}`; §12.2's provenance-cell description reworded to match.
+- **`DESIGN_BRIEF.md` §4.1** — the three-point gate content and ASCII mockup reordered (public
+  disclosure leads) and reworded (no OFFICIAL claim); the "public repo" callout note updated.
+- **`pipeline/statefile.py`** — `RunState.attestation` default and `RunState.new()` dropped the
+  `sensitivity_ceiling` param/field entirely; attestation is now just `{"attested": bool}`.
+- **`pipeline/stages/assembly.py`** / **`pipeline/assembly/notebook.py`** — stopped threading
+  `sensitivity_ceiling` into the report data bundle; the rendered provenance sentence now reads
+  "The submitting officer confirmed/did NOT confirm that these inputs contain no sensitive,
+  classified, or personal information, appropriate for this public, world-readable repository" —
+  no ceiling claim, same audit intent.
+- **`frontend/src/components/UsageWarningGate.tsx`**, **`README.md`**, **`SYSTEM_OVERVIEW.ipynb`**
+  — same reword applied to the live UI copy and the two narrative docs.
+- **Historical `runs/*/run.json` and `runs/*/artefacts/*` left untouched** — they are the
+  immutable record of what was actually attested/rendered for past runs, not live schema.
+
+**Verified:** pipeline 213 tests green (2 updated: `test_new_run_defaults` attestation shape,
+`test_assembly` report-data fixture), ruff clean. Backend 135 tests green (untouched — the
+per-upload `acknowledge_no_sensitive` flow never named OFFICIAL, so no change needed there).
+Frontend 55 tests green (1 updated: `App.test.tsx`'s gate-copy assertions now look for "this is
+public" / "nothing sensitive" instead of "keep it at official"), build + strict typecheck + lint
+(0 err, 1 pre-existing accepted warning) + format clean.
+
+**Prior branch (`claude/concurrent-specialists-aqb0t9`, merged to main): the specialists — and now the two
 threshold generalists — run concurrently — the §5.4 fan-out the tech spec always mandated,
 replacing the serial one-after-another loops
 (TECH_SPEC §5.4, §13, §14; CLAUDE.md §3 "one poll fully determines visible state").** Tom asked

@@ -255,11 +255,11 @@ def _provenance_section(data: dict) -> str:
         lines.append("</ul>")
 
     attested = data.get("attested")
-    ceiling = html.escape(str(data.get("sensitivity_ceiling", "OFFICIAL")))
-    verb = "were attested" if attested else "were NOT attested"
+    verb = "confirmed" if attested else "did NOT confirm"
     lines.append(
-        f'<p class="attestation">Inputs {verb} by the submitting officer as at or below '
-        f"{ceiling}.</p>"
+        f'<p class="attestation">The submitting officer {verb} that these inputs contain '
+        "no sensitive, classified, or personal information, appropriate for this public, "
+        "world-readable repository.</p>"
     )
     lines.append("</div>")
     return "\n".join(lines)

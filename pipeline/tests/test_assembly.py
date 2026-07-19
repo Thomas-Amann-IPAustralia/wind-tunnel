@@ -82,7 +82,6 @@ def _report_data(**overrides) -> dict:
         "created_at": "2026-07-15T00:00:00Z",
         "generated_at": "2026-07-15T14:00:00Z",
         "attested": True,
-        "sensitivity_ceiling": "OFFICIAL",
         "threshold_md": "## 1. Basic information\n\nA triage assistant.\n",
         "full_sections": [
             {

@@ -180,7 +180,7 @@ the assembly stage produces.
     "poc": 0, "flow_map": 0, "threshold": 1, "full": 0
   },                                  // no "outline": the interview is unbounded (brief §4/§7)
   "review_cycles": 0,                 // reviewer internal loop, cap 2 (§11)
-  "attestation": { "sensitivity_ceiling": "OFFICIAL", "attested": true },
+  "attestation": { "attested": true },
   "last_error": null                  // populated in FAILED (§5.6)
 }
 ```
@@ -707,7 +707,7 @@ Conflicts still live after two cycles are written to `unresolved.json` and rende
 
 ### 12.2 Provenance cell
 
-Run id, timestamps, model version per role, corpus manifest versions, prompt versions per role, agent-to-section attribution, per-run token/cost totals (§13), and the input-sensitivity attestation ("inputs were user-attested as at or below OFFICIAL"; brief §3). This is what lets a human audit the audit.
+Run id, timestamps, model version per role, corpus manifest versions, prompt versions per role, agent-to-section attribution, per-run token/cost totals (§13), and the input attestation (a self-attested confirmation that inputs contained no sensitive, classified, or personal information, appropriate for a public, world-readable repository — no claim about system sensitivity accreditation; brief §3). This is what lets a human audit the audit.
 
 ### 12.3 Embedding the PoC and diagrams
 
