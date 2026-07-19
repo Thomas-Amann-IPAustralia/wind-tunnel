@@ -1,0 +1,211 @@
+{
+  "overview": "The implementation of the ATO Deduction Assistant follows a highly precautionary, phased approach to safely introduce a public-facing generative AI interface into a sensitive domain. The architecture relies on a Retrieval-Augmented Generation (RAG) pattern strictly bounded to official ATO policy documents, completely isolated from live taxpayer data. \n\n```mermaid\ngraph TD\n  A[User Input] --> B[Privacy Scrubber Middleware]\n  B --> C{Input Guardrails}\n  C -->|Pass| D[LLM / RAG Engine]\n  C -->|Fail| E[Reject Prompt]\n  D --> F[Policy Document Vector DB]\n  D --> G{Output Guardrails}\n  G -->|Pass| H[Chat UI with Citations]\n  G -->|Fail| I[Safe Fallback Response]\n  H --> J[Comprehensive Logging & RMS]\n```\n\nThe sequencing begins with establishing governance, legal clearances, and fairness metrics (Phase 1). This is followed by data preparation, mapping policy documents, and building the core RAG and privacy-scrubbing architecture (Phase 2). Phase 3 focuses on rigorous security implementation, including bounded UI controls, kill-switches, and extensive red-teaming. Finally, Phase 4 covers deployment, staff training, and the activation of continuous monitoring frameworks to ensure ongoing compliance and safety.",
+  "steps": [
+    {
+      "title": "Establish multidisciplinary governance and accountability",
+      "detail": "Appoint an Accountable Official and an Accountable Use Case Owner for the system. Assemble a multidisciplinary project team comprising policy owners, legal experts, tax specialists, and user experience designers to oversee the design and deployment.",
+      "traces_to": [
+        {
+          "specialist": "legal",
+          "section": "11.1",
+          "mitigation": "Designate an Accountable Official and an Accountable Use Case Owner, and establish clear human oversight protocols."
+        },
+        {
+          "specialist": "ethics",
+          "section": "10.1",
+          "mitigation": "Assemble a multidisciplinary team including policy owners, legal experts, tax specialists, and user experience designers."
+        }
+      ]
+    },
+    {
+      "title": "Obtain legal clearances and conduct Privacy Impact Assessment",
+      "detail": "Conduct a comprehensive Privacy Impact Assessment (PIA) adopting a privacy-by-design approach. Concurrently, obtain formal legal advice regarding administrative law risks, privacy compliance, and the legal robustness of the system's disclaimers. Consult internal legal teams or the AHRC regarding human rights obligations (non-discrimination and accessibility). Store all formal advice in the ATO's secure corporate document management system (e.g., Content Manager).",
+      "traces_to": [
+        {
+          "specialist": "privacy",
+          "section": "7.1",
+          "mitigation": "Complete a comprehensive privacy impact assessment (PIA)."
+        },
+        {
+          "specialist": "legal",
+          "section": "12.2",
+          "mitigation": "Obtain formal legal advice to assess administrative law risks, privacy compliance, and disclaimer robustness, stored in a secure document management system."
+        },
+        {
+          "specialist": "legal",
+          "section": "10.2",
+          "mitigation": "Consult internal legal and policy teams or the AHRC to ensure alignment with human rights obligations."
+        }
+      ]
+    },
+    {
+      "title": "Define fairness metrics and conduct stakeholder consultation",
+      "detail": "Explicitly define and document what constitutes a fair process and outcome for the chatbot. Establish measurable acceptance criteria and evaluation metrics to detect unwanted bias, specifically ensuring consistent guidance for non-standard employment types (e.g., gig economy workers). Conduct structured consultation processes with primary users (taxpayers) and internal stakeholders (ATO support staff) to gather feedback on these metrics before deployment.",
+      "traces_to": [
+        {
+          "specialist": "ethics",
+          "section": "5.1",
+          "mitigation": "Explicitly define and document what constitutes a fair process and outcome, ensuring no unfair discrimination for non-standard employment types."
+        },
+        {
+          "specialist": "ethics",
+          "section": "5.2",
+          "mitigation": "Establish clear, measurable acceptance criteria and evaluation metrics to identify and mitigate unwanted bias."
+        },
+        {
+          "specialist": "ethics",
+          "section": "8.1",
+          "mitigation": "Establish structured consultation processes to gather feedback from primary users and internal stakeholders before deployment."
+        }
+      ]
+    },
+    {
+      "title": "Map policy documents and ensure RAG data quality",
+      "detail": "Document and map the specific legislative provisions and policy documents that the RAG system will interpret. Apply the National AI Centre's Data Quality Checklist to the document repository to verify accuracy against trusted internal sources, completeness of deduction categories, consistency, timeliness for the current financial year, traceability, and sufficient data coverage.",
+      "traces_to": [
+        {
+          "specialist": "legal",
+          "section": "12.1",
+          "mitigation": "Document and map specific legislative provisions and policy documents during the detailed design phase."
+        },
+        {
+          "specialist": "data_governance",
+          "section": "6.1",
+          "mitigation": "Apply the National AI Centre's Data Quality Checklist to verify accuracy, completeness, consistency, timeliness, traceability, and data coverage."
+        }
+      ]
+    },
+    {
+      "title": "Implement real-time privacy scrubbing and data isolation",
+      "detail": "Ensure the system architecture is completely isolated from live taxpayer account data. Implement a middleware layer to perform real-time data minimisation on user prompts before they reach the LLM.\n\n```python\nimport re\n\ndef scrub_user_prompt(prompt_text):\n    # Mask Tax File Numbers (TFNs)\n    tfn_pattern = r'\\b\\d{3}[- ]?\\d{3}[- ]?\\d{3}\\b'\n    scrubbed = re.sub(tfn_pattern, '[REDACTED_TFN]', prompt_text)\n    # Additional regex/NLP masking for sensitive financial identifiers goes here\n    return scrubbed\n```",
+      "traces_to": [
+        {
+          "specialist": "privacy",
+          "section": "7.1",
+          "mitigation": "Implement real-time data minimisation techniques, such as automated scrubbing or masking of TFNs and other personal identifiers from user prompts."
+        },
+        {
+          "specialist": "it_security",
+          "section": "7.3",
+          "mitigation": "Completely isolate the system from live taxpayer account data to maintain security boundaries."
+        }
+      ]
+    },
+    {
+      "title": "Build RAG citation mechanism",
+      "detail": "Configure the RAG generation pipeline to append exact source citations to every response. The system must provide direct hyperlinks to the official ATO website for the specific policy document used, instructing the user to perform final verification there.",
+      "traces_to": [
+        {
+          "specialist": "ethics",
+          "section": "8.5",
+          "mitigation": "Implement a RAG-based citation mechanism that cites the exact source and directs users to the official ATO website for final verification."
+        }
+      ]
+    },
+    {
+      "title": "Configure UI, disclaimers, and bounded creativity dial",
+      "detail": "Integrate the chat interface into the ATO portal. Implement prominent, mandatory disclaimers clarifying the system's advisory nature. Implement the 'creativity' dial, but strictly bound its underlying LLM parameters (e.g., capping the `temperature` and `top_p` values) to prevent unpredictable or hallucinated outputs. Ensure the UI provides a clear, accessible option for users to request a non-AI alternative (e.g., static FAQ wizard).",
+      "traces_to": [
+        {
+          "specialist": "ethics",
+          "section": "8.4",
+          "mitigation": "Feature prominent, mandatory disclaimers, a 'creativity' dial as a meta-signal, and the ability to request a non-AI alternative."
+        },
+        {
+          "specialist": "it_security",
+          "section": "7.3",
+          "mitigation": "Strictly bound the 'creativity' dial's parameters to prevent unpredictable outputs."
+        }
+      ]
+    },
+    {
+      "title": "Implement security guardrails and failsafes",
+      "detail": "Deploy robust input sanitization and output guardrails to detect and block prompt injection and jailbreaking attempts. Implement a 'kill-switch' capability in the ATO portal to quickly disable the chat interface and revert users to a static FAQ wizard or interactive decision tree in the event of a major hallucination or security compromise. Prepare rollback capabilities to revert to the last known good state if a model update fails.",
+      "traces_to": [
+        {
+          "specialist": "it_security",
+          "section": "7.3",
+          "mitigation": "Implement robust input sanitization and output guardrails to mitigate prompt injection and jailbreaking vulnerabilities."
+        },
+        {
+          "specialist": "it_security",
+          "section": "6.7",
+          "mitigation": "Implement protocols for immediate intervention, including a kill-switch capability, failsafe mechanisms to revert to non-AI alternatives, and rollback capabilities."
+        }
+      ]
+    },
+    {
+      "title": "Configure comprehensive logging and records management",
+      "detail": "Configure comprehensive logging of all user interactions, prompts, and model decisions. Apply strict access controls to these logs to protect user privacy. Capture and retain these records in an approved records management system in accordance with NAA guidance, taking a risk-based approach to retention. Conduct a Business System Assessment Framework (BSAF) assessment. Finally, publish a public record documenting the system's scope, capabilities, limitations, and expected contexts of use.",
+      "traces_to": [
+        {
+          "specialist": "it_security",
+          "section": "7.3",
+          "mitigation": "Configure comprehensive logging of all user interactions and model decisions, treated as sensitive data with strict access controls."
+        },
+        {
+          "specialist": "data_governance",
+          "section": "8.3",
+          "mitigation": "Capture and retain records in an approved records management system, take a risk-based approach to retention, and undertake a BSAF assessment."
+        },
+        {
+          "specialist": "ethics",
+          "section": "8.2",
+          "mitigation": "Maintain a public record or document the system's scope, capabilities, limitations, and expected contexts of use."
+        }
+      ]
+    },
+    {
+      "title": "Conduct red-teaming and RAI acceptance testing",
+      "detail": "Execute a comprehensive testing plan prior to deployment. Conduct regular offensive security assessments, including AI red-teaming and penetration testing, specifically targeting prompt injection and input attacks. Perform Responsible AI (RAI) acceptance testing to verify that ethical requirements and fairness metrics are met.",
+      "traces_to": [
+        {
+          "specialist": "it_security",
+          "section": "7.3",
+          "mitigation": "Conduct regular offensive security assessments, including AI red-teaming and penetration testing."
+        },
+        {
+          "specialist": "solution_architect",
+          "section": "6.4",
+          "mitigation": "Establish a comprehensive testing plan including robust adversarial testing (red team testing) and Responsible AI (RAI) acceptance testing."
+        }
+      ]
+    },
+    {
+      "title": "Train staff and update incident response procedures",
+      "detail": "Update existing incident management procedures to reflect AI-specific failure modes. Provide specialized AI ethics training, interactive workshops, and sandpit environments for operators, support staff, and incident responders to ensure they are equipped to manage and oversee the system.",
+      "traces_to": [
+        {
+          "specialist": "it_security",
+          "section": "6.7",
+          "mitigation": "Update incident management procedures to reflect AI-specific failure modes and train responders to assess and address AI-related incidents."
+        },
+        {
+          "specialist": "solution_architect",
+          "section": "6.8",
+          "mitigation": "Provide regular training programs, including specialized AI ethics training and interactive workshops/sandpit environments for operators and support staff."
+        }
+      ]
+    },
+    {
+      "title": "Deploy continuous monitoring and feedback loops",
+      "detail": "Post-deployment, activate a Continuous RAI Validator to track model drift, data quality, close-domain hallucinations, token usage, latency, and potential security exploits. Establish a structured feedback loop with ATO policy teams to continuously verify RAG accuracy, flag concerns, and trigger manual intervention or model disengagement if necessary.",
+      "traces_to": [
+        {
+          "specialist": "solution_architect",
+          "section": "6.6",
+          "mitigation": "Leverage a continuous monitoring framework (Continuous RAI Validator) to track model drift, hallucinations, agent behaviors, token usage, and security exploits."
+        },
+        {
+          "specialist": "it_security",
+          "section": "6.7",
+          "mitigation": "Establish a structured feedback loop with ATO policy teams to flag concerns and trigger manual intervention or model disengagement."
+        }
+      ]
+    }
+  ],
+  "provenance": {
+    "model": "gemini-3.1-pro-preview",
+    "prompt_version": "v1"
+  }
+}
