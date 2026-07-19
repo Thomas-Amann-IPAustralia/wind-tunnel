@@ -1,0 +1,53 @@
+{
+  "sections": {
+    "3.1": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "Bounding the 'creativity' dial and providing clear non-AI alternatives (e.g., static FAQs, interactive decision trees) reduces the likelihood of confusion. If users do struggle with the interface, the availability of standard ATO support channels limits the consequence to a short-term, reversible barrier."
+    },
+    "3.2": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "Applying the National AI Centre's Data Quality Checklist to ensure data coverage and grounding responses strictly in official policy via RAG reduces the likelihood of biased outputs. Continuous RAI monitoring ensures any limited unfair treatment is quickly identified and corrected."
+    },
+    "3.3": {
+      "consequence": "Insignificant",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "Input sanitization and output guardrails, combined with strict RAG grounding in neutral tax policy, make generative stereotyping unlikely. Any isolated incidents that bypass guardrails would be mild, quickly fixed via the planned kill-switch and rollback protocols, and cause no lasting harm."
+    },
+    "3.4": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "Mandatory disclaimers and direct RAG citations to official policy documents encourage users to verify guidance, making blind reliance on hallucinations unlikely. If incorrect guidance is given, the consequence is minor as users are explicitly directed to authoritative sources before filing returns."
+    },
+    "3.5": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "Real-time automated scrubbing and masking of TFNs and sensitive identifiers from user prompts before LLM processing makes the exposure of sensitive data unlikely. If masking partially fails, the consequence is minor as the system remains strictly isolated from live taxpayer account data."
+    },
+    "3.6": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "Because user prompts will be scrubbed of sensitive identifiers prior to processing, the sensitivity of the prompt logs is significantly reduced. Strict access controls on these logs make a breach unlikely, with minor consequences if a small number of records are accessed."
+    },
+    "3.7": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "Extensive red-teaming, input sanitization, and output guardrails make successful prompt injection or jailbreaking unlikely. The implementation of a rapid kill-switch ensures that any exploited vulnerability results in only a limited breach before being resolved with updates."
+    },
+    "3.8": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rating": "Medium",
+      "rationale": "Strictly bounding the controversial 'creativity' dial and implementing a rapid kill-switch prevents prolonged public exposure to hallucinations. While a viral screenshot of a hallucination could still cause moderate reputational impact and public questioning, the strict guardrails and disclaimers make this event unlikely."
+    }
+  },
+  "overall_residual": "Medium"
+}
