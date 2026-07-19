@@ -4,7 +4,7 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:48:57Z",
+  "updated_at": "2026-07-19T10:48:58Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -19,7 +19,7 @@
     "full.checkpoint": "pending",
     "full.architect": "complete",
     "full.reviewer": "complete",
-    "full.assembly": "active"
+    "full.assembly": "complete"
   },
   "log": [
     {
@@ -4090,9 +4090,23 @@
       "agent": "full.assembly",
       "type": "stage_started",
       "detail": "Assembly started"
+    },
+    {
+      "id": "evt_000394",
+      "ts": "2026-07-19T10:48:58Z",
+      "agent": "full.assembly",
+      "type": "drafting",
+      "detail": "Assembling the notebook and the report."
+    },
+    {
+      "id": "evt_000395",
+      "ts": "2026-07-19T10:48:58Z",
+      "agent": "full.assembly",
+      "type": "stage_complete",
+      "detail": "Assembly complete"
     }
   ],
-  "log_cursor": 393,
+  "log_cursor": 395,
   "questions": null,
   "failure": null,
   "expected_ranges": {
