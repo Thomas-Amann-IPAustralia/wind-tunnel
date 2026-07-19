@@ -4,7 +4,7 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:44:49Z",
+  "updated_at": "2026-07-19T10:45:10Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -16,7 +16,7 @@
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
-    "full.checkpoint": "waiting_user",
+    "full.checkpoint": "pending",
     "full.architect": "pending",
     "full.reviewer": "pending",
     "full.assembly": "pending"
@@ -2561,9 +2561,16 @@
       "agent": "backend",
       "type": "heartbeat",
       "detail": ""
+    },
+    {
+      "id": "evt_000245",
+      "ts": "2026-07-19T10:45:10Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 244,
+  "log_cursor": 245,
   "questions": null,
   "failure": null,
   "expected_ranges": {
