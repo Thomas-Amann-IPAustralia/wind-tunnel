@@ -1,0 +1,137 @@
+{
+  "batch_id": "q-1",
+  "specialists": [
+    {
+      "node_id": "full.specialist.it_security",
+      "friendly": "IT Security specialist",
+      "why": "The conceptual outline lacks technical details regarding mobile data storage and hosting infrastructure, which are critical for assessing security risks.",
+      "items": [
+        {
+          "question_id": "it_security-1",
+          "text": "Will the mobile application store or cache performance data locally on the device, and what encryption standards will be applied to local storage?",
+          "options": null,
+          "allow_free_text": true
+        },
+        {
+          "question_id": "it_security-2",
+          "text": "What hosting environment or cloud service provider is proposed for the AI model and API endpoints?",
+          "options": null,
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.privacy",
+      "friendly": "Privacy specialist",
+      "why": "The assessment requires recording the exact storage repository for the privacy threshold and impact assessments to ensure compliance and auditability.",
+      "items": [
+        {
+          "question_id": "privacy-1",
+          "text": "Where will the completed Privacy Impact Assessment (PIA) and Privacy Threshold Assessment be officially stored (e.g., specific Content Manager/TRIM container or project folder)?",
+          "options": [],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.ethics",
+      "friendly": "Ethics & Fairness specialist",
+      "why": "The project outline lacks details on the specific implementation plans for fairness, transparency, and stakeholder choice.",
+      "items": [
+        {
+          "question_id": "ethics-1",
+          "text": "Has a specific definition of fairness (e.g., demographic parity, equal opportunity) been selected or discussed for evaluating the performance summaries?",
+          "options": [],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "ethics-2",
+          "text": "Are there plans to make the system's scope, goals, and evaluation metrics publicly visible or accessible to staff?",
+          "options": [],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "ethics-3",
+          "text": "Will staff members be given the option to opt-out of AI-assisted drafting and request a traditional, purely human-led performance evaluation process?",
+          "options": [],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.legal",
+      "friendly": "Legal & Administrative Law specialist",
+      "why": "To clarify existing policy constraints and governance structures that affect the legal and administrative compliance of the AI tool.",
+      "items": [
+        {
+          "question_id": "legal-1",
+          "text": "Has the agency identified whether existing HR policies or enterprise agreements mandate or restrict the use of automated tools in staff performance evaluations?",
+          "options": null,
+          "allow_free_text": true
+        },
+        {
+          "question_id": "legal-2",
+          "text": "Is there an existing agency-wide AI governance framework or designated Accountable Official under the DTA AI Use Policy who will oversee this use case?",
+          "options": null,
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.data_governance",
+      "friendly": "Data Governance specialist",
+      "why": "The National Archives of Australia recommends conducting a BSAF assessment as a first step to identify and manage AI-generated records and ensure adequate records management functionality is in place.",
+      "items": [
+        {
+          "question_id": "data_governance-1",
+          "text": "Has the agency scheduled or conducted a Business System Assessment Framework (BSAF) assessment for this mobile application to evaluate its records management functionality?",
+          "options": [
+            "Yes, a BSAF assessment has been completed.",
+            "Yes, a BSAF assessment is scheduled or in progress.",
+            "No, a BSAF assessment has not been scheduled.",
+            "Unsure / Not applicable"
+          ],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.solution_architect",
+      "friendly": "Solution Architect (sections)",
+      "why": "Clarifying procurement, piloting, and training details is essential to finalize the technical and operational controls for the system.",
+      "items": [
+        {
+          "question_id": "solution_architect-1",
+          "text": "Will the AI system utilize a procured off-the-shelf model (e.g., via a commercial API) or a custom-built/fine-tuned model?",
+          "options": [
+            "Procured off-the-shelf model",
+            "Custom-built/fine-tuned model",
+            "Undecided"
+          ],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "solution_architect-2",
+          "text": "Is there a planned pilot or phased roll-out for the Manager Performance Assessment Assistant before full deployment?",
+          "options": [
+            "Yes, a pilot is planned",
+            "No pilot is planned",
+            "Undecided"
+          ],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "solution_architect-3",
+          "text": "What specific training or guidance will be provided to managers to prevent automation bias when reviewing AI-generated drafts?",
+          "options": null,
+          "allow_free_text": true
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "total": 12,
+    "answered": 0,
+    "skipped": 0
+  }
+}
