@@ -3,8 +3,8 @@
   "run_id": "WT-TSEP-B7",
   "run_code": "WT-TSEP-B7",
   "phase": "threshold",
-  "overall_state": "paused",
-  "updated_at": "2026-07-19T10:37:22Z",
+  "overall_state": "running",
+  "updated_at": "2026-07-19T10:37:38Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -119,9 +119,16 @@
       "agent": "threshold.rating_engine",
       "type": "stage_complete",
       "detail": "Rating engine complete"
+    },
+    {
+      "id": "evt_000015",
+      "ts": "2026-07-19T10:37:38Z",
+      "agent": "backend",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 14,
+  "log_cursor": 15,
   "questions": null,
   "failure": null,
   "expected_ranges": {
