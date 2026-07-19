@@ -1,29 +1,25 @@
 {
   "specialist": "privacy",
   "sections": {
-    "7.1": "Yes. The ATO Deduction Assistant can comply with the Australian Privacy Principles (APPs), provided that robust data minimisation, filtering, and security controls are implemented. Because the chatbot features a free-text interface, there is a risk that taxpayers may input unsolicited personal information, such as Tax File Numbers (TFNs) or sensitive financial details. Under APP 4, any such additional, unrequested information is classified as unsolicited (APP Guidelines, p.108). As an agency, if these inputs are contained in a Commonwealth record, the ATO is not required to destroy or de-identify the personal information under APP 4.3, but must instead deal with it in accordance with APPs 5–13 (APP Guidelines, p.108; APP Guidelines, p.111). To ensure compliance with APP 3 (Collection) and APP 11 (Security), the ATO must adopt a privacy-by-design approach and complete a comprehensive privacy impact assessment (OAIC AI Training Checklist, p.1). This includes implementing real-time data minimisation techniques, such as automated scrubbing or masking of TFNs and other personal identifiers from user prompts before they are processed by the LLM. Furthermore, to satisfy APP 10 (Accuracy) and APP 11, the ATO must ensure that the AI system is appropriate and reliable for its intended uses, understand its limitations, and implement mitigations or safeguards to address the risk of inaccuracy (OAIC AI Selection Checklist, p.1; OAIC AI Training Checklist, p.1). The use of clear disclaimers to signal where AI models require careful consideration is also appropriate to manage user expectations and ensure transparency (OAIC AI Training Top 5, p.1)."
+    "7.1": "Yes. The ATO Deduction Assistant can comply with the Australian Privacy Principles (APPs), provided that robust data minimisation, filtering, and security controls are implemented. Crucially, all user interaction logs and processed data will be stored strictly on Australian soil. This onshore data storage commitment is a key privacy control that supports compliance with APP 8 by ensuring that no personal information is disclosed to overseas recipients (APP Guidelines, p.122; OAIC PIA Tool, §APP 8 — Cross-border disclosure of personal information). Because the chatbot features a free-text interface, there is a risk that taxpayers may input unsolicited personal information, such as Tax File Numbers (TFNs) or sensitive financial details. To ensure compliance with APP 11, the ATO must implement robust access security and monitoring controls to protect against internal and external risks, ensuring that personal information is only accessed by authorised persons on a strict need-to-know basis (OAIC PIA Tool, §APP 11 — Security of personal information). This includes implementing real-time data minimisation techniques, such as automated scrubbing or masking of TFNs and other personal identifiers from user prompts before they are processed by the LLM. Furthermore, if any personal information is shared with third-party service providers, enforceable contractual arrangements must be put in place to protect the information and monitor compliance with APP 6 (OAIC PIA Tool, §APP 6 — Use or disclosure of personal information)."
   },
   "citations": {
     "7.1": [
       {
         "short_name": "APP Guidelines",
-        "locator": "p.108"
+        "locator": "p.122"
       },
       {
-        "short_name": "APP Guidelines",
-        "locator": "p.111"
+        "short_name": "OAIC PIA Tool",
+        "locator": "§APP 8 — Cross-border disclosure of personal information"
       },
       {
-        "short_name": "OAIC AI Training Checklist",
-        "locator": "p.1"
+        "short_name": "OAIC PIA Tool",
+        "locator": "§APP 11 — Security of personal information"
       },
       {
-        "short_name": "OAIC AI Selection Checklist",
-        "locator": "p.1"
-      },
-      {
-        "short_name": "OAIC AI Training Top 5",
-        "locator": "p.1"
+        "short_name": "OAIC PIA Tool",
+        "locator": "§APP 6 — Use or disclosure of personal information"
       }
     ]
   },

@@ -4,14 +4,14 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:17:46Z",
+  "updated_at": "2026-07-19T00:18:20Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
-    "full.specialist.privacy": "active",
+    "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
@@ -4697,9 +4697,246 @@
       "agent": "full.specialist.privacy",
       "type": "stage_started",
       "detail": "Privacy specialist started"
+    },
+    {
+      "id": "evt_000453",
+      "ts": "2026-07-19T00:17:47Z",
+      "agent": "full.specialist.privacy",
+      "type": "revision",
+      "detail": "amending 7.1 for your revision request",
+      "ref": {
+        "target": "privacy"
+      }
+    },
+    {
+      "id": "evt_000454",
+      "ts": "2026-07-19T00:17:47Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§APP 8 — Cross-border disclosure of personal information"
+      }
+    },
+    {
+      "id": "evt_000455",
+      "ts": "2026-07-19T00:17:47Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§APP 11 — Security of personal information"
+      }
+    },
+    {
+      "id": "evt_000456",
+      "ts": "2026-07-19T00:17:47Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.122"
+      }
+    },
+    {
+      "id": "evt_000457",
+      "ts": "2026-07-19T00:17:47Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.121"
+      }
+    },
+    {
+      "id": "evt_000458",
+      "ts": "2026-07-19T00:17:47Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§APP 6 — Use or disclosure of personal information"
+      }
+    },
+    {
+      "id": "evt_000459",
+      "ts": "2026-07-19T00:17:47Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.158"
+      }
+    },
+    {
+      "id": "evt_000460",
+      "ts": "2026-07-19T00:17:51Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.155"
+      }
+    },
+    {
+      "id": "evt_000461",
+      "ts": "2026-07-19T00:17:51Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.185"
+      }
+    },
+    {
+      "id": "evt_000462",
+      "ts": "2026-07-19T00:17:51Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.115"
+      }
+    },
+    {
+      "id": "evt_000463",
+      "ts": "2026-07-19T00:17:51Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.187"
+      }
+    },
+    {
+      "id": "evt_000464",
+      "ts": "2026-07-19T00:17:51Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.198"
+      }
+    },
+    {
+      "id": "evt_000465",
+      "ts": "2026-07-19T00:17:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.155"
+      }
+    },
+    {
+      "id": "evt_000466",
+      "ts": "2026-07-19T00:17:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.153"
+      }
+    },
+    {
+      "id": "evt_000467",
+      "ts": "2026-07-19T00:17:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.163"
+      }
+    },
+    {
+      "id": "evt_000468",
+      "ts": "2026-07-19T00:17:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.155"
+      }
+    },
+    {
+      "id": "evt_000469",
+      "ts": "2026-07-19T00:17:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.154"
+      }
+    },
+    {
+      "id": "evt_000470",
+      "ts": "2026-07-19T00:17:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.163"
+      }
+    },
+    {
+      "id": "evt_000471",
+      "ts": "2026-07-19T00:17:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000472",
+      "ts": "2026-07-19T00:17:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.166"
+      }
+    },
+    {
+      "id": "evt_000473",
+      "ts": "2026-07-19T00:17:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§APP 8 — Cross-border disclosure of personal information"
+      }
+    },
+    {
+      "id": "evt_000474",
+      "ts": "2026-07-19T00:18:20Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_complete",
+      "detail": "Privacy specialist complete"
     }
   ],
-  "log_cursor": 452,
+  "log_cursor": 474,
   "questions": null,
   "failure": null,
   "expected_ranges": {
