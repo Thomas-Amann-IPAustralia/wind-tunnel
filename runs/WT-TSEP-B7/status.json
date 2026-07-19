@@ -4,7 +4,7 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:48:54Z",
+  "updated_at": "2026-07-19T10:48:57Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -19,7 +19,7 @@
     "full.checkpoint": "pending",
     "full.architect": "complete",
     "full.reviewer": "complete",
-    "full.assembly": "pending"
+    "full.assembly": "active"
   },
   "log": [
     {
@@ -4069,9 +4069,30 @@
       "agent": "full.reviewer",
       "type": "stage_complete",
       "detail": "Adjudicating reviewer complete"
+    },
+    {
+      "id": "evt_000391",
+      "ts": "2026-07-19T10:48:55Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Residual overall risk after mitigation (highest-wins): Medium."
+    },
+    {
+      "id": "evt_000392",
+      "ts": "2026-07-19T10:48:57Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000393",
+      "ts": "2026-07-19T10:48:57Z",
+      "agent": "full.assembly",
+      "type": "stage_started",
+      "detail": "Assembly started"
     }
   ],
-  "log_cursor": 390,
+  "log_cursor": 393,
   "questions": null,
   "failure": null,
   "expected_ranges": {
