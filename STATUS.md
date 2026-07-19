@@ -2,8 +2,9 @@
 
 ## Current stage
 
-**This branch (`claude/concurrent-specialists-aqb0t9`): the specialists now run concurrently —
-the §5.4 fan-out the tech spec always mandated, replacing the serial one-after-another loop
+**This branch (`claude/concurrent-specialists-aqb0t9`): the specialists — and now the two
+threshold generalists — run concurrently — the §5.4 fan-out the tech spec always mandated,
+replacing the serial one-after-another loops
 (TECH_SPEC §5.4, §13, §14; CLAUDE.md §3 "one poll fully determines visible state").** Tom asked
 for three specialists drafting at once. TECH_SPEC §5.4 already required exactly this
 ("FULL_DRAFTING/FULL_REVISING … run their agents concurrently … respecting the rate-limit budget
@@ -33,9 +34,20 @@ proof, partial-resume skip keeping committed questions, atomic budget under 8 th
 concurrent amendment via REVIEW, budgets-knob read), 8 consecutive full-suite runs flake-free, ruff
 format + check clean.** TECH_SPEC §5.4 extended with one sentence naming the knob and the
 single-writer rule. Backend/frontend untouched — `status.json`'s whole-graph `nodes` map was built
-for several actives at once (the Chamber animates it already). Handoff note: `threshold_drafting`'s
-two generalists still run serially — §5.4 names them too; the runner is generic enough to lift if
-wanted.
+for several actives at once (the Chamber animates it already). **Second commit: the generalists
+too (Tom's follow-up).** The fan-out machinery was extracted to `pipeline/stages/fanout.py`
+(`AgentTask`, `run_agent_tasks`, `DeferredPulse`, `fanout_width` — same knob; the pair of 2 sits
+under the bound of 3 either way) and `threshold_drafting` now fans both assessors out, delivering
+design §7.2's "Generalist A and Generalist B go active at the same time". One semantic note: the
+two generalists are symmetric by construction (identical prompts — divergence is the signal), so
+which model answer lands in slot a vs b is scheduling-dependent; that's meaningless in production
+(higher-wins is commutative, `divergence.json` stays a faithful record of both inputs) but it means
+test transports must not script the pair as an ordered FIFO. **Pipeline after both commits: 220
+tests green (1 new: barrier-proven simultaneous generalists with assignment-agnostic outcome
+checks; 2 rewritten: the failure-resume test's handler now counts under a lock and asserts
+assignment-agnostically, and the mid-stage-pulse test now expects the §5.4 reality — the drafted
+pair lands before the reconciler starts, rather than "A active while B pending" which encoded the
+old serial order), 10 consecutive runs of the concurrency-sensitive files flake-free, ruff clean.**
 
 **Prior branch (`claude/file-upload-not-found-4cgk43`): the "Not Found" file-upload bug — diagnosed
 as a stale backend deploy, with a graceful-degradation frontend fix (TECH_SPEC §7; CLAUDE.md §9).**
@@ -1968,7 +1980,10 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
   (§13). Design §7.2's "six bloom at once" is read as the unthrottled ideal; the knob reaches it
   when quota does. Corollary decided at the same time: workers never write files or commit — all
   writes/commits stay on the coordinating thread, which is how §5.4's "no repo-commit race" and
-  §14's single-writer property survive per-draft progress commits.
+  §14's single-writer property survive per-draft progress commits. Extended to the threshold
+  generalists (shared runner, `stages/fanout.py`, same knob): because the pair is symmetric by
+  design, a→slot-a assignment is scheduling-dependent and deliberately left so — pinning it would
+  add coordination for a distinction that carries no meaning (higher-wins is commutative).
 - **A specialist owns a section *and everything under it*; sub-question keys fold, not fail
   (WT-H2A8-H3 branch).** The docs define write-scope (§9.3) at subsection granularity (`12.2`),
   but `questions.json` nests real sub-questions (`12.2.1`/`12.2.2`, `8.4.1`/`8.4.2`) under some

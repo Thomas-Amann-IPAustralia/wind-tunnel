@@ -6,7 +6,7 @@ independently, driving their own KB through the bounded fetch/search tool loop
 (``agents/specialist.py``). They run **concurrently** (§5.4), fanned out over a
 thread pool bounded by ``config/budgets.yml`` ``specialist_concurrency``; workers
 compute and narrate only, while all file writes and commits stay on the
-coordinating thread (see ``_run_specialist_tasks``). Each may raise up to three
+coordinating thread (see ``stages/fanout.py``). Each may raise up to three
 checkpoint questions; if any does, ``full/questions.json`` is written and the next
 stage is the ``FULL_CHECKPOINT`` user pause (§6.4). If none do, the checkpoint
 (and ``FULL_REVISING``) is skipped — the §5.1 happy path straight to ``architect``.
@@ -30,11 +30,6 @@ this, ``ASSEMBLY``, is not built yet.
 from __future__ import annotations
 
 import json
-import threading
-from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor
-from concurrent.futures import wait as futures_wait
-from dataclasses import dataclass
-from functools import lru_cache
 from pathlib import Path
 from typing import Callable
 
@@ -60,6 +55,7 @@ from rating import overall_rating, rating
 from retrieval.retrieve import KB
 from stages.assembly import archive_superseded
 from stages.context import StageContext
+from stages.fanout import AgentTask, run_agent_tasks
 from statefile import REVISION_CAP
 from status import friendly_name
 
@@ -122,150 +118,6 @@ def _load_index_text(kb_root: Path, specialist: str) -> str:
     return json.dumps(index, ensure_ascii=False)
 
 
-# -- concurrent specialist fan-out (§5.4) --------------------------------------
-
-# How often the coordinating thread wakes to publish worker narration while the
-# fan-out is in flight. Publishing itself stays throttled by the driver's pulse
-# (run.py PULSE_MIN_INTERVAL_S); this only bounds how stale an *urgent* node
-# transition can get before it reaches the repo.
-_PUBLISH_INTERVAL_S = 2.0
-
-
-@lru_cache(maxsize=1)
-def _specialist_concurrency() -> int:
-    """How many specialists run at once (§5.4), from config/budgets.yml
-    ``specialist_concurrency`` — a §13 rate knob, owned there, not hardcoded
-    (CLAUDE.md §6 "one owner per fact"). Bounded below the full six so the
-    burst of tool-loop calls respects the Gemini rate budget; raise it in the
-    config as quota allows."""
-    import yaml
-
-    here = Path(__file__).resolve()
-    for parent in here.parents:
-        candidate = parent / "config" / "budgets.yml"
-        if candidate.is_file():
-            with candidate.open(encoding="utf-8") as fh:
-                budgets = yaml.safe_load(fh) or {}
-            return max(1, int(budgets.get("specialist_concurrency", 3)))
-    raise FileNotFoundError(f"Could not locate config/budgets.yml above {here}.")
-
-
-class _DeferredPulse:
-    """Stands in for ``status.pulse`` while specialist workers run (§5.4).
-
-    Narration from a worker thread asks to publish; publishing means
-    ``status.save`` plus a git commit, and the working copy is single-writer
-    (§14) — a commit from a worker would race the coordinator's commits and
-    could stage a file another part of the stage is mid-writing. So worker
-    pulses are only *recorded* here; the coordinating thread drains the request
-    between waits and publishes through the driver's real pulse, keeping every
-    commit on one thread. Lock ordering is acyclic: this lock is only ever held
-    for the flag flip — the coordinator drains (this lock), releases, and only
-    then publishes (which takes the status lock inside ``save``)."""
-
-    def __init__(self) -> None:
-        self._lock = threading.Lock()
-        self._dirty = False
-        self._urgent = False
-
-    def __call__(self, urgent: bool) -> None:
-        with self._lock:
-            self._dirty = True
-            self._urgent = self._urgent or urgent
-
-    def drain(self) -> bool | None:
-        """The pending request's urgency, or None if nothing was asked. Clears it."""
-        with self._lock:
-            if not self._dirty:
-                return None
-            urgent = self._urgent
-            self._dirty = self._urgent = False
-            return urgent
-
-
-@dataclass
-class _SpecialistTask:
-    """One specialist's unit of concurrent work (§5.4).
-
-    ``work`` runs on a worker thread: narration (the thread-safe status model)
-    plus LLM/KB compute only — **never a file write or a commit**. ``finish``
-    runs on the coordinating thread once ``work`` returns: it writes the
-    specialist's files and completes its node, so every disk write the committer
-    can stage, and every commit, stays single-threaded (§14)."""
-
-    specialist: str
-    work: Callable[[], SpecialistDraft]
-    finish: Callable[[SpecialistDraft], None]
-
-
-def _run_specialist_tasks(ctx: StageContext, tasks: list[_SpecialistTask]) -> None:
-    """Fan ``tasks`` out over a bounded thread pool (§5.4 — at most
-    ``specialist_concurrency`` in flight; the KB each worker opens is its own,
-    the write scope of each result is disjoint by construction, §9.3/§6.2).
-
-    While workers run, ``ctx.status.pulse`` is swapped for a :class:`_DeferredPulse`
-    and the coordinator publishes on their behalf between waits, so narration
-    still reaches the repo on the §6.3 cadence but only ever from this thread.
-    Each task's ``finish`` runs here as its worker completes — a finished draft
-    is written and pulse-committed without waiting for the slowest specialist,
-    preserving the per-draft resume granularity (§5.3).
-
-    On a worker failure: not-yet-started tasks are cancelled (their specialists
-    stay ``pending`` and re-run on resume), already-running ones are allowed to
-    end and their results are still finished (their files are on disk, so the
-    failure commit preserves them and the §5.3 idempotent skip honours them),
-    and the first error then propagates to the driver's calm-failure path
-    (§5.6)."""
-    if not tasks:
-        return
-    deferred = _DeferredPulse()
-    original_pulse = ctx.status.pulse
-    ctx.status.pulse = deferred
-
-    def publish() -> None:
-        urgent = deferred.drain()
-        if urgent is not None and original_pulse is not None:
-            original_pulse(urgent)
-
-    first_error: BaseException | None = None
-    try:
-        with ThreadPoolExecutor(
-            max_workers=min(_specialist_concurrency(), len(tasks)),
-            thread_name_prefix="specialist",
-        ) as pool:
-            pending = {pool.submit(task.work): task for task in tasks}
-            while pending:
-                done, _ = futures_wait(
-                    pending, timeout=_PUBLISH_INTERVAL_S, return_when=FIRST_COMPLETED
-                )
-                for future in done:
-                    task = pending.pop(future)
-                    try:
-                        result = future.result()
-                    except BaseException as exc:  # BaseException: includes CancelledError
-                        if first_error is None:
-                            first_error = exc
-                            for other in pending:
-                                other.cancel()  # only not-yet-started tasks cancel
-                        continue
-                    try:
-                        task.finish(result)
-                    except BaseException:
-                        # A coordinator-side failure (write/serialise): stop admitting
-                        # queued work before propagating, as with a worker failure.
-                        for other in pending:
-                            other.cancel()
-                        raise
-                publish()
-        # The pool has exited: every worker has ended, so restoring the pulse
-        # below cannot race a late worker narration into a worker-side commit.
-    finally:
-        ctx.status.pulse = original_pulse
-    publish()
-    if first_error is not None:
-        raise first_error
-
-
 def full_drafting(ctx: StageContext) -> None:
     """Every specialist drafts its owned sections independently — and concurrently,
     fanned out over the bounded §5.4 pool (§5.1, §9.3). Outputs
@@ -285,14 +137,14 @@ def full_drafting(ctx: StageContext) -> None:
     threshold_md = ctx.read_text("threshold/threshold_assessment.md")
 
     drafts: dict[str, SpecialistDraft] = {}
-    tasks: list[_SpecialistTask] = []
+    tasks: list[AgentTask] = []
     for specialist in SPECIALISTS:
         relpath = f"full/specialists/{specialist}.json"
         if ctx.path(relpath).is_file():
             drafts[specialist] = SpecialistDraft.from_dict(ctx.read_json(relpath))
             continue
         tasks.append(_draft_task(ctx, specialist, kb_root, outline, threshold_md, drafts))
-    _run_specialist_tasks(ctx, tasks)
+    run_agent_tasks(ctx, tasks)
 
     # Collected in SPECIALISTS order — not completion order — so the questions
     # payload (and its committed JSON) is deterministic across re-runs.
@@ -312,7 +164,7 @@ def _draft_task(
     outline: str,
     threshold_md: str,
     drafts: dict[str, SpecialistDraft],
-) -> _SpecialistTask:
+) -> AgentTask:
     """One specialist's FULL_DRAFTING task (§5.4): the worker narrates its own
     start and drives its own KB through the tool loop; the coordinator writes the
     finished draft and completes the node."""
@@ -340,7 +192,7 @@ def _draft_task(
         ctx.status.complete_node(node)
         drafts[specialist] = draft
 
-    return _SpecialistTask(specialist=specialist, work=work, finish=finish)
+    return AgentTask(name=specialist, work=work, finish=finish)
 
 
 # -- FULL_REVISING -------------------------------------------------------------
@@ -377,7 +229,7 @@ def full_revising(ctx: StageContext) -> None:
 
     answered_count = 0
     skipped_count = 0
-    tasks: list[_SpecialistTask] = []
+    tasks: list[AgentTask] = []
     for entry in questions.get("specialists") or []:
         specialist = _specialist_from_node(entry["node_id"])
         items = entry.get("items") or []
@@ -397,10 +249,10 @@ def full_revising(ctx: StageContext) -> None:
                 _revision_seed_terms(items, answer_by_id),
             )
         )
-    _run_specialist_tasks(ctx, tasks)
+    run_agent_tasks(ctx, tasks)
 
     # Task order (the questions-payload order), not completion order — deterministic.
-    revised = [t.specialist for t in tasks]
+    revised = [t.name for t in tasks]
     ctx.write_json(
         REVISED_RELPATH,
         {"revised": revised, "counts": {"answered": answered_count, "skipped": skipped_count}},
@@ -415,7 +267,7 @@ def _revise_task(
     threshold_md: str,
     directive_context: str,
     seed_terms: str,
-) -> _SpecialistTask:
+) -> AgentTask:
     """One questioning specialist's FULL_REVISING task (§5.4): re-draft its whole
     owned set with the user's answers in hand (§5.1, §11.3 machinery)."""
     node = f"{_SPECIALIST_NODE_PREFIX}{specialist}"
@@ -451,7 +303,7 @@ def _revise_task(
         ctx.write_text(f"full/specialists/{specialist}.md", render_specialist_markdown(new_draft))
         ctx.status.complete_node(node)
 
-    return _SpecialistTask(specialist=specialist, work=work, finish=finish)
+    return AgentTask(name=specialist, work=work, finish=finish)
 
 
 def _specialist_from_node(node_id: str) -> str:
@@ -740,7 +592,7 @@ def _apply_amendments(
         _amend_task(ctx, spec, dirs, kb_root, outline, threshold_md, drafts, cycle, detail)
         for spec, dirs in by_spec.items()
     ]
-    _run_specialist_tasks(ctx, tasks)
+    run_agent_tasks(ctx, tasks)
     return drafts
 
 
@@ -754,7 +606,7 @@ def _amend_task(
     drafts: dict[str, dict],
     cycle: int | None,
     detail: Callable[[tuple[str, ...]], str] | None,
-) -> _SpecialistTask:
+) -> AgentTask:
     """One targeted specialist's amendment task (§5.4, §11.3)."""
     node = f"{_SPECIALIST_NODE_PREFIX}{spec}"
     target_sections = tuple(
@@ -793,7 +645,7 @@ def _amend_task(
         ctx.status.complete_node(node)
         drafts[spec] = new_draft.to_dict()
 
-    return _SpecialistTask(specialist=spec, work=work, finish=finish)
+    return AgentTask(name=spec, work=work, finish=finish)
 
 
 def _render_directives(dirs: list[dict]) -> str:

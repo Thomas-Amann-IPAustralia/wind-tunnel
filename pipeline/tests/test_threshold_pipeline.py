@@ -413,19 +413,27 @@ def test_failed_run_resumes_from_its_failed_stage(tmp_path):
     """The zombie-run bug: a failed run's `stage` still points at the failing
     stage, so its retry dispatch is same-stage — that dispatch must clear the
     FAILED marker and actually re-run the stage (all three live failed runs
-    needed exactly this). The retry also proves per-generalist idempotence: A's
-    committed draft is not re-drafted when only B failed."""
+    needed exactly this). The retry also proves per-generalist idempotence: the
+    committed draft of the assessor that succeeded is not re-drafted when only
+    the other one failed. (The generalists draft concurrently, §5.4, so which of
+    the two fails is scheduling-dependent — the handler counts under a lock and
+    the assertions are assignment-agnostic.)"""
     run_dir = tmp_path / "WT-TEST-FR"
     run_dir.mkdir()
     _make_run(run_dir, run_id="WT-TEST-FR")
 
+    import threading
+
     calls = {"n": 0}
+    gate = threading.Lock()
 
     def failing_handler(*, model, system, user, response_json):
-        calls["n"] += 1
-        if calls["n"] == 1:
+        with gate:
+            calls["n"] += 1
+            first = calls["n"] == 1
+        if first:
             return _generalist_json(_A)
-        raise LLMError("boom: simulated malformed-JSON exhaustion for assessor B")
+        raise LLMError("boom: simulated malformed-JSON exhaustion for one assessor")
 
     first = run_pipeline(
         run_dir,
@@ -442,8 +450,9 @@ def test_failed_run_resumes_from_its_failed_stage(tmp_path):
     assert status_doc["failure"] is not None
 
     # The retry is a same-stage dispatch (the backend's /redispatch maps a failed
-    # THRESHOLD_DRAFTING to itself). Only B's draft is scripted — if A were
-    # re-drafted the queue would exhaust and the test would fail.
+    # THRESHOLD_DRAFTING to itself). Only ONE draft is scripted — exactly the
+    # missing assessor's; if the committed one were re-drafted the queue would
+    # exhaust and the test would fail.
     resume_client = LLMClient(
         transport=ScriptedTransport(
             responses={
@@ -496,9 +505,12 @@ class _SnapshotCommitter:
 
 def test_status_pulses_publish_mid_stage_progress(tmp_path):
     """Node transitions are committed as they happen, not only at stage
-    checkpoints — the SPA must see Assessor A go active while B is still
-    pending, or the whole first stage reads as a hung, not-yet-started run
-    (and invites a needless restart)."""
+    checkpoints — otherwise the whole first stage reads as a hung,
+    not-yet-started run (and invites a needless restart). The generalists draft
+    concurrently (§5.4), so the guaranteed mid-stage observation is the drafted
+    pair landing before the reconciler starts; with instant scripted calls the
+    fleeting both-active state may fall between pulse drains (a real run's
+    30s+ calls make it visible — the design §7.2 "two nodes pulsing")."""
     run_dir = tmp_path / "WT-TEST-PU"
     run_dir.mkdir()
     _make_run(run_dir, run_id="WT-TEST-PU")
@@ -510,7 +522,63 @@ def test_status_pulses_publish_mid_stage_progress(tmp_path):
     pulses = [nodes for message, nodes in committer.snapshots if "status pulse" in message]
     assert pulses, "expected mid-stage status pulses"
     assert any(
-        nodes["threshold.generalist_a"] == "active" and nodes["threshold.generalist_b"] == "pending"
+        nodes["threshold.generalist_a"] == "complete"
+        and nodes["threshold.generalist_b"] == "complete"
+        and nodes["threshold.reconciler"] == "pending"
         for nodes in pulses
-    ), "a poll during drafting must show A active while B is still pending"
+    ), "a poll must see the drafted pair before the reconciler starts"
     assert any(nodes["threshold.reconciler"] == "active" for nodes in pulses)
+
+
+def test_threshold_drafting_fans_out_both_generalists(tmp_path):
+    """The two assessors draft simultaneously (§5.4; design §7.2 "Generalist A and
+    Generalist B go active at the same time"): a 2-party barrier inside the
+    transport only releases when both are mid-call, so a serial implementation
+    times it out rather than passing. The two are symmetric by construction —
+    identical prompts — so which response lands in which slot is
+    scheduling-dependent: both scripted drafts must land, one per slot, and the
+    engine's ratings are identical either way (higher-wins is commutative)."""
+    import threading
+
+    run_dir = tmp_path / "WT-TEST-2GEN"
+    run_dir.mkdir()
+    _make_run(run_dir, run_id="WT-TEST-2GEN")
+
+    barrier = threading.Barrier(2)
+    queue = [_generalist_json(_A), _generalist_json(_B)]
+    qlock = threading.Lock()
+
+    def handler(*, model, system, user, response_json):
+        if model == resolve_model("threshold_reconciler"):
+            return _reconciler_json()
+        barrier.wait(timeout=30)  # broken barrier (= serial execution) fails loudly
+        with qlock:
+            return queue.pop(0)
+
+    result = run_pipeline(
+        run_dir,
+        llm=LLMClient(transport=ScriptedTransport(handler=handler)),
+        committer=FakeCommitter(),
+    )
+
+    assert result.ok
+    assert result.final_stage is Stage.THRESHOLD_REVIEW
+    a = json.loads((run_dir / "threshold" / "generalist_a.json").read_text())
+    b = json.loads((run_dir / "threshold" / "generalist_b.json").read_text())
+    assert a["label"] == "generalist_a" and b["label"] == "generalist_b"
+    expected_risk_maps = {
+        json.dumps(
+            {
+                sid: {"consequence": c, "likelihood": lk, "rationale": f"rationale {sid}"}
+                for sid, (c, lk) in risks.items()
+            },
+            sort_keys=True,
+        )
+        for risks in (_A, _B)
+    }
+    got_risk_maps = {json.dumps(d["risks"], sort_keys=True) for d in (a, b)}
+    assert got_risk_maps == expected_risk_maps  # both drafts landed, one per assessor
+    ratings = json.loads((run_dir / "threshold" / "ratings.json").read_text())
+    got = {sid: ratings["sections"][sid]["rating"] for sid in RISK_SECTIONS}
+    assert got == _EXPECTED_RATINGS  # assignment-independent
+    assert ratings["overall_inherent"] == _EXPECTED_OVERALL

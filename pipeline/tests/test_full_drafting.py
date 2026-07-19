@@ -25,7 +25,8 @@ from retrieval.db import write_kb
 from retrieval.retrieve import KB
 from run import FakeCommitter, _make_pulse, run_pipeline
 from stages.context import StageContext
-from stages.full import SPECIALISTS, _specialist_concurrency, full_drafting
+from stages.fanout import fanout_width
+from stages.full import SPECIALISTS, full_drafting
 from statefile import RunState, Stage, StageStatus
 from status import StatusModel
 
@@ -571,7 +572,7 @@ def test_specialist_concurrency_comes_from_budgets_yml():
     # The fan-out width is a §13 rate knob owned by config/budgets.yml — the
     # committed value is 3 (raise toward 6 as Gemini quota allows). The barrier
     # test below is calibrated to this value; change them together.
-    assert _specialist_concurrency() == 3
+    assert fanout_width() == 3
 
 
 def test_full_drafting_fans_out_concurrently_within_bound(tmp_path):
