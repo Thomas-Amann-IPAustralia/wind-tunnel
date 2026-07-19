@@ -1,0 +1,106 @@
+{
+  "specialist": "solution_architect",
+  "sections": {
+    "6.3": "Not applicable. The current project outline does not specify whether an off-the-shelf AI model will be procured or if a custom model will be developed. If a model is procured, a formal AI Suitability Assessment must be conducted to evaluate if the model's capabilities align with the purpose of synthesizing sensitive HR performance data, and to ensure the supplier provides sufficient documentation regarding bias and performance (AI Suitability Assessment, §(document start); AI Technical Standard, DTA-Tech-Standards!r18).",
+    "6.4": "No. The system is currently in the conceptual phase and has not yet been tested. To ensure reliability and safety, the development team must implement RAI Acceptance Testing (including bias and fairness testing) to verify that the model does not generate biased evaluations, and conduct adversarial testing to secure the mobile-first application against data leaks (RAI Acceptance Testing, §(document start); AI Technical Standard, DTA-Tech-Standards!r105, DTA-Tech-Standards!r18).",
+    "6.5": "Yes. While a pilot is not yet detailed in the outline, a pilot (phased roll-out) will be conducted prior to full deployment. This is necessary to calibrate the system, monitor bias-related metrics, and evaluate how managers interact with the tool in a live environment to prevent automation bias (AI Technical Standard, DTA-Tech-Standards!r18).",
+    "6.6": "Yes. A plan to monitor and evaluate the performance of the AI system will be established. This will include implementing a Continuous RAI Validator to continuously monitor outcomes against responsible AI requirements (Continuous RAI Validator, §(document start)). We will also establish a live test dataset to periodically test the system in production, ensuring its operational integrity and tracking metrics for bias drift or unexpected behavior (AI Technical Standard, DTA-Tech-Standards!r64, DTA-Tech-Standards!r129; Agentic AI Addendum, p.31).",
+    "6.8": "Yes. A process will be established to ensure operators (managers) are sufficiently trained. This training will focus on context-based bias awareness and the reduction of automation bias, ensuring managers understand that they remain fully accountable for the final evaluations and must critically review and edit all AI-generated drafts rather than deferring uncritically to the system's outputs (AI Technical Standard, DTA-Tech-Standards!r18, DTA-Tech-Standards!r37)."
+  },
+  "citations": {
+    "6.3": [
+      {
+        "short_name": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      },
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r18"
+      }
+    ],
+    "6.4": [
+      {
+        "short_name": "RAI Acceptance Testing",
+        "locator": "§(document start)"
+      },
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r105"
+      },
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r18"
+      }
+    ],
+    "6.5": [
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r18"
+      }
+    ],
+    "6.6": [
+      {
+        "short_name": "Continuous RAI Validator",
+        "locator": "§(document start)"
+      },
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r64"
+      },
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r129"
+      },
+      {
+        "short_name": "Agentic AI Addendum",
+        "locator": "p.31"
+      }
+    ],
+    "6.8": [
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r18"
+      },
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r37"
+      }
+    ]
+  },
+  "questions": {
+    "why": "Clarifying procurement, piloting, and training details is essential to finalize the technical and operational controls for the system.",
+    "items": [
+      {
+        "question_id": "solution_architect-1",
+        "text": "Will the AI system utilize a procured off-the-shelf model (e.g., via a commercial API) or a custom-built/fine-tuned model?",
+        "options": [
+          "Procured off-the-shelf model",
+          "Custom-built/fine-tuned model",
+          "Undecided"
+        ],
+        "allow_free_text": true
+      },
+      {
+        "question_id": "solution_architect-2",
+        "text": "Is there a planned pilot or phased roll-out for the Manager Performance Assessment Assistant before full deployment?",
+        "options": [
+          "Yes, a pilot is planned",
+          "No pilot is planned",
+          "Undecided"
+        ],
+        "allow_free_text": true
+      },
+      {
+        "question_id": "solution_architect-3",
+        "text": "What specific training or guidance will be provided to managers to prevent automation bias when reviewing AI-generated drafts?",
+        "options": null,
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
