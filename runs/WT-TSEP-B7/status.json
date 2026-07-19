@@ -4,16 +4,16 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:38:34Z",
+  "updated_at": "2026-07-19T10:38:43Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "active",
-    "full.specialist.privacy": "active",
+    "full.specialist.privacy": "complete",
     "full.specialist.ethics": "active",
-    "full.specialist.legal": "pending",
+    "full.specialist.legal": "active",
     "full.specialist.data_governance": "pending",
     "full.specialist.solution_architect": "pending",
     "full.checkpoint": "pending",
@@ -1315,9 +1315,30 @@
         "doc": "AHRC AI Guidance",
         "locator": "§White label provider"
       }
+    },
+    {
+      "id": "evt_000127",
+      "ts": "2026-07-19T10:38:43Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_started",
+      "detail": "Legal & Administrative Law specialist started"
+    },
+    {
+      "id": "evt_000128",
+      "ts": "2026-07-19T10:38:43Z",
+      "agent": "full.specialist.legal",
+      "type": "drafting",
+      "detail": "drafting legal's owned sections"
+    },
+    {
+      "id": "evt_000129",
+      "ts": "2026-07-19T10:38:43Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_complete",
+      "detail": "Privacy specialist complete"
     }
   ],
-  "log_cursor": 126,
+  "log_cursor": 129,
   "questions": null,
   "failure": null,
   "expected_ranges": {

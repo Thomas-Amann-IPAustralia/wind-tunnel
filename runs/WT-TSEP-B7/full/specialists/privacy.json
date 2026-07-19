@@ -1,0 +1,51 @@
+{
+  "specialist": "privacy",
+  "sections": {
+    "7.1": "Yes, provided that the system is designed and configured to meet strict APP compliance requirements.\n\nFirst, under APP 3, when a user uploads or pastes a cease and desist letter containing personal information (such as names, contact details, or other identifiable details of the disputing parties) into the chatbot, this constitutes a collection of solicited personal information (APP Guidelines, p.86). This collection must be reasonably necessary for business.gov's functions or activities (APP Guidelines, p.91).\n\nSecond, under APP 6, to prevent unauthorised disclosure, the agency must ensure that the AI system's terms of use do not allow the developer or any third party to access or use the personal information input into the system for model training or other secondary purposes (OAIC AI Selection Checklist, p.2; OAIC AI Training Top 5, p.1).\n\nThird, under APP 11, the agency must implement robust security measures to protect the highly sensitive unstructured text from misuse, interference, loss, and unauthorised access or modification (OAIC AI Selection Checklist, p.2). This includes ensuring that uploaded documents are not retained longer than necessary and are securely destroyed or de-identified once the session ends (OAIC PIA Guide, p.8)."
+  },
+  "citations": {
+    "7.1": [
+      {
+        "short_name": "APP Guidelines",
+        "locator": "p.86"
+      },
+      {
+        "short_name": "APP Guidelines",
+        "locator": "p.91"
+      },
+      {
+        "short_name": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      },
+      {
+        "short_name": "OAIC AI Training Top 5",
+        "locator": "p.1"
+      },
+      {
+        "short_name": "OAIC PIA Guide",
+        "locator": "p.8"
+      }
+    ]
+  },
+  "questions": {
+    "why": "The storage location of the privacy threshold assessment and privacy impact assessment must be recorded to complete the assessment.",
+    "items": [
+      {
+        "question_id": "privacy-1",
+        "text": "Where will the privacy threshold assessment and/or privacy impact assessment (PIA) for the C&D Claim Evaluator be stored?",
+        "options": null,
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [
+    {
+      "section": "7.2",
+      "reason": "The storage location of the privacy threshold assessment and privacy impact assessment is not specified in the project outline."
+    }
+  ],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
