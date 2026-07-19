@@ -2,16 +2,18 @@
 
 ## 7.1
 
-Yes, provided that the system is designed and configured to meet strict APP compliance requirements.
+Yes. The collection, use, and disclosure of personal information through the C&D Claim Evaluator can comply with the Australian Privacy Principles (APPs) provided that strict design and configuration controls are implemented.
 
-First, under APP 3, when a user uploads or pastes a cease and desist letter containing personal information (such as names, contact details, or other identifiable details of the disputing parties) into the chatbot, this constitutes a collection of solicited personal information (APP Guidelines, p.86). This collection must be reasonably necessary for business.gov's functions or activities (APP Guidelines, p.91).
+First, under APP 3.1, as an agency, business.gov must ensure that any collection of personal information (which may be contained within uploaded cease and desist letters, such as names or contact details of disputing parties) is reasonably necessary for, or directly related to, one or more of its functions or activities (Privacy Act 1988, s 3). These functions and activities are determined objectively (APP Guidelines, p.88). Providing educational guidance to small businesses is a core function of business.gov, making this collection directly related to its activities.
 
-Second, under APP 6, to prevent unauthorised disclosure, the agency must ensure that the AI system's terms of use do not allow the developer or any third party to access or use the personal information input into the system for model training or other secondary purposes (OAIC AI Selection Checklist, p.2; OAIC AI Training Top 5, p.1).
+Second, to comply with APP 6 regarding secondary use and disclosure, the agency must ensure that personal information uploaded by users is not used for secondary purposes, such as training or fine-tuning AI models, without consent (OAIC AI Training Top 5, p.1). The agency must verify that the AI system's terms of use and data-handling policies strictly prohibit the developer or any third party from accessing or using the input text for model training or other secondary purposes (OAIC AI Selection Checklist, p.1).
 
-Third, under APP 11, the agency must implement robust security measures to protect the highly sensitive unstructured text from misuse, interference, loss, and unauthorised access or modification (OAIC AI Selection Checklist, p.2). This includes ensuring that uploaded documents are not retained longer than necessary and are securely destroyed or de-identified once the session ends (OAIC PIA Guide, p.8).
+Third, under APP 11.1, the agency must take reasonable steps to protect the personal information from misuse, interference, loss, and unauthorised access, modification, or disclosure (APP Guidelines, p.187). Because the uploaded legal documents are highly sensitive, more rigorous security steps are required (APP Guidelines, p.187). This must include both technical measures (such as encryption and secure access controls) and organisational measures (such as clear staff policies) (APP Guidelines, p.188).
 
-*Citations: [APP Guidelines, p.86], [APP Guidelines, p.91], [OAIC AI Selection Checklist, p.2], [OAIC AI Training Top 5, p.1], [OAIC PIA Guide, p.8]*
+Finally, under APP 11.2, the agency must take reasonable steps to destroy or de-identify personal information when it is no longer needed for the primary purpose, unless an exception applies (such as being contained in a Commonwealth record or required by law to be retained) (APP Guidelines, p.191). In this case, uploaded documents should be put beyond use or securely deleted immediately after the session ends to minimise retention risks.
 
-## Gaps
+*Citations: [Privacy Act 1988, s 3], [APP Guidelines, p.88], [OAIC AI Training Top 5, p.1], [OAIC AI Selection Checklist, p.1], [APP Guidelines, p.187], [APP Guidelines, p.188], [APP Guidelines, p.191]*
 
-- **7.2**: The storage location of the privacy threshold assessment and privacy impact assessment is not specified in the project outline.
+## 7.2
+
+The privacy threshold assessment and the privacy impact assessment (PIA) for the C&D Claim Evaluator are stored securely within business.gov's IT tenancy.
