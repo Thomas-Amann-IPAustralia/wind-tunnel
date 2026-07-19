@@ -2,11 +2,14 @@
   "schema_version": 1,
   "run_id": "WT-9J32-99",
   "created_at": "2026-07-19T13:35:13Z",
-  "updated_at": "2026-07-19T13:37:18Z",
-  "stage": "THRESHOLD_DRAFTING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-19T13:38:24Z",
+  "stage": "THRESHOLD_REVIEW",
+  "stage_status": "awaiting_user",
   "phase": "threshold",
-  "checkpoints": {},
+  "checkpoints": {
+    "THRESHOLD_DRAFTING": "95ae4a79c8e3e9b3c276d8ee516823b9a7061dc0",
+    "THRESHOLD_RECONCILING": "6c886b203565915b72885bbc4cfec90bf23dd897"
+  },
   "revisions": {
     "poc": 0,
     "flow_map": 0,
