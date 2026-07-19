@@ -4,7 +4,7 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:45:30Z",
+  "updated_at": "2026-07-19T10:45:58Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -3000,9 +3000,196 @@
         "doc": "OWASP LLM Top 10",
         "locator": "p.9"
       }
+    },
+    {
+      "id": "evt_000287",
+      "ts": "2026-07-19T10:45:37Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000288",
+      "ts": "2026-07-19T10:45:37Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000289",
+      "ts": "2026-07-19T10:45:37Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000290",
+      "ts": "2026-07-19T10:45:37Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.24"
+      }
+    },
+    {
+      "id": "evt_000291",
+      "ts": "2026-07-19T10:45:37Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.198"
+      }
+    },
+    {
+      "id": "evt_000292",
+      "ts": "2026-07-19T10:45:37Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000293",
+      "ts": "2026-07-19T10:45:37Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.14"
+      }
+    },
+    {
+      "id": "evt_000294",
+      "ts": "2026-07-19T10:45:37Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.155"
+      }
+    },
+    {
+      "id": "evt_000295",
+      "ts": "2026-07-19T10:45:38Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000296",
+      "ts": "2026-07-19T10:45:38Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000297",
+      "ts": "2026-07-19T10:45:38Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000298",
+      "ts": "2026-07-19T10:45:38Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Top 5",
+      "ref": {
+        "doc": "OAIC AI Training Top 5",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000299",
+      "ts": "2026-07-19T10:45:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.89"
+      }
+    },
+    {
+      "id": "evt_000300",
+      "ts": "2026-07-19T10:45:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.88"
+      }
+    },
+    {
+      "id": "evt_000301",
+      "ts": "2026-07-19T10:45:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 3"
+      }
+    },
+    {
+      "id": "evt_000302",
+      "ts": "2026-07-19T10:45:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.183"
+      }
+    },
+    {
+      "id": "evt_000303",
+      "ts": "2026-07-19T10:45:58Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 3"
+      }
     }
   ],
-  "log_cursor": 286,
+  "log_cursor": 303,
   "questions": null,
   "failure": null,
   "expected_ranges": {
