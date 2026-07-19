@@ -1,0 +1,183 @@
+{
+  "items": [
+    {
+      "section": "5.1",
+      "title": "Defining fairness",
+      "owner": "ethics",
+      "state": "gapped"
+    },
+    {
+      "section": "5.2",
+      "title": "Measuring fairness",
+      "owner": "ethics",
+      "state": "gapped"
+    },
+    {
+      "section": "6.1",
+      "title": "Data suitability",
+      "owner": "data_governance",
+      "state": "addressed"
+    },
+    {
+      "section": "6.2",
+      "title": "Indigenous data",
+      "owner": "data_governance",
+      "state": "addressed"
+    },
+    {
+      "section": "6.3",
+      "title": "Suitability of procured AI system",
+      "owner": "solution_architect",
+      "state": "addressed"
+    },
+    {
+      "section": "6.4",
+      "title": "Testing",
+      "owner": "solution_architect",
+      "state": "addressed"
+    },
+    {
+      "section": "6.5",
+      "title": "Pilot",
+      "owner": "solution_architect",
+      "state": "addressed"
+    },
+    {
+      "section": "6.6",
+      "title": "Monitoring",
+      "owner": "solution_architect",
+      "state": "addressed"
+    },
+    {
+      "section": "6.7",
+      "title": "Preparedness to intervene or disengage",
+      "owner": "it_security",
+      "state": "addressed"
+    },
+    {
+      "section": "6.8",
+      "title": "Training of AI system operators",
+      "owner": "solution_architect",
+      "state": "addressed"
+    },
+    {
+      "section": "7.1",
+      "title": "Minimise and protect personal information",
+      "owner": "privacy",
+      "state": "addressed"
+    },
+    {
+      "section": "7.2",
+      "title": "Privacy threshold and/or impact assessment",
+      "owner": "privacy",
+      "state": "addressed"
+    },
+    {
+      "section": "7.3",
+      "title": "Security risks",
+      "owner": "it_security",
+      "state": "addressed"
+    },
+    {
+      "section": "8.1",
+      "title": "Consultation",
+      "owner": "ethics",
+      "state": "addressed"
+    },
+    {
+      "section": "8.2",
+      "title": "Public visibility",
+      "owner": "ethics",
+      "state": "addressed"
+    },
+    {
+      "section": "8.3",
+      "title": "Maintain appropriate documentation and records",
+      "owner": "data_governance",
+      "state": "addressed"
+    },
+    {
+      "section": "8.4",
+      "title": "Disclosing AI interactions and outputs",
+      "owner": "ethics",
+      "state": "addressed"
+    },
+    {
+      "section": "8.5",
+      "title": "Offer appropriate explanations",
+      "owner": "ethics",
+      "state": "addressed"
+    },
+    {
+      "section": "9.1",
+      "title": "Notification of AI affecting rights",
+      "owner": "legal",
+      "state": "addressed"
+    },
+    {
+      "section": "9.2",
+      "title": "Challenging administrative actions influenced by AI",
+      "owner": "legal",
+      "state": "addressed"
+    },
+    {
+      "section": "10.1",
+      "title": "Incorporating diversity",
+      "owner": "ethics",
+      "state": "addressed"
+    },
+    {
+      "section": "10.2",
+      "title": "Human rights obligations",
+      "owner": "legal",
+      "state": "addressed"
+    },
+    {
+      "section": "11.1",
+      "title": "Ensuring accountability during the lifecycle of the AI system",
+      "owner": "legal",
+      "state": "addressed"
+    },
+    {
+      "section": "12.1",
+      "title": "Alignment with relevant legal frameworks",
+      "owner": "legal",
+      "state": "addressed"
+    },
+    {
+      "section": "12.2",
+      "title": "Legal advice",
+      "owner": "legal",
+      "state": "addressed"
+    },
+    {
+      "section": "12.3",
+      "title": "Risk summary table",
+      "owner": "reviewer",
+      "state": "addressed"
+    },
+    {
+      "section": "12.4",
+      "title": "Overall residual risk rating",
+      "owner": "reviewer",
+      "state": "addressed"
+    },
+    {
+      "section": "12.5",
+      "title": "Internal governance body review",
+      "owner": "human_action",
+      "state": "human_action"
+    }
+  ],
+  "counts": {
+    "addressed": 25,
+    "gapped": 2,
+    "missing": 0,
+    "human_action": 1
+  },
+  "missing": [],
+  "gaps": [
+    "5.1",
+    "5.2"
+  ]
+}
