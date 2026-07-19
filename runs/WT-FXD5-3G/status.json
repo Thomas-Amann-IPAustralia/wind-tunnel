@@ -4,13 +4,13 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:17:09Z",
+  "updated_at": "2026-07-19T00:17:45Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
-    "full.specialist.it_security": "active",
+    "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
@@ -4343,9 +4343,356 @@
       "agent": "full.specialist.it_security",
       "type": "stage_started",
       "detail": "IT Security specialist started"
+    },
+    {
+      "id": "evt_000420",
+      "ts": "2026-07-19T00:17:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "revision",
+      "detail": "amending 7.3 for your revision request",
+      "ref": {
+        "target": "it_security"
+      }
+    },
+    {
+      "id": "evt_000421",
+      "ts": "2026-07-19T00:17:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000422",
+      "ts": "2026-07-19T00:17:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.187"
+      }
+    },
+    {
+      "id": "evt_000423",
+      "ts": "2026-07-19T00:17:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI Data Security CSI",
+      "ref": {
+        "doc": "AI Data Security CSI",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000424",
+      "ts": "2026-07-19T00:17:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.180"
+      }
+    },
+    {
+      "id": "evt_000425",
+      "ts": "2026-07-19T00:17:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI Data Security CSI",
+      "ref": {
+        "doc": "AI Data Security CSI",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000426",
+      "ts": "2026-07-19T00:17:10Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.97"
+      }
+    },
+    {
+      "id": "evt_000427",
+      "ts": "2026-07-19T00:17:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000428",
+      "ts": "2026-07-19T00:17:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.197"
+      }
+    },
+    {
+      "id": "evt_000429",
+      "ts": "2026-07-19T00:17:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.198"
+      }
+    },
+    {
+      "id": "evt_000430",
+      "ts": "2026-07-19T00:17:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.61"
+      }
+    },
+    {
+      "id": "evt_000431",
+      "ts": "2026-07-19T00:17:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.97"
+      }
+    },
+    {
+      "id": "evt_000432",
+      "ts": "2026-07-19T00:17:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.180"
+      }
+    },
+    {
+      "id": "evt_000433",
+      "ts": "2026-07-19T00:17:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.61"
+      }
+    },
+    {
+      "id": "evt_000434",
+      "ts": "2026-07-19T00:17:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading CSCM",
+      "ref": {
+        "doc": "CSCM",
+        "locator": "Controls - June 2026!r945"
+      }
+    },
+    {
+      "id": "evt_000435",
+      "ts": "2026-07-19T00:17:17Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000436",
+      "ts": "2026-07-19T00:17:17Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading E8 Maturity FAQ",
+      "ref": {
+        "doc": "E8 Maturity FAQ",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000437",
+      "ts": "2026-07-19T00:17:17Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.104"
+      }
+    },
+    {
+      "id": "evt_000438",
+      "ts": "2026-07-19T00:17:17Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.82"
+      }
+    },
+    {
+      "id": "evt_000439",
+      "ts": "2026-07-19T00:17:17Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.104"
+      }
+    },
+    {
+      "id": "evt_000440",
+      "ts": "2026-07-19T00:17:17Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000441",
+      "ts": "2026-07-19T00:17:17Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading LLMSVS",
+      "ref": {
+        "doc": "LLMSVS",
+        "locator": "§Control objective"
+      }
+    },
+    {
+      "id": "evt_000442",
+      "ts": "2026-07-19T00:17:17Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000443",
+      "ts": "2026-07-19T00:17:21Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000444",
+      "ts": "2026-07-19T00:17:21Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.82"
+      }
+    },
+    {
+      "id": "evt_000445",
+      "ts": "2026-07-19T00:17:21Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000446",
+      "ts": "2026-07-19T00:17:21Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading LLMSVS",
+      "ref": {
+        "doc": "LLMSVS",
+        "locator": "§Control objective"
+      }
+    },
+    {
+      "id": "evt_000447",
+      "ts": "2026-07-19T00:17:21Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000448",
+      "ts": "2026-07-19T00:17:21Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.37"
+      }
+    },
+    {
+      "id": "evt_000449",
+      "ts": "2026-07-19T00:17:21Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.82"
+      }
+    },
+    {
+      "id": "evt_000450",
+      "ts": "2026-07-19T00:17:21Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000451",
+      "ts": "2026-07-19T00:17:45Z",
+      "agent": "full.specialist.it_security",
+      "type": "stage_complete",
+      "detail": "IT Security specialist complete"
     }
   ],
-  "log_cursor": 419,
+  "log_cursor": 451,
   "questions": null,
   "failure": null,
   "expected_ranges": {
