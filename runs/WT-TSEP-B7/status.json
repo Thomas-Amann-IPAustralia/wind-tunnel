@@ -4,7 +4,7 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:38:51Z",
+  "updated_at": "2026-07-19T10:39:04Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -12,10 +12,10 @@
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
-    "full.specialist.ethics": "active",
+    "full.specialist.ethics": "complete",
     "full.specialist.legal": "active",
     "full.specialist.data_governance": "active",
-    "full.specialist.solution_architect": "pending",
+    "full.specialist.solution_architect": "active",
     "full.checkpoint": "pending",
     "full.architect": "pending",
     "full.reviewer": "pending",
@@ -1423,9 +1423,448 @@
       "agent": "full.specialist.it_security",
       "type": "stage_complete",
       "detail": "IT Security specialist complete"
+    },
+    {
+      "id": "evt_000139",
+      "ts": "2026-07-19T10:38:51Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000140",
+      "ts": "2026-07-19T10:38:51Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000141",
+      "ts": "2026-07-19T10:38:51Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Disposal of generative AI assistant prompts and inputs"
+      }
+    },
+    {
+      "id": "evt_000142",
+      "ts": "2026-07-19T10:38:51Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Example: AI technologies incorporated into a regulatory compliance assessment business system"
+      }
+    },
+    {
+      "id": "evt_000143",
+      "ts": "2026-07-19T10:38:51Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000144",
+      "ts": "2026-07-19T10:38:51Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Managing AI technologies incorporated into business systems"
+      }
+    },
+    {
+      "id": "evt_000145",
+      "ts": "2026-07-19T10:38:53Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.57"
+      }
+    },
+    {
+      "id": "evt_000146",
+      "ts": "2026-07-19T10:38:53Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.65"
+      }
+    },
+    {
+      "id": "evt_000147",
+      "ts": "2026-07-19T10:38:53Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000148",
+      "ts": "2026-07-19T10:38:53Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000149",
+      "ts": "2026-07-19T10:38:53Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000150",
+      "ts": "2026-07-19T10:38:53Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000151",
+      "ts": "2026-07-19T10:38:53Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.67"
+      }
+    },
+    {
+      "id": "evt_000152",
+      "ts": "2026-07-19T10:38:53Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.55"
+      }
+    },
+    {
+      "id": "evt_000153",
+      "ts": "2026-07-19T10:38:57Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000154",
+      "ts": "2026-07-19T10:38:57Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§More information on the use of AI in Australian Government"
+      }
+    },
+    {
+      "id": "evt_000155",
+      "ts": "2026-07-19T10:38:57Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000156",
+      "ts": "2026-07-19T10:38:57Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.26"
+      }
+    },
+    {
+      "id": "evt_000157",
+      "ts": "2026-07-19T10:38:57Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000158",
+      "ts": "2026-07-19T10:38:57Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000159",
+      "ts": "2026-07-19T10:38:57Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000160",
+      "ts": "2026-07-19T10:38:57Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000161",
+      "ts": "2026-07-19T10:39:01Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000162",
+      "ts": "2026-07-19T10:39:01Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000163",
+      "ts": "2026-07-19T10:39:01Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000164",
+      "ts": "2026-07-19T10:39:01Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.34"
+      }
+    },
+    {
+      "id": "evt_000165",
+      "ts": "2026-07-19T10:39:01Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000166",
+      "ts": "2026-07-19T10:39:01Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000167",
+      "ts": "2026-07-19T10:39:01Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ABA AI Year 2 Report",
+      "ref": {
+        "doc": "ABA AI Year 2 Report",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000168",
+      "ts": "2026-07-19T10:39:01Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000169",
+      "ts": "2026-07-19T10:39:03Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000170",
+      "ts": "2026-07-19T10:39:03Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§More information on the use of AI in Australian Government"
+      }
+    },
+    {
+      "id": "evt_000171",
+      "ts": "2026-07-19T10:39:03Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000172",
+      "ts": "2026-07-19T10:39:03Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.26"
+      }
+    },
+    {
+      "id": "evt_000173",
+      "ts": "2026-07-19T10:39:03Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000174",
+      "ts": "2026-07-19T10:39:03Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000175",
+      "ts": "2026-07-19T10:39:03Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000176",
+      "ts": "2026-07-19T10:39:03Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000177",
+      "ts": "2026-07-19T10:39:04Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_started",
+      "detail": "Solution Architect (sections) started"
+    },
+    {
+      "id": "evt_000178",
+      "ts": "2026-07-19T10:39:04Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "drafting",
+      "detail": "drafting solution_architect's owned sections"
+    },
+    {
+      "id": "evt_000179",
+      "ts": "2026-07-19T10:39:04Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_complete",
+      "detail": "Ethics & Fairness specialist complete"
     }
   ],
-  "log_cursor": 138,
+  "log_cursor": 179,
   "questions": null,
   "failure": null,
   "expected_ranges": {
