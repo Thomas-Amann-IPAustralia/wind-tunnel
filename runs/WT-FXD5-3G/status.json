@@ -10,7 +10,7 @@
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
-    "full.specialist.it_security": "complete",
+    "full.specialist.it_security": "active",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
@@ -4336,9 +4336,16 @@
       "agent": "full.reviewer",
       "type": "stage_complete",
       "detail": "Adjudicating reviewer complete"
+    },
+    {
+      "id": "evt_000419",
+      "ts": "2026-07-19T00:17:09Z",
+      "agent": "full.specialist.it_security",
+      "type": "stage_started",
+      "detail": "IT Security specialist started"
     }
   ],
-  "log_cursor": 418,
+  "log_cursor": 419,
   "questions": null,
   "failure": null,
   "expected_ranges": {
