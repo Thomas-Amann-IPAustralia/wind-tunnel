@@ -1,0 +1,39 @@
+# legal — owned sections
+
+## 9.1
+
+Not applicable. Tripwire is an automated, headless backend data monitoring pipeline used internally by data operators and system maintainers to validate data chunks from CSVs and SQL databases (Outline §7, Threshold §3.1). It does not make administrative decisions or take administrative actions that have a legal or significant effect on individuals, groups, or communities (Threshold §3.1). Therefore, notification of AI-influenced administrative actions is not applicable to this use case, as the system's role is limited to technical data validation and pipeline integrity monitoring.
+
+*Citations: [ADM Better Practice Guide, p.42]*
+
+## 9.2
+
+Not applicable. As discussed in section 9.1, Tripwire does not perform administrative actions or make decisions affecting external parties, so there are no administrative actions to challenge (Threshold §3.1). For internal operational issues (such as false positives or pipeline halts), data operators can diagnose and resolve issues using the provided runbooks and the 4-8 week observation/calibration mode (Outline §9, Threshold §2.5).
+
+*Citations: [ADM Better Practice Guide, p.10]*
+
+## 10.2
+
+No. The project outline and threshold assessment do not indicate that the project team has consulted an appropriate source of advice or otherwise ensured that the AI use case and data use align with human rights obligations. Given that the system processes structured data that may precautionarily contain sensitive personal information (Threshold §3.5), consultation with legal or human rights advisors is highly recommended to ensure compliance with relevant human rights frameworks and to prevent any indirect discriminatory impacts.
+
+*Citations: [ADM Better Practice Guide, p.13]*
+
+## 11.1
+
+No. While the system is designed to be auditable and provides logs and runbooks for operator intervention (Outline §5, §7), the project outline and threshold assessment do not state whether specific agency accountability mechanisms—such as designating an Accountable Official or an Accountable Use Case Owner under the Policy for the responsible use of AI in government—have been formally established (Threshold §1.2, §1.3). To ensure accountability throughout the lifecycle, the agency must designate these roles and maintain an internal AI use case register.
+
+*Citations: [AI Use Policy v2.0, p.11]*
+
+## 12.1
+
+No. The project outline and threshold assessment have not identified or documented any agency-specific legislation or regulatory instruments relevant to the Tripwire pipeline (Threshold §1.9). Although general frameworks such as the Privacy Act 1988 (Cth) and the Policy for the responsible use of AI in government are noted as relevant due to the potential processing of personal information (Threshold §3.5, §4.1), specific enabling or regulatory legislation for the data sources has not yet been documented.
+
+*Citations: [ADM Better Practice Guide, p.51]*
+
+## 12.2
+
+Yes. The need for legal advice has been identified during the assessment process (12.2.1). Specifically, because the pipeline processes structured data from SQL databases and CSVs that may contain sensitive personal information (PII), legal advice is required to clarify data governance, privacy compliance, and the lawful authority for data ingestion and processing (Threshold §3.5, §4.1).
+
+At this stage of the assessment, no formal legal advice has been obtained or stored (12.2.2), as the project is currently in its initial assessment and scoping phase (Threshold §4.1). Once obtained, the legal advice will be stored in the agency's secure document management system.
+
+*Citations: [ADM Better Practice Guide, p.13]*

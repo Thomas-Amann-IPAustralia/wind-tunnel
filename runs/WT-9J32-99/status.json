@@ -4,7 +4,7 @@
   "run_code": "WT-9J32-99",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T13:40:07Z",
+  "updated_at": "2026-07-19T13:40:10Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
-    "full.specialist.legal": "active",
+    "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
@@ -2041,9 +2041,16 @@
       "agent": "full.specialist.data_governance",
       "type": "stage_complete",
       "detail": "Data Governance specialist complete"
+    },
+    {
+      "id": "evt_000197",
+      "ts": "2026-07-19T13:40:10Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_complete",
+      "detail": "Legal & Administrative Law specialist complete"
     }
   ],
-  "log_cursor": 196,
+  "log_cursor": 197,
   "questions": null,
   "failure": null,
   "expected_ranges": {
