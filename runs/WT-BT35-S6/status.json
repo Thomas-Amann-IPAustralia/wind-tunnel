@@ -3,8 +3,8 @@
   "run_id": "WT-BT35-S6",
   "run_code": "WT-BT35-S6",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-19T13:08:17Z",
+  "overall_state": "paused",
+  "updated_at": "2026-07-19T13:08:19Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
