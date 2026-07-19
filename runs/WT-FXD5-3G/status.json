@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:08:07Z",
+  "updated_at": "2026-07-19T00:08:08Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -15,7 +15,7 @@
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
-    "full.specialist.solution_architect": "complete",
+    "full.specialist.solution_architect": "active",
     "full.checkpoint": "pending",
     "full.architect": "pending",
     "full.reviewer": "pending",
@@ -3872,9 +3872,16 @@
       "agent": "full.specialist.data_governance",
       "type": "stage_complete",
       "detail": "Data Governance specialist complete"
+    },
+    {
+      "id": "evt_000369",
+      "ts": "2026-07-19T00:08:08Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_started",
+      "detail": "Solution Architect (sections) started"
     }
   ],
-  "log_cursor": 368,
+  "log_cursor": 369,
   "questions": null,
   "failure": null,
   "expected_ranges": {
