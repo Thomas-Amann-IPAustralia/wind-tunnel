@@ -662,6 +662,17 @@ pipeline.
 
 ## Done
 
+- **Innovation Month 2026 (IM2026) branding — landing page, README, SYSTEM_OVERVIEW (this
+  branch).** The competition requires the entry to be *clearly identified in its visible
+  description* as part of Innovation Month 2026, with `IM2026` in the name. Added: (1) the
+  landing page (`frontend/src/routes/Landing.{tsx,css}`) now carries an "A Windtunnel entry for
+  Innovation Month 2026 (IM2026)." line in the visible description **and** the IM2026 *Ready or
+  Not…* mark (`frontend/src/img/ReadyOrNotColour.png`) as a quiet credit above the standing
+  disclaimer — styled with the existing tokens (hairline rule, `--ink-muted`), no new palette;
+  (2) the same identifier + logo at the top of `README.md`; (3) an IM2026 note + logo in
+  `SYSTEM_OVERVIEW.ipynb`'s title cell. **Frontend: 55 tests green, build + strict typecheck +
+  lint (0 err, 1 pre-existing accepted warning) + prettier clean; notebook re-validated as JSON.**
+  Purely additive branding — no product/pipeline behaviour touched.
 - **File-upload "Not Found" bug — diagnosed + graceful frontend degradation (TECH_SPEC §7;
   CLAUDE.md §9; this branch).** Root cause is a **stale Render backend deploy**, not a code bug:
   the `/api/runs/{id}/brainstorm/upload` route exists and returns 200 to the exact URL + body the
