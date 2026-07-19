@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:09:57Z",
+  "updated_at": "2026-07-19T00:09:59Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -19,7 +19,7 @@
     "full.checkpoint": "pending",
     "full.architect": "complete",
     "full.reviewer": "complete",
-    "full.assembly": "pending"
+    "full.assembly": "active"
   },
   "log": [
     {
@@ -4249,9 +4249,30 @@
       "agent": "full.reviewer",
       "type": "stage_complete",
       "detail": "Adjudicating reviewer complete"
+    },
+    {
+      "id": "evt_000407",
+      "ts": "2026-07-19T00:09:58Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Residual overall risk after mitigation (highest-wins): Medium."
+    },
+    {
+      "id": "evt_000408",
+      "ts": "2026-07-19T00:09:59Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000409",
+      "ts": "2026-07-19T00:09:59Z",
+      "agent": "full.assembly",
+      "type": "stage_started",
+      "detail": "Assembly started"
     }
   ],
-  "log_cursor": 406,
+  "log_cursor": 409,
   "questions": null,
   "failure": null,
   "expected_ranges": {
