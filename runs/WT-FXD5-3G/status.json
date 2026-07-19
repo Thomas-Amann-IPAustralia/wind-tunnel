@@ -15,7 +15,7 @@
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
-    "full.specialist.solution_architect": "complete",
+    "full.specialist.solution_architect": "active",
     "full.checkpoint": "pending",
     "full.architect": "complete",
     "full.reviewer": "complete",
@@ -4934,9 +4934,16 @@
       "agent": "full.specialist.privacy",
       "type": "stage_complete",
       "detail": "Privacy specialist complete"
+    },
+    {
+      "id": "evt_000475",
+      "ts": "2026-07-19T00:18:20Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_started",
+      "detail": "Solution Architect (sections) started"
     }
   ],
-  "log_cursor": 474,
+  "log_cursor": 475,
   "questions": null,
   "failure": null,
   "expected_ranges": {
