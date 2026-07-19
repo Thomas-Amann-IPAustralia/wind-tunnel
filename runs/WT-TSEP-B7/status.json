@@ -4,7 +4,7 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:46:29Z",
+  "updated_at": "2026-07-19T10:46:35Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -12,9 +12,9 @@
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "active",
-    "full.specialist.ethics": "active",
+    "full.specialist.ethics": "complete",
     "full.specialist.legal": "active",
-    "full.specialist.data_governance": "complete",
+    "full.specialist.data_governance": "active",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "pending",
@@ -3453,9 +3453,33 @@
         "doc": "APP Guidelines",
         "locator": "p.178"
       }
+    },
+    {
+      "id": "evt_000329",
+      "ts": "2026-07-19T10:46:35Z",
+      "agent": "full.specialist.data_governance",
+      "type": "stage_started",
+      "detail": "Data Governance specialist started"
+    },
+    {
+      "id": "evt_000330",
+      "ts": "2026-07-19T10:46:35Z",
+      "agent": "full.specialist.data_governance",
+      "type": "revision",
+      "detail": "revising data_governance's sections in light of your answers",
+      "ref": {
+        "target": "data_governance"
+      }
+    },
+    {
+      "id": "evt_000331",
+      "ts": "2026-07-19T10:46:35Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_complete",
+      "detail": "Ethics & Fairness specialist complete"
     }
   ],
-  "log_cursor": 328,
+  "log_cursor": 331,
   "questions": null,
   "failure": null,
   "expected_ranges": {
