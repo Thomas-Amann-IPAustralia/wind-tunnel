@@ -4,7 +4,7 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:46:01Z",
+  "updated_at": "2026-07-19T10:46:29Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -3277,9 +3277,185 @@
       "agent": "full.specialist.it_security",
       "type": "stage_complete",
       "detail": "IT Security specialist complete"
+    },
+    {
+      "id": "evt_000313",
+      "ts": "2026-07-19T10:46:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.36"
+      }
+    },
+    {
+      "id": "evt_000314",
+      "ts": "2026-07-19T10:46:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.45"
+      }
+    },
+    {
+      "id": "evt_000315",
+      "ts": "2026-07-19T10:46:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.48"
+      }
+    },
+    {
+      "id": "evt_000316",
+      "ts": "2026-07-19T10:46:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.40"
+      }
+    },
+    {
+      "id": "evt_000317",
+      "ts": "2026-07-19T10:46:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.37"
+      }
+    },
+    {
+      "id": "evt_000318",
+      "ts": "2026-07-19T10:46:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.68"
+      }
+    },
+    {
+      "id": "evt_000319",
+      "ts": "2026-07-19T10:46:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading Legal Landscape for AI",
+      "ref": {
+        "doc": "Legal Landscape for AI",
+        "locator": "§General laws that may apply"
+      }
+    },
+    {
+      "id": "evt_000320",
+      "ts": "2026-07-19T10:46:12Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI & Australian Law",
+      "ref": {
+        "doc": "AI & Australian Law",
+        "locator": "§Bias, exclusion and access"
+      }
+    },
+    {
+      "id": "evt_000321",
+      "ts": "2026-07-19T10:46:29Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.189"
+      }
+    },
+    {
+      "id": "evt_000322",
+      "ts": "2026-07-19T10:46:29Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.188"
+      }
+    },
+    {
+      "id": "evt_000323",
+      "ts": "2026-07-19T10:46:29Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.193"
+      }
+    },
+    {
+      "id": "evt_000324",
+      "ts": "2026-07-19T10:46:29Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.185"
+      }
+    },
+    {
+      "id": "evt_000325",
+      "ts": "2026-07-19T10:46:29Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.187"
+      }
+    },
+    {
+      "id": "evt_000326",
+      "ts": "2026-07-19T10:46:29Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.191"
+      }
+    },
+    {
+      "id": "evt_000327",
+      "ts": "2026-07-19T10:46:29Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.216"
+      }
+    },
+    {
+      "id": "evt_000328",
+      "ts": "2026-07-19T10:46:29Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.178"
+      }
     }
   ],
-  "log_cursor": 312,
+  "log_cursor": 328,
   "questions": null,
   "failure": null,
   "expected_ranges": {
