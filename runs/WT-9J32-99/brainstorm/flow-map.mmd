@@ -1,0 +1,46 @@
+flowchart LR
+    subgraph Sources [Data Sources]
+        CSV[CSV Files]
+        SQL[SQL Databases]
+    end
+
+    subgraph Storage [State & Schema Storage]
+        Schema[(Schema Truth)]
+        SQLite[(SQLite State DB)]
+    end
+
+    subgraph Pipeline [Tripwire Verification Pipeline]
+        Ingest[Ingestion & Normalization]
+        BiEncoder[Bi-Encoder Gate]
+        CrossEncoder[Cross-Encoder Gate]
+        Decision[Decision Engine]
+        Alerts[Alerting & Logging]
+    end
+
+    subgraph Target [Target Systems]
+        ClearedDB[(Cleared Data Store)]
+    end
+
+    subgraph Actors [Users & Stakeholders]
+        Operator[Data Operator / Maintainer]
+        Stakeholder[IT Security & Business Owners]
+    end
+
+    CSV -->|raw structured data| Ingest
+    SQL -->|raw structured data| Ingest
+    Schema -->|validation schema| Ingest
+
+    Ingest -->|normalized data chunks| BiEncoder
+    BiEncoder -->|candidate matches & scores| CrossEncoder
+    CrossEncoder -->|high-precision verification scores| Decision
+
+    Decision <-->|read/write state under concurrency limits| SQLite
+    
+    Decision -->|confidence >= threshold| ClearedDB
+    
+    Decision -->|confidence < threshold / uncertainty| Alerts
+    Alerts -->|loud failure alert & logs| Operator
+    Alerts -->|audit logs & reports| Stakeholder
+    
+    Operator -->|diagnose & calibrate thresholds| Decision
+    Operator -->|manual reconciliation via runbooks| SQLite
