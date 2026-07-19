@@ -4,15 +4,15 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:37:54Z",
+  "updated_at": "2026-07-19T10:37:55Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
-    "full.specialist.it_security": "pending",
-    "full.specialist.privacy": "pending",
-    "full.specialist.ethics": "pending",
+    "full.specialist.it_security": "active",
+    "full.specialist.privacy": "active",
+    "full.specialist.ethics": "active",
     "full.specialist.legal": "pending",
     "full.specialist.data_governance": "pending",
     "full.specialist.solution_architect": "pending",
@@ -133,9 +133,256 @@
       "agent": "pipeline",
       "type": "heartbeat",
       "detail": ""
+    },
+    {
+      "id": "evt_000017",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000018",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.it_security",
+      "type": "stage_started",
+      "detail": "IT Security specialist started"
+    },
+    {
+      "id": "evt_000019",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.it_security",
+      "type": "drafting",
+      "detail": "drafting it_security's owned sections"
+    },
+    {
+      "id": "evt_000020",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_started",
+      "detail": "Privacy specialist started"
+    },
+    {
+      "id": "evt_000021",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "drafting",
+      "detail": "drafting privacy's owned sections"
+    },
+    {
+      "id": "evt_000022",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_started",
+      "detail": "Ethics & Fairness specialist started"
+    },
+    {
+      "id": "evt_000023",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "drafting",
+      "detail": "drafting ethics's owned sections"
+    },
+    {
+      "id": "evt_000024",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000025",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000026",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000027",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI Data Security CSI",
+      "ref": {
+        "doc": "AI Data Security CSI",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000028",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000029",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000030",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§Part 3: Privacy management — addressing risks"
+      }
+    },
+    {
+      "id": "evt_000031",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000032",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000033",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§Ensuring compliance"
+      }
+    },
+    {
+      "id": "evt_000034",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000035",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§APP 11 — Security of personal information"
+      }
+    },
+    {
+      "id": "evt_000036",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000037",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000038",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000039",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000040",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000041",
+      "ts": "2026-07-19T10:37:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.30"
+      }
     }
   ],
-  "log_cursor": 16,
+  "log_cursor": 41,
   "questions": null,
   "failure": null,
   "expected_ranges": {
