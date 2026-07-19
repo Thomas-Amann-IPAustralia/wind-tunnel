@@ -1,0 +1,17 @@
+{
+  "answers": [],
+  "skips": [
+    "it_security-1",
+    "it_security-2",
+    "privacy-1",
+    "ethics-1",
+    "ethics-2",
+    "ethics-3",
+    "legal-1",
+    "legal-2",
+    "legal-3",
+    "data_governance-1",
+    "sol_arch-1"
+  ],
+  "submitted_at": "2026-07-19T00:04:21Z"
+}
