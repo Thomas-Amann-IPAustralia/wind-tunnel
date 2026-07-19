@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Assessor Blueprint</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #090a0f;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        /* Clean dot matrix background */
+        .grid-bg {
+            background-color: #0e1015;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.06) 1.5px, transparent 1.5px);
+            background-size: 28px 28px;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: auto; /* Allow panning/scrolling */
+            cursor: grab;
+        }
+        
+        .grid-bg.grabbing {
+            cursor: grabbing;
+        }
+
+        .workspace {
+            position: relative;
+            width: 3200px; 
+            height: 1600px;
+            transform-origin: top left;
+        }
+
+        svg.connections {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; 
+            z-index: 10;
+        }
+
+        /* Modern wire styles */
+        .wire {
+            fill: none;
+            stroke: #272a35; 
+            stroke-width: 2.5;
+            transition: stroke 0.3s ease;
+        }
+
+        .wire.active {
+            stroke: #0ea5e9; 
+            stroke-width: 3;
+            filter: drop-shadow(0 0 6px rgba(14, 165, 233, 0.6));
+        }
+        
+        .wire.loop-wire {
+            stroke-dasharray: 6 6;
+            stroke: #3f3f46;
+        }
+        
+        .wire.loop-wire.active {
+            stroke: #eab308; /* Yellow for feedback loop */
+            filter: drop-shadow(0 0 6px rgba(234, 179, 8, 0.6));
+        }
+
+        .wire-pulse {
+            fill: none;
+            stroke: #ffffff;
+            stroke-width: 1.5;
+            stroke-dasharray: 8 12;
+            animation: pulse-flow 1s linear infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .wire.active + .wire-pulse { opacity: 1; }
+
+        @keyframes pulse-flow {
+            from { stroke-dashoffset: 20; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        .node {
+            position: absolute;
+            background: #15171e;
+            border: 1px solid #272a35;
+            border-top: 4px solid #3f3f46;
+            border-radius: 6px;
+            width: 300px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 20;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .node:hover {
+            border-color: #4b5563;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        .node.state-idle { border-top-color: #3f3f46; }
+        .node.state-running { 
+            border-top-color: #0ea5e9; 
+            border-color: rgba(14, 165, 233, 0.4);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.15); 
+        }
+        .node.state-waiting_qa { border-top-color: #eab308; } /* Yellow for waiting on user */
+        .node.state-done { border-top-color: #10b981; }
+
+        .node-header {
+            padding: 10px 14px;
+            border-bottom: 1px solid #1f222b;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .node-title {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #f1f5f9;
+        }
+
+        .node-body {
+            padding: 14px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            min-height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        /* Tool Badges */
+        .tools-container {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .tool-badge {
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #1f222b;
+            color: #52525b;
+            border: 1px solid #272a35;
+            transition: all 0.15s;
+        }
+        
+        .tool-badge.active {
+            background: #0ea5e9;
+            color: #ffffff;
+            border-color: #38bdf8;
+            box-shadow: 0 0 8px rgba(14, 165, 233, 0.4);
+        }
+
+        .pin {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #15171e;
+            border: 2px solid #52525b;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 30;
+        }
+        .pin-in { left: -6px; }
+        .pin-out { right: -6px; }
+
+        .node.state-done .pin-out { border-color: #10b981; background-color: #10b981; }
+        .node.state-running .pin-in { border-color: #0ea5e9; background-color: #0ea5e9; }
+
+        .activity-log {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: #38bdf8;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            height: 1.2em;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .node.state-running .activity-log { opacity: 1; }
+
+        .status-badge {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: #1f222b;
+            color: #71717a;
+        }
+
+        .node.state-running .status-badge { background: rgba(14, 165, 233, 0.15); color: #38bdf8; }
+        .node.state-waiting_qa .status-badge { background: rgba(234, 179, 8, 0.15); color: #facc15; }
+        .node.state-done .status-badge { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+
+        /* Tool Nodes Styling */
+        .node.tool-node {
+            width: 240px;
+            border-top-color: #8b5cf6; 
+            background: #1e1b4b; /* Deep purple tint */
+        }
+        .node.tool-node.state-idle { border-top-color: #4c1d95; }
+        .node.tool-node.state-running {
+            border-top-color: #a855f7;
+            border-color: rgba(168, 85, 247, 0.4);
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.15);
+        }
+        .node.tool-node .node-header { background: rgba(139, 92, 246, 0.1); }
+        .node.tool-node .status-badge { color: #c084fc; background: rgba(168, 85, 247, 0.15); }
+        .node.tool-node .activity-log { color: #d8b4fe; }
+
+        .wire.tool-wire {
+            stroke-dasharray: 4 4;
+            stroke: #4c1d95;
+            stroke-width: 2;
+        }
+        .wire.tool-wire.active {
+            stroke: #a855f7;
+            filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.6));
+        }
+        .wire-pulse.tool-pulse { stroke: #e9d5ff; }
+
+        @keyframes pulse-flow-reverse {
+            from { stroke-dashoffset: 0; }
+            to { stroke-dashoffset: 20; }
+        }
+        .wire-pulse.reverse { animation: pulse-flow-reverse 1s linear infinite; }
+
+        #side-pane {
+            box-shadow: -5px 0 25px rgba(0,0,0,0.5);
+        }
+        
+        .code-block {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            background: #111216;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #272a35;
+            color: #a1a1aa;
+            overflow-y: auto;
+            max-height: 200px;
+            white-space: pre-wrap;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #272a35; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+    </style>
+</head>
+<body>
+
+    <div class="h-14 bg-[#0e1015] border-b border-[#272a35] flex items-center justify-between px-6 z-40 flex-shrink-0 relative">
+        <div class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-sky-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"></path></svg>
+            <h1 class="text-sm font-semibold tracking-wide text-zinc-200">AI Impact Assessment <span class="text-zinc-500 font-normal ml-2">| Live Agent Telemetry</span></h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="text-xs text-zinc-500 font-mono flex items-center gap-2">
+                <div id="status-indicator" class="w-2 h-2 rounded-full bg-zinc-600"></div>
+                <span id="global-status">SYSTEM IDLE</span>
+            </div>
+            <button id="start-btn" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold py-1.5 px-4 rounded transition-colors shadow-[0_0_10px_rgba(14,165,233,0.2)]">
+                Execute Assessment
+            </button>
+            <button id="reset-btn" class="bg-zinc-800 hover:bg-zinc-700 text-zinc-300 border border-zinc-700 text-xs font-semibold py-1.5 px-4 rounded transition-colors hidden">
+                Reset
+            </button>
+        </div>
+    </div>
+
+    <div class="grid-bg" id="scroll-container">
+        <div class="workspace" id="workspace">
+            <svg class="connections" id="svg-layer"></svg>
+            <div id="node-layer"></div>
+        </div>
+    </div>
+
+    <!-- Agent Details Side Pane -->
+    <div id="side-pane" class="fixed right-0 top-14 bottom-0 w-96 bg-[#15171e] border-l border-[#272a35] transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
+        <div class="p-4 border-b border-[#272a35] flex justify-between items-center bg-[#0e1015]">
+            <h2 class="text-sm font-semibold text-zinc-200" id="pane-title">Agent Details</h2>
+            <button id="close-pane" class="text-zinc-500 hover:text-white transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <div class="p-5 flex-1 overflow-y-auto flex flex-col gap-5">
+            <div>
+                <div class="text-xs text-zinc-500 mb-1 uppercase tracking-wider">Model Identity</div>
+                <div class="flex items-center gap-2">
+                    <span class="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded border border-purple-500/30" id="pane-model">Gemini 1.5 Pro</span>
+                </div>
+            </div>
+            <div id="pane-metrics">
+                <div class="mb-5">
+                    <div class="text-xs text-zinc-500 mb-1 uppercase tracking-wider">Current Pass</div>
+                    <div class="text-sm text-zinc-300" id="pane-pass">1 / 1</div>
+                </div>
+                <div>
+                    <div class="text-xs text-zinc-500 mb-1 uppercase tracking-wider">Token Usage (Live)</div>
+                    <div class="font-mono text-xl text-sky-400" id="pane-tokens">0</div>
+                </div>
+            </div>
+            <div>
+                <div class="text-xs text-zinc-500 mb-2 uppercase tracking-wider" id="pane-prompt-label">System Prompt Instructions</div>
+                <div class="code-block" id="pane-prompt">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const workflowData = {
+            nodes: [
+                { id: 'assessA', title: 'Assessor A', type: 'agent', x: 100, y: 150, description: 'Independent threshold drafting.', llm: { model: 'Gemini 1.5 Flash', prompt: 'You are an initial assessor. Review the intake form and draft preliminary threshold findings based on strict rubric A. Focus on immediate red flags.'} },
+                { id: 'assessB', title: 'Assessor B', type: 'agent', x: 100, y: 350, description: 'Independent threshold drafting.', llm: { model: 'Gemini 1.5 Flash', prompt: 'You are an initial assessor. Review the intake form and draft preliminary threshold findings based on strict rubric B. Focus on long-term viability.'} },
+                
+                { id: 'reconcile', title: 'Reconciler', type: 'agent', x: 450, y: 250, description: 'Merging parallel assessments.', llm: { model: 'Gemini 1.5 Pro', prompt: 'Synthesize the outputs of Assessor A and B. Resolve any conflicts in their findings and output a unified preliminary threshold document.'} },
+                { id: 'rating', title: 'Rating Engine', type: 'agent', x: 800, y: 250, description: 'Computing initial score.', llm: { model: 'Algorithmic Engine', prompt: 'Calculate deterministic risk score based on reconciled data parameters. (Non-LLM node)'} },
+                
+                // Specialists - Shifted right to accommodate Tool Nodes
+                { id: 'specIT', title: 'IT Security Specialist', type: 'agent', x: 1150, y: 50, description: 'Reviewing security posture.', passesRequired: 2, toolNodeId: 'tool_infosec', llm: { model: 'Gemini 1.5 Pro', prompt: 'Analyze architecture for security vulnerabilities. Query the Infosec KB for recent CVEs related to the proposed stack.'} },
+                { id: 'specPrivacy', title: 'Privacy Specialist', type: 'agent', x: 1150, y: 200, description: 'Checking data compliance.', passesRequired: 2, toolNodeId: 'tool_privacy', llm: { model: 'Gemini 1.5 Pro', prompt: 'Ensure GDPR/CCPA compliance. Check data retention policies against corporate privacy guidelines.'} },
+                { id: 'specEthics', title: 'Ethics & Fairness', type: 'agent', x: 1150, y: 350, description: 'Evaluating bias vectors.', passesRequired: 2, toolNodeId: 'tool_web', llm: { model: 'Gemini 1.5 Pro', prompt: 'Assess AI models for potential bias against protected classes. Search web for recent case studies on similar implementations.'} },
+                { id: 'specLegal', title: 'Legal & Admin Law', type: 'agent', x: 1150, y: 500, description: 'Regulatory alignment.', passesRequired: 2, toolNodeId: 'tool_legal', llm: { model: 'Gemini 1.5 Pro', prompt: 'Review proposed usage against internal legal frameworks and external administrative law requirements.'} },
+                { id: 'specData', title: 'Data Governance', type: 'agent', x: 1150, y: 650, description: 'Data lifecycle audit.', passesRequired: 2, toolNodeId: 'tool_data', llm: { model: 'Gemini 1.5 Flash', prompt: 'Trace data lineage from intake to deletion. Verify metadata tagging standards are met.'} },
+                { id: 'specArchSec', title: 'Solution Architect (Sec)', type: 'agent', x: 1150, y: 800, description: 'Architecture review.', passesRequired: 2, toolNodeId: 'tool_arch', llm: { model: 'Gemini 1.5 Pro', prompt: 'Review cloud infrastructure diagrams for structural flaws and identity access management issues.'} },
+
+                // External Tool / Database Nodes
+                { id: 'tool_infosec', title: 'Infosec KB Vector DB', type: 'tool', x: 1550, y: 50, description: 'Semantic search of known CVEs and internal security protocols.', llm: { model: 'Retrieval Augmented Gen', prompt: 'SELECT * FROM internal_kb WHERE similarity > 0.85'} },
+                { id: 'tool_privacy', title: 'Privacy RAG Index', type: 'tool', x: 1550, y: 200, description: 'Vectorized GDPR, CCPA, and corporate privacy directives.', llm: { model: 'Semantic Index', prompt: 'Querying vector embeddings for "data retention", "PII handling"...'} },
+                { id: 'tool_web', title: 'Live Web Search API', type: 'tool', x: 1550, y: 350, description: 'External query engine for current events and case studies.', llm: { model: 'Search API', prompt: 'Execute parameterized search against approved external domains.'} },
+                { id: 'tool_legal', title: 'Legal Ruleset DB', type: 'tool', x: 1550, y: 500, description: 'Deterministic lookup of administrative law constraints.', llm: { model: 'Graph Database', prompt: 'MATCH (n:Regulation)-[r:APPLIES_TO]->(c:Jurisdiction) RETURN n'} },
+                { id: 'tool_data', title: 'Data Gov RAG', type: 'tool', x: 1550, y: 650, description: 'Corporate metadata standards and lineage requirements.', llm: { model: 'Retrieval Augmented Gen', prompt: 'Extracting specific tagging compliance rules from unstructured policy docs.'} },
+                { id: 'tool_arch', title: 'Architecture Patterns', type: 'tool', x: 1550, y: 800, description: 'Library of pre-approved cloud architecture diagrams.', llm: { model: 'Knowledge Graph', prompt: 'Lookup structural requirements for multi-region active-active deployments.'} },
+
+                // Downstream nodes shifted to the right
+                { id: 'userQA', title: 'User Q&A Consolidation', type: 'agent', x: 2000, y: 425, description: 'Aggregating specialist questions and awaiting user input.', llm: { model: 'Gemini 1.5 Flash', prompt: 'Review all questions generated by the specialist college. Deduplicate and format them into a concise questionnaire for the user. Await response, then distribute answers.'} },
+                { id: 'checkpoint', title: 'Question Checkpoint', type: 'agent', x: 2450, y: 425, description: 'Aggregating specialist findings.', llm: { model: 'Deterministic', prompt: 'Gatekeeper node. Ensures all specialists have completed pass 2.'} },
+                { id: 'archApp', title: 'Solution Architect (App)', type: 'agent', x: 2800, y: 425, description: 'Finalizing appendix.', llm: { model: 'Gemini 1.5 Pro', prompt: 'Generate the technical appendix summarizing all architectural changes and requirements.'} },
+                { id: 'reviewer', title: 'Adjudicating Reviewer', type: 'agent', x: 3150, y: 425, description: 'Final human-in-loop check.', llm: { model: 'Human Interface', prompt: 'Present final assembled data to human adjudicator for sign-off.'} },
+                { id: 'assembly', title: 'Assembly', type: 'agent', x: 3500, y: 425, description: 'Generating final document.', llm: { model: 'Document Gen', prompt: 'Compile all approved sections into a PDF report.'} }
+            ],
+            edges: [
+                { from: 'assessA', to: 'reconcile' },
+                { from: 'assessB', to: 'reconcile' },
+                { from: 'reconcile', to: 'rating' },
+                
+                { from: 'rating', to: 'specIT' },
+                { from: 'rating', to: 'specPrivacy' },
+                { from: 'rating', to: 'specEthics' },
+                { from: 'rating', to: 'specLegal' },
+                { from: 'rating', to: 'specData' },
+                { from: 'rating', to: 'specArchSec' },
+                
+                // Tool Edges (Forward: Query, Backward: Return Data)
+                { from: 'specIT', to: 'tool_infosec', isTool: true },
+                { from: 'tool_infosec', to: 'specIT', isTool: true, isReverse: true },
+                
+                { from: 'specPrivacy', to: 'tool_privacy', isTool: true },
+                { from: 'tool_privacy', to: 'specPrivacy', isTool: true, isReverse: true },
+                
+                { from: 'specEthics', to: 'tool_web', isTool: true },
+                { from: 'tool_web', to: 'specEthics', isTool: true, isReverse: true },
+                
+                { from: 'specLegal', to: 'tool_legal', isTool: true },
+                { from: 'tool_legal', to: 'specLegal', isTool: true, isReverse: true },
+                
+                { from: 'specData', to: 'tool_data', isTool: true },
+                { from: 'tool_data', to: 'specData', isTool: true, isReverse: true },
+                
+                { from: 'specArchSec', to: 'tool_arch', isTool: true },
+                { from: 'tool_arch', to: 'specArchSec', isTool: true, isReverse: true },
+
+                // Specialists to Q&A
+                { from: 'specIT', to: 'userQA' },
+                { from: 'specPrivacy', to: 'userQA' },
+                { from: 'specEthics', to: 'userQA' },
+                { from: 'specLegal', to: 'userQA' },
+                { from: 'specData', to: 'userQA' },
+                { from: 'specArchSec', to: 'userQA' },
+
+                // The Feedback Loop Edges (from QA back to specialists)
+                { from: 'userQA', to: 'specIT', isLoop: true },
+                { from: 'userQA', to: 'specPrivacy', isLoop: true },
+                { from: 'userQA', to: 'specEthics', isLoop: true },
+                { from: 'userQA', to: 'specLegal', isLoop: true },
+                { from: 'userQA', to: 'specData', isLoop: true },
+                { from: 'userQA', to: 'specArchSec', isLoop: true },
+
+                // Specialists to Checkpoint (post loop)
+                { from: 'specIT', to: 'checkpoint', requiresLoop: true },
+                { from: 'specPrivacy', to: 'checkpoint', requiresLoop: true },
+                { from: 'specEthics', to: 'checkpoint', requiresLoop: true },
+                { from: 'specLegal', to: 'checkpoint', requiresLoop: true },
+                { from: 'specData', to: 'checkpoint', requiresLoop: true },
+                { from: 'specArchSec', to: 'checkpoint', requiresLoop: true },
+
+                { from: 'checkpoint', to: 'archApp' },
+                { from: 'archApp', to: 'reviewer' },
+                { from: 'reviewer', to: 'assembly' }
+            ]
+        };
+
+        const standardActivities = ["Parsing context...", "Evaluating parameters...", "Drafting response...", "Calculating confidence...", "Synthesizing..."];
+
+        const state = {
+            nodes: {},
+            edges: workflowData.edges.map(e => ({...e, active: false})),
+            isRunning: false,
+            intervals: {},
+            activeNodeId: null
+        };
+
+        workflowData.nodes.forEach(n => {
+            state.nodes[n.id] = { 
+                ...n, 
+                status: 'idle', 
+                currentPass: 1,
+                maxPasses: n.passesRequired || 1,
+                tokens: 0 
+            };
+        });
+
+        const nodeLayer = document.getElementById('node-layer');
+        const svgLayer = document.getElementById('svg-layer');
+
+        function renderNodes() {
+            nodeLayer.innerHTML = '';
+            Object.values(state.nodes).forEach(node => {
+                const nodeEl = document.createElement('div');
+                let nodeClass = `node state-${node.status}`;
+                if (node.type === 'tool') nodeClass += ' tool-node';
+                
+                nodeEl.className = nodeClass;
+                nodeEl.id = `node-${node.id}`;
+                nodeEl.style.left = `${node.x}px`;
+                nodeEl.style.top = `${node.y}px`;
+                
+                const hasInput = state.edges.some(e => e.to === node.id && !e.isReverse);
+                const hasOutput = state.edges.some(e => e.from === node.id && !e.isReverse);
+
+                nodeEl.innerHTML = `
+                    ${hasInput ? '<div class="pin pin-in"></div>' : ''}
+                    <div class="node-header">
+                        <span class="node-title">${node.title}</span>
+                        <span class="status-badge" id="status-${node.id}">IDLE</span>
+                    </div>
+                    <div class="node-body">
+                        <div>${node.description}</div>
+                        <div class="activity-log" id="activity-${node.id}">> Standing by...</div>
+                    </div>
+                    ${hasOutput ? '<div class="pin pin-out"></div>' : ''}
+                `;
+                
+                nodeEl.addEventListener('click', () => openSidePane(node.id));
+                nodeLayer.appendChild(nodeEl);
+            });
+        }
+
+        function drawEdges() {
+            svgLayer.innerHTML = '';
+            
+            state.edges.forEach((edge) => {
+                // For reversed tool edges, we just use the original forward edge's path data 
+                // but animate the pulse backwards. So we skip drawing the base wire twice.
+                if (edge.isReverse && !edge.active) return;
+
+                const fromNode = document.getElementById(`node-${edge.from}`);
+                const toNode = document.getElementById(`node-${edge.to}`);
+                
+                if (!fromNode || !toNode) return;
+
+                const fromRect = fromNode.getBoundingClientRect();
+                const toRect = toNode.getBoundingClientRect();
+                const workspaceRect = document.getElementById('workspace').getBoundingClientRect();
+
+                // If it's a reverse edge that is currently active, we still calculate based on original points
+                let startX = (fromRect.right - workspaceRect.left);
+                let startY = (fromRect.top + fromRect.height / 2) - workspaceRect.top;
+                let endX = (toRect.left - workspaceRect.left);
+                let endY = (toRect.top + toRect.height / 2) - workspaceRect.top;
+
+                if (edge.isReverse) {
+                    startX = (toRect.right - workspaceRect.left);
+                    startY = (toRect.top + toRect.height / 2) - workspaceRect.top;
+                    endX = (fromRect.left - workspaceRect.left);
+                    endY = (fromRect.top + fromRect.height / 2) - workspaceRect.top;
+                }
+
+                let pathData;
+
+                if (edge.isLoop) {
+                    const dip = 150;
+                    pathData = `M ${startX-150} ${startY+35} C ${startX-150} ${startY + dip}, ${endX+150} ${endY + dip}, ${endX+150} ${endY+35}`;
+                } else {
+                    const distance = Math.abs(endX - startX);
+                    const controlOffset = Math.max(distance * 0.5, 50);
+                    pathData = `M ${startX} ${startY} C ${startX + controlOffset} ${startY}, ${endX - controlOffset} ${endY}, ${endX} ${endY}`;
+                }
+
+                if (!edge.isReverse) {
+                    const pathBase = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    pathBase.setAttribute('d', pathData);
+                    
+                    let classes = 'wire';
+                    if (edge.isLoop) classes += ' loop-wire';
+                    if (edge.isTool) classes += ' tool-wire';
+                    if (edge.active) classes += ' active';
+                    
+                    pathBase.setAttribute('class', classes);
+                    svgLayer.appendChild(pathBase);
+                }
+
+                if (edge.active) {
+                    const pathPulse = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    pathPulse.setAttribute('d', pathData);
+                    let pulseClasses = 'wire-pulse';
+                    if (edge.isTool) pulseClasses += ' tool-pulse';
+                    if (edge.isReverse) pulseClasses += ' reverse';
+                    pathPulse.setAttribute('class', pulseClasses);
+                    svgLayer.appendChild(pathPulse);
+                }
+            });
+        }
+
+        function openSidePane(nodeId) {
+            state.activeNodeId = nodeId;
+            const node = state.nodes[nodeId];
+            document.getElementById('pane-title').innerText = node.title;
+            document.getElementById('pane-model').innerText = node.llm.model;
+            document.getElementById('pane-prompt').innerText = node.llm.prompt;
+            
+            const metricsPanel = document.getElementById('pane-metrics');
+            const promptLabel = document.getElementById('pane-prompt-label');
+
+            if (node.type === 'tool') {
+                metricsPanel.style.display = 'none';
+                promptLabel.innerText = "Query Action / Schema Context";
+            } else {
+                metricsPanel.style.display = 'block';
+                promptLabel.innerText = "System Prompt Instructions";
+                document.getElementById('pane-pass').innerText = `${node.currentPass} / ${node.maxPasses}`;
+                document.getElementById('pane-tokens').innerText = node.tokens.toLocaleString();
+            }
+            
+            document.getElementById('side-pane').classList.remove('translate-x-full');
+            
+            document.querySelectorAll('.node').forEach(el => el.style.boxShadow = '');
+            const highlightColor = node.type === 'tool' ? 'rgba(168, 85, 247, 0.8)' : 'white';
+            document.getElementById(`node-${nodeId}`).style.boxShadow = `0 0 0 2px ${highlightColor}, 0 8px 25px rgba(0,0,0,0.5)`;
+        }
+
+        document.getElementById('close-pane').addEventListener('click', () => {
+            state.activeNodeId = null;
+            document.getElementById('side-pane').classList.add('translate-x-full');
+            document.querySelectorAll('.node').forEach(el => el.style.boxShadow = '');
+        });
+
+        function updateSidePaneLive(nodeId) {
+            if (state.activeNodeId === nodeId && state.nodes[nodeId].type !== 'tool') {
+                document.getElementById('pane-tokens').innerText = state.nodes[nodeId].tokens.toLocaleString();
+                document.getElementById('pane-pass').innerText = `${state.nodes[nodeId].currentPass} / ${state.nodes[nodeId].maxPasses}`;
+            }
+        }
+
+        function updateNodeVisuals(id) {
+            const el = document.getElementById(`node-${id}`);
+            const badge = document.getElementById(`status-${id}`);
+            const nodeData = state.nodes[id];
+            
+            if (!el || !badge) return;
+
+            let nodeClass = `node state-${nodeData.status}`;
+            if (nodeData.type === 'tool') nodeClass += ' tool-node';
+            el.className = nodeClass;
+            
+            let statusText = nodeData.status.toUpperCase();
+            if (statusText === 'WAITING_QA') statusText = 'PENDING Q&A';
+            badge.innerText = statusText;
+        }
+
+        function runSimulationStep() {
+            if (!state.isRunning) return;
+
+            let allAgentsDone = true;
+            let nodesStateChanged = false;
+
+            Object.values(state.nodes).forEach(node => {
+                if (node.type === 'tool') return; // Tools are puppeteered by agents, not loop-driven
+                if (node.status !== 'done') allAgentsDone = false;
+
+                if (node.status === 'idle') {
+                    const incomingEdges = state.edges.filter(e => e.to === node.id && !e.isReverse);
+                    
+                    let canStart = false;
+                    
+                    if (incomingEdges.length === 0) {
+                        canStart = true;
+                    } else {
+                        canStart = incomingEdges.every(edge => {
+                            if (edge.isLoop) return true; 
+                            if (edge.requiresLoop) {
+                                return state.nodes[edge.from].status === 'done';
+                            }
+                            if (node.id === 'userQA') {
+                                return state.nodes[edge.from].status === 'waiting_qa';
+                            }
+                            return state.nodes[edge.from].status === 'done';
+                        });
+                    }
+
+                    if (canStart) {
+                        node.status = 'running';
+                        nodesStateChanged = true;
+                        
+                        const activityEl = document.getElementById(`activity-${node.id}`);
+                        if(activityEl) {
+                             const intId = setInterval(() => {
+                                 if(state.nodes[node.id].status === 'running') {
+                                     node.tokens += Math.floor(Math.random() * 45) + 5;
+                                     updateSidePaneLive(node.id);
+
+                                     let actionText = `> ${standardActivities[Math.floor(Math.random() * standardActivities.length)]}`;
+                                     activityEl.innerText = actionText;
+
+                                     // Simulate querying the connected Tool/KB Node
+                                     if (node.toolNodeId && Math.random() > 0.6) {
+                                         const toolId = node.toolNodeId;
+                                         
+                                         // 1. Activate Tool Node Visually
+                                         state.nodes[toolId].status = 'running';
+                                         updateNodeVisuals(toolId);
+                                         
+                                         const toolEl = document.getElementById(`activity-${toolId}`);
+                                         if(toolEl) toolEl.innerText = "> Generating embedding search...";
+
+                                         // 2. Pulse wire from Agent to Tool
+                                         const edgeOut = state.edges.find(e => e.from === node.id && e.to === toolId && !e.isReverse);
+                                         if(edgeOut) edgeOut.active = true;
+                                         drawEdges();
+
+                                         setTimeout(() => {
+                                             if (!state.isRunning) return;
+                                             if(edgeOut) edgeOut.active = false;
+                                             
+                                             if(toolEl) toolEl.innerText = "> Retrieving chunks...";
+
+                                             // 3. Pulse wire returning Data from Tool to Agent
+                                             const edgeIn = state.edges.find(e => e.from === toolId && e.to === node.id && e.isReverse);
+                                             if(edgeIn) edgeIn.active = true;
+                                             drawEdges();
+
+                                             setTimeout(() => {
+                                                 if (!state.isRunning) return;
+                                                 if(edgeIn) edgeIn.active = false;
+                                                 state.nodes[toolId].status = 'idle';
+                                                 updateNodeVisuals(toolId);
+                                                 if(toolEl) toolEl.innerText = "> Standing by...";
+                                                 drawEdges();
+                                             }, 600);
+                                         }, 600);
+                                     }
+
+                                 } else {
+                                     clearInterval(intId);
+                                     if(state.nodes[node.id].status === 'done') activityEl.innerText = "> Task complete.";
+                                     if(state.nodes[node.id].status === 'waiting_qa') activityEl.innerText = "> Sent questions to user.";
+                                 }
+                             }, 800 + Math.random() * 800);
+                             state.intervals[node.id] = intId;
+                        }
+
+                        const duration = (node.id === 'userQA') ? 4000 : 3500 + Math.random() * 2500;
+
+                        setTimeout(() => {
+                            if (!state.isRunning) return;
+                            
+                            if (node.currentPass < node.maxPasses) {
+                                node.status = 'waiting_qa';
+                                state.edges.filter(e => e.from === node.id && e.to === 'userQA').forEach(e => {
+                                    e.active = true;
+                                    setTimeout(() => { e.active = false; drawEdges(); }, 2000);
+                                });
+                            } else {
+                                node.status = 'done';
+                                
+                                if (node.id === 'userQA') {
+                                    const specialists = ['specIT', 'specPrivacy', 'specEthics', 'specLegal', 'specData', 'specArchSec'];
+                                    specialists.forEach(sId => {
+                                        state.nodes[sId].status = 'idle';
+                                        state.nodes[sId].currentPass = 2; 
+                                    });
+                                    state.edges.filter(e => e.isLoop).forEach(e => {
+                                        e.active = true;
+                                        setTimeout(() => { e.active = false; drawEdges(); }, 2000);
+                                    });
+                                } else {
+                                    state.edges.filter(e => e.from === node.id && !e.isLoop && !e.isTool).forEach(e => {
+                                        e.active = true;
+                                        setTimeout(() => { e.active = false; drawEdges(); }, 2000);
+                                    });
+                                }
+                            }
+
+                            updateNodeVisuals(node.id);
+                            updateSidePaneLive(node.id);
+                            drawEdges(); 
+                            runSimulationStep(); 
+
+                        }, duration);
+                    }
+                }
+            });
+
+            if (nodesStateChanged) {
+                Object.keys(state.nodes).forEach(updateNodeVisuals);
+                drawEdges();
+            }
+
+            if (allAgentsDone) {
+                state.isRunning = false;
+                document.getElementById('global-status').innerText = "ASSESSMENT COMPLETE";
+                document.getElementById('status-indicator').classList.replace('bg-sky-500', 'bg-emerald-500');
+                document.getElementById('reset-btn').classList.remove('hidden');
+                document.getElementById('start-btn').classList.add('hidden');
+            }
+        }
+        
+        document.getElementById('start-btn').addEventListener('click', () => {
+            if (state.isRunning) return;
+            state.isRunning = true;
+            document.getElementById('start-btn').innerText = "System Running...";
+            document.getElementById('start-btn').classList.add('opacity-50', 'cursor-not-allowed');
+            document.getElementById('global-status').innerText = "PROCESSING GRAPH";
+            document.getElementById('status-indicator').classList.replace('bg-zinc-600', 'bg-sky-500');
+            runSimulationStep();
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            Object.values(state.intervals).forEach(clearInterval);
+            state.intervals = {};
+            state.isRunning = false;
+            
+            Object.values(state.nodes).forEach(n => {
+                n.status = 'idle';
+                n.currentPass = 1;
+                n.tokens = 0;
+            });
+            state.edges.forEach(e => e.active = false);
+            
+            renderNodes();
+            drawEdges();
+            if(state.activeNodeId) openSidePane(state.activeNodeId); // refresh pane if open
+            
+            const btn = document.getElementById('start-btn');
+            btn.classList.remove('hidden', 'opacity-50', 'cursor-not-allowed');
+            btn.innerText = "Execute Assessment";
+            document.getElementById('reset-btn').classList.add('hidden');
+            
+            document.getElementById('global-status').innerText = "SYSTEM IDLE";
+            document.getElementById('status-indicator').classList.replace('bg-emerald-500', 'bg-zinc-600'); 
+            
+            document.getElementById('scroll-container').scrollTo({left: 0, top: 0, behavior: 'smooth'});
+        });
+
+        window.addEventListener('resize', () => {
+            clearTimeout(window.resizeTimer);
+            window.resizeTimer = setTimeout(drawEdges, 100);
+        });
+
+        // Mouse Drag / Panning Logic
+        const container = document.getElementById('scroll-container');
+        let isDown = false;
+        let startX, startY, scrollLeft, scrollTop;
+
+        container.addEventListener('mousedown', (e) => {
+            // Prevent dragging if clicking on a node or the side pane
+            if(e.target.closest('.node') || e.target.closest('#side-pane')) return;
+            isDown = true;
+            container.classList.add('grabbing');
+            startX = e.pageX - container.offsetLeft;
+            startY = e.pageY - container.offsetTop;
+            scrollLeft = container.scrollLeft;
+            scrollTop = container.scrollTop;
+        });
+        
+        container.addEventListener('mouseleave', () => {
+            isDown = false;
+            container.classList.remove('grabbing');
+        });
+        
+        container.addEventListener('mouseup', () => {
+            isDown = false;
+            container.classList.remove('grabbing');
+        });
+        
+        container.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - container.offsetLeft;
+            const y = e.pageY - container.offsetTop;
+            const walkX = (x - startX) * 1.5; // Drag speed multiplier
+            const walkY = (y - startY) * 1.5;
+            container.scrollLeft = scrollLeft - walkX;
+            container.scrollTop = scrollTop - walkY;
+        });
+
+        // Initialize
+        renderNodes();
+        drawEdges();
+        setTimeout(() => {
+            container.scrollTo({ left: 50, top: 0, behavior: 'smooth' });
+        }, 100);
+
+    </script>
+</body>
+</html>
