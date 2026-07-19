@@ -41,8 +41,38 @@
   font-size: var(--text-lg);
 }
 
+.wt-landing__im2026-line {
+  margin-top: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--slate);
+}
+
 .wt-landing__status {
   min-height: 1.5rem;
+}
+
+/* Innovation Month 2026 credit — the "Ready or Not…" mark sits quietly below the
+ * primary path, identifying the entry without competing with it (competition rule:
+ * IM2026 must be clearly visible in the description). */
+.wt-landing__im2026 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+
+.wt-landing__im2026-logo {
+  display: block;
+  height: auto;
+  max-width: 220px;
+}
+
+.wt-landing__im2026-credit {
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
 }
 
 .wt-landing__error {

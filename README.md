@@ -2,6 +2,11 @@
 
 *Test the design under load before you build the aircraft.*
 
+> **An Innovation Month 2026 (IM2026) entry.** Windtunnel is a demonstration
+> system built for Innovation Month 2026 — *Ready or Not…*
+
+<img src="frontend/src/img/ReadyOrNotColour.png" alt="Innovation Month 2026 — Ready or Not…" width="320">
+
 Windtunnel takes a public servant's loose idea for an AI solution, sharpens it
 through a co-design **Brainstorm** phase, then stress-tests it through a
 multi-agent **Governance** phase built directly on the Australian Government's

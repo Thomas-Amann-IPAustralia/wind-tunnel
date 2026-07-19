@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ColdStartNote } from "../components/ColdStartNote";
 import { Surface } from "../components/Surface";
 import { useBackendStatus } from "../context/BackendStatus";
+import im2026Logo from "../img/ReadyOrNotColour.png";
 import logo from "../img/WindTunnelLogo.png";
 import { ApiError, createRun, NetworkError } from "../lib/api";
 import "./Landing.css";
@@ -48,6 +49,9 @@ export function Landing() {
             that stress-test it against the DTA&rsquo;s AI impact assessment. You finish holding a
             draft assessment for your subject-matter experts to review.
           </p>
+          <p className="wt-landing__im2026-line">
+            A <strong>Windtunnel</strong> entry for <strong>Innovation Month 2026 (IM2026)</strong>.
+          </p>
         </div>
 
         <div className="wt-landing__actions">
@@ -76,6 +80,18 @@ export function Landing() {
           ) : (
             <ColdStartNote />
           )}
+        </div>
+
+        <div className="wt-landing__im2026">
+          <img
+            className="wt-landing__im2026-logo"
+            src={im2026Logo}
+            alt="Innovation Month 2026 — Ready or Not…"
+            width={220}
+          />
+          <p className="wt-landing__im2026-credit">
+            Built for <strong>Innovation Month 2026 (IM2026)</strong>.
+          </p>
         </div>
       </div>
     </Surface>
