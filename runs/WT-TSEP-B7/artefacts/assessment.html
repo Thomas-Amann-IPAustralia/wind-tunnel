@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI impact assessment</title>
+<style>
+/* The Report register (TECH_SPEC §12.5, design §8): quiet authority — serif body,
+   sans headings, mono for data and citations. Fonts are role-based (design §3.3, §11):
+   IBM Plex where installed, otherwise a faithful serif/sans/mono system fallback, so the
+   render depends on no external font fetch. Colour is never the only cue (design §3.2):
+   every risk chip carries a leading shape glyph and its text label, legible in greyscale. */
+
+:root {
+  --serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --ink: #1a1a1a;
+  --muted: #55585c;
+  --rule: #d5d7da;
+  --panel: #f4f2ee;
+  --panel-border: #b9b3a7;
+  --link: #1c4f8f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #eceae6;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.report {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 3rem 2.5rem 5rem;
+  background: #fff;
+}
+
+/* Headings — sans, exact DTA numbering carried in the content itself. */
+h1, h2, h3, h4 { font-family: var(--sans); line-height: 1.25; color: var(--ink); }
+h1 { font-size: 1.7rem; font-weight: 600; margin: 2.6rem 0 1rem; padding-bottom: .4rem; border-bottom: 2px solid var(--ink); }
+h2 { font-size: 1.28rem; font-weight: 600; margin: 2rem 0 .6rem; }
+h3 { font-size: 1.08rem; font-weight: 600; margin: 1.4rem 0 .4rem; }
+p { margin: .6rem 0; }
+a { color: var(--link); }
+code { font-family: var(--mono); font-size: .9em; }
+
+/* Title block — the document announces what it is before section 1. */
+.title-block {
+  border: 1px solid var(--rule);
+  border-top: 5px solid var(--ink);
+  padding: 1.8rem 2rem 1.6rem;
+  margin-bottom: 1.5rem;
+}
+.title-block h1 { border: 0; margin: .2rem 0 .6rem; font-size: 2rem; }
+.title-block .draft-mark {
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #8a5a00;
+  margin: 0;
+}
+.title-block .rev { font-family: var(--sans); font-weight: 600; color: var(--muted); margin: 0 0 .4rem; }
+.title-block .meta { font-family: var(--mono); font-size: .85rem; color: var(--muted); margin: .2rem 0; }
+.title-block .disclaimer { font-family: var(--sans); font-size: .9rem; color: var(--muted); margin-top: .8rem; }
+
+.attribution { font-family: var(--sans); font-size: .82rem; color: var(--muted); margin: 0 0 .4rem; }
+
+/* Citations — a scannable first-class apparatus, mono, never buried. */
+.citations { font-family: var(--mono); font-size: .82rem; color: var(--muted); margin: .3rem 0 0; }
+
+/* Risk table + chips. Chips carry a shape glyph + label so greyscale/poor-projector
+   reading never depends on colour (design §3.2). */
+.risk-table { width: 100%; border-collapse: collapse; margin: .8rem 0; font-family: var(--sans); font-size: .92rem; }
+.risk-table th, .risk-table td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); }
+.risk-table th { font-weight: 600; border-bottom: 2px solid var(--ink); }
+.overall { font-family: var(--sans); font-weight: 600; margin: .8rem 0; }
+
+.chip { display: inline-block; font-family: var(--sans); font-weight: 600; font-size: .82rem; padding: .05rem .5rem; border-radius: 999px; border: 1.5px solid var(--ink); white-space: nowrap; }
+.chip::before { margin-right: .35rem; font-weight: 700; }
+.chip-low { background: #e7f2e7; } .chip-low::before { content: "●"; }
+.chip-medium { background: #fbf0d8; } .chip-medium::before { content: "◆"; }
+.chip-high { background: #f6dcd6; } .chip-high::before { content: "▲"; }
+
+.human-action, .gap-note { font-family: var(--sans); font-size: .9rem; }
+.human-action { border-left: 3px solid var(--panel-border); background: var(--panel); padding: .6rem .8rem; margin: 1rem 0; }
+.gap-note { color: #7a3b00; border-left: 3px solid #c98a3a; padding-left: .7rem; }
+
+/* Unresolved disagreement — calm, confident, a bordered panel in neutral tones, not an
+   error box. Styled to be found, not skimmed past (design §8). */
+.unresolved-intro { font-family: var(--sans); font-style: italic; color: var(--muted); margin: .6rem 0 1rem; }
+.unresolved-panel { border: 1px solid var(--panel-border); background: var(--panel); border-radius: 4px; padding: 1rem 1.2rem; margin: 1rem 0; }
+.unresolved-panel h3 { margin-top: 0; font-size: 1rem; }
+.unresolved-panel .position { margin: .4rem 0; }
+.unresolved-panel .why { font-style: italic; color: var(--muted); margin-top: .6rem; }
+
+/* Provenance — the audit trail, mono, a clean record. */
+.provenance { font-family: var(--mono); font-size: .82rem; color: var(--muted); background: #fafafa; border: 1px solid var(--rule); padding: 1rem 1.2rem; }
+.provenance ul { margin: .3rem 0; padding-left: 1.2rem; }
+.provenance .attestation { color: var(--ink); }
+
+.references .reference { font-size: .9rem; margin: .5rem 0; }
+.references .unresolved-ref { font-family: var(--sans); font-size: .8rem; color: #7a3b00; }
+
+.poc-frame { width: 100%; height: 30rem; border: 1px solid var(--rule); }
+
+.running-footer { display: none; }
+
+@media (max-width: 40rem) {
+  .report { padding: 1.5rem 1.1rem 3rem; }
+  body { font-size: 16px; }
+}
+
+/* Print — the standing disclaimer on every page, risk tables never split across a page
+   break, chips legible in greyscale (the shape glyph carries the level). */
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .report { max-width: none; padding: 0; }
+  .running-footer { display: block; position: fixed; bottom: 0; left: 0; right: 0; font-family: var(--sans); font-size: 8pt; color: #333; text-align: center; padding: .3rem; border-top: 1px solid var(--rule); }
+  .report { margin-bottom: 2rem; }
+  .risk-table, .unresolved-panel, .provenance { break-inside: avoid; page-break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+  .chip { border-color: #000; }
+  a { color: #000; text-decoration: underline; }
+}
+
+</style>
+</head>
+<body>
+<main class="report">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=54f547ec"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="title-block">
+<p class="draft-mark">DRAFT — for SME review</p>
+<h1>AI impact assessment</h1>
+<p class="meta">Run <code>WT-TSEP-B7</code> · Generated 2026-07-19T10:48:58Z</p>
+<p class="disclaimer">Draft for SME review — not an approval, not legal advice.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=5471cb68"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Threshold-assessment-%E2%80%94-sections-1%E2%80%934">Threshold assessment — sections 1–4<a class="anchor-link" href="#Threshold-assessment-%E2%80%94-sections-1%E2%80%934">¶</a></h1><h1 id="Threshold-AI-impact-assessment-%E2%80%94-WT-TSEP-B7">Threshold AI impact assessment — WT-TSEP-B7<a class="anchor-link" href="#Threshold-AI-impact-assessment-%E2%80%94-WT-TSEP-B7">¶</a></h1><h2 id="1.-Basic-information">1. Basic information<a class="anchor-link" href="#1.-Basic-information">¶</a></h2><h3 id="Section-1-%E2%80%94-Basic-information">Section 1 — Basic information<a class="anchor-link" href="#Section-1-%E2%80%94-Basic-information">¶</a></h3><ul>
+<li><strong>1.1 AI use case profile</strong>: C&amp;D Claim Evaluator (Run ID: WT-TSEP-B7).</li>
+<li><strong>1.2 Establishing impact assessment responsibilities</strong>: Not stated in the outline.</li>
+<li><strong>1.3 Additional roles and responsibilities</strong>: Not stated in the outline.</li>
+<li><strong>1.4 AI use case description</strong>: A public-facing chatbot hosted on business.gov where users upload or paste a cease and desist letter. The AI analyzes the unstructured text against common legal standards and regulatory frameworks to identify potentially invalid or unenforceable claims, providing links to relevant business.gov guidance articles.</li>
+<li><strong>1.5 In-scope use case</strong>: Yes, this is an active deployment of an AI-enabled chatbot on a public government portal (business.gov).</li>
+<li><strong>1.6 Type of AI technology</strong>: Natural Language Processing (NLP) / Generative AI chatbot capable of parsing unstructured text and comparing it against legal frameworks.</li>
+<li><strong>1.7 Usage pattern</strong>: Web-based chat interface with a document upload feature.</li>
+<li><strong>1.8 Administrative decisions</strong>: Not stated in the outline. (The tool is intended to be informational and not a substitute for professional legal counsel, suggesting it does not make formal administrative decisions).</li>
+<li><strong>1.9 Domain</strong>: Small business support, legal information, and regulatory guidance.</li>
+<li><strong>1.10 Expert contributions</strong>: Not stated in the outline.</li>
+<li><strong>1.11 Impact assessment review log</strong>: Not stated in the outline.</li>
+</ul>
+<h2 id="2.-Purpose-and-expected-benefits">2. Purpose and expected benefits<a class="anchor-link" href="#2.-Purpose-and-expected-benefits">¶</a></h2><h3 id="Section-2-%E2%80%94-Purpose-and-expected-benefits">Section 2 — Purpose and expected benefits<a class="anchor-link" href="#Section-2-%E2%80%94-Purpose-and-expected-benefits">¶</a></h3><ul>
+<li><strong>2.1 Problem definition</strong>: Small business owners often receive cease and desist letters that may contain illegitimate or bullying claims. However, they frequently lack the financial and legal resources to hire professional counsel to evaluate the validity of every demand they receive.</li>
+<li><strong>2.2 AI use case purpose</strong>: To provide an accessible, automated tool that analyzes the text of cease and desist letters against common legal standards to help small business owners identify potentially invalid or unenforceable claims, thereby empowering them with educational resources.</li>
+<li><strong>2.3 Non-AI alternatives</strong>: A static, comprehensive 'self-help' guide or checklist hosted on business.gov that teaches business owners how to spot common red flags themselves.</li>
+<li><strong>2.4 Identifying stakeholders</strong>: Primary users are small business owners. Other stakeholders include the business.gov legal team, the general public, and the entities sending the cease and desist letters (who may face increased scrutiny).</li>
+<li><strong>2.5 Expected benefits</strong>: A reduction in user-reported confusion regarding legal notices and high engagement with the provided educational resources within six months of deployment.</li>
+</ul>
+<h2 id="3.-Inherent-risk-assessment">3. Inherent risk assessment<a class="anchor-link" href="#3.-Inherent-risk-assessment">¶</a></h2><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Consequence</th>
+<th>Likelihood</th>
+<th>Risk rating</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.1 Reducing service accessibility and inclusion</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.2 Unfair discrimination</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.3 Stereotyping or demeaning representations</td>
+<td>Minor</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.4 Harm</td>
+<td>Major</td>
+<td>Possible</td>
+<td>High</td>
+</tr>
+<tr>
+<td>3.5 Privacy concerns</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.6 Security concerns — data aspects</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.7 Security concerns — system aspects</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.8 Reputation or public confidence</td>
+<td>Major</td>
+<td>Possible</td>
+<td>High</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3.9 Overall inherent risk rating (highest-wins): High</strong></p>
+<h3 id="3.1-Reducing-service-accessibility-and-inclusion">3.1 Reducing service accessibility and inclusion<a class="anchor-link" href="#3.1-Reducing-service-accessibility-and-inclusion">¶</a></h3><p>The tool is public-facing and relies on a web-based chat interface and PDF document uploads. Users with accessibility needs, limited English proficiency, or low digital literacy may face barriers accessing the tool or understanding its outputs. If the document parser fails to read certain formats or if the interface is not fully compliant with accessibility standards, users will face noticeable access issues. Under the precautionary principle, since accessibility testing and mitigation strategies are not stated in the outline, we assess a Moderate consequence and a Possible likelihood.</p>
+<h3 id="3.2-Unfair-discrimination">3.2 Unfair discrimination<a class="anchor-link" href="#3.2-Unfair-discrimination">¶</a></h3><p>AI models analyzing legal claims may exhibit bias based on jurisdiction, language style, or the nature of the parties involved. If the model performs poorly on non-standard English or interprets legal language in a biased manner, it could provide lower-quality or misleading analyses to culturally and linguistically diverse business owners. In line with the precautionary principle, this risk of unfair treatment or incorrect assessments for specific groups is rated as a Moderate consequence with a Possible likelihood.</p>
+<h3 id="3.3-Stereotyping-or-demeaning-representations">3.3 Stereotyping or demeaning representations<a class="anchor-link" href="#3.3-Stereotyping-or-demeaning-representations">¶</a></h3><p>While the primary task is legal document analysis, generative AI chatbots can generate biased, stereotyping, or demeaning language if prompted in unexpected ways or if the underlying model contains latent biases. Given the lack of detail on conversational guardrails in the outline, we apply the precautionary default of a Minor consequence and a Possible likelihood.</p>
+<h3 id="3.4-Harm">3.4 Harm<a class="anchor-link" href="#3.4-Harm">¶</a></h3><p>If the chatbot incorrectly identifies a legally valid and enforceable cease and desist claim as "illegitimate" or "unenforceable," a small business owner might ignore the letter. Despite the persistent disclaimer, users are highly likely to rely on the tool's specific analysis. This could result in severe legal consequences, including costly litigation, statutory damages, or business closure. Under the precautionary principle, this potential for significant financial and operational distress is classified as a Major consequence with a Possible likelihood.</p>
+<h3 id="3.5-Privacy-concerns">3.5 Privacy concerns<a class="anchor-link" href="#3.5-Privacy-concerns">¶</a></h3><p>Users upload highly sensitive legal documents containing private disputes and potentially proprietary business information. Although the outline specifies a preference for strict data privacy controls to prevent model training, the risk of data leaks, unauthorized access, or accidental exposure of these sensitive uploads remains. Any data leak would cause noticeable distress and privacy concerns. We precautionarily rate this as a Moderate consequence and a Possible likelihood.</p>
+<h3 id="3.6-Security-concerns-%E2%80%94-data-aspects">3.6 Security concerns — data aspects<a class="anchor-link" href="#3.6-Security-concerns-%E2%80%94-data-aspects">¶</a></h3><p>The system processes unstructured text from active legal disputes, which is highly sensitive. A security breach of the business.gov infrastructure hosting these uploaded documents could compromise proprietary business data and private legal strategies, raising serious privacy and legal concerns. In the absence of detailed security architecture in the outline, we apply the precautionary default of a Moderate consequence and a Possible likelihood.</p>
+<h3 id="3.7-Security-concerns-%E2%80%94-system-aspects">3.7 Security concerns — system aspects<a class="anchor-link" href="#3.7-Security-concerns-%E2%80%94-system-aspects">¶</a></h3><p>Implementing a public-facing document upload and parsing feature on business.gov infrastructure introduces known system vulnerabilities (e.g., malicious file uploads, prompt injection attacks, or system exploits). A vulnerability could lead to unauthorized access, data leaks, or service disruption. We cautiously rate this as a Moderate consequence and a Possible likelihood.</p>
+<h3 id="3.8-Reputation-or-public-confidence">3.8 Reputation or public confidence<a class="anchor-link" href="#3.8-Reputation-or-public-confidence">¶</a></h3><p>Because the tool is hosted on the official business.gov platform, users will associate its outputs directly with government authority. If the AI provides incorrect legal guidance that leads to financial loss for small businesses, or if sensitive legal documents uploaded by users are leaked, it would trigger widespread public criticism and severely damage trust in business.gov as a reliable government portal. Under the precautionary principle, this is rated as a Major consequence and a Possible likelihood.</p>
+<h2 id="4.-Threshold-assessment-outcome">4. Threshold assessment outcome<a class="anchor-link" href="#4.-Threshold-assessment-outcome">¶</a></h2><h3 id="4.1-Assessing-officer-recommendation">4.1 Assessing officer recommendation<a class="anchor-link" href="#4.1-Assessing-officer-recommendation">¶</a></h3><p>The proposed "C&amp;D Claim Evaluator" chatbot offers a highly innovative, self-help mechanism for resource-constrained small business owners facing legal pressure. However, because the tool performs automated analysis on unstructured legal documents and provides assessments on the validity of legal claims, it carries substantial inherent risks.</p>
+<p>Key areas of concern include the potential for severe financial and legal harm if a user acts on incorrect AI advice (e.g., ignoring a valid legal notice), privacy risks associated with uploading highly sensitive and proprietary legal disputes, and system security risks inherent to public-facing document upload features.</p>
+<p>To safely progress this initiative, it is recommended that the project team conduct rigorous testing of the AI's analytical accuracy, implement strict data-handling and privacy controls to ensure uploaded documents are secure and never used for model training, and design highly visible, legally robust disclaimers to ensure users understand the tool is strictly educational and not a substitute for professional legal counsel. Further detailed risk mitigation planning and stakeholder consultation with legal experts are strongly advised before proceeding to development.</p>
+<p>A full assessment is <strong>required</strong>.</p>
+<p>Overall inherent risk is <strong>High</strong> — refer to an internal governance body (§12.5).</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=d9773e01"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Full-assessment-%E2%80%94-sections-5%E2%80%9312">Full assessment — sections 5–12<a class="anchor-link" href="#Full-assessment-%E2%80%94-sections-5%E2%80%9312">¶</a></h1><h2 id="5.1-%C2%B7-Defining-fairness">5.1 · Defining fairness<a class="anchor-link" href="#5.1-%C2%B7-Defining-fairness">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p class="gap-note">Gap — The project team has not yet established a clear definition of what constitutes a fair process or outcome in the context of the C&amp;D Claim Evaluator.</p>
+<h2 id="5.2-%C2%B7-Measuring-fairness">5.2 · Measuring fairness<a class="anchor-link" href="#5.2-%C2%B7-Measuring-fairness">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p class="gap-note">Gap — The project team has not yet established quantitative or qualitative metrics to measure or monitor the fairness of the chatbot's outcomes.</p>
+<h2 id="6.1-%C2%B7-Data-suitability">6.1 · Data suitability<a class="anchor-link" href="#6.1-%C2%B7-Data-suitability">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>Yes. The AI system requires the input of unstructured text from cease and desist letters uploaded by users to operate. The chosen data (the uploaded letters) is highly suitable because it represents the direct, real-world legal disputes that small business owners need evaluated. To ensure data suitability and reliability of the AI outputs, the system must align with key data quality principles:</p>
+<ol>
+<li><strong>Accuracy</strong>: The system must correctly parse the uploaded text (e.g., PDFs or pasted text) to ensure that the data correctly reflects real-world events and legal claims without errors (Data Quality Checklist, p.1).</li>
+<li><strong>Completeness</strong>: The system must verify that all mandatory fields and the full text of the uploaded letters are present and available for the AI task, identifying any missing data patterns (Data Quality Checklist, p.1).</li>
+<li><strong>Consistency</strong>: The system must ensure that the legal standards and status of information are consistent across different systems and sources (Data Quality Checklist, p.1).</li>
+<li><strong>Timeliness</strong>: The legal standards and regulatory frameworks used by the AI to evaluate these claims must be kept up to date to ensure the analysis is relevant to current laws (Data Quality Checklist, p.2).</li>
+<li><strong>Data Coverage and Bias</strong>: The training and evaluation data for the underlying model must cover all common legal scenarios, jurisdictions, and language styles that the AI will encounter to avoid biased or lower-quality assessments for diverse business owners (Data Quality Checklist, p.3).</li>
+<li><strong>Traceability</strong>: The system must maintain clear lineage to prove which data source influenced a specific AI output, ensuring the advice is interpretable and verifiable (Data Quality Checklist, p.3).</li>
+</ol>
+<p class="citations">Sources: [Data Quality Checklist, p.1]; [Data Quality Checklist, p.2]; [Data Quality Checklist, p.3]</p>
+<h2 id="6.2-%C2%B7-Indigenous-data">6.2 · Indigenous data<a class="anchor-link" href="#6.2-%C2%B7-Indigenous-data">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>Not applicable. The C&amp;D Claim Evaluator is a general-purpose tool designed to analyze unstructured text from cease and desist letters uploaded by small business owners, and does not specifically target, collect, or use Indigenous data as part of its core design. However, if the system processes letters involving Indigenous businesses, communities, or intellectual property, or if any outputs relate to Indigenous people, the agency must ensure consistency with the Framework for Governance of Indigenous Data. This includes partnering with Aboriginal and Torres Strait Islander people at all stages of the data lifecycle to reflect their priorities, building APS capability to support their inclusion in data governance, and embedding co-design in data use and governance activities (DDGS, p.13). Furthermore, the agency must ensure that the AI use case does not lead to harms arising from a breach of obligations under applicable laws, including Indigenous cultural and intellectual property (AI Use Policy v2.0, p.20).</p>
+<p class="citations">Sources: [DDGS, p.13]; [AI Use Policy v2.0, p.20]</p>
+<h2 id="6.3-%C2%B7-Suitability-of-procured-AI-system">6.3 · Suitability of procured AI system<a class="anchor-link" href="#6.3-%C2%B7-Suitability-of-procured-AI-system">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>Yes. While the specific model to be procured or utilized (e.g., a commercial LLM or open-source model hosted on business.gov infrastructure) is not finalized in the outline, any procurement will be subject to a formal AI Suitability Assessment. This process pattern ensures that using AI adds clear value over non-AI alternatives (such as static self-help guides) and that the model's capabilities align with the natural language processing requirements of parsing unstructured legal text. Furthermore, in accordance with Statement 20 of the AI Technical Standard, model selection will evaluate trade-offs including data residency, privacy concerns (ensuring uploaded documents are not used for training), and operational assurance.</p>
+<p class="citations">Sources: [AI Suitability Assessment, §(document start)]; [AI Technical Standard, DTA-Tech-Standards!r73]</p>
+<h2 id="6.4-%C2%B7-Testing">6.4 · Testing<a class="anchor-link" href="#6.4-%C2%B7-Testing">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>No. The AI system is currently in the conceptual/design phase and has not yet been built or tested. However, a comprehensive testing regime is planned prior to deployment. This will include Responsible AI (RAI) Acceptance Testing to verify that ethical and safety requirements are met, such as testing the accuracy of the legal analysis to prevent incorrect guidance (which could lead to severe legal or financial harm). Additionally, in alignment with Statement 28 of the AI Technical Standard, we will undertake negative testing, failure testing, and fault injection to identify and mitigate security and privacy weaknesses, particularly regarding prompt injection attacks and document parsing vulnerabilities.</p>
+<p class="citations">Sources: [RAI Acceptance Testing, §(document start)]; [AI Technical Standard, DTA-Tech-Standards!r103]</p>
+<h2 id="6.5-%C2%B7-Pilot">6.5 · Pilot<a class="anchor-link" href="#6.5-%C2%B7-Pilot">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>Yes. Given the high inherent risk of the C&amp;D Claim Evaluator (particularly the potential for financial and legal harm if users rely on incorrect advice), a structured pilot phase will be conducted before full public deployment. This is consistent with emerging public sector practices where AI deployments are initially trialed as pilots (such as the French Court of Audit's ChatJF prototype) to bridge the gap between development and production, allowing for the refinement of model accuracy, user interface disclaimers, and data handling controls in a restricted environment.</p>
+<p class="citations">Sources: [OECD AI in Public Audit, p.25]</p>
+<h2 id="6.6-%C2%B7-Monitoring">6.6 · Monitoring<a class="anchor-link" href="#6.6-%C2%B7-Monitoring">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>Yes. A comprehensive post-deployment monitoring and evaluation plan will be established. This will incorporate a Continuous RAI Validator pattern to continuously monitor and validate the chatbot's outcomes against safety and reliability requirements (e.g., tracking hallucination rates and accuracy of legal guidance). In accordance with Statement 33 of the AI Technical Standard, the plan will define disaster recovery, backup, and monitoring processes to ensure system resilience.</p>
+<p class="citations">Sources: [Continuous RAI Validator, §(document start)]; [AI Technical Standard, DTA-Tech-Standards!r114]</p>
+<h2 id="6.7-%C2%B7-Preparedness-to-intervene-or-disengage">6.7 · Preparedness to intervene or disengage<a class="anchor-link" href="#6.7-%C2%B7-Preparedness-to-intervene-or-disengage">¶</a></h2><p class="attribution">Assessed by: IT Security specialist</p>
+<p>Yes. A manual kill-switch is planned to take the chatbot offline immediately if it begins generating harmful or highly inaccurate legal advice. To support this, the project team should establish clear processes for human intervention and safe disengagement of the AI system. This includes preparing for automated rollbacks and using advanced deployments with a human-in-the-loop as a failsafe to quickly revert the system to a last known good state if the model is compromised or exhibits anomalous behavior (Deploying AI Securely, p.6). Furthermore, the team should integrate AI-specific failure states—such as model drift or adversarial manipulation—into their existing incident response, business continuity, and disaster recovery plans, ensuring there is a clear mechanism to bypass or temporarily disable the chatbot without disrupting the broader business.gov portal (PSPF PA001-2026, p.4; Secure AI Dev Guidelines, p.14). Clear protocols for immediate intervention, such as the ability to quickly take the system offline, are essential for managing unexpected or inappropriate model behavior (LLMSVS, §Control objective).</p>
+<p class="citations">Sources: [Deploying AI Securely, p.6]; [PSPF PA001-2026, p.4]; [Secure AI Dev Guidelines, p.14]; [LLMSVS, §Control objective]</p>
+<h2 id="6.8-%C2%B7-Training-of-AI-system-operators">6.8 · Training of AI system operators<a class="anchor-link" href="#6.8-%C2%B7-Training-of-AI-system-operators">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p>Yes. A formal training and skill-development process will be established for the business.gov operators and legal team members who oversee the system, as confirmed by the project team. This aligns with Statement 10 of the AI Technical Standard, which requires defining human oversight and control mechanisms, including identifying required personas and training them to supervise, monitor, and intervene or override AI decisions when necessary. It also reflects international best practices where public institutions invest heavily in effective training and communication efforts to manage expectations and encourage proper use.</p>
+<p class="citations">Sources: [AI Technical Standard, DTA-Tech-Standards!r37]; [OECD AI in Public Audit, p.25]</p>
+<h2 id="7.1-%C2%B7-Minimise-and-protect-personal-information">7.1 · Minimise and protect personal information<a class="anchor-link" href="#7.1-%C2%B7-Minimise-and-protect-personal-information">¶</a></h2><p class="attribution">Assessed by: Privacy specialist</p>
+<p>Yes. The collection, use, and disclosure of personal information through the C&amp;D Claim Evaluator can comply with the Australian Privacy Principles (APPs) provided that strict design and configuration controls are implemented.</p>
+<p>First, under APP 3.1, as an agency, business.gov must ensure that any collection of personal information (which may be contained within uploaded cease and desist letters, such as names or contact details of disputing parties) is reasonably necessary for, or directly related to, one or more of its functions or activities (Privacy Act 1988, s 3). These functions and activities are determined objectively (APP Guidelines, p.88). Providing educational guidance to small businesses is a core function of business.gov, making this collection directly related to its activities.</p>
+<p>Second, to comply with APP 6 regarding secondary use and disclosure, the agency must ensure that personal information uploaded by users is not used for secondary purposes, such as training or fine-tuning AI models, without consent (OAIC AI Training Top 5, p.1). The agency must verify that the AI system's terms of use and data-handling policies strictly prohibit the developer or any third party from accessing or using the input text for model training or other secondary purposes (OAIC AI Selection Checklist, p.1).</p>
+<p>Third, under APP 11.1, the agency must take reasonable steps to protect the personal information from misuse, interference, loss, and unauthorised access, modification, or disclosure (APP Guidelines, p.187). Because the uploaded legal documents are highly sensitive, more rigorous security steps are required (APP Guidelines, p.187). This must include both technical measures (such as encryption and secure access controls) and organisational measures (such as clear staff policies) (APP Guidelines, p.188).</p>
+<p>Finally, under APP 11.2, the agency must take reasonable steps to destroy or de-identify personal information when it is no longer needed for the primary purpose, unless an exception applies (such as being contained in a Commonwealth record or required by law to be retained) (APP Guidelines, p.191). In this case, uploaded documents should be put beyond use or securely deleted immediately after the session ends to minimise retention risks.</p>
+<p class="citations">Sources: [Privacy Act 1988, s 3]; [APP Guidelines, p.88]; [OAIC AI Training Top 5, p.1]; [OAIC AI Selection Checklist, p.1]; [APP Guidelines, p.187]; [APP Guidelines, p.188]; [APP Guidelines, p.191]</p>
+<h2 id="7.2-%C2%B7-Privacy-threshold-and/or-impact-assessment">7.2 · Privacy threshold and/or impact assessment<a class="anchor-link" href="#7.2-%C2%B7-Privacy-threshold-and/or-impact-assessment">¶</a></h2><p class="attribution">Assessed by: Privacy specialist</p>
+<p>The privacy threshold assessment and the privacy impact assessment (PIA) for the C&amp;D Claim Evaluator are stored securely within business.gov's IT tenancy.</p>
+<h2 id="7.3-%C2%B7-Security-risks">7.3 · Security risks<a class="anchor-link" href="#7.3-%C2%B7-Security-risks">¶</a></h2><p class="attribution">Assessed by: IT Security specialist</p>
+<p>No. While the project outline specifies that the chatbot will be hosted on business.gov infrastructure and requires strict data privacy controls to prevent uploaded documents from being used for model training, it does not detail specific operational security measures to address AI-specific risks. To secure the system, several critical measures must be implemented. First, the team must address prompt injection vulnerabilities (both direct and indirect), where malicious inputs in uploaded documents or chat prompts could manipulate the model's behavior, leading to content manipulation, unauthorized access, or bypass of safety guidelines (OWASP LLM Top 10, p.7; ISM, p.171). Second, pre-trained or external models must be thoroughly inspected in a secure development zone using approved scanners before deployment to detect malicious code (Deploying AI Securely, p.6). Finally, the system's operation must be continuously monitored, with logging configured to track AI decisions for compliance and forensic analysis, ensuring the AI's identity is distinct from typical user identifiers (AI in OT Principles, p.19).</p>
+<p class="citations">Sources: [OWASP LLM Top 10, p.7]; [ISM, p.171]; [Deploying AI Securely, p.6]; [AI in OT Principles, p.19]</p>
+<h2 id="8.1-%C2%B7-Consultation">8.1 · Consultation<a class="anchor-link" href="#8.1-%C2%B7-Consultation">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>Yes. The project team has conducted initial consultations with 12 small business owners, who represent the primary user group and key stakeholders identified in section 2.4, to understand their needs and challenges when receiving cease and desist letters.</p>
+<h2 id="8.2-%C2%B7-Public-visibility">8.2 · Public visibility<a class="anchor-link" href="#8.2-%C2%B7-Public-visibility">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>Yes. The AI chatbot will be hosted publicly on business.gov, and the interface will feature a clear, persistent disclaimer outlining the scope and goals of the tool, specifically clarifying that the output is informational and not a substitute for professional legal counsel. This aligns with transparency recommendations to publish clear information about the system's scope, capabilities, and limitations to set appropriate user expectations.</p>
+<p class="citations">Sources: [NAIC RAI Tools, p.51]</p>
+<h2 id="8.3-%C2%B7-Maintain-appropriate-documentation-and-records">8.3 · Maintain appropriate documentation and records<a class="anchor-link" href="#8.3-%C2%B7-Maintain-appropriate-documentation-and-records">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>Yes. The agency has confirmed that it will store and log the uploaded cease and desist letters and chat transcripts. To comply with Commonwealth recordkeeping requirements, the agency must establish robust processes to maintain appropriate documentation and records throughout the lifecycle of the AI use case, in accordance with the Archives Act 1983 and National Archives of Australia (NAA) guidance.</p>
+<ol>
+<li><strong>Commonwealth Records Status</strong>: All AI-generated content, including the preliminary analyses, recommendations, and chat transcripts, constitutes Commonwealth records under the Archives Act 1983 and must not be destroyed or altered without permission (Archives Act 1983, s 24; NAA AI Records Guidance, §General principles for managing records generated by AI).</li>
+<li><strong>System Development and Governance Records</strong>: The agency must capture and record application design documentation, operational specifications, details of the AI model, rules frameworks, configuration, and training datasets in the system's development records (NAA AI Records Guidance, §Example: AI technologies incorporated into a regulatory compliance assessment business system).</li>
+<li><strong>Individual Session and Input Records</strong>: Since the chatbot processes sensitive legal disputes, the AI-generated outputs and associated metadata must be captured into an approved records management system if the business system itself lacks adequate recordkeeping functionality (NAA AI Records Guidance, §General principles for managing records generated by AI).</li>
+<li><strong>Prompts and Inputs</strong>: The agency must make risk-based decisions to retain user prompts and uploaded source documents (inputs) to preserve adequate evidence of how the AI outputs were generated, ensuring transparency and accountability (NAA AI Records Guidance, §Disposal of generative AI assistant prompts and inputs). The agency has confirmed there are no plans to use these inputs to fine-tune or train future iterations of the AI model.</li>
+<li><strong>Policies and Procedures</strong>: Documentation regarding the correct usage of the AI, system testing, and the disclaimers provided to users must be retained to demonstrate compliant operation (NAA AI Records Guidance, §Example: AI technologies incorporated into a regulatory compliance assessment business system).</li>
+</ol>
+<p class="citations">Sources: [Archives Act 1983, s 24]; [NAA AI Records Guidance, §General principles for managing records generated by AI]; [NAA AI Records Guidance, §Disposal of generative AI assistant prompts and inputs]; [NAA AI Records Guidance, §Example: AI technologies incorporated into a regulatory compliance assessment business system]</p>
+<h2 id="8.4-%C2%B7-Disclosing-AI-interactions-and-outputs">8.4 · Disclosing AI interactions and outputs<a class="anchor-link" href="#8.4-%C2%B7-Disclosing-AI-interactions-and-outputs">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>Yes.</p>
+<ul>
+<li>8.4.1: Yes, users will be clearly informed that they are interacting with an AI system through a persistent disclaimer on the web-based chat interface on business.gov, which clarifies that the chatbot's outputs are informational and AI-generated.</li>
+<li>8.4.2: Yes, a non-AI alternative is available. The project team has considered a static, comprehensive 'self-help' guide or checklist on business.gov as a non-AI alternative. To comply with accessibility and inclusion standards, this static guide should be made readily accessible to users who do not wish to interact with the AI chatbot.</li>
+</ul>
+<p class="citations">Sources: [NAIC RAI Tools, p.51]</p>
+<h2 id="8.5-%C2%B7-Offer-appropriate-explanations">8.5 · Offer appropriate explanations<a class="anchor-link" href="#8.5-%C2%B7-Offer-appropriate-explanations">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>Yes. The chatbot will provide explanations by highlighting specific paragraphs in the uploaded cease and desist letters that appear to lack a legal basis and linking them directly to relevant business.gov guidance articles. This allows users to understand the specific factors and regulatory frameworks underpinning the AI's insights, aligning with the principle of providing clear, non-technical explanations that help users understand the logic behind AI-generated recommendations.</p>
+<p class="citations">Sources: [NAIC RAI Tools, p.35]</p>
+<h2 id="9.1-%C2%B7-Notification-of-AI-affecting-rights">9.1 · Notification of AI affecting rights<a class="anchor-link" href="#9.1-%C2%B7-Notification-of-AI-affecting-rights">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Not applicable. The C&amp;D Claim Evaluator is a public-facing chatbot designed strictly to provide informational support and educational resources to small business owners evaluating cease and desist letters. It does not make, or materially influence, formal administrative decisions or administrative actions that have a legal or significant effect on individuals or organisations.</p>
+<h2 id="9.2-%C2%B7-Challenging-administrative-actions-influenced-by-AI">9.2 · Challenging administrative actions influenced by AI<a class="anchor-link" href="#9.2-%C2%B7-Challenging-administrative-actions-influenced-by-AI">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Not applicable. Because the chatbot is an informational tool and does not make or materially influence administrative actions or decisions with legal or significant effects, there are no administrative actions arising from this system to challenge. However, users can provide feedback through standard business.gov feedback mechanisms if they dispute the chatbot's informational outputs.</p>
+<h2 id="10.1-%C2%B7-Incorporating-diversity">10.1 · Incorporating diversity<a class="anchor-link" href="#10.1-%C2%B7-Incorporating-diversity">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p>Yes. The project team includes individuals with diverse skills, experiences, and backgrounds, including legal, UX/UI, accessibility, and cultural diversity experts, to oversee the AI lifecycle. This multidisciplinary composition aligns with best practices to safeguard against unintentional outcomes and ensure usability and compliance throughout the system's lifecycle.</p>
+<p class="citations">Sources: [ADM Guide (earlier ed.), p.18]; [Diversity &amp; Inclusion in AI, p.8]</p>
+<h2 id="10.2-%C2%B7-Human-rights-obligations">10.2 · Human rights obligations<a class="anchor-link" href="#10.2-%C2%B7-Human-rights-obligations">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Yes. The agency has scheduled or has underway a formal consultation with human rights and anti-discrimination advisors, alongside a Privacy Impact Assessment (PIA), to ensure that the AI use case and the handling of uploaded legal data align with human rights obligations. This aligns with best practices for managing risks of algorithmic bias and discrimination under federal anti-discrimination laws, such as the Racial Discrimination Act 1975 and Disability Discrimination Act 1992, and ensures the system does not produce biased outputs or disadvantage protected groups (HTI State of AI Governance, p.48).</p>
+<p class="citations">Sources: [HTI State of AI Governance, p.48]</p>
+<h2 id="11.1-%C2%B7-Ensuring-accountability-during-the-lifecycle-of-the-AI-system">11.1 · Ensuring accountability during the lifecycle of the AI system<a class="anchor-link" href="#11.1-%C2%B7-Ensuring-accountability-during-the-lifecycle-of-the-AI-system">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Yes. The agency has established clear accountability mechanisms by designating both an accountable official and an accountable use case owner for the C&amp;D Claim Evaluator system (AI Use Policy v2.0, p.11). Since this use case has been assessed as having a High inherent risk rating, the agency will also report the use case to the Digital Transformation Agency (DTA) through the accountable official and govern it through a designated board or senior executive, establishing a system to regularly review the use case at least every 12 months (AI Use Policy v2.0, p.16).</p>
+<p class="citations">Sources: [AI Use Policy v2.0, p.11]; [AI Use Policy v2.0, p.16]</p>
+<h2 id="12.1-%C2%B7-Alignment-with-relevant-legal-frameworks">12.1 · Alignment with relevant legal frameworks<a class="anchor-link" href="#12.1-%C2%B7-Alignment-with-relevant-legal-frameworks">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>No. While the threshold assessment notes that the AI will analyze text against common legal standards, the project documentation does not yet show that all relevant agency-specific legislation and regulatory instruments have been fully identified and documented. Key frameworks that must be formally documented include the Privacy Act 1988 (Cth) (ADM Better Practice Guide, p.18), anti-discrimination laws, and the Australian Consumer Law regarding misleading advice or information (HTI State of AI Governance, p.36). A comprehensive legal review is required to map these requirements before deployment.</p>
+<p class="citations">Sources: [ADM Better Practice Guide, p.18]; [HTI State of AI Governance, p.36]</p>
+<h2 id="12.2-%C2%B7-Legal-advice">12.2 · Legal advice<a class="anchor-link" href="#12.2-%C2%B7-Legal-advice">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Yes.</p>
+<ul>
+<li><p>12.2.1: Yes, the need for legal advice has been identified. Given that the chatbot analyzes unstructured legal documents and provides assessments on the validity of legal claims, there is a high risk of severe financial and legal harm if a user acts on incorrect AI advice. Legal advice is essential to review the correctness of the legal interpretations programmed into the AI, draft legally robust disclaimers, and ensure compliance with administrative law, privacy, and liability frameworks.</p>
+</li>
+<li><p>12.2.2: The location where the legal advice will be stored is currently unavailable or not yet determined, as the project is in its conceptual and assessment phase and formal legal advice has not yet been finalized or stored in the agency's records management system.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=87f27d73"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Residual-risk-%E2%80%94-12.3-and-12.4">Residual risk — 12.3 and 12.4<a class="anchor-link" href="#Residual-risk-%E2%80%94-12.3-and-12.4">¶</a></h1><h2 id="12.3-Residual-risk-summary">12.3 Residual risk summary<a class="anchor-link" href="#12.3-Residual-risk-summary">¶</a></h2><table class="risk-table">
+<thead><tr><th>Area</th><th>Consequence</th><th>Likelihood</th><th>Residual rating</th></tr></thead><tbody>
+<tr><td>3.1</td><td>Moderate</td><td>Unlikely</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.2</td><td>Moderate</td><td>Unlikely</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.3</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.4</td><td>Major</td><td>Unlikely</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.5</td><td>Moderate</td><td>Possible</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.6</td><td>Moderate</td><td>Possible</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.7</td><td>Moderate</td><td>Unlikely</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.8</td><td>Major</td><td>Unlikely</td><td class="chip chip-medium">Medium</td></tr>
+</tbody></table>
+<p class="overall">12.4 Overall residual risk rating (highest-wins): <span class="chip chip-medium">Medium</span></p>
+<p class="human-action">12.5 — Internal governance body review is a human action where the agency's governance policy requires it.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=59f38960"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Implementation-Plan">Appendix — Implementation Plan<a class="anchor-link" href="#Appendix-%E2%80%94-Implementation-Plan">¶</a></h1><p>The implementation of the C&amp;D Claim Evaluator follows a defense-in-depth architecture, prioritizing strict data compartmentalization, legal accuracy, and user transparency. The system consists of a frontend web interface hosted on business.gov, an API gateway with prompt injection filters, an orchestration layer for document parsing, and an isolated LLM environment.</p>
+<p>Sequencing is divided into four phases:</p>
+<ol>
+<li><strong>Governance &amp; Legal Prep</strong>: Securing legal advice, mapping legislation, and establishing accountability.</li>
+<li><strong>Secure Build</strong>: Procuring the model, implementing strict data handling (balancing privacy destruction with Commonwealth recordkeeping), and building the UI with persistent disclaimers.</li>
+<li><strong>Testing &amp; Pilot</strong>: RAI acceptance testing, fault injection, and a restricted pilot deployment.</li>
+<li><strong>Production &amp; Monitoring</strong>: Continuous validation, distinct AI logging, and active kill-switch readiness.</li>
+</ol>
+<h2 id="Implementation-steps">Implementation steps<a class="anchor-link" href="#Implementation-steps">¶</a></h2><h3 id="1.-Establish-governance,-legal-mapping,-and-accountability">1. Establish governance, legal mapping, and accountability<a class="anchor-link" href="#1.-Establish-governance,-legal-mapping,-and-accountability">¶</a></h3><p>Before development begins, designate an accountable official and use case owner, and establish a governance board to review the system every 12 months. Report the High-risk use case to the DTA. Conduct a comprehensive legal review to map obligations under the Privacy Act 1988, anti-discrimination laws, and Australian Consumer Law. Obtain formal legal advice to review the AI's programmed legal interpretations, draft robust disclaimers, and ensure compliance. Concurrently, consult human rights and anti-discrimination advisors alongside the Privacy Impact Assessment (PIA).</p>
+<p><em>Answers: [Legal &amp; Administrative Law specialist, §11.1] — Designate accountable official/owner, report to DTA, and establish 12-month review cycle via governance board; [Legal &amp; Administrative Law specialist, §12.1] — Document relevant legislation including Privacy Act, anti-discrimination laws, and Australian Consumer Law; [Legal &amp; Administrative Law specialist, §12.2] — Obtain legal advice to review AI interpretations, draft disclaimers, and ensure liability compliance; [Legal &amp; Administrative Law specialist, §10.2] — Consult human rights and anti-discrimination advisors alongside the PIA</em></p>
+<h3 id="2.-Procure-model-and-verify-secondary-use-prohibitions">2. Procure model and verify secondary use prohibitions<a class="anchor-link" href="#2.-Procure-model-and-verify-secondary-use-prohibitions">¶</a></h3><p>Execute an AI Suitability Assessment to evaluate data residency and privacy trade-offs. Inspect any pre-trained or external models in a secure development zone using approved scanners to detect malicious code prior to deployment. Verify contractually and technically that the AI system's terms of use strictly prohibit the developer or third parties from accessing input text for model training or secondary purposes.</p>
+<p><em>Answers: [Solution Architect (sections), §6.3] — Conduct AI Suitability Assessment evaluating data residency and privacy; [IT Security specialist, §7.3] — Inspect pre-trained models in a secure dev zone using approved scanners; [Privacy specialist, §7.1] — Verify terms of use strictly prohibit input text being used for model training or secondary purposes</em></p>
+<h3 id="3.-Develop-transparent-UI-and-non-AI-alternatives">3. Develop transparent UI and non-AI alternatives<a class="anchor-link" href="#3.-Develop-transparent-UI-and-non-AI-alternatives">¶</a></h3><p>Build the web-based chat interface on business.gov with a persistent, highly visible disclaimer stating the tool is AI-generated, informational, and not a substitute for professional legal counsel. Configure the AI output to highlight specific paragraphs in the uploaded letter that lack legal basis and provide direct hyperlinks to relevant business.gov guidance articles. Ensure a static, comprehensive 'self-help' guide is published and easily accessible as a non-AI alternative.</p>
+<p><em>Answers: [Ethics &amp; Fairness specialist, §8.2] — Implement clear, persistent disclaimer that output is informational and not legal counsel; [Ethics &amp; Fairness specialist, §8.4] — Inform users they are interacting with AI and provide a static self-help guide as a non-AI alternative; [Ethics &amp; Fairness specialist, §8.5] — Highlight specific paragraphs in the upload and link to business.gov guidance articles for explanation</em></p>
+<h3 id="4.-Implement-secure-data-handling-and-compliant-recordkeeping">4. Implement secure data handling and compliant recordkeeping<a class="anchor-link" href="#4.-Implement-secure-data-handling-and-compliant-recordkeeping">¶</a></h3><p>To satisfy both privacy destruction requirements and Commonwealth recordkeeping obligations, implement a dual-path data lifecycle.</p>
+<div class="jp-Mermaid"><pre class="mermaid">
+sequenceDiagram
+    participant User
+    participant WebApp as business.gov UI
+    participant AI as AI Processing Enclave
+    participant CRMS as Commonwealth Records System
+    User-&gt;&gt;WebApp: Uploads C&amp;D Letter
+    WebApp-&gt;&gt;AI: Process Document (Encrypted)
+    AI--&gt;&gt;WebApp: Returns Analysis
+    WebApp-&gt;&gt;CRMS: Archive Session (Prompts, Inputs, Outputs, Metadata)
+    CRMS--&gt;&gt;WebApp: Ack
+    WebApp-&gt;&gt;AI: Trigger Hard Delete
+    WebApp-&gt;&gt;WebApp: Purge Local Cache
+</pre></div><p>Ensure all data is encrypted at rest and in transit. Immediately upon session termination, transfer the AI-generated outputs, metadata, prompts, and inputs to an approved, access-controlled records management system, then securely delete all traces from the active web and AI processing environments.</p>
+<p><em>Answers: [Privacy specialist, §7.1] — Encrypt data, implement secure access controls, and destroy/de-identify personal info immediately after session ends; [Data Governance specialist, §8.3] — Capture AI outputs, metadata, prompts, and inputs into an approved records management system</em></p>
+<h3 id="5.-Deploy-security-controls,-prompt-defenses,-and-kill-switch">5. Deploy security controls, prompt defenses, and kill-switch<a class="anchor-link" href="#5.-Deploy-security-controls,-prompt-defenses,-and-kill-switch">¶</a></h3><p>Implement input validation and system prompt guardrails to mitigate direct and indirect prompt injection vulnerabilities from uploaded documents. Build a manual kill-switch accessible to the business.gov operations team to immediately take the chatbot offline if it generates harmful advice. Integrate this kill-switch and automated rollback procedures into existing incident response and disaster recovery plans.</p>
+<p><em>Answers: [IT Security specialist, §7.3] — Address direct and indirect prompt injection vulnerabilities; [IT Security specialist, §6.7] — Implement manual kill-switch, automated rollbacks, and integrate into incident response plans</em></p>
+<h3 id="6.-Execute-RAI-acceptance-testing-and-data-quality-validation">6. Execute RAI acceptance testing and data quality validation<a class="anchor-link" href="#6.-Execute-RAI-acceptance-testing-and-data-quality-validation">¶</a></h3><p>Prior to deployment, execute a rigorous testing regime. Conduct Responsible AI (RAI) Acceptance Testing to verify the accuracy of the legal analysis. Perform negative testing, failure testing, and fault injection to identify document parsing vulnerabilities. Validate data quality by ensuring the system accurately parses PDFs, covers diverse legal scenarios and language styles to prevent bias, and maintains traceability of which data source influenced specific outputs.</p>
+<p><em>Answers: [Solution Architect (sections), §6.4] — Conduct RAI Acceptance Testing, negative testing, failure testing, and fault injection; [Data Governance specialist, §6.1] — Ensure data accuracy, completeness, bias coverage, and traceability</em></p>
+<h3 id="7.-Train-operators-and-execute-restricted-pilot">7. Train operators and execute restricted pilot<a class="anchor-link" href="#7.-Train-operators-and-execute-restricted-pilot">¶</a></h3><p>Develop and deliver formal training for business.gov operators and the legal team on how to supervise the system, monitor outputs, and trigger the kill-switch. Following training, launch the system in a structured pilot phase to a restricted audience. Use this pilot to refine model accuracy, test the effectiveness of the UI disclaimers, and validate data handling controls before full public release.</p>
+<p><em>Answers: [Solution Architect (sections), §6.8] — Establish formal training for operators and legal team to supervise and intervene; [Solution Architect (sections), §6.5] — Conduct a structured pilot phase before full public deployment</em></p>
+<h3 id="8.-Implement-continuous-monitoring-and-distinct-AI-logging">8. Implement continuous monitoring and distinct AI logging<a class="anchor-link" href="#8.-Implement-continuous-monitoring-and-distinct-AI-logging">¶</a></h3><p>Deploy a Continuous RAI Validator pattern to monitor the chatbot in production. Configure logging to track AI decisions for compliance and forensic analysis, ensuring the AI's identity is recorded distinctly from user identifiers. Continuously monitor hallucination rates and the accuracy of legal guidance, maintaining disaster recovery and backup processes.</p>
+<p><em>Answers: [Solution Architect (sections), §6.6] — Establish Continuous RAI Validator, disaster recovery, and monitoring processes; [IT Security specialist, §7.3] — Configure logging to track AI decisions with a distinct AI identity</em></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=3b24d9fc"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Recommended-next-steps">Appendix — Recommended next steps<a class="anchor-link" href="#Appendix-%E2%80%94-Recommended-next-steps">¶</a></h1><p>Where the assessment could not be completed from the available evidence, the point is recorded here as a concrete next step for the project team — not a failure of the assessment.</p>
+<ul>
+<li><strong>§5.1</strong> <em>(Ethics &amp; Fairness specialist)</em>: The project team has not yet established a clear definition of what constitutes a fair process or outcome in the context of the C&amp;D Claim Evaluator.</li>
+<li><strong>§5.2</strong> <em>(Ethics &amp; Fairness specialist)</em>: The project team has not yet established quantitative or qualitative metrics to measure or monitor the fairness of the chatbot's outcomes.</li>
+<li><strong>Unanswered checkpoint question</strong> (it_security-2): What specific technical controls (e.g., input sanitization, file type validation, or prompt analysis firewalls) are planned to protect the document upload feature against malicious files and prompt injection attacks?</li>
+<li><strong>Unanswered checkpoint question</strong> (ethics-1): Has the project team established a clear definition of fairness and selected specific qualitative or quantitative metrics to measure and monitor potential bias in the chatbot's legal analyses?</li>
+<li><strong>Unanswered checkpoint question</strong> (legal-3): Where will the formal legal advice, once obtained, be officially stored within the agency's records management system?</li>
+<li><strong>Unanswered checkpoint question</strong> (solution_architect-1): Has a specific commercial or open-source Large Language Model (LLM) been pre-selected or procured for this chatbot, or is the model selection still open?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=77a3ddcc"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Points-of-unresolved-disagreement">Appendix — Points of unresolved disagreement<a class="anchor-link" href="#Appendix-%E2%80%94-Points-of-unresolved-disagreement">¶</a></h1><div class="unresolved-intro">For a governance assessment, honest disagreement is more credible than manufactured agreement. These points are flagged for human judgement.</div>
+<div class="unresolved-panel">
+<h3>Retention vs. deletion of sensitive user inputs</h3>
+<p class="position"><strong>full.specialist.privacy:</strong> Uploaded documents should be securely deleted immediately after the session ends to minimise retention risks. <span class="citations">(APP Guidelines, p.191)</span></p>
+<p class="position"><strong>full.specialist.data_governance:</strong> The agency must retain user prompts and uploaded source documents to preserve adequate evidence of how AI outputs were generated. <span class="citations">(Archives Act 1983, s 24); (NAA AI Records Guidance, §Disposal of generative AI assistant prompts and inputs)</span></p>
+<p class="why">Why unresolved: Both positions are well supported by their respective frameworks (privacy minimization vs. Commonwealth recordkeeping). Resolution requires a human policy judgement on how to balance privacy risks with evidentiary requirements.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=80610281"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Provenance">Appendix — Provenance<a class="anchor-link" href="#Appendix-%E2%80%94-Provenance">¶</a></h1><div class="provenance">
+<p>Run id: <code>WT-TSEP-B7</code></p>
+<p>Created: <code>2026-07-19T10:35:04Z</code></p>
+<p>Generated: <code>2026-07-19T10:48:58Z</code></p>
+<p>Models and prompts per role:</p><ul>
+<li><code>architect</code>: gemini-3.1-pro-preview (prompt v1)</li>
+<li><code>reviewer</code>: gemini-3.1-pro-preview (prompt v1)</li>
+<li><code>specialist</code>: gemini-3.5-flash (prompt v1)</li>
+<li><code>threshold_generalist</code>: gemini-3.5-flash (prompt v1)</li>
+<li><code>threshold_reconciler</code>: gemini-3.1-pro-preview (prompt v1)</li>
+</ul>
+<p>Corpus manifest versions:</p><ul>
+<li><code>it_security</code>: 2026-07-15T14:44:12Z (13 documents)</li>
+<li><code>privacy</code>: 2026-07-15T14:44:22Z (8 documents)</li>
+<li><code>ethics</code>: 2026-07-15T14:44:36Z (17 documents)</li>
+<li><code>legal</code>: 2026-07-15T14:44:49Z (11 documents)</li>
+<li><code>data_governance</code>: 2026-07-15T14:44:53Z (5 documents)</li>
+<li><code>solution_architect</code>: 2026-07-15T14:44:54Z (56 documents)</li>
+</ul>
+<p class="attestation">Inputs were NOT attested by the submitting officer as at or below OFFICIAL.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=6c961a8a"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="References">References<a class="anchor-link" href="#References">¶</a></h1><div class="references">
+<p class="reference"><strong>AI Suitability Assessment</strong> — CSIRO Data61 — 2023 <a href="https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/">https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/</a></p>
+<p class="reference"><strong>Archives Act 1983</strong> — Federal Register of Legislation (Office of Parliamentary Counsel) — Compilation No. 51 (1 June 2026) <a href="https://www.legislation.gov.au/C2004A02796/latest">https://www.legislation.gov.au/C2004A02796/latest</a></p>
+<p class="reference"><strong>APP Guidelines</strong> — Australian Privacy Principles Guidelines (consolidated; Chapter 3 updated) — Office of the Australian Information Commissioner — consolidated <a href="https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines">https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines</a></p>
+<p class="reference"><strong>ADM Better Practice Guide</strong> — Automated Decision-Making Better Practice Guide — Commonwealth Ombudsman — March 2025 <a href="https://www.ombudsman.gov.au/__data/assets/pdf_file/0025/317437/Automated-Decision-Making-Better-Practice-Guide-March-2025.pdf">https://www.ombudsman.gov.au/__data/assets/pdf_file/0025/317437/Automated-Decision-Making-Better-Practice-Guide-March-2025.pdf</a></p>
+<p class="reference"><strong>ADM Guide (earlier ed.)</strong> — Automated decision-making: better practice guide — Commonwealth Ombudsman — earlier edition <a href="https://apo.org.au/node/306481">https://apo.org.au/node/306481</a></p>
+<p class="reference"><strong>Continuous RAI Validator</strong> — CSIRO Data61 — 2023 <a href="https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/">https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/</a></p>
+<p class="reference"><strong>DDGS</strong> — Data and Digital Government Strategy — Digital Transformation Agency and Department of Finance — v1.0 (December 2023) <a href="https://www.dataanddigital.gov.au/strategy">https://www.dataanddigital.gov.au/strategy</a></p>
+<p class="reference"><strong>Deploying AI Securely</strong> — Deploying AI Systems Securely: Best Practices for Deploying Secure and Resilient AI Systems — US National Security Agency (with CISA, FBI, ASD ACSC and partners) — 2024 <a href="https://www.cyber.gov.au/about-us/view-all-content/publications/deploying-ai-systems-securely">https://www.cyber.gov.au/about-us/view-all-content/publications/deploying-ai-systems-securely</a></p>
+<p class="reference"><strong>Diversity &amp; Inclusion in AI</strong> — Diversity and Inclusion in Artificial Intelligence — Didar Zowghi and Francesca da Rimini (CSIRO Data61) — v1 (2023) <a href="https://arxiv.org/abs/2305.12728">https://arxiv.org/abs/2305.12728</a></p>
+<p class="reference"><strong>Secure AI Dev Guidelines</strong> — Guidelines for secure AI system development — UK National Cyber Security Centre and US CISA (with partners incl. ASD ACSC) — November 2023 <a href="https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development">https://www.ncsc.gov.uk/collection/guidelines-secure-ai-system-development</a></p>
+<p class="reference"><strong>NAIC RAI Tools</strong> — Implementing Australia's AI Ethics Principles: A selection of Responsible AI practices and resources — CSIRO National AI Centre (prepared by Gradient Institute) — 2023 <a href="https://www.csiro.au/-/media/D61/NAIC/Gradient-Report/23-00122_DATA61_REPORT_NAIC-ResponsibleAITools_WEB_230620.pdf">https://www.csiro.au/-/media/D61/NAIC/Gradient-Report/23-00122_DATA61_REPORT_NAIC-ResponsibleAITools_WEB_230620.pdf</a></p>
+<p class="reference"><strong>NAA AI Records Guidance</strong> — Information management for records created using Artificial Intelligence (AI) technologies — National Archives of Australia — January 2025 <a href="https://www.naa.gov.au/information-management/information-management-basics/artificial-intelligence">https://www.naa.gov.au/information-management/information-management-basics/artificial-intelligence</a></p>
+<p class="reference"><strong>ISM</strong> — Information security manual — Australian Signals Directorate — June 2026 <a href="https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism">https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism</a></p>
+<p class="reference"><strong>LLMSVS</strong> — OWASP Large Language Model Security Verification Standard (LLMSVS) — OWASP Foundation — 2.0 <a href="https://owasp.org/www-project-llm-security-verification-standard/">https://owasp.org/www-project-llm-security-verification-standard/</a></p>
+<p class="reference"><strong>OWASP LLM Top 10</strong> — OWASP Top 10 for Large Language Model Applications — OWASP Foundation — 2025 <a href="https://genai.owasp.org/llm-top-10/">https://genai.owasp.org/llm-top-10/</a></p>
+<p class="reference"><strong>AI Use Policy v2.0</strong> — Policy for the responsible use of AI in government — Digital Transformation Agency — 2.0 <a href="https://www.dta.gov.au/policies-and-guidance/policy-responsible-use-ai-government">https://www.dta.gov.au/policies-and-guidance/policy-responsible-use-ai-government</a></p>
+<p class="reference"><strong>AI in OT Principles</strong> — Principles for the secure integration of artificial intelligence in operational technology — Australian Signals Directorate (with CISA and partners) — 2025 <a href="https://www.cyber.gov.au/about-us/view-all-content/publications">https://www.cyber.gov.au/about-us/view-all-content/publications</a></p>
+<p class="reference"><strong>Privacy Act 1988</strong> — Federal Register of Legislation (Office of Parliamentary Counsel) — Compilation No. 104 (4 June 2026) <a href="https://www.legislation.gov.au/C2004A03712/latest">https://www.legislation.gov.au/C2004A03712/latest</a></p>
+<p class="reference"><strong>OAIC AI Selection Checklist</strong> — Privacy considerations checklist: selecting an AI product — Office of the Australian Information Commissioner — 2024 <a href="https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-the-use-of-commercially-available-ai-products">https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-the-use-of-commercially-available-ai-products</a></p>
+<p class="reference"><strong>PSPF PA001-2026</strong> — Protective Security Policy Framework – Policy Advisory 001-2026 — Attorney-General's Department — 2026 <a href="https://www.protectivesecurity.gov.au">https://www.protectivesecurity.gov.au</a></p>
+<p class="reference"><strong>RAI Acceptance Testing</strong> — CSIRO Data61 — 2023 <a href="https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/">https://research.csiro.au/ss/science/projects/responsible-ai-pattern-catalogue/</a></p>
+<p class="reference"><strong>Data Quality Checklist</strong> — Strengthen data quality: data quality checklist — National AI Centre — 2026 <a href="https://www.ai.gov.au/planning-ai/strengthen-data-quality">https://www.ai.gov.au/planning-ai/strengthen-data-quality</a></p>
+<p class="reference"><strong>AI Technical Standard</strong> — Technical Standard for Government's use of Artificial Intelligence (AI technical standard) — Digital Transformation Agency — 2025 <a href="https://www.digital.gov.au/policy/ai/standard">https://www.digital.gov.au/policy/ai/standard</a></p>
+<p class="reference"><strong>HTI State of AI Governance</strong> — The State of AI Governance in Australia — Human Technology Institute, University of Technology Sydney — 31 May 2023 <a href="https://www.uts.edu.au/human-technology-institute/projects/state-ai-governance-australia">https://www.uts.edu.au/human-technology-institute/projects/state-ai-governance-australia</a></p>
+<p class="reference"><strong>OECD AI in Public Audit</strong> — The state of artificial intelligence in public audit: Evidence from selected countries and the European Union — OECD — 2026 (OECD Artificial Intelligence Papers No. 58) <a href="https://doi.org/10.1787/f4a6c658-en">https://doi.org/10.1787/f4a6c658-en</a></p>
+<p class="reference"><strong>OAIC AI Training Top 5</strong> — Top 5 takeaways: privacy considerations when training a generative AI model — Office of the Australian Information Commissioner — 2024 <a href="https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models">https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models</a></p>
+</div>
+</div>
+</div>
+</div>
+
+</main>
+<div class="running-footer" role="contentinfo">Draft for SME review — not an approval, not legal advice.</div>
+</body>
+</html>

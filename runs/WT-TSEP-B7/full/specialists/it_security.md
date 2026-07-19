@@ -1,0 +1,13 @@
+# it_security — owned sections
+
+## 6.7
+
+Yes. A manual kill-switch is planned to take the chatbot offline immediately if it begins generating harmful or highly inaccurate legal advice. To support this, the project team should establish clear processes for human intervention and safe disengagement of the AI system. This includes preparing for automated rollbacks and using advanced deployments with a human-in-the-loop as a failsafe to quickly revert the system to a last known good state if the model is compromised or exhibits anomalous behavior (Deploying AI Securely, p.6). Furthermore, the team should integrate AI-specific failure states—such as model drift or adversarial manipulation—into their existing incident response, business continuity, and disaster recovery plans, ensuring there is a clear mechanism to bypass or temporarily disable the chatbot without disrupting the broader business.gov portal (PSPF PA001-2026, p.4; Secure AI Dev Guidelines, p.14). Clear protocols for immediate intervention, such as the ability to quickly take the system offline, are essential for managing unexpected or inappropriate model behavior (LLMSVS, §Control objective).
+
+*Citations: [Deploying AI Securely, p.6], [PSPF PA001-2026, p.4], [Secure AI Dev Guidelines, p.14], [LLMSVS, §Control objective]*
+
+## 7.3
+
+No. While the project outline specifies that the chatbot will be hosted on business.gov infrastructure and requires strict data privacy controls to prevent uploaded documents from being used for model training, it does not detail specific operational security measures to address AI-specific risks. To secure the system, several critical measures must be implemented. First, the team must address prompt injection vulnerabilities (both direct and indirect), where malicious inputs in uploaded documents or chat prompts could manipulate the model's behavior, leading to content manipulation, unauthorized access, or bypass of safety guidelines (OWASP LLM Top 10, p.7; ISM, p.171). Second, pre-trained or external models must be thoroughly inspected in a secure development zone using approved scanners before deployment to detect malicious code (Deploying AI Securely, p.6). Finally, the system's operation must be continuously monitored, with logging configured to track AI decisions for compliance and forensic analysis, ensuring the AI's identity is distinct from typical user identifiers (AI in OT Principles, p.19).
+
+*Citations: [OWASP LLM Top 10, p.7], [ISM, p.171], [Deploying AI Securely, p.6], [AI in OT Principles, p.19]*

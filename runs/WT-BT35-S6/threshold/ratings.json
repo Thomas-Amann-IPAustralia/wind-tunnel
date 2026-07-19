@@ -1,0 +1,45 @@
+{
+  "sections": {
+    "3.1": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium"
+    },
+    "3.2": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium"
+    },
+    "3.3": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium"
+    },
+    "3.4": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium"
+    },
+    "3.5": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium"
+    },
+    "3.6": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium"
+    },
+    "3.7": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium"
+    },
+    "3.8": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium"
+    }
+  },
+  "overall_inherent": "Medium"
+}

@@ -1,0 +1,145 @@
+{
+  "batch_id": "q-1",
+  "specialists": [
+    {
+      "node_id": "full.specialist.it_security",
+      "friendly": "IT Security specialist",
+      "why": "The project outline lacks technical implementation details regarding system disengagement and specific security controls for the document upload feature.",
+      "items": [
+        {
+          "question_id": "it_security-1",
+          "text": "Will there be a manual 'kill-switch' or disengagement procedure to take the chatbot offline immediately if it begins generating harmful or highly inaccurate legal advice?",
+          "options": [
+            "Yes, a manual kill-switch is planned",
+            "No, but automated alerts are planned",
+            "No disengagement procedure has been designed yet"
+          ],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "it_security-2",
+          "text": "What specific technical controls (e.g., input sanitization, file type validation, or prompt analysis firewalls) are planned to protect the document upload feature against malicious files and prompt injection attacks?",
+          "options": [],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.privacy",
+      "friendly": "Privacy specialist",
+      "why": "The storage location of the privacy threshold assessment and privacy impact assessment must be recorded to complete the assessment.",
+      "items": [
+        {
+          "question_id": "privacy-1",
+          "text": "Where will the privacy threshold assessment and/or privacy impact assessment (PIA) for the C&D Claim Evaluator be stored?",
+          "options": null,
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.ethics",
+      "friendly": "Ethics & Fairness specialist",
+      "why": "The project outline lacks details regarding fairness definitions, stakeholder consultation, and team diversity, which are critical for completing these sections of the assessment.",
+      "items": [
+        {
+          "question_id": "ethics-1",
+          "text": "Has the project team established a clear definition of fairness and selected specific qualitative or quantitative metrics to measure and monitor potential bias in the chatbot's legal analyses?",
+          "options": null,
+          "allow_free_text": true
+        },
+        {
+          "question_id": "ethics-2",
+          "text": "Has the project team conducted or planned any formal consultations with key stakeholders, such as small business owners, legal experts, or the business.gov legal team?",
+          "options": null,
+          "allow_free_text": true
+        },
+        {
+          "question_id": "ethics-3",
+          "text": "Does the project team include individuals with diverse skills, backgrounds, and experiences (e.g., legal, UX/UI, accessibility, and cultural diversity experts) to oversee the AI lifecycle?",
+          "options": null,
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.legal",
+      "friendly": "Legal & Administrative Law specialist",
+      "why": "To establish formal compliance and record-keeping structures for this high-risk AI use case.",
+      "items": [
+        {
+          "question_id": "legal-1",
+          "text": "Has the agency designated an accountable official and an accountable use case owner for the C&D Claim Evaluator system?",
+          "options": [
+            "Yes, both have been designated",
+            "Only the accountable official has been designated",
+            "No, neither has been designated yet"
+          ],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "legal-2",
+          "text": "Has a formal Privacy Impact Assessment (PIA) or consultation with human rights/anti-discrimination advisors been scheduled for this project?",
+          "options": [
+            "Yes, scheduled or underway",
+            "Completed",
+            "No, not yet scheduled"
+          ],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "legal-3",
+          "text": "Where will the formal legal advice, once obtained, be officially stored within the agency's records management system?",
+          "options": [],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.data_governance",
+      "friendly": "Data Governance specialist",
+      "why": "To ensure compliance with Commonwealth recordkeeping standards and strict data privacy controls regarding sensitive legal disputes.",
+      "items": [
+        {
+          "question_id": "data_governance-1",
+          "text": "Will the system store or log the uploaded cease and desist letters and chat transcripts, and if so, where will these records be hosted to comply with Commonwealth recordkeeping requirements?",
+          "options": [],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "data_governance-2",
+          "text": "Are there any plans to use the uploaded letters or user prompts to fine-tune or train future iterations of the AI model?",
+          "options": [
+            "Yes",
+            "No"
+          ],
+          "allow_free_text": true
+        }
+      ]
+    },
+    {
+      "node_id": "full.specialist.solution_architect",
+      "friendly": "Solution Architect (sections)",
+      "why": "To refine the implementation details of the procurement, piloting, and operational oversight of the chatbot.",
+      "items": [
+        {
+          "question_id": "solution_architect-1",
+          "text": "Has a specific commercial or open-source Large Language Model (LLM) been pre-selected or procured for this chatbot, or is the model selection still open?",
+          "options": [],
+          "allow_free_text": true
+        },
+        {
+          "question_id": "solution_architect-2",
+          "text": "Is there an existing business.gov operational team or legal team designated to act as the human-in-the-loop operators and supervisors for this AI system?",
+          "options": [],
+          "allow_free_text": true
+        }
+      ]
+    }
+  ],
+  "counts": {
+    "total": 13,
+    "answered": 0,
+    "skipped": 0
+  }
+}

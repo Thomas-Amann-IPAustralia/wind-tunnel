@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "run_id": "WT-BT35-S6",
+  "created_at": "2026-07-19T13:02:53Z",
+  "updated_at": "2026-07-19T13:10:09Z",
+  "stage": "FULL_CHECKPOINT",
+  "stage_status": "awaiting_user",
+  "phase": "full",
+  "checkpoints": {
+    "THRESHOLD_DRAFTING": "867f7bb057c78992f98720b100d6f7614f55ae9f",
+    "THRESHOLD_RECONCILING": "24b344eef68183163debcbae6deb12b9d4a071dd",
+    "FULL_DRAFTING": "3da6d1fa61632892b59b2f71bf128aa98229cce0"
+  },
+  "revisions": {
+    "poc": 0,
+    "flow_map": 0,
+    "threshold": 0,
+    "full": 0
+  },
+  "review_cycles": 0,
+  "attestation": {
+    "sensitivity_ceiling": "OFFICIAL",
+    "attested": false
+  },
+  "last_error": null
+}

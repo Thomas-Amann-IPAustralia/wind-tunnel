@@ -43,6 +43,7 @@ from __future__ import annotations
 
 import json
 import os
+import threading
 import time
 from dataclasses import dataclass, field
 from functools import lru_cache
@@ -144,18 +145,26 @@ class Transport(Protocol):
 @dataclass
 class CallBudget:
     """Counts model calls against the per-run ceiling (TECH_SPEC §13). Shared across
-    every agent in a run so the whole run — not each stage — is bounded."""
+    every agent in a run so the whole run — not each stage — is bounded.
+
+    Charging is atomic: the §5.4 fan-out has several specialists drafting on worker
+    threads against this one budget, so the check-and-increment must not race — a
+    torn pair could admit calls past the ceiling the guard exists to enforce."""
 
     max_calls: int = field(default_factory=_run_max_calls)
     used: int = 0
+    _lock: threading.Lock = field(
+        default_factory=threading.Lock, repr=False, compare=False, init=False
+    )
 
     def charge(self) -> None:
-        if self.used >= self.max_calls:
-            raise LLMError(
-                f"Run call budget exhausted ({self.used}/{self.max_calls}, "
-                "config/budgets.yml run_max_calls). Refusing further LLM calls (§13)."
-            )
-        self.used += 1
+        with self._lock:
+            if self.used >= self.max_calls:
+                raise LLMError(
+                    f"Run call budget exhausted ({self.used}/{self.max_calls}, "
+                    "config/budgets.yml run_max_calls). Refusing further LLM calls (§13)."
+                )
+            self.used += 1
 
 
 @dataclass
@@ -225,6 +234,8 @@ class LLMClient:
         text = self.transport.generate(
             model=model, system=system, user=user, response_json=response_json
         )
+        # list.append of a fresh dict is atomic under the GIL — safe for the §5.4
+        # fan-out, where concurrent specialists share this client's provenance list.
         self.calls.append({"role": role, "model": model})
         return LLMResponse(text=text, role=role, model=model)
 

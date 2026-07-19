@@ -21,6 +21,7 @@ from agents.threshold import (
 )
 from rating import consequence_tiers, likelihood_tiers, overall_rating, rating
 from stages.context import StageContext
+from stages.fanout import AgentTask, run_agent_tasks
 from statefile import REVISION_CAP
 
 NODE_A = "threshold.generalist_a"
@@ -68,23 +69,46 @@ _RISK_TITLES = {
 
 
 def threshold_drafting(ctx: StageContext) -> None:
-    """Two generalists (Flash) draft sections 1–4 independently (§5.1). Outputs
-    ``threshold/generalist_a.json`` and ``threshold/generalist_b.json``.
+    """Two generalists (Flash) draft sections 1–4 independently — and concurrently,
+    through the shared §5.4 fan-out (design §7.2: "Generalist A and Generalist B go
+    active at the same time"). Outputs ``threshold/generalist_a.json`` and
+    ``threshold/generalist_b.json``.
+
+    The two are symmetric by design — the same prompt over the same outline, two
+    independent rolls whose divergence is the reconciler's signal — so which worker
+    finishes first carries no meaning. Workers compute and narrate only; each
+    finished draft is written and pulse-committed by the coordinating thread as it
+    lands (see ``stages/fanout.py``).
 
     Each generalist is individually idempotent (§5.3): a retry after a mid-stage
     failure (say, B died after A's draft was pulse-committed) skips the finished
     draft rather than paying for its LLM call again — the rebuilt status log
     already narrates the completed node, so no event is re-emitted."""
     outline = ctx.outline()
+    tasks: list[AgentTask] = []
     for node, label in ((NODE_A, "generalist_a"), (NODE_B, "generalist_b")):
         relpath = f"threshold/{label}.json"
         if ctx.path(relpath).is_file():
             continue
+        tasks.append(_generalist_task(ctx, node, label, relpath, outline))
+    run_agent_tasks(ctx, tasks)
+
+
+def _generalist_task(
+    ctx: StageContext, node: str, label: str, relpath: str, outline: str
+) -> AgentTask:
+    """One generalist's THRESHOLD_DRAFTING task (§5.4)."""
+
+    def work() -> GeneralistDraft:
         ctx.status.start_node(node)
         ctx.status.drafting(node, "drafting threshold sections 1–4")
-        draft = run_generalist(ctx.llm, label, outline)
+        return run_generalist(ctx.llm, label, outline)
+
+    def finish(draft: GeneralistDraft) -> None:
         ctx.write_json(relpath, draft.to_dict())
         ctx.status.complete_node(node)
+
+    return AgentTask(name=label, work=work, finish=finish)
 
 
 # -- THRESHOLD_RECONCILING -----------------------------------------------------

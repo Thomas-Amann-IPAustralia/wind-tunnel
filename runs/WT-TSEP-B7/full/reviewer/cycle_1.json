@@ -1,0 +1,80 @@
+{
+  "coherence_findings": [
+    {
+      "summary": "Contradiction regarding the retention versus deletion of highly sensitive uploaded legal documents.",
+      "sections": [
+        "7.1",
+        "8.3"
+      ],
+      "detail": "Section 7.1 (Privacy) asserts that uploaded documents should be securely deleted immediately after the session ends to minimize retention risks under APP 11.2. Conversely, Section 8.3 (Data Governance) states that the agency will store and log the uploaded letters and retain user prompts and source documents to comply with the Archives Act 1983 and NAA guidance."
+    }
+  ],
+  "amend_directives": [],
+  "unresolved": [
+    {
+      "topic": "Retention vs. deletion of sensitive user inputs",
+      "position_a": {
+        "specialist": "full.specialist.privacy",
+        "claim": "Uploaded documents should be securely deleted immediately after the session ends to minimise retention risks.",
+        "support": [
+          "(APP Guidelines, p.191)"
+        ]
+      },
+      "position_b": {
+        "specialist": "full.specialist.data_governance",
+        "claim": "The agency must retain user prompts and uploaded source documents to preserve adequate evidence of how AI outputs were generated.",
+        "support": [
+          "(Archives Act 1983, s 24)",
+          "(NAA AI Records Guidance, §Disposal of generative AI assistant prompts and inputs)"
+        ]
+      },
+      "why_unresolved": "Both positions are well supported by their respective frameworks (privacy minimization vs. Commonwealth recordkeeping). Resolution requires a human policy judgement on how to balance privacy risks with evidentiary requirements."
+    }
+  ],
+  "residual": {
+    "3.1": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rationale": "The provision of a static, non-AI alternative guide (8.4.2) and the inclusion of accessibility experts on the project team (10.1) reduce the likelihood of users being completely excluded, though the consequence of the AI tool failing remains moderate."
+    },
+    "3.2": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rationale": "Consultations with human rights advisors (10.2) and planned data coverage/bias checks (6.1) reduce the likelihood of unfair discrimination, though the impact on affected individuals would still be moderate."
+    },
+    "3.3": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rationale": "RAI Acceptance Testing (6.4) and anti-discrimination reviews (10.2) make the generation of demeaning representations unlikely, with consequences remaining minor."
+    },
+    "3.4": {
+      "consequence": "Major",
+      "likelihood": "Unlikely",
+      "rationale": "The implementation of a pilot phase (6.5), rigorous accuracy testing (6.4), and legally robust disclaimers (8.2, 12.2) reduce the likelihood of users acting on incorrect advice. However, if they do, the financial and legal harm remains major."
+    },
+    "3.5": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "While privacy controls are proposed (7.1), the unresolved conflict requiring the retention of highly sensitive legal documents as Commonwealth records (8.3) means the likelihood of privacy concerns remains possible."
+    },
+    "3.6": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "The system processes highly sensitive legal data, and IT Security notes that specific operational security measures are not yet detailed (7.3). Combined with the requirement to store this data (8.3), the likelihood of a data security concern remains possible."
+    },
+    "3.7": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rationale": "Planned negative testing, fault injection (6.4), and the implementation of a manual kill-switch (6.7) reduce the likelihood of system vulnerabilities being successfully exploited to an unlikely level."
+    },
+    "3.8": {
+      "consequence": "Major",
+      "likelihood": "Unlikely",
+      "rationale": "The structured pilot phase (6.5), continuous monitoring (6.6), and comprehensive legal reviews (12.1) reduce the likelihood of a reputational failure, though the consequence of a public failure on business.gov remains major."
+    }
+  },
+  "provenance": {
+    "model": "gemini-3.1-pro-preview",
+    "prompt_version": "v1"
+  }
+}

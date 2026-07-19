@@ -1,0 +1,2554 @@
+{
+  "schema_version": 1,
+  "run_id": "WT-BT35-S6",
+  "run_code": "WT-BT35-S6",
+  "phase": "full",
+  "overall_state": "paused",
+  "updated_at": "2026-07-19T13:10:09Z",
+  "nodes": {
+    "threshold.generalist_a": "complete",
+    "threshold.generalist_b": "complete",
+    "threshold.reconciler": "complete",
+    "threshold.rating_engine": "complete",
+    "full.specialist.it_security": "complete",
+    "full.specialist.privacy": "complete",
+    "full.specialist.ethics": "complete",
+    "full.specialist.legal": "complete",
+    "full.specialist.data_governance": "complete",
+    "full.specialist.solution_architect": "complete",
+    "full.checkpoint": "waiting_user",
+    "full.architect": "pending",
+    "full.reviewer": "pending",
+    "full.assembly": "pending"
+  },
+  "log": [
+    {
+      "id": "evt_000001",
+      "ts": "2026-07-19T13:06:44Z",
+      "agent": "backend",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000002",
+      "ts": "2026-07-19T13:07:02Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000003",
+      "ts": "2026-07-19T13:07:03Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000004",
+      "ts": "2026-07-19T13:07:03Z",
+      "agent": "threshold.generalist_a",
+      "type": "stage_started",
+      "detail": "Assessor A started"
+    },
+    {
+      "id": "evt_000005",
+      "ts": "2026-07-19T13:07:03Z",
+      "agent": "threshold.generalist_a",
+      "type": "drafting",
+      "detail": "drafting threshold sections 1–4"
+    },
+    {
+      "id": "evt_000006",
+      "ts": "2026-07-19T13:07:03Z",
+      "agent": "threshold.generalist_b",
+      "type": "stage_started",
+      "detail": "Assessor B started"
+    },
+    {
+      "id": "evt_000007",
+      "ts": "2026-07-19T13:07:03Z",
+      "agent": "threshold.generalist_b",
+      "type": "drafting",
+      "detail": "drafting threshold sections 1–4"
+    },
+    {
+      "id": "evt_000008",
+      "ts": "2026-07-19T13:07:36Z",
+      "agent": "threshold.generalist_b",
+      "type": "stage_complete",
+      "detail": "Assessor B complete"
+    },
+    {
+      "id": "evt_000009",
+      "ts": "2026-07-19T13:07:44Z",
+      "agent": "threshold.generalist_a",
+      "type": "stage_complete",
+      "detail": "Assessor A complete"
+    },
+    {
+      "id": "evt_000010",
+      "ts": "2026-07-19T13:07:45Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000011",
+      "ts": "2026-07-19T13:07:45Z",
+      "agent": "threshold.reconciler",
+      "type": "stage_started",
+      "detail": "Reconciler started"
+    },
+    {
+      "id": "evt_000012",
+      "ts": "2026-07-19T13:08:15Z",
+      "agent": "threshold.reconciler",
+      "type": "stage_complete",
+      "detail": "Reconciler complete"
+    },
+    {
+      "id": "evt_000013",
+      "ts": "2026-07-19T13:08:16Z",
+      "agent": "threshold.rating_engine",
+      "type": "stage_started",
+      "detail": "Rating engine started"
+    },
+    {
+      "id": "evt_000014",
+      "ts": "2026-07-19T13:08:17Z",
+      "agent": "threshold.rating_engine",
+      "type": "stage_complete",
+      "detail": "Rating engine complete"
+    },
+    {
+      "id": "evt_000015",
+      "ts": "2026-07-19T13:08:31Z",
+      "agent": "backend",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000016",
+      "ts": "2026-07-19T13:08:47Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000017",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000018",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.it_security",
+      "type": "stage_started",
+      "detail": "IT Security specialist started"
+    },
+    {
+      "id": "evt_000019",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.it_security",
+      "type": "drafting",
+      "detail": "drafting it_security's owned sections"
+    },
+    {
+      "id": "evt_000020",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_started",
+      "detail": "Privacy specialist started"
+    },
+    {
+      "id": "evt_000021",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.privacy",
+      "type": "drafting",
+      "detail": "drafting privacy's owned sections"
+    },
+    {
+      "id": "evt_000022",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_started",
+      "detail": "Ethics & Fairness specialist started"
+    },
+    {
+      "id": "evt_000023",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "drafting",
+      "detail": "drafting ethics's owned sections"
+    },
+    {
+      "id": "evt_000024",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§Part 3: Privacy management — addressing risks"
+      }
+    },
+    {
+      "id": "evt_000025",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000026",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000027",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§Ensuring compliance"
+      }
+    },
+    {
+      "id": "evt_000028",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000029",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§APP 11 — Security of personal information"
+      }
+    },
+    {
+      "id": "evt_000030",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000031",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000032",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000033",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI Data Security CSI",
+      "ref": {
+        "doc": "AI Data Security CSI",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000034",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000035",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000036",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000037",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000038",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000039",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000040",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000041",
+      "ts": "2026-07-19T13:08:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000042",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000043",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000044",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000045",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000046",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000047",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000048",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000049",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000050",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§AI Ethics Principles at a glance"
+      }
+    },
+    {
+      "id": "evt_000051",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000052",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000053",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§The rise of AI and ethics"
+      }
+    },
+    {
+      "id": "evt_000054",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000055",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000056",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000057",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.32"
+      }
+    },
+    {
+      "id": "evt_000058",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000059",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§AI Ethics Principles at a glance"
+      }
+    },
+    {
+      "id": "evt_000060",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000061",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading TRS AI Guidelines",
+      "ref": {
+        "doc": "TRS AI Guidelines",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000062",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§A requirement for a technical explanation?"
+      }
+    },
+    {
+      "id": "evt_000063",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000064",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§The rise of AI and ethics"
+      }
+    },
+    {
+      "id": "evt_000065",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000066",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Top 5",
+      "ref": {
+        "doc": "OAIC AI Training Top 5",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000067",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000068",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000069",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.91"
+      }
+    },
+    {
+      "id": "evt_000070",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000071",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000072",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000073",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000074",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000075",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000076",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000077",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000078",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000079",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000080",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000081",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000082",
+      "ts": "2026-07-19T13:09:00Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 33D"
+      }
+    },
+    {
+      "id": "evt_000083",
+      "ts": "2026-07-19T13:09:00Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000084",
+      "ts": "2026-07-19T13:09:00Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.40"
+      }
+    },
+    {
+      "id": "evt_000085",
+      "ts": "2026-07-19T13:09:00Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 33D"
+      }
+    },
+    {
+      "id": "evt_000086",
+      "ts": "2026-07-19T13:09:00Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 33D"
+      }
+    },
+    {
+      "id": "evt_000087",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000088",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000089",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000090",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.43"
+      }
+    },
+    {
+      "id": "evt_000091",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.27"
+      }
+    },
+    {
+      "id": "evt_000092",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000093",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000094",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000095",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000096",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.50"
+      }
+    },
+    {
+      "id": "evt_000097",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000098",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000099",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000100",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000101",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000102",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading TRS AI Guidelines",
+      "ref": {
+        "doc": "TRS AI Guidelines",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000103",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000104",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000105",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000106",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000107",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000108",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000109",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000110",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000111",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.33"
+      }
+    },
+    {
+      "id": "evt_000112",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000113",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§AI Ethics Principles at a glance"
+      }
+    },
+    {
+      "id": "evt_000114",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000115",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading eSafety GenAI Position Statement",
+      "ref": {
+        "doc": "eSafety GenAI Position Statement",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000116",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.17"
+      }
+    },
+    {
+      "id": "evt_000117",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§The rise of AI and ethics"
+      }
+    },
+    {
+      "id": "evt_000118",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 7"
+      }
+    },
+    {
+      "id": "evt_000119",
+      "ts": "2026-07-19T13:09:20Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_started",
+      "detail": "Legal & Administrative Law specialist started"
+    },
+    {
+      "id": "evt_000120",
+      "ts": "2026-07-19T13:09:20Z",
+      "agent": "full.specialist.legal",
+      "type": "drafting",
+      "detail": "drafting legal's owned sections"
+    },
+    {
+      "id": "evt_000121",
+      "ts": "2026-07-19T13:09:20Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_complete",
+      "detail": "Privacy specialist complete"
+    },
+    {
+      "id": "evt_000122",
+      "ts": "2026-07-19T13:09:20Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000123",
+      "ts": "2026-07-19T13:09:20Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000124",
+      "ts": "2026-07-19T13:09:20Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000125",
+      "ts": "2026-07-19T13:09:20Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000126",
+      "ts": "2026-07-19T13:09:20Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000127",
+      "ts": "2026-07-19T13:09:20Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000128",
+      "ts": "2026-07-19T13:09:21Z",
+      "agent": "full.specialist.data_governance",
+      "type": "stage_started",
+      "detail": "Data Governance specialist started"
+    },
+    {
+      "id": "evt_000129",
+      "ts": "2026-07-19T13:09:21Z",
+      "agent": "full.specialist.data_governance",
+      "type": "drafting",
+      "detail": "drafting data_governance's owned sections"
+    },
+    {
+      "id": "evt_000130",
+      "ts": "2026-07-19T13:09:21Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000131",
+      "ts": "2026-07-19T13:09:21Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000132",
+      "ts": "2026-07-19T13:09:21Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Disposal of generative AI assistant prompts and inputs"
+      }
+    },
+    {
+      "id": "evt_000133",
+      "ts": "2026-07-19T13:09:21Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Example: AI technologies incorporated into a regulatory compliance assessment business system"
+      }
+    },
+    {
+      "id": "evt_000134",
+      "ts": "2026-07-19T13:09:21Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000135",
+      "ts": "2026-07-19T13:09:21Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Managing AI technologies incorporated into business systems"
+      }
+    },
+    {
+      "id": "evt_000136",
+      "ts": "2026-07-19T13:09:21Z",
+      "agent": "full.specialist.it_security",
+      "type": "stage_complete",
+      "detail": "IT Security specialist complete"
+    },
+    {
+      "id": "evt_000137",
+      "ts": "2026-07-19T13:09:23Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000138",
+      "ts": "2026-07-19T13:09:23Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000139",
+      "ts": "2026-07-19T13:09:23Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.57"
+      }
+    },
+    {
+      "id": "evt_000140",
+      "ts": "2026-07-19T13:09:23Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000141",
+      "ts": "2026-07-19T13:09:23Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.34"
+      }
+    },
+    {
+      "id": "evt_000142",
+      "ts": "2026-07-19T13:09:23Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000143",
+      "ts": "2026-07-19T13:09:23Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000144",
+      "ts": "2026-07-19T13:09:23Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000145",
+      "ts": "2026-07-19T13:09:25Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000146",
+      "ts": "2026-07-19T13:09:25Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§More information on the use of AI in Australian Government"
+      }
+    },
+    {
+      "id": "evt_000147",
+      "ts": "2026-07-19T13:09:25Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000148",
+      "ts": "2026-07-19T13:09:25Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.26"
+      }
+    },
+    {
+      "id": "evt_000149",
+      "ts": "2026-07-19T13:09:25Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000150",
+      "ts": "2026-07-19T13:09:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.65"
+      }
+    },
+    {
+      "id": "evt_000151",
+      "ts": "2026-07-19T13:09:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000152",
+      "ts": "2026-07-19T13:09:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000153",
+      "ts": "2026-07-19T13:09:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.93"
+      }
+    },
+    {
+      "id": "evt_000154",
+      "ts": "2026-07-19T13:09:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000155",
+      "ts": "2026-07-19T13:09:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000156",
+      "ts": "2026-07-19T13:09:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.17"
+      }
+    },
+    {
+      "id": "evt_000157",
+      "ts": "2026-07-19T13:09:26Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000158",
+      "ts": "2026-07-19T13:09:27Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000159",
+      "ts": "2026-07-19T13:09:27Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§More information on the use of AI in Australian Government"
+      }
+    },
+    {
+      "id": "evt_000160",
+      "ts": "2026-07-19T13:09:27Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000161",
+      "ts": "2026-07-19T13:09:27Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.26"
+      }
+    },
+    {
+      "id": "evt_000162",
+      "ts": "2026-07-19T13:09:27Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000163",
+      "ts": "2026-07-19T13:09:27Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000164",
+      "ts": "2026-07-19T13:09:27Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000165",
+      "ts": "2026-07-19T13:09:27Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000166",
+      "ts": "2026-07-19T13:09:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.65"
+      }
+    },
+    {
+      "id": "evt_000167",
+      "ts": "2026-07-19T13:09:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.57"
+      }
+    },
+    {
+      "id": "evt_000168",
+      "ts": "2026-07-19T13:09:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.67"
+      }
+    },
+    {
+      "id": "evt_000169",
+      "ts": "2026-07-19T13:09:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.45"
+      }
+    },
+    {
+      "id": "evt_000170",
+      "ts": "2026-07-19T13:09:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.17"
+      }
+    },
+    {
+      "id": "evt_000171",
+      "ts": "2026-07-19T13:09:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.44"
+      }
+    },
+    {
+      "id": "evt_000172",
+      "ts": "2026-07-19T13:09:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000173",
+      "ts": "2026-07-19T13:09:29Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.48"
+      }
+    },
+    {
+      "id": "evt_000174",
+      "ts": "2026-07-19T13:09:32Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000175",
+      "ts": "2026-07-19T13:09:32Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000176",
+      "ts": "2026-07-19T13:09:32Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.26"
+      }
+    },
+    {
+      "id": "evt_000177",
+      "ts": "2026-07-19T13:09:32Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000178",
+      "ts": "2026-07-19T13:09:32Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§More information on the use of AI in Australian Government"
+      }
+    },
+    {
+      "id": "evt_000179",
+      "ts": "2026-07-19T13:09:32Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000180",
+      "ts": "2026-07-19T13:09:32Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000181",
+      "ts": "2026-07-19T13:09:32Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000182",
+      "ts": "2026-07-19T13:09:37Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_started",
+      "detail": "Solution Architect (sections) started"
+    },
+    {
+      "id": "evt_000183",
+      "ts": "2026-07-19T13:09:37Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "drafting",
+      "detail": "drafting solution_architect's owned sections"
+    },
+    {
+      "id": "evt_000184",
+      "ts": "2026-07-19T13:09:37Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_complete",
+      "detail": "Ethics & Fairness specialist complete"
+    },
+    {
+      "id": "evt_000185",
+      "ts": "2026-07-19T13:09:37Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading QB4AIRA",
+      "ref": {
+        "doc": "QB4AIRA",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000186",
+      "ts": "2026-07-19T13:09:37Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000187",
+      "ts": "2026-07-19T13:09:37Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Pattern Catalogue",
+      "ref": {
+        "doc": "RAI Pattern Catalogue",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000188",
+      "ts": "2026-07-19T13:09:37Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.25"
+      }
+    },
+    {
+      "id": "evt_000189",
+      "ts": "2026-07-19T13:09:37Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading QB4AIRA",
+      "ref": {
+        "doc": "QB4AIRA",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000190",
+      "ts": "2026-07-19T13:09:37Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000191",
+      "ts": "2026-07-19T13:09:39Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000192",
+      "ts": "2026-07-19T13:09:39Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Pattern Catalogue Mapping",
+      "ref": {
+        "doc": "RAI Pattern Catalogue Mapping",
+        "locator": "RAI pattern catalogue!r26"
+      }
+    },
+    {
+      "id": "evt_000193",
+      "ts": "2026-07-19T13:09:39Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Suitability Assessment",
+      "ref": {
+        "doc": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000194",
+      "ts": "2026-07-19T13:09:39Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Continuous RAI Validator",
+      "ref": {
+        "doc": "Continuous RAI Validator",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000195",
+      "ts": "2026-07-19T13:09:39Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000196",
+      "ts": "2026-07-19T13:09:39Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r105"
+      }
+    },
+    {
+      "id": "evt_000197",
+      "ts": "2026-07-19T13:09:39Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000198",
+      "ts": "2026-07-19T13:09:39Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Acceptance Testing",
+      "ref": {
+        "doc": "RAI Acceptance Testing",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000199",
+      "ts": "2026-07-19T13:09:42Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r129"
+      }
+    },
+    {
+      "id": "evt_000200",
+      "ts": "2026-07-19T13:09:42Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r64"
+      }
+    },
+    {
+      "id": "evt_000201",
+      "ts": "2026-07-19T13:09:42Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r87"
+      }
+    },
+    {
+      "id": "evt_000202",
+      "ts": "2026-07-19T13:09:42Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r37"
+      }
+    },
+    {
+      "id": "evt_000203",
+      "ts": "2026-07-19T13:09:42Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r46"
+      }
+    },
+    {
+      "id": "evt_000204",
+      "ts": "2026-07-19T13:09:42Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r18"
+      }
+    },
+    {
+      "id": "evt_000205",
+      "ts": "2026-07-19T13:09:42Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Assessment for Test Cases",
+      "ref": {
+        "doc": "RAI Assessment for Test Cases",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000206",
+      "ts": "2026-07-19T13:09:42Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r92"
+      }
+    },
+    {
+      "id": "evt_000207",
+      "ts": "2026-07-19T13:09:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000208",
+      "ts": "2026-07-19T13:09:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Pattern Catalogue Mapping",
+      "ref": {
+        "doc": "RAI Pattern Catalogue Mapping",
+        "locator": "RAI pattern catalogue!r26"
+      }
+    },
+    {
+      "id": "evt_000209",
+      "ts": "2026-07-19T13:09:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Suitability Assessment",
+      "ref": {
+        "doc": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000210",
+      "ts": "2026-07-19T13:09:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Continuous RAI Validator",
+      "ref": {
+        "doc": "Continuous RAI Validator",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000211",
+      "ts": "2026-07-19T13:09:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000212",
+      "ts": "2026-07-19T13:09:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r105"
+      }
+    },
+    {
+      "id": "evt_000213",
+      "ts": "2026-07-19T13:09:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000214",
+      "ts": "2026-07-19T13:09:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Acceptance Testing",
+      "ref": {
+        "doc": "RAI Acceptance Testing",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000215",
+      "ts": "2026-07-19T13:09:49Z",
+      "agent": "full.specialist.data_governance",
+      "type": "stage_complete",
+      "detail": "Data Governance specialist complete"
+    },
+    {
+      "id": "evt_000216",
+      "ts": "2026-07-19T13:09:55Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_complete",
+      "detail": "Legal & Administrative Law specialist complete"
+    },
+    {
+      "id": "evt_000217",
+      "ts": "2026-07-19T13:10:07Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_complete",
+      "detail": "Solution Architect (sections) complete"
+    },
+    {
+      "id": "evt_000218",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.it_security",
+      "type": "question_raised",
+      "detail": "Will the mobile application store or cache performance data locally on the device, and what encryption standards will be applied to local storage?",
+      "ref": {
+        "specialist": "it_security",
+        "question_id": "it_security-1"
+      }
+    },
+    {
+      "id": "evt_000219",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.it_security",
+      "type": "question_raised",
+      "detail": "What hosting environment or cloud service provider is proposed for the AI model and API endpoints?",
+      "ref": {
+        "specialist": "it_security",
+        "question_id": "it_security-2"
+      }
+    },
+    {
+      "id": "evt_000220",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.privacy",
+      "type": "question_raised",
+      "detail": "Where will the completed Privacy Impact Assessment (PIA) and Privacy Threshold Assessment be officially stored (e.g., specific Content Manager/TRIM container or project folder)?",
+      "ref": {
+        "specialist": "privacy",
+        "question_id": "privacy-1"
+      }
+    },
+    {
+      "id": "evt_000221",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.ethics",
+      "type": "question_raised",
+      "detail": "Has a specific definition of fairness (e.g., demographic parity, equal opportunity) been selected or discussed for evaluating the performance summaries?",
+      "ref": {
+        "specialist": "ethics",
+        "question_id": "ethics-1"
+      }
+    },
+    {
+      "id": "evt_000222",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.ethics",
+      "type": "question_raised",
+      "detail": "Are there plans to make the system's scope, goals, and evaluation metrics publicly visible or accessible to staff?",
+      "ref": {
+        "specialist": "ethics",
+        "question_id": "ethics-2"
+      }
+    },
+    {
+      "id": "evt_000223",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.ethics",
+      "type": "question_raised",
+      "detail": "Will staff members be given the option to opt-out of AI-assisted drafting and request a traditional, purely human-led performance evaluation process?",
+      "ref": {
+        "specialist": "ethics",
+        "question_id": "ethics-3"
+      }
+    },
+    {
+      "id": "evt_000224",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.legal",
+      "type": "question_raised",
+      "detail": "Has the agency identified whether existing HR policies or enterprise agreements mandate or restrict the use of automated tools in staff performance evaluations?",
+      "ref": {
+        "specialist": "legal",
+        "question_id": "legal-1"
+      }
+    },
+    {
+      "id": "evt_000225",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.legal",
+      "type": "question_raised",
+      "detail": "Is there an existing agency-wide AI governance framework or designated Accountable Official under the DTA AI Use Policy who will oversee this use case?",
+      "ref": {
+        "specialist": "legal",
+        "question_id": "legal-2"
+      }
+    },
+    {
+      "id": "evt_000226",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.data_governance",
+      "type": "question_raised",
+      "detail": "Has the agency scheduled or conducted a Business System Assessment Framework (BSAF) assessment for this mobile application to evaluate its records management functionality?",
+      "ref": {
+        "specialist": "data_governance",
+        "question_id": "data_governance-1"
+      }
+    },
+    {
+      "id": "evt_000227",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "question_raised",
+      "detail": "Will the AI system utilize a procured off-the-shelf model (e.g., via a commercial API) or a custom-built/fine-tuned model?",
+      "ref": {
+        "specialist": "solution_architect",
+        "question_id": "solution_architect-1"
+      }
+    },
+    {
+      "id": "evt_000228",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "question_raised",
+      "detail": "Is there a planned pilot or phased roll-out for the Manager Performance Assessment Assistant before full deployment?",
+      "ref": {
+        "specialist": "solution_architect",
+        "question_id": "solution_architect-2"
+      }
+    },
+    {
+      "id": "evt_000229",
+      "ts": "2026-07-19T13:10:08Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "question_raised",
+      "detail": "What specific training or guidance will be provided to managers to prevent automation bias when reviewing AI-generated drafts?",
+      "ref": {
+        "specialist": "solution_architect",
+        "question_id": "solution_architect-3"
+      }
+    }
+  ],
+  "log_cursor": 229,
+  "questions": {
+    "batch_id": "q-1",
+    "specialists": [
+      {
+        "node_id": "full.specialist.it_security",
+        "friendly": "IT Security specialist",
+        "why": "The conceptual outline lacks technical details regarding mobile data storage and hosting infrastructure, which are critical for assessing security risks.",
+        "items": [
+          {
+            "question_id": "it_security-1",
+            "text": "Will the mobile application store or cache performance data locally on the device, and what encryption standards will be applied to local storage?",
+            "options": null,
+            "allow_free_text": true
+          },
+          {
+            "question_id": "it_security-2",
+            "text": "What hosting environment or cloud service provider is proposed for the AI model and API endpoints?",
+            "options": null,
+            "allow_free_text": true
+          }
+        ]
+      },
+      {
+        "node_id": "full.specialist.privacy",
+        "friendly": "Privacy specialist",
+        "why": "The assessment requires recording the exact storage repository for the privacy threshold and impact assessments to ensure compliance and auditability.",
+        "items": [
+          {
+            "question_id": "privacy-1",
+            "text": "Where will the completed Privacy Impact Assessment (PIA) and Privacy Threshold Assessment be officially stored (e.g., specific Content Manager/TRIM container or project folder)?",
+            "options": [],
+            "allow_free_text": true
+          }
+        ]
+      },
+      {
+        "node_id": "full.specialist.ethics",
+        "friendly": "Ethics & Fairness specialist",
+        "why": "The project outline lacks details on the specific implementation plans for fairness, transparency, and stakeholder choice.",
+        "items": [
+          {
+            "question_id": "ethics-1",
+            "text": "Has a specific definition of fairness (e.g., demographic parity, equal opportunity) been selected or discussed for evaluating the performance summaries?",
+            "options": [],
+            "allow_free_text": true
+          },
+          {
+            "question_id": "ethics-2",
+            "text": "Are there plans to make the system's scope, goals, and evaluation metrics publicly visible or accessible to staff?",
+            "options": [],
+            "allow_free_text": true
+          },
+          {
+            "question_id": "ethics-3",
+            "text": "Will staff members be given the option to opt-out of AI-assisted drafting and request a traditional, purely human-led performance evaluation process?",
+            "options": [],
+            "allow_free_text": true
+          }
+        ]
+      },
+      {
+        "node_id": "full.specialist.legal",
+        "friendly": "Legal & Administrative Law specialist",
+        "why": "To clarify existing policy constraints and governance structures that affect the legal and administrative compliance of the AI tool.",
+        "items": [
+          {
+            "question_id": "legal-1",
+            "text": "Has the agency identified whether existing HR policies or enterprise agreements mandate or restrict the use of automated tools in staff performance evaluations?",
+            "options": null,
+            "allow_free_text": true
+          },
+          {
+            "question_id": "legal-2",
+            "text": "Is there an existing agency-wide AI governance framework or designated Accountable Official under the DTA AI Use Policy who will oversee this use case?",
+            "options": null,
+            "allow_free_text": true
+          }
+        ]
+      },
+      {
+        "node_id": "full.specialist.data_governance",
+        "friendly": "Data Governance specialist",
+        "why": "The National Archives of Australia recommends conducting a BSAF assessment as a first step to identify and manage AI-generated records and ensure adequate records management functionality is in place.",
+        "items": [
+          {
+            "question_id": "data_governance-1",
+            "text": "Has the agency scheduled or conducted a Business System Assessment Framework (BSAF) assessment for this mobile application to evaluate its records management functionality?",
+            "options": [
+              "Yes, a BSAF assessment has been completed.",
+              "Yes, a BSAF assessment is scheduled or in progress.",
+              "No, a BSAF assessment has not been scheduled.",
+              "Unsure / Not applicable"
+            ],
+            "allow_free_text": true
+          }
+        ]
+      },
+      {
+        "node_id": "full.specialist.solution_architect",
+        "friendly": "Solution Architect (sections)",
+        "why": "Clarifying procurement, piloting, and training details is essential to finalize the technical and operational controls for the system.",
+        "items": [
+          {
+            "question_id": "solution_architect-1",
+            "text": "Will the AI system utilize a procured off-the-shelf model (e.g., via a commercial API) or a custom-built/fine-tuned model?",
+            "options": [
+              "Procured off-the-shelf model",
+              "Custom-built/fine-tuned model",
+              "Undecided"
+            ],
+            "allow_free_text": true
+          },
+          {
+            "question_id": "solution_architect-2",
+            "text": "Is there a planned pilot or phased roll-out for the Manager Performance Assessment Assistant before full deployment?",
+            "options": [
+              "Yes, a pilot is planned",
+              "No pilot is planned",
+              "Undecided"
+            ],
+            "allow_free_text": true
+          },
+          {
+            "question_id": "solution_architect-3",
+            "text": "What specific training or guidance will be provided to managers to prevent automation bias when reviewing AI-generated drafts?",
+            "options": null,
+            "allow_free_text": true
+          }
+        ]
+      }
+    ],
+    "counts": {
+      "total": 12,
+      "answered": 0,
+      "skipped": 0
+    }
+  },
+  "failure": null,
+  "expected_ranges": {
+    "threshold": [
+      50,
+      210
+    ],
+    "full": [
+      170,
+      630
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+# ethics — owned sections
+
+## 5.1
+
+No. The current project outline does not establish a clear definition of what constitutes a fair process or outcome for the Manager Performance Assessment Assistant. To align with responsible AI practices, the system owner must consult domain experts and affected staff to contextualise fairness for this specific HR use case, as what constitutes a fair outcome is highly contextual and depends on the harms and benefits of the system (NAIC RAI Tools, p.19).
+
+*Citations: [NAIC RAI Tools, p.19]*
+
+## 5.2
+
+No. There is currently no mechanism or methodology specified in the project outline to measure the fairness of the system's outcomes, either quantitatively or qualitatively. Implementing fairness metrics (such as evaluating demographic parity or using tools like Aequitas) is a recommended next step to identify and mitigate potential bias in performance summaries (NAIC RAI Tools, p.20).
+
+*Citations: [NAIC RAI Tools, p.20]*
+
+## 8.1
+
+No. The project outline does not indicate that consultation has yet occurred with the primary stakeholders (the staff members whose evaluations are affected) or other key groups identified in section 2.4. Engaging stakeholders early and throughout the lifecycle is critical to identifying potential harms and ensuring the system's safety and fairness (VAISS, s 10).
+
+*Citations: [VAISS, s 10]*
+
+## 8.2
+
+No. The project outline does not specify whether appropriate information regarding the scope, goals, and limitations of the AI tool will be made publicly available. To build trust and support accountability, agencies should disclose key information about the system's purpose and anticipated impacts (NAIC RAI Tools, p.33).
+
+*Citations: [NAIC RAI Tools, p.33]*
+
+## 8.4
+
+No. 
+
+8.4.1: The outline does not state whether staff members will be explicitly informed when their performance evaluations are drafted or influenced by the AI system. 
+
+8.4.2: Furthermore, there is no provision in the current design allowing staff or managers to request a non-AI alternative for drafting or reviewing evaluations. Under responsible AI standards, organisations should disclose when AI is used and provide appropriate mechanisms for affected individuals to understand and potentially contest these interactions (VAISS, s 10; NAIC RAI Tools, p.33).
+
+*Citations: [VAISS, s 10], [NAIC RAI Tools, p.33]*
+
+## 8.5
+
+No. The current outline does not specify whether the AI system will allow for appropriate explanations of the factors leading to its generated performance summaries or development suggestions. Providing lay-person or technical explanations is essential for users to understand the system's underlying logic and to prevent automation bias (AHRC HRT Report, §A requirement for a technical explanation?; NAIC RAI Tools, p.33).
+
+*Citations: [AHRC HRT Report, §A requirement for a technical explanation?], [NAIC RAI Tools, p.33]*
+
+## 10.1
+
+No. The project outline does not provide evidence that a diverse team with appropriately varied skills, experiences, and backgrounds has been incorporated throughout the lifecycle of this AI use case. To ensure diversity and inclusion, the project should actively involve multidisciplinary teams (including HR, legal, and diverse staff representatives) in the design, testing, and monitoring phases (Diversity & Inclusion in AI, p.5; ADM Guide (earlier ed.), p.30).
+
+*Citations: [Diversity & Inclusion in AI, p.5], [ADM Guide (earlier ed.), p.30]*

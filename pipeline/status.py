@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import json
 import os
+import threading
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
@@ -244,7 +245,18 @@ class StatusModel:
     checkpoints reads as a hung run for the entire first stage). ``urgent=True``
     (a node entering/leaving ``active``) always publishes; ``urgent=False``
     (drafting/retrieval sub-activity) is throttled by the installer. Never part
-    of the serialised document."""
+    of the serialised document.
+
+    The model is thread-safe: during the §5.4 fan-out, several specialists
+    narrate from worker threads at once. One reentrant lock makes each mutation
+    atomic — in particular the §6.3 coupling (node-state change + its log line
+    land together, so a concurrent ``save`` can never serialise a graph state
+    without its narration) and the event ids (minted from the log length, which
+    unlocked appends would double-issue). ``save``/``to_dict`` take the same
+    lock, so a snapshot is always internally consistent. The lock is held while
+    ``pulse`` is invoked; installers must therefore never block a pulse on
+    another thread that itself narrates (the driver's committing pulse runs
+    single-threaded; the fan-out's deferred pulse only flips flags)."""
 
     run_id: str
     phase: str
@@ -257,6 +269,9 @@ class StatusModel:
     updated_at: str = ""
     schema_version: int = SCHEMA_VERSION
     pulse: Callable[[bool], None] | None = field(default=None, repr=False, compare=False)
+    _lock: threading.RLock = field(
+        default_factory=threading.RLock, repr=False, compare=False, init=False
+    )
 
     # -- construction -----------------------------------------------------------
 
@@ -333,25 +348,27 @@ class StatusModel:
 
         ``message`` is the plain, calm line shown in the log; ``technical`` sits in
         the failure payload behind "Show technical detail" (design §7.2.4)."""
-        evt = self._set_and_narrate(node_id, "failed", message, now)
-        self.overall_state = "failed"
-        self.failure = {
-            "stage": node_id,
-            "message": message,
-            "run_code": run_code or self.run_id,
-            "technical": technical,
-        }
-        return evt
+        with self._lock:
+            evt = self._set_and_narrate(node_id, "failed", message, now)
+            self.overall_state = "failed"
+            self.failure = {
+                "stage": node_id,
+                "message": message,
+                "run_code": run_code or self.run_id,
+                "technical": technical,
+            }
+            return evt
 
     def wait_node(self, node_id: str, *, now: str | None = None) -> None:
         """Set ``node_id`` waiting_user and flip ``overall_state`` to paused (§5.1).
 
         No coupled event: a pause is narrated by the ``question_raised`` lines the
         caller already emitted (checkpoint), so this is not a graph-only change."""
-        self._require_node(node_id)
-        self.nodes[node_id] = "waiting_user"
-        self.overall_state = "paused"
-        self._touch(now)
+        with self._lock:
+            self._require_node(node_id)
+            self.nodes[node_id] = "waiting_user"
+            self.overall_state = "paused"
+            self._touch(now)
 
     # -- ephemeral / sub-activity / liveness events (no node-state change) -------
 
@@ -370,12 +387,13 @@ class StatusModel:
         now: str | None = None,
     ) -> Event:
         """An agent read a chunk (§6.3): ephemeral label on the node."""
-        self._require_node(node_id)
-        ref = {"doc": doc, "locator": locator} if doc or locator else None
-        evt = self._append(node_id, "retrieval", detail, ref, now)
-        if self.pulse is not None:
-            self.pulse(False)  # throttled — sub-activity feeds the animation (§7.2.5)
-        return evt
+        with self._lock:
+            self._require_node(node_id)
+            ref = {"doc": doc, "locator": locator} if doc or locator else None
+            evt = self._append(node_id, "retrieval", detail, ref, now)
+            if self.pulse is not None:
+                self.pulse(False)  # throttled — sub-activity feeds the animation (§7.2.5)
+            return evt
 
     def drafting(
         self,
@@ -386,12 +404,13 @@ class StatusModel:
         now: str | None = None,
     ) -> Event:
         """Node sub-activity, e.g. "drafting §7.3" (§6.3)."""
-        self._require_node(node_id)
-        ref = {"section": section} if section else None
-        evt = self._append(node_id, "drafting", detail, ref, now)
-        if self.pulse is not None:
-            self.pulse(False)  # throttled — sub-activity feeds the animation (§7.2.5)
-        return evt
+        with self._lock:
+            self._require_node(node_id)
+            ref = {"section": section} if section else None
+            evt = self._append(node_id, "drafting", detail, ref, now)
+            if self.pulse is not None:
+                self.pulse(False)  # throttled — sub-activity feeds the animation (§7.2.5)
+            return evt
 
     def question_raised(
         self,
@@ -436,8 +455,9 @@ class StatusModel:
             raise StatusError(
                 f"Unknown overall_state: {state!r}. Expected one of {sorted(OVERALL_STATES)}."
             )
-        self.overall_state = state
-        self._touch(now)
+        with self._lock:
+            self.overall_state = state
+            self._touch(now)
 
     def set_running(self, *, now: str | None = None) -> None:
         """The "tunnel is running" signal — pair with the first heartbeat (§5.7).
@@ -455,34 +475,37 @@ class StatusModel:
 
     def set_questions(self, questions: dict, *, now: str | None = None) -> None:
         """Attach the batched-questions payload shown while paused (§6.4)."""
-        self.questions = questions
-        self._touch(now)
+        with self._lock:
+            self.questions = questions
+            self._touch(now)
 
     def clear_questions(self, *, now: str | None = None) -> None:
         """Drop the questions payload once answers are submitted (§6.4)."""
-        self.questions = None
-        self._touch(now)
+        with self._lock:
+            self.questions = None
+            self._touch(now)
 
     # -- internals --------------------------------------------------------------
 
     def _set_and_narrate(
         self, node_id: str, state: str, detail: str | None, now: str | None
     ) -> Event:
-        self._require_node(node_id)
-        event_type = _COUPLED_EVENT[state]
-        self.nodes[node_id] = state
-        default_detail = {
-            "active": f"{friendly_name(node_id)} started",
-            "complete": f"{friendly_name(node_id)} complete",
-            "failed": f"{friendly_name(node_id)} failed",
-        }[state]
-        evt = self._append(node_id, event_type, detail or default_detail, None, now)
-        # Publish node transitions as they happen (§6.3 cadence). `failed` is
-        # excluded: the driver's failure path persists + commits immediately after,
-        # with the failure payload this method has not yet populated.
-        if state in ("active", "complete") and self.pulse is not None:
-            self.pulse(True)
-        return evt
+        with self._lock:
+            self._require_node(node_id)
+            event_type = _COUPLED_EVENT[state]
+            self.nodes[node_id] = state
+            default_detail = {
+                "active": f"{friendly_name(node_id)} started",
+                "complete": f"{friendly_name(node_id)} complete",
+                "failed": f"{friendly_name(node_id)} failed",
+            }[state]
+            evt = self._append(node_id, event_type, detail or default_detail, None, now)
+            # Publish node transitions as they happen (§6.3 cadence). `failed` is
+            # excluded: the driver's failure path persists + commits immediately after,
+            # with the failure payload this method has not yet populated.
+            if state in ("active", "complete") and self.pulse is not None:
+                self.pulse(True)
+            return evt
 
     def _append(
         self, agent: str, event_type: str, detail: str, ref: dict | None, now: str | None
@@ -491,18 +514,19 @@ class StatusModel:
             raise StatusError(
                 f"Unknown event type: {event_type!r}. Expected one of {sorted(EVENT_TYPES)}."
             )
-        ts = now or utc_now_iso()
-        evt = Event(
-            id=_event_id(self._next_ordinal()),
-            ts=ts,
-            agent=agent,
-            type=event_type,
-            detail=detail,
-            ref=ref,
-        )
-        self.log.append(evt)
-        self.updated_at = ts
-        return evt
+        with self._lock:
+            ts = now or utc_now_iso()
+            evt = Event(
+                id=_event_id(self._next_ordinal()),
+                ts=ts,
+                agent=agent,
+                type=event_type,
+                detail=detail,
+                ref=ref,
+            )
+            self.log.append(evt)
+            self.updated_at = ts
+            return evt
 
     def _next_ordinal(self) -> int:
         return len(self.log) + 1
@@ -522,21 +546,23 @@ class StatusModel:
     # -- serialisation ----------------------------------------------------------
 
     def to_dict(self) -> dict:
-        """The status.json document in the §6.1 shape."""
-        return {
-            "schema_version": self.schema_version,
-            "run_id": self.run_id,
-            "run_code": self.run_id,  # the run code *is* the id (§3)
-            "phase": self.phase,
-            "overall_state": self.overall_state,
-            "updated_at": self.updated_at,
-            "nodes": dict(self.nodes),
-            "log": [e.to_dict() for e in self.log],
-            "log_cursor": self.log_cursor,
-            "questions": self.questions,
-            "failure": self.failure,
-            "expected_ranges": self.expected_ranges,
-        }
+        """The status.json document in the §6.1 shape. Taken under the lock so a
+        snapshot mid-fan-out is internally consistent (§6.3 coupling)."""
+        with self._lock:
+            return {
+                "schema_version": self.schema_version,
+                "run_id": self.run_id,
+                "run_code": self.run_id,  # the run code *is* the id (§3)
+                "phase": self.phase,
+                "overall_state": self.overall_state,
+                "updated_at": self.updated_at,
+                "nodes": dict(self.nodes),
+                "log": [e.to_dict() for e in self.log],
+                "log_cursor": self.log_cursor,
+                "questions": self.questions,
+                "failure": self.failure,
+                "expected_ranges": self.expected_ranges,
+            }
 
     def save(self, run_dir: str | os.PathLike) -> Path:
         """Atomically write ``<run_dir>/status.json`` (temp + os.replace)."""

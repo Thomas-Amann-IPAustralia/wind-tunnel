@@ -1,0 +1,57 @@
+{
+  "specialist": "data_governance",
+  "sections": {
+    "6.1": "Yes. The chosen data—consisting of internal performance review documents, goal-tracking data, and manager-logged feedback notes—is directly relevant to synthesizing a staff member's performance over an assessment period. However, to ensure suitability and mitigate risks of bias or inaccuracy, the data must be checked for coverage, completeness, and potential systemic bias. Specifically, unstructured feedback logs and meeting transcripts can contain gendered, neurodivergent, or historical biases that the AI model might replicate or amplify if not carefully managed. Therefore, while the data types are functionally suitable for performance drafting, ongoing data quality checks and human-in-the-loop verification are required to ensure the inputs are accurate, complete, and unbiased.",
+    "6.2": "No. The current use-case outline does not specify whether consistency with the Framework for Governance of Indigenous Data has been established. Because the system will process performance evaluations of Aboriginal and Torres Strait Islander staff, the agency must ensure that data governance arrangements are consistent with the Framework, partnering with Indigenous people throughout the data lifecycle and supporting their inclusion in data governance.",
+    "8.3": "Yes. The agency will implement processes to maintain comprehensive records throughout the AI lifecycle in accordance with National Archives of Australia (NAA) guidance. This includes capturing AI-generated draft summaries, final approved evaluations, and associated metadata into the agency's approved records management system. To ensure transparency and traceability, the agency will make risk-based decisions to retain the prompts, inputs, and source data (such as manager notes and feedback logs) that contributed to specific outputs. Furthermore, system design, development, testing, and operational policies will be documented and retained to demonstrate how the system achieves its outputs."
+  },
+  "citations": {
+    "6.1": [
+      {
+        "short_name": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    ],
+    "6.2": [
+      {
+        "short_name": "DDGS",
+        "locator": "p.13"
+      }
+    ],
+    "8.3": [
+      {
+        "short_name": "NAA AI Records Guidance",
+        "locator": "§Managing AI technologies incorporated into business systems"
+      },
+      {
+        "short_name": "NAA AI Records Guidance",
+        "locator": "§Disposal of generative AI assistant prompts and inputs"
+      },
+      {
+        "short_name": "NAA AI Records Guidance",
+        "locator": "§Example: AI technologies incorporated into a regulatory compliance assessment business system"
+      }
+    ]
+  },
+  "questions": {
+    "why": "The National Archives of Australia recommends conducting a BSAF assessment as a first step to identify and manage AI-generated records and ensure adequate records management functionality is in place.",
+    "items": [
+      {
+        "question_id": "data_governance-1",
+        "text": "Has the agency scheduled or conducted a Business System Assessment Framework (BSAF) assessment for this mobile application to evaluate its records management functionality?",
+        "options": [
+          "Yes, a BSAF assessment has been completed.",
+          "Yes, a BSAF assessment is scheduled or in progress.",
+          "No, a BSAF assessment has not been scheduled.",
+          "Unsure / Not applicable"
+        ],
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}

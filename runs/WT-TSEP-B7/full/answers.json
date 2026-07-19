@@ -1,0 +1,47 @@
+{
+  "answers": [
+    {
+      "question_id": "it_security-1",
+      "value": "Yes, a manual kill-switch is planned"
+    },
+    {
+      "question_id": "privacy-1",
+      "value": "Within business gov's IT tenancy"
+    },
+    {
+      "question_id": "ethics-2",
+      "value": "Yes we've spoken with 12 business owners"
+    },
+    {
+      "question_id": "ethics-3",
+      "value": "Yes the team contains all that"
+    },
+    {
+      "question_id": "legal-1",
+      "value": "Yes, both have been designated"
+    },
+    {
+      "question_id": "legal-2",
+      "value": "Yes, scheduled or underway"
+    },
+    {
+      "question_id": "data_governance-1",
+      "value": "Yes they will be stored by my org"
+    },
+    {
+      "question_id": "data_governance-2",
+      "value": "No"
+    },
+    {
+      "question_id": "solution_architect-2",
+      "value": "Yes"
+    }
+  ],
+  "skips": [
+    "it_security-2",
+    "ethics-1",
+    "legal-3",
+    "solution_architect-1"
+  ],
+  "submitted_at": "2026-07-19T10:44:49Z"
+}

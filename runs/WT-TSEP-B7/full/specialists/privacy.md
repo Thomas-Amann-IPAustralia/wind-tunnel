@@ -1,0 +1,19 @@
+# privacy — owned sections
+
+## 7.1
+
+Yes. The collection, use, and disclosure of personal information through the C&D Claim Evaluator can comply with the Australian Privacy Principles (APPs) provided that strict design and configuration controls are implemented.
+
+First, under APP 3.1, as an agency, business.gov must ensure that any collection of personal information (which may be contained within uploaded cease and desist letters, such as names or contact details of disputing parties) is reasonably necessary for, or directly related to, one or more of its functions or activities (Privacy Act 1988, s 3). These functions and activities are determined objectively (APP Guidelines, p.88). Providing educational guidance to small businesses is a core function of business.gov, making this collection directly related to its activities.
+
+Second, to comply with APP 6 regarding secondary use and disclosure, the agency must ensure that personal information uploaded by users is not used for secondary purposes, such as training or fine-tuning AI models, without consent (OAIC AI Training Top 5, p.1). The agency must verify that the AI system's terms of use and data-handling policies strictly prohibit the developer or any third party from accessing or using the input text for model training or other secondary purposes (OAIC AI Selection Checklist, p.1).
+
+Third, under APP 11.1, the agency must take reasonable steps to protect the personal information from misuse, interference, loss, and unauthorised access, modification, or disclosure (APP Guidelines, p.187). Because the uploaded legal documents are highly sensitive, more rigorous security steps are required (APP Guidelines, p.187). This must include both technical measures (such as encryption and secure access controls) and organisational measures (such as clear staff policies) (APP Guidelines, p.188).
+
+Finally, under APP 11.2, the agency must take reasonable steps to destroy or de-identify personal information when it is no longer needed for the primary purpose, unless an exception applies (such as being contained in a Commonwealth record or required by law to be retained) (APP Guidelines, p.191). In this case, uploaded documents should be put beyond use or securely deleted immediately after the session ends to minimise retention risks.
+
+*Citations: [Privacy Act 1988, s 3], [APP Guidelines, p.88], [OAIC AI Training Top 5, p.1], [OAIC AI Selection Checklist, p.1], [APP Guidelines, p.187], [APP Guidelines, p.188], [APP Guidelines, p.191]*
+
+## 7.2
+
+The privacy threshold assessment and the privacy impact assessment (PIA) for the C&D Claim Evaluator are stored securely within business.gov's IT tenancy.

@@ -1,0 +1,70 @@
+{
+  "sections": {
+    "1": "### 1.1 AI Use Case Profile\n- **Title**: Manager Performance Assessment Assistant\n- **Summary**: A mobile-first AI tool that synthesizes performance data and manager-logged notes to help draft objective staff evaluations.\n\n### 1.2 Establishing Impact Assessment Responsibilities\n- **Assessing Officer**: Not stated in the outline.\n- **Approving Officer**: Not stated in the outline.\n\n### 1.3 Additional Roles and Responsibilities\n- Not stated in the outline.\n\n### 1.4 AI Use Case Description\nThe proposed system is a mobile-first AI-powered assessment tool designed to assist managers in drafting objective staff evaluations. It analyzes and synthesizes performance data, goal-tracking records, and manager-logged feedback notes to generate draft performance summaries and development suggestions for managers to review and finalize.\n\n### 1.5 In-Scope Use Case\nYes. The system uses AI to analyze and synthesize performance data to generate draft evaluations for human review.\n\n### 1.6 Type of AI Technology\nNatural Language Processing (NLP) and Generative AI (specifically text synthesis and summarisation).\n\n### 1.7 Usage Pattern\nHuman-in-the-loop: The AI generates draft performance summaries and development suggestions, which are then reviewed, edited, and finalized by the manager.\n\n### 1.8 Administrative Decisions\nThe AI drafts evaluations that directly influence performance assessments, which may subsequently affect administrative decisions regarding staff development, retention, or promotion. The final decisions are made by the managers, but the AI's drafts directly influence them.\n\n### 1.9 Domain\nHuman Resources / Internal Staff Performance Management.\n\n### 1.10 Expert Contributions\n- Not stated in the outline.\n\n### 1.11 Impact Assessment Review Log\n- Not stated in the outline.",
+    "2": "### 2.1 Problem Definition\nManagers frequently struggle to provide consistent, objective, and timely performance feedback to their staff. This difficulty leads to gaps in staff development and introduces potential bias into performance evaluations.\n\n### 2.2 AI Use Case Purpose\nTo assist managers by analyzing performance data and feedback logs to generate draft performance summaries and development suggestions, thereby improving feedback consistency, timeliness, and reducing evaluation bias.\n\n### 2.3 Non-AI Alternatives\n- Not stated in the outline.\n\n### 2.4 Identifying Stakeholders\n- **Primary Users**: Managers who input notes and review/approve the AI-generated summaries.\n- **Primary Stakeholders Affected**: Staff members whose performance evaluations and development pathways are shaped by these assessments.\n\n### 2.5 Expected Benefits\n- Improved consistency and objectivity in staff evaluations.\n- More timely feedback delivery.\n- Reduced bias in performance assessments.\n- Better identified development opportunities for staff.",
+    "4": "### 4.1 Assessing Officer Recommendation\nBased on the preliminary threshold assessment of the \"Manager Performance Assessment Assistant,\" the proposed system introduces several areas of notable risk that warrant careful management. The system processes highly sensitive personal and professional information—including performance reviews, goal-tracking data, and potentially un-anonymized meeting transcripts. Because the outputs directly influence staff performance evaluations, career progression, and development opportunities, there are inherent risks regarding algorithmic bias, unfair discrimination, and privacy.\n\nWhile the system maintains a human-in-the-loop pattern where managers must review and approve all drafts, the potential for automation bias (where managers over-rely on AI-generated drafts without critical review) remains a key concern. Furthermore, the mobile-first design introduces specific accessibility and security considerations.\n\nTo ensure safe, fair, and transparent deployment, it is recommended that the project team undertake the following actions:\n1. **Conduct a Privacy Impact Assessment (PIA)** to address the collection, storage, and processing of sensitive employee data and transcripts, ensuring robust data minimization and anonymization.\n2. **Establish Rigorous Bias Testing** on the synthesis models to ensure they do not perpetuate or amplify gendered, racial, or neurodivergent biases in performance feedback.\n3. **Perform an Accessibility Audit** of the mobile interface to ensure all managers, including those with disabilities, can fully utilize the tool.\n4. **Implement Clear Human-in-the-Loop Protocols** to ensure managers remain fully accountable for the final evaluations and do not defer uncritically to AI-generated drafts.\n5. **Review System Security** to address mobile-specific vulnerabilities, such as insecure local data caching or API risks.\n\nA cautious, precautionary approach should be maintained throughout the design and deployment phases to safeguard employee trust and ensure compliance with privacy and anti-discrimination standards."
+  },
+  "risks": {
+    "3.1": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "The outline specifies a \"mobile-first\" application. If the mobile interface or the generated summaries are not fully accessible or optimized for assistive technologies, managers with visual, motor, or cognitive impairments may face barriers when inputting notes or reviewing drafts. Since accessibility measures are not explicitly stated in the outline, a precautionary moderate consequence and possible likelihood are applied.",
+      "divergence_note": ""
+    },
+    "3.2": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "The AI will process internal performance review documents, goal-tracking data, and feedback logs to generate evaluations. Performance evaluations are highly susceptible to systemic bias. AI models trained on or synthesizing unstructured feedback logs and meeting transcripts may replicate or amplify historical biases against minority groups, women, or neurodivergent staff. Given the direct impact on careers and the lack of stated bias-mitigation strategies in the outline, this risk is considered possible with moderate consequences.",
+      "divergence_note": ""
+    },
+    "3.3": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "Language models used to synthesize natural language notes and transcripts can generate coded or gendered language (e.g., describing assertive behavior differently based on gender). Without explicit guardrails detailed in the outline, there is a possible risk of perpetuating harmful stereotypes in staff evaluations, warranting a moderate consequence rating.",
+      "divergence_note": ""
+    },
+    "3.4": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "Biased, inaccurate, or unfair performance summaries can lead to tangible professional, financial, and psychological harm for staff members. This includes unfair performance ratings, missed promotion opportunities, career stagnation, or distress. Because evaluations directly affect careers and livelihoods, the potential consequence is moderate and the likelihood is possible.",
+      "divergence_note": ""
+    },
+    "3.5": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "The system will process highly sensitive HR data, including performance reviews, goal-tracking data, and potentially \"anonymized meeting transcripts or feedback logs.\" If the anonymization of transcripts is incomplete, or if sensitive personal disclosures made during meetings are processed and exposed by the AI, it poses a moderate privacy risk with a possible likelihood.",
+      "divergence_note": ""
+    },
+    "3.6": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "Internal performance data and meeting transcripts are highly confidential. A data breach compromising this information could expose sensitive organizational dynamics and personal employee details. Given the mobile-first deployment, data security is critical, leading to a precautionary selection of moderate consequence and possible likelihood.",
+      "divergence_note": ""
+    },
+    "3.7": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "Deploying a mobile-first application that handles sensitive HR data and integrates with internal databases and AI APIs introduces specific system security risks. Vulnerabilities such as insecure local data caching on mobile devices, API exploits, or unauthorized access if a device is lost could expose sensitive employee records. Precautionarily, this is rated as a moderate consequence with a possible likelihood.",
+      "divergence_note": ""
+    },
+    "3.8": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "Using AI to draft employee performance evaluations could attract negative attention from staff, unions, or the public if perceived as outsourcing human leadership and merit-based assessments to algorithms. If the system is viewed as biased or insecure, it could undermine trust in public service administration and internal governance, warranting a moderate consequence and possible likelihood.",
+      "divergence_note": ""
+    }
+  },
+  "overall_inherent": "Medium",
+  "provenance": {
+    "model": "gemini-3.1-pro-preview",
+    "prompt_version": "v1"
+  }
+}
