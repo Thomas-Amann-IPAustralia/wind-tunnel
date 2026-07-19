@@ -2,9 +2,9 @@
   "schema_version": 1,
   "run_id": "WT-TSEP-B7",
   "run_code": "WT-TSEP-B7",
-  "phase": "threshold",
+  "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:37:38Z",
+  "updated_at": "2026-07-19T10:37:54Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -126,9 +126,16 @@
       "agent": "backend",
       "type": "heartbeat",
       "detail": ""
+    },
+    {
+      "id": "evt_000016",
+      "ts": "2026-07-19T10:37:54Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 15,
+  "log_cursor": 16,
   "questions": null,
   "failure": null,
   "expected_ranges": {
