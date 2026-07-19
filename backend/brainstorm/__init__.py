@@ -13,21 +13,24 @@ persistence lives in ``transcript.py`` here.
 from __future__ import annotations
 
 from brainstorm.feasibility import FeasibilityResult, assess_feasibility
-from brainstorm.interviewer import InterviewerResult, run_interviewer
-from brainstorm.mapgen import MapResult, generate_flow_map
-from brainstorm.poc import PocResult, generate_poc
+from brainstorm.interviewer import InterviewerResult, ingest_seed_material, run_interviewer
+from brainstorm.mapgen import MapResult, generate_flow_map, validate_mermaid
+from brainstorm.poc import PocResult, generate_poc, validate_poc_html
 from brainstorm.sufficiency import assess_sufficiency
 from brainstorm.transcript import Transcript
 
 __all__ = [
     "InterviewerResult",
     "run_interviewer",
+    "ingest_seed_material",
     "assess_sufficiency",
     "assess_feasibility",
     "FeasibilityResult",
     "generate_poc",
+    "validate_poc_html",
     "PocResult",
     "generate_flow_map",
+    "validate_mermaid",
     "MapResult",
     "Transcript",
 ]

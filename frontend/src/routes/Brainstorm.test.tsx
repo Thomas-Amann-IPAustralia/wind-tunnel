@@ -21,6 +21,7 @@ vi.mock("../lib/api", async (importActual) => {
     generateFlowMap: vi.fn(),
     postFlowMapSvg: vi.fn(),
     fetchArtefactText: vi.fn(),
+    uploadBrainstormFile: vi.fn(),
   };
 });
 
@@ -39,6 +40,7 @@ import {
   getBrainstorm,
   postFlowMapSvg,
   submitRun,
+  uploadBrainstormFile,
 } from "../lib/api";
 import { renderMermaid } from "../lib/mermaid";
 
@@ -87,6 +89,7 @@ beforeEach(() => {
   vi.mocked(generateFlowMap).mockReset();
   vi.mocked(postFlowMapSvg).mockReset();
   vi.mocked(fetchArtefactText).mockReset();
+  vi.mocked(uploadBrainstormFile).mockReset();
   vi.mocked(renderMermaid).mockClear();
 });
 
@@ -282,5 +285,113 @@ describe("Brainstorm synthesis — PoC and flow map (§6.3/§6.4)", () => {
     expect(await screen.findByTitle("Information-flow map")).toBeTruthy();
     expect(vi.mocked(fetchArtefactText)).toHaveBeenCalledWith(CODE, "flow-map.mmd");
     expect(vi.mocked(postFlowMapSvg)).not.toHaveBeenCalled();
+  });
+});
+
+describe("Brainstorm file upload (§7)", () => {
+  function loadFresh() {
+    vi.mocked(getBrainstorm).mockResolvedValue({
+      outline_md: outlineMd([]),
+      transcript: [],
+      sufficiency: { ready: false, missing: [] },
+      stage: "BRAINSTORM",
+    });
+  }
+
+  async function openUploader() {
+    fireEvent.click(await screen.findByRole("button", { name: /or upload a file instead/i }));
+  }
+
+  function pick(name: string, content: string, type = "text/plain") {
+    const file = new File([content], name, { type });
+    fireEvent.change(screen.getByLabelText(/choose a file to upload/i), {
+      target: { files: [file] },
+    });
+  }
+
+  it("uploads a plain-text file as seed material and folds the result into the outline", async () => {
+    loadFresh();
+    vi.mocked(uploadBrainstormFile).mockResolvedValue({
+      produced: "outline",
+      assistant_message: "I've drafted the problem — who are the users?",
+      outline_md: outlineMd(["problem"], { problem: "Citizens wait too long." }),
+      outline_delta: { updated: ["problem"], newly_resolved: ["problem"], title_changed: false },
+      sufficiency: { ready: false, missing: [] },
+      stage: "BRAINSTORM",
+    });
+
+    renderBrainstorm();
+    await openUploader();
+    pick("idea.txt", "We run an enquiries team and want AI to help draft replies.");
+
+    // Gated on the no-sensitive acknowledgement — Upload is disabled until it's ticked.
+    const ack = await screen.findByLabelText(/no sensitive information/i);
+    const uploadBtn = () => screen.getByRole("button", { name: /^upload$/i });
+    expect((uploadBtn() as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.click(ack);
+    expect((uploadBtn() as HTMLButtonElement).disabled).toBe(false);
+    fireEvent.click(uploadBtn());
+
+    expect(await screen.findByText("I've drafted the problem — who are the users?")).toBeTruthy();
+    expect(screen.getByText("Citizens wait too long.")).toBeTruthy();
+    expect(vi.mocked(uploadBrainstormFile)).toHaveBeenCalledWith(
+      CODE,
+      expect.objectContaining({ format: "text", acknowledgeNoSensitive: true }),
+    );
+  });
+
+  it("requires the extra starting-material acknowledgement for a Mermaid upload, then draws the map", async () => {
+    loadFresh();
+    vi.mocked(uploadBrainstormFile).mockResolvedValue({
+      produced: "map",
+      mermaid: "flowchart TD\n  A-->B",
+    });
+    vi.mocked(postFlowMapSvg).mockResolvedValue({ run_id: CODE, committed: true });
+
+    renderBrainstorm();
+    await openUploader();
+    pick("flow.mmd", "flowchart TD\n  A-->B", "text/plain");
+
+    const uploadBtn = () => screen.getByRole("button", { name: /^upload$/i });
+    // With only the no-sensitive ack, a Mermaid upload stays disabled…
+    fireEvent.click(await screen.findByLabelText(/no sensitive information/i));
+    expect((uploadBtn() as HTMLButtonElement).disabled).toBe(true);
+    // …until the starting-material ack is given too.
+    fireEvent.click(screen.getByLabelText(/starting material/i));
+    expect((uploadBtn() as HTMLButtonElement).disabled).toBe(false);
+    fireEvent.click(uploadBtn());
+
+    // Rendered client-side, posted back, and shown on the flow-map tab (CLAUDE.md §9).
+    expect(await screen.findByTitle("Information-flow map")).toBeTruthy();
+    expect(vi.mocked(renderMermaid)).toHaveBeenCalledWith("flowchart TD\n  A-->B");
+    expect(vi.mocked(postFlowMapSvg)).toHaveBeenCalledWith(CODE, expect.stringContaining("<svg"));
+    expect(vi.mocked(uploadBrainstormFile)).toHaveBeenCalledWith(
+      CODE,
+      expect.objectContaining({
+        format: "mermaid",
+        acknowledgeNoSensitive: true,
+        acknowledgeStartingMaterial: true,
+      }),
+    );
+  });
+
+  it("uploads an HTML file as the proof of concept and shows it in the sandboxed frame", async () => {
+    loadFresh();
+    vi.mocked(uploadBrainstormFile).mockResolvedValue({ produced: "poc" });
+
+    renderBrainstorm();
+    await openUploader();
+    pick("mock.html", "<!doctype html><html><body>Mock</body></html>", "text/html");
+
+    fireEvent.click(await screen.findByLabelText(/no sensitive information/i));
+    fireEvent.click(screen.getByRole("button", { name: /^upload$/i }));
+
+    const frame = (await screen.findByTitle("Proof-of-concept preview")) as HTMLIFrameElement;
+    expect(frame.getAttribute("src")).toContain("/artefact/poc.html");
+    expect(frame.getAttribute("sandbox")).toBe("");
+    expect(vi.mocked(uploadBrainstormFile)).toHaveBeenCalledWith(
+      CODE,
+      expect.objectContaining({ format: "html", acknowledgeNoSensitive: true }),
+    );
   });
 });

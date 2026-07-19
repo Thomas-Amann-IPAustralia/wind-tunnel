@@ -2,7 +2,46 @@
 
 ## Current stage
 
-**This branch (`claude/windtunnel-governance-nodes-h9q4bq`): the knowledge plane — the
+**This branch (`claude/brainstorm-file-upload-ybgzdb`): file upload in Brainstorm — a public
+servant can upload a file instead of chatting, in three formats (TECH_SPEC §7, §9.2, §12.3/§12.4;
+CLAUDE.md §3).** A new `POST /api/runs/{id}/brainstorm/upload` endpoint (valid only at
+`BRAINSTORM`, like the other brainstorm endpoints) accepts a decoded-text file with a `format` and
+two acknowledgements, and dispatches on format:
+
+1. **Plain text → seed material (the primary path).** Fed through the interviewer
+   (`ingest_seed_material`, a thin sibling of `run_interviewer` sharing its prompt + `_parse`)
+   **exactly as a long first message would be**, so it populates outline sections; committed like a
+   normal turn (outline stays the single source of truth, CLAUDE.md §3; the upload recorded as a
+   user turn, the interviewer's summary as the reply). The document is wrapped as untrusted content
+   inside the agent (§9.2).
+2. **Mermaid (`.mmd`) → the run's `flow-map.mmd`, framed as starting material.** Validated with the
+   same `validate_mermaid` the generator uses (extracted to public), committed, and the source
+   returned so the SPA does the existing client-render-then-post-SVG round-trip (CLAUDE.md §9). No
+   LLM call. The additional starting-material acknowledgement gates this format.
+3. **HTML → the run's `poc.html`.** Validated as an HTML document but with the §12.4
+   limitations-banner requirement **relaxed for a user upload** (`validate_poc_html(...,
+   require_banner=False)`) — a public servant supplying their own mock is exempt. Rendered in the
+   existing `sandbox=""` iframe. No LLM call.
+
+Both acknowledgements are enforced server-side (the authoritative check) **and** client-side (the
+Upload button stays disabled until given): every upload confirms no sensitive information (the repo
+is public, brief §3); a Mermaid upload additionally acknowledges starting-material treatment. The
+licence gate (§8) never applies to a user submission — this is a user artefact, not a corpus
+document. **Also (Tom's ask):** the flow-map panel now has an **Open in a new tab** button (the
+in-canvas preview is small) — the client-rendered SVG is opened full-size via a blob URL.
+**Frontend-visible surface:** a collapsible "Or upload a file instead" affordance under the
+conversation (`FileUpload.tsx`), format auto-detected from the extension with a manual override,
+routing the result to the surface that now holds it (outline / map tab / PoC tab). No pipeline,
+contract-breaking, or integrity-invariant change. **Backend: 135 tests green (122 prior + 13
+upload: validators ×3, plain-text ingest + untrusted-wrap ×2, Mermaid commit/ack/reject ×3, HTML
+commit/reject ×2, shared ack/empty/stage-guard ×3), ruff clean. Frontend: 54 tests green (51 prior
++ 3 upload: plain-text seed, Mermaid double-ack + render, HTML→PoC), build + strict typecheck +
+lint (0 err, 1 pre-existing warning) + format clean.** **No document contradiction to fix** — §7
+did not enumerate an upload endpoint but the change sits squarely inside its brainstorm surface and
+holds every §3 invariant. **What remains unchanged:** a first live Gemini run is still the only
+untested seam (the plain-text ingest's live *judgement*; the whole path is unit-tested LLM-free).
+
+**Prior branch (`claude/windtunnel-governance-nodes-h9q4bq`): the knowledge plane — the
 specialists' knowledge bases are now depicted as nodes in the Chamber graph, closing the
 biggest gap between the real governance page and the PoC (`frontend/windtunnel_agent_telemetry.html`)
 (DESIGN §7.2; CLAUDE.md §3, §9).** Tom asked to bring the real governance node network closer
@@ -512,8 +551,38 @@ pipeline.
 
 ## Done
 
+- **Brainstorm file upload — upload a file instead of chatting, in three formats (TECH_SPEC §7,
+  §9.2, §12.3/§12.4; CLAUDE.md §3; this branch).** No pipeline/contract-breaking change; every
+  invariant held (outline stays the single source of truth; uploads wrapped as untrusted; commits
+  via the Contents API; the licence gate never applies to a user submission). **135 backend + 54
+  frontend tests green.** The pieces:
+  - **`backend/brainstorm/interviewer.py`** — `ingest_seed_material`: feeds an uploaded
+    plain-text document through the interviewer prompt (shared `load_prompt`/`_parse`) so it
+    populates outline sections *exactly as a long first message would*, framed as an uploaded
+    document rather than a chat turn, wrapped as untrusted content (§9.2).
+  - **`backend/brainstorm/mapgen.py` / `poc.py`** — extracted the validators to public:
+    `validate_mermaid` (reused to gate an uploaded `.mmd`) and `validate_poc_html(*,
+    require_banner)` (the §12.4 banner requirement is **relaxed for a user upload**; a
+    model-generated PoC still requires it). One owner per fact — both paths share one check.
+  - **`backend/app.py`** — `POST /api/runs/{id}/brainstorm/upload` (`UploadBody`): valid only at
+    `BRAINSTORM`; enforces the no-sensitive-info acknowledgement for every upload and the
+    starting-material acknowledgement for Mermaid; `text` → seed the outline (commit like a turn),
+    `mermaid` → commit `flow-map.mmd` + return the source for the SPA's client-render round-trip,
+    `html` → commit `poc.html`. Mermaid/HTML make no LLM call.
+  - **`frontend`** — `FileUpload.tsx` (+ `.css`): a collapsible "Or upload a file instead"
+    affordance under the conversation, format auto-detected from the extension with a manual
+    override, the two acknowledgement checkboxes gating the Upload button. `Brainstorm.tsx` wires
+    `uploadBrainstormFile` and routes the result to the conversation / map / PoC surface;
+    `api.ts`/`types.ts` gained the typed client + `UploadResponse`. Plus **Open in a new tab** on
+    the flow-map panel (`BrainstormSynthesis.tsx`) — the small preview opens full-size via a blob
+    URL (Tom's ask).
+  - **Tests** — `backend/tests/test_upload.py` (13: validators, plain-text ingest +
+    untrusted-wrap, Mermaid commit/ack/reject, HTML commit/reject, ack/empty/stage-guard, all
+    LLM-free) and three in `frontend/src/routes/Brainstorm.test.tsx` (plain-text seed, Mermaid
+    double-ack + render, HTML→PoC).
+
 - **The knowledge plane — specialists' knowledge bases depicted as nodes (DESIGN §7.2;
-  CLAUDE.md §3, §9; this branch).** The real governance graph now mirrors the PoC's most
+  CLAUDE.md §3, §9; prior branch).** The real governance graph now mirrors the PoC's most
   important missing element: each specialist paired 1:1 with the knowledge base it reads.
   Frontend-only; the shelves are presentational (derived from the paired specialist + retrieval
   events), so one poll still fully determines the graph (CLAUDE.md §3) and `status.json` `nodes`

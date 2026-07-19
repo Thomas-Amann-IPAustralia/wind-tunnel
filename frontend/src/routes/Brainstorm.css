@@ -45,6 +45,25 @@
   min-height: 0;
 }
 
+/* The conversation tab stacks the dialogue over the "upload a file instead" affordance:
+ * the conversation grows and scrolls internally, the uploader sits below at its natural
+ * height (collapsed to a single quiet button until opened). */
+.wt-brainstorm__conversation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-height: 0;
+}
+
+.wt-brainstorm__conversation > .wt-convo {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.wt-brainstorm__conversation > .wt-upload {
+  flex: 0 0 auto;
+}
+
 .wt-brainstorm__footer {
   display: flex;
   flex-direction: column;

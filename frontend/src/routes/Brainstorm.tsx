@@ -5,6 +5,8 @@ import { FlowMapPanel, PocPanel } from "../components/BrainstormSynthesis";
 import { BrainstormTabs } from "../components/BrainstormTabs";
 import type { BrainstormTab } from "../components/BrainstormTabs";
 import { Conversation } from "../components/Conversation";
+import { FileUpload } from "../components/FileUpload";
+import type { UploadPayload } from "../components/FileUpload";
 import { OutlineCanvas } from "../components/OutlineCanvas";
 import { RunCodeChip } from "../components/RunCodeChip";
 import { SufficiencyBanner } from "../components/SufficiencyBanner";
@@ -21,6 +23,7 @@ import {
   NetworkError,
   postFlowMapSvg,
   submitRun,
+  uploadBrainstormFile,
 } from "../lib/api";
 import { parseOutline } from "../lib/outline";
 import { isValid } from "../lib/runCode";
@@ -59,6 +62,9 @@ export function Brainstorm() {
   const [pendingUser, setPendingUser] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [sendError, setSendError] = useState<string | null>(null);
+
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
@@ -187,6 +193,58 @@ export function Brainstorm() {
     [code, markResolving],
   );
 
+  // Upload a file instead of chatting (§7 file upload). Plain text seeds the outline (and is
+  // recorded as a turn, exactly as a long first message would be); a Mermaid upload becomes the
+  // flow map (rendered + posted back like a generated one); an HTML upload becomes the PoC. The
+  // result routes the user to the surface that now holds their material.
+  const upload = useCallback(
+    async (payload: UploadPayload) => {
+      if (!code) return;
+      setUploadError(null);
+      setUploading(true);
+      try {
+        const resp = await uploadBrainstormFile(code, {
+          format: payload.format,
+          content: payload.content,
+          filename: payload.filename,
+          acknowledgeNoSensitive: payload.acknowledgeNoSensitive,
+          acknowledgeStartingMaterial: payload.acknowledgeStartingMaterial,
+        });
+        if (resp.produced === "outline") {
+          setTurns((prev) => [
+            ...prev,
+            { role: "user", text: payload.content, ts: nowIso() },
+            { role: "assistant", text: resp.assistant_message ?? "", ts: nowIso() },
+          ]);
+          if (resp.outline_md) setOutlineMd(resp.outline_md);
+          if (resp.sufficiency) setSufficiency(resp.sufficiency);
+          if (resp.outline_delta) {
+            markResolving([...resp.outline_delta.newly_resolved, ...resp.outline_delta.updated]);
+          }
+          setTab("conversation");
+        } else if (resp.produced === "map") {
+          if (resp.mermaid) {
+            const svg = await renderMermaidLazy(resp.mermaid);
+            setFlowSvg(svg);
+            await postFlowMapSvg(code, svg);
+          }
+          setTab("map");
+        } else {
+          // An uploaded PoC — exempt from the limitations-banner requirement (§12.4).
+          setFeasibility(null);
+          setPocReady(true);
+          setPocNonce((n) => n + 1);
+          setTab("poc");
+        }
+      } catch (err) {
+        setUploadError(describe(err, "upload that file"));
+      } finally {
+        setUploading(false);
+      }
+    },
+    [code, markResolving],
+  );
+
   const saveSection = useCallback(
     async (id: string, body: string) => {
       if (!code || body.length === 0) return;
@@ -302,14 +360,17 @@ export function Brainstorm() {
                 aria-labelledby={`wt-tab-${tab}`}
               >
                 {tab === "conversation" ? (
-                  <Conversation
-                    turns={turns}
-                    pendingUser={pendingUser}
-                    thinking={sending}
-                    onSend={send}
-                    disabled={sending}
-                    error={sendError}
-                  />
+                  <div className="wt-brainstorm__conversation">
+                    <Conversation
+                      turns={turns}
+                      pendingUser={pendingUser}
+                      thinking={sending}
+                      onSend={send}
+                      disabled={sending || uploading}
+                      error={sendError}
+                    />
+                    <FileUpload uploading={uploading} error={uploadError} onUpload={upload} />
+                  </div>
                 ) : tab === "poc" ? (
                   <PocPanel
                     feasibility={feasibility}

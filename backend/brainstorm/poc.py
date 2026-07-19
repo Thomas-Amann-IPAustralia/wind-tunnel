@@ -74,17 +74,24 @@ def generate_poc(
         )
     resp = client.complete_text(prompt.model_role, prompt.system, "\n\n".join(parts))
     html = strip_code_fence(resp.text)
-    _validate(html)
+    validate_poc_html(html)
     return PocResult(html=html, model=resp.model, prompt_version=prompt.version)
 
 
-def _validate(html: str) -> None:
+def validate_poc_html(html: str, *, require_banner: bool = True) -> None:
+    """Assert ``html`` is a usable self-contained PoC document. Raises ``PocError`` otherwise.
+
+    ``require_banner`` gates the §12.4 limitations-banner check. It is mandatory for a
+    **model-generated** PoC (the banner is a first-class design requirement the model must author
+    in, design §6.3), but **relaxed for a user-uploaded** PoC (§7 file upload): a public servant
+    who supplies their own HTML mock is exempt from the banner requirement — the exemption lives
+    here so both paths share one document check (one owner per fact)."""
     if not html.strip():
         raise PocError("PoC generation returned empty output.")
     low = html.lower()
     if "<!doctype html" not in low and "<html" not in low:
         raise PocError("PoC output is not an HTML document (no '<!doctype html>' or '<html>').")
-    if LIMITATIONS_MARKER not in html:
+    if require_banner and LIMITATIONS_MARKER not in html:
         raise PocError(
             f"PoC output has no limitations banner (expected class={LIMITATIONS_MARKER!r}). "
             "The banner is a first-class requirement authored into the file (design §6.3, §12.4)."

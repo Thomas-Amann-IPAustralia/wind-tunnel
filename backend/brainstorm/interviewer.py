@@ -64,6 +64,40 @@ def run_interviewer(
     return _parse(data, resp, prompt)
 
 
+def ingest_seed_material(
+    client: LLMClient, *, outline_md: str, seed_text: str
+) -> InterviewerResult:
+    """Ingest an **uploaded plain-text document** as seed material for the outline (§7 file
+    upload). A public servant may upload a document instead of chatting; its whole text is fed
+    through one interviewer pass so it populates outline sections **exactly as a long first
+    message would** — same prompt, same output shape, same write-scope filtering. The only
+    difference from ``run_interviewer`` is framing: the text is presented as an uploaded
+    document to summarise into the outline, not a chat turn to answer.
+
+    The document is user-derived and wrapped as untrusted content (§9.2); the interviewer treats
+    it as data describing the use case, never as instructions."""
+    prompt = load_prompt("interviewer")
+    parts = [
+        wrap_untrusted(
+            outline_md, label="## The outline so far (what you have written; update it)"
+        ),
+        wrap_untrusted(
+            seed_text,
+            label=(
+                "## An uploaded document describing the idea "
+                "(seed material — read it and populate the outline from it)"
+            ),
+        ),
+        "## Your turn\n\nThe person uploaded the document above instead of typing. Read it as "
+        "the description of their idea and return the single JSON object your instructions "
+        "describe: write every section you can now fill in `section_updates`, set "
+        "`title`/`summary` if the document establishes them, and in `assistant_message` "
+        "briefly say what you drafted and ask the sharpest next question.",
+    ]
+    data, resp = client.complete_json(prompt.model_role, prompt.system, "\n\n".join(parts))
+    return _parse(data, resp, prompt)
+
+
 def _parse(data: dict, resp, prompt) -> InterviewerResult:
     assistant_message = str(data.get("assistant_message", "")).strip()
     if not assistant_message:

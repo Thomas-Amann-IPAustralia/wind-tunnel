@@ -146,6 +146,13 @@ export function FlowMapPanel({
         <figure className="wt-synth__artefact">
           <figcaption className="wt-synth__artefact-head">
             <span className="wt-synth__artefact-title">Flow map</span>
+            <button
+              type="button"
+              className="wt-btn wt-btn--quiet"
+              onClick={() => openSvgInNewTab(flowSvg)}
+            >
+              Open in a new tab
+            </button>
           </figcaption>
           <iframe
             className="wt-synth__frame wt-synth__frame--map"
@@ -155,12 +162,23 @@ export function FlowMapPanel({
           />
           <p className="wt-synth__caveat">
             Actors, systems, and how data moves. It reads the same way as the pipeline you&rsquo;re
-            about to watch.
+            about to watch. The preview is small — open it in a new tab to see it full-size.
           </p>
         </figure>
       ) : null}
     </section>
   );
+}
+
+/** Open the rendered flow map full-size in a new browser tab. The SVG is client-side only
+ * (never committed as a servable file until its `/flow-map/svg` round-trip), so there is no
+ * artefact URL to link — we wrap it as a standalone document in a blob URL. The blob is
+ * revoked after a minute so it doesn't leak once the tab has loaded. */
+function openSvgInNewTab(svg: string): void {
+  const blob = new Blob([svgDoc(svg)], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  window.open(url, "_blank", "noopener,noreferrer");
+  setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }
 
 /** Wrap a rendered SVG as a minimal standalone document for a sandboxed iframe, so
