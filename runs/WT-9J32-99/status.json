@@ -4,17 +4,17 @@
   "run_code": "WT-9J32-99",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T13:39:22Z",
+  "updated_at": "2026-07-19T13:39:27Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
-    "full.specialist.privacy": "active",
+    "full.specialist.privacy": "complete",
     "full.specialist.ethics": "active",
     "full.specialist.legal": "active",
-    "full.specialist.data_governance": "pending",
+    "full.specialist.data_governance": "active",
     "full.specialist.solution_architect": "pending",
     "full.checkpoint": "pending",
     "full.architect": "pending",
@@ -1039,9 +1039,184 @@
       "agent": "full.specialist.it_security",
       "type": "stage_complete",
       "detail": "IT Security specialist complete"
+    },
+    {
+      "id": "evt_000103",
+      "ts": "2026-07-19T13:39:22Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000104",
+      "ts": "2026-07-19T13:39:22Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000105",
+      "ts": "2026-07-19T13:39:22Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000106",
+      "ts": "2026-07-19T13:39:22Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000107",
+      "ts": "2026-07-19T13:39:22Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000108",
+      "ts": "2026-07-19T13:39:22Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000109",
+      "ts": "2026-07-19T13:39:25Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.65"
+      }
+    },
+    {
+      "id": "evt_000110",
+      "ts": "2026-07-19T13:39:25Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.34"
+      }
+    },
+    {
+      "id": "evt_000111",
+      "ts": "2026-07-19T13:39:25Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000112",
+      "ts": "2026-07-19T13:39:25Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.55"
+      }
+    },
+    {
+      "id": "evt_000113",
+      "ts": "2026-07-19T13:39:25Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000114",
+      "ts": "2026-07-19T13:39:25Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000115",
+      "ts": "2026-07-19T13:39:25Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000116",
+      "ts": "2026-07-19T13:39:25Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000117",
+      "ts": "2026-07-19T13:39:27Z",
+      "agent": "full.specialist.data_governance",
+      "type": "stage_started",
+      "detail": "Data Governance specialist started"
+    },
+    {
+      "id": "evt_000118",
+      "ts": "2026-07-19T13:39:27Z",
+      "agent": "full.specialist.data_governance",
+      "type": "drafting",
+      "detail": "drafting data_governance's owned sections"
+    },
+    {
+      "id": "evt_000119",
+      "ts": "2026-07-19T13:39:27Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_complete",
+      "detail": "Privacy specialist complete"
     }
   ],
-  "log_cursor": 102,
+  "log_cursor": 119,
   "questions": null,
   "failure": null,
   "expected_ranges": {

@@ -1,0 +1,53 @@
+{
+  "specialist": "privacy",
+  "sections": {
+    "7.1": "No. The current project outline does not specify whether the structured data ingested from SQL databases and CSVs contains personal or sensitive information. If personal or sensitive information is processed, we cannot be satisfied of compliance with the Australian Privacy Principles (APPs) at this stage. To ensure compliance, the project must verify if personal information is collected or used (APP 3), ensure data minimisation techniques are integrated, and confirm that any secondary use of personal information for training or calibrating the bi-encoder and cross-encoder gates complies with APP 6 or has valid consent (OAIC AI Training Checklist, p.2; OAIC AI Training Top 5, p.1). Furthermore, robust security measures must be implemented under APP 11 to protect any personal information stored in logs or SQLite databases from unauthorised access or corruption (OAIC AI Selection Checklist, p.2)."
+  },
+  "citations": {
+    "7.1": [
+      {
+        "short_name": "OAIC AI Training Checklist",
+        "locator": "p.2"
+      },
+      {
+        "short_name": "OAIC AI Training Top 5",
+        "locator": "p.1"
+      },
+      {
+        "short_name": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    ]
+  },
+  "questions": {
+    "why": "The assessment requires clarification on whether personal information is processed and where the privacy compliance documentation is stored.",
+    "items": [
+      {
+        "question_id": "privacy-1",
+        "text": "Does the structured data ingested from SQL databases and CSVs contain any personal or sensitive information?",
+        "options": [
+          "Yes",
+          "No",
+          "Unsure"
+        ],
+        "allow_free_text": true
+      },
+      {
+        "question_id": "privacy-2",
+        "text": "Where are the Privacy Threshold Assessment and/or Privacy Impact Assessment for this project stored?",
+        "options": null,
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [
+    {
+      "section": "7.2",
+      "reason": "The project outline does not state where the privacy threshold assessment or privacy impact assessment is stored."
+    }
+  ],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
