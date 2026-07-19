@@ -4,7 +4,7 @@
   "run_code": "WT-BT35-S6",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T13:09:49Z",
+  "updated_at": "2026-07-19T13:09:55Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
-    "full.specialist.legal": "active",
+    "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "active",
     "full.checkpoint": "pending",
@@ -2254,9 +2254,16 @@
       "agent": "full.specialist.data_governance",
       "type": "stage_complete",
       "detail": "Data Governance specialist complete"
+    },
+    {
+      "id": "evt_000216",
+      "ts": "2026-07-19T13:09:55Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_complete",
+      "detail": "Legal & Administrative Law specialist complete"
     }
   ],
-  "log_cursor": 215,
+  "log_cursor": 216,
   "questions": null,
   "failure": null,
   "expected_ranges": {
