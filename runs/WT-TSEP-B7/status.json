@@ -4,7 +4,7 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:47:35Z",
+  "updated_at": "2026-07-19T10:48:14Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -17,7 +17,7 @@
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
-    "full.architect": "active",
+    "full.architect": "complete",
     "full.reviewer": "pending",
     "full.assembly": "pending"
   },
@@ -4020,9 +4020,23 @@
       "agent": "full.architect",
       "type": "stage_started",
       "detail": "Solution Architect (appendix) started"
+    },
+    {
+      "id": "evt_000384",
+      "ts": "2026-07-19T10:47:36Z",
+      "agent": "full.architect",
+      "type": "drafting",
+      "detail": "Writing an implementation plan that answers the risks the specialists raised."
+    },
+    {
+      "id": "evt_000385",
+      "ts": "2026-07-19T10:48:14Z",
+      "agent": "full.architect",
+      "type": "stage_complete",
+      "detail": "Solution Architect (appendix) complete"
     }
   ],
-  "log_cursor": 383,
+  "log_cursor": 385,
   "questions": null,
   "failure": null,
   "expected_ranges": {
