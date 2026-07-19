@@ -4,10 +4,10 @@
   "run_code": "WT-9J32-99",
   "phase": "threshold",
   "overall_state": "running",
-  "updated_at": "2026-07-19T13:37:19Z",
+  "updated_at": "2026-07-19T13:37:42Z",
   "nodes": {
     "threshold.generalist_a": "active",
-    "threshold.generalist_b": "active",
+    "threshold.generalist_b": "complete",
     "threshold.reconciler": "pending",
     "threshold.rating_engine": "pending",
     "full.specialist.it_security": "pending",
@@ -70,9 +70,16 @@
       "agent": "threshold.generalist_b",
       "type": "drafting",
       "detail": "drafting threshold sections 1–4"
+    },
+    {
+      "id": "evt_000008",
+      "ts": "2026-07-19T13:37:42Z",
+      "agent": "threshold.generalist_b",
+      "type": "stage_complete",
+      "detail": "Assessor B complete"
     }
   ],
-  "log_cursor": 7,
+  "log_cursor": 8,
   "questions": null,
   "failure": null,
   "expected_ranges": {
