@@ -4,12 +4,12 @@
   "run_code": "WT-9J32-99",
   "phase": "threshold",
   "overall_state": "running",
-  "updated_at": "2026-07-19T13:38:21Z",
+  "updated_at": "2026-07-19T13:38:22Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
-    "threshold.rating_engine": "active",
+    "threshold.rating_engine": "complete",
     "full.specialist.it_security": "pending",
     "full.specialist.privacy": "pending",
     "full.specialist.ethics": "pending",
@@ -112,9 +112,16 @@
       "agent": "threshold.rating_engine",
       "type": "stage_started",
       "detail": "Rating engine started"
+    },
+    {
+      "id": "evt_000014",
+      "ts": "2026-07-19T13:38:22Z",
+      "agent": "threshold.rating_engine",
+      "type": "stage_complete",
+      "detail": "Rating engine complete"
     }
   ],
-  "log_cursor": 13,
+  "log_cursor": 14,
   "questions": null,
   "failure": null,
   "expected_ranges": {
