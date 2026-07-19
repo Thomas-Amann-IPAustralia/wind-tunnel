@@ -2,7 +2,54 @@
 
 ## Current stage
 
-**This branch (`claude/windtunnel-chamber-redesign-guxzzt`): the Chamber redesign — the
+**This branch (`claude/windtunnel-governance-nodes-h9q4bq`): the knowledge plane — the
+specialists' knowledge bases are now depicted as nodes in the Chamber graph, closing the
+biggest gap between the real governance page and the PoC (`frontend/windtunnel_agent_telemetry.html`)
+(DESIGN §7.2; CLAUDE.md §3, §9).** Tom asked to bring the real governance node network closer
+to the PoC, flagging the missing specialist **knowledge bases as nodes** as the most important
+piece. Restored, plus the surrounding PoC structure. Frontend-only; no backend, pipeline,
+contract, or data-shape change — the shelves are **presentational** and their state is derived
+from the paired specialist + the run's retrieval events, so one poll still fully determines the
+visible graph (CLAUDE.md §3). **51 frontend tests green (45 prior + 6: 5 knowledge-plane
+topology, 1 Chamber KB-selection), build + strict typecheck + lint (0 errors, 1 pre-existing
+accepted warning) + `format:check` clean.** Verified visually by driving the built app against a
+mocked full-assessment run (Playwright screenshots of the graph with the six shelves lit
+being-read/read/idle, and the KB detail drawer with its real served source). The pieces:
+
+1. **`lib/topology.ts` — the knowledge plane, as data.** Added `KB_NODES` (six shelves, 1:1 with
+   the drafting specialists per `instrument/sections.json` `kb_specialists` — the real
+   `kb/<specialist>.sqlite` indexes, TECH_SPEC §8.3), `KB_EDGES` (each specialist → its shelf),
+   and the `KbNode` type + `allKbNodes`/`kbNodeById`/`kbForSpecialist` helpers. Each shelf carries
+   a lay `blurb`/`contains`/`explain` and a real `docCount` mirrored from
+   `kb/<specialist>.manifest.json` (a by-hand mirror like the `status.py` node ids, documented as
+   such). **The shelves are deliberately NOT in `allNodeIds()`** — that stays the pinned
+   `status.py` mirror (`topology.test` still green), so they never enter `status.json` `nodes`.
+   The layout grid widened (a KB column between the college and the checkpoint; `SPEC_PITCH`
+   150) and `workspaceSize` now spans both planes; `SPEC_JOIN_X` is the x at which a specialist's
+   onward wire turns past the shelves toward the checkpoint (the PoC's routing).
+2. **`components/PipelineGraph.tsx` + `.css` — the shelves rendered.** Each specialist now shows
+   its knowledge base to its lower-right, joined by a distinct dashed **retrieval wire** (the
+   vapour tone, not a pipeline handoff). A shelf's state derives from its specialist — `serving`
+   (lit, pulsing) while it reads, `read` once done, else `idle` — carried by a state word + strip
+   + shape, never colour alone (§9). Added **node-kind icons** (agent/engine/checkpoint/database),
+   faint **group frame + phase captions** ("The specialist college · knowledge plane", "Threshold
+   assessment", "Full assessment"), and **chunk chips** flying off a serving shelf (CSS
+   offset-path, gated on support + reduced motion — pure enhancement). Uses `--vapour`, not a new
+   hue, so it stays inside the design system.
+3. **`components/NodeDetail.tsx` + `.css` — the KB drawer.** Selecting a shelf opens the same
+   drawer from the shelf's point of view: a "Knowledge base" chip, what body of authority it holds
+   (`N official documents`, and what they cover), the citation guarantee, and **the real sources it
+   has served this run** (the paired specialist's retrieval evidence — still one poll). Shared
+   `DrawerShell`/`SourceList` between the node and KB variants.
+4. **`routes/Chamber.tsx` — wired KB selection.** A selection is now a pipeline node *or* a shelf;
+   a shelf borrows the paired specialist's state + retrieval evidence for the drawer.
+
+**No document contradiction to fix** — the PoC is a direction, not a spec; the knowledge plane
+realises DESIGN §7.2's "six specialists, each reading its own sources" as visible nodes. **Next:**
+unchanged from the prior branch's ledger (a first live Gemini run remains the untested seam).
+
+
+**Prior branch (`claude/windtunnel-chamber-redesign-guxzzt`): the Chamber redesign — the
 governance surface is now a clickable node-graph canvas built for lay-audience
 transparency, plus the Windtunnel brand assets (logo, favicon, sprite loading
 animation) (DESIGN §7.2; CLAUDE.md §4, §9).** Tom asked to move the Chamber towards the
@@ -465,8 +512,33 @@ pipeline.
 
 ## Done
 
+- **The knowledge plane — specialists' knowledge bases depicted as nodes (DESIGN §7.2;
+  CLAUDE.md §3, §9; this branch).** The real governance graph now mirrors the PoC's most
+  important missing element: each specialist paired 1:1 with the knowledge base it reads.
+  Frontend-only; the shelves are presentational (derived from the paired specialist + retrieval
+  events), so one poll still fully determines the graph (CLAUDE.md §3) and `status.json` `nodes`
+  is unchanged. **51 frontend tests green (45 prior + 6: knowledge-plane topology ×5, Chamber
+  KB-selection ×1), build + strict typecheck + lint (0 err, 1 pre-existing warning) + format
+  clean.** The pieces:
+  - **`lib/topology.ts`** — `KB_NODES` (6, 1:1 with the drafting specialists per `sections.json`
+    `kb_specialists`; real `kb/<spec>.sqlite` indexes), `KB_EDGES`, the `KbNode` type +
+    `allKbNodes`/`kbNodeById`/`kbForSpecialist`. Each shelf: lay `blurb`/`contains`/`explain` +
+    real `docCount` mirrored from `kb/<spec>.manifest.json`. **Kept out of `allNodeIds()`** so the
+    `status.py` mirror stays pinned (`topology.test`). Widened the grid (KB column, `SPEC_PITCH`
+    150), `workspaceSize` spans both planes, `SPEC_JOIN_X` routes the onward wire past the shelves.
+  - **`components/PipelineGraph.tsx` + `.css`** — shelves rendered lower-right of each specialist,
+    joined by a dashed vapour-tone **retrieval wire**; shelf state (`serving`/`read`/`idle`)
+    derived from the specialist, carried by word + strip + shape (§9). Added node-kind icons, a
+    faint group frame + phase captions, and offset-path **chunk chips** (gated on support +
+    reduced motion). Stays inside the design system (`--vapour`, no new hue).
+  - **`components/NodeDetail.tsx` + `.css`** — a `KbDetail` variant: what the shelf holds
+    (`N official documents` + coverage), the citation guarantee, and the real sources served this
+    run (the specialist's retrieval evidence). Shared `DrawerShell`/`SourceList`.
+  - **`routes/Chamber.tsx`** — a selection is a node or a shelf; a shelf borrows the paired
+    specialist's state + evidence for the drawer.
+
 - **Chamber redesign — a lay-audience node-graph canvas + Windtunnel brand assets
-  (DESIGN §7.2; CLAUDE.md §4, §9; this branch).** Frontend-only; reads the same one-poll
+  (DESIGN §7.2; CLAUDE.md §4, §9; prior branch).** Frontend-only; reads the same one-poll
   `status.json` (CLAUDE.md §3). No backend/pipeline/contract change. **45 frontend tests
   green (41 prior + 4: topology layout/edges ×3, node-detail interaction ×1), build +
   strict typecheck + lint (0 err, 1 pre-existing warning) + format clean.** The pieces:

@@ -112,6 +112,35 @@ describe("Chamber state routing", () => {
     expect(screen.getByText("p.14")).toBeTruthy();
   });
 
+  it("running: selecting a specialist's knowledge base shows the shelf and the sources it served", async () => {
+    serve(
+      baseDoc({
+        overall_state: "running",
+        phase: "full",
+        nodes: { "full.specialist.privacy": "active" },
+        log: [
+          {
+            id: "evt_1",
+            ts: "2026-07-16T00:00:01Z",
+            agent: "full.specialist.privacy",
+            type: "retrieval",
+            detail: "reading OAIC PIA guidance",
+            ref: { doc: "OAIC — PIA guide", locator: "p.14" },
+          },
+        ],
+      }),
+    );
+    renderChamber();
+    // The knowledge base is its own node, shown as being read while its specialist works.
+    const shelf = await screen.findByRole("button", {
+      name: /Privacy sources — a knowledge base, being read/i,
+    });
+    fireEvent.click(shelf);
+    // The drawer names the shelf as a knowledge base and lists the served source.
+    expect(await screen.findByText(/Sources served this run/i)).toBeTruthy();
+    expect(screen.getByText("OAIC — PIA guide")).toBeTruthy();
+  });
+
   it("running but not started: offers a calm wait + a re-dispatch that re-kicks the run", async () => {
     vi.mocked(redispatchRun).mockResolvedValue({
       run_id: CODE,

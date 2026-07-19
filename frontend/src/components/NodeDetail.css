@@ -57,6 +57,10 @@
   color: var(--amber);
   border-color: color-mix(in srgb, var(--amber) 45%, transparent);
 }
+.wt-ndetail__kind--kb {
+  color: var(--vapour);
+  border-color: color-mix(in srgb, var(--vapour) 45%, transparent);
+}
 
 .wt-ndetail__title {
   flex: 1 1 auto;
@@ -171,6 +175,10 @@
   font-size: var(--text-sm);
   line-height: 1.5;
   color: var(--chamber-ink);
+}
+.wt-ndetail__callout--kb {
+  border-left-color: var(--vapour);
+  background: color-mix(in srgb, var(--vapour) 8%, transparent);
 }
 
 .wt-ndetail__sec {

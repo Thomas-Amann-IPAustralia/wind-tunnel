@@ -1,10 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  allKbNodes,
   allNodeIds,
   allNodes,
   EDGES,
   friendlyFor,
+  KB_EDGES,
+  kbForSpecialist,
   nodeById,
   TOPOLOGY,
   workspaceSize,
@@ -93,5 +96,55 @@ describe("topology", () => {
     expect(width).toBeGreaterThan(0);
     expect(height).toBeGreaterThan(0);
     expect(nodeById("full.assembly")?.pos.x).toBeLessThanOrEqual(width);
+  });
+});
+
+describe("knowledge plane", () => {
+  const SPECIALIST_IDS = [
+    "full.specialist.it_security",
+    "full.specialist.privacy",
+    "full.specialist.ethics",
+    "full.specialist.legal",
+    "full.specialist.data_governance",
+    "full.specialist.solution_architect",
+  ];
+
+  it("pairs one knowledge base 1:1 with each drafting specialist", () => {
+    const kb = allKbNodes();
+    expect(kb.map((k) => k.specialistId)).toEqual(SPECIALIST_IDS);
+    // Each shelf keys off a real specialist node id (not a status node itself).
+    for (const k of kb) {
+      expect(k.id).toBe(`kb.${k.specialistId.replace("full.specialist.", "")}`);
+      expect(nodeById(k.specialistId)?.kind).toBe("llm");
+    }
+  });
+
+  it("keeps shelves out of the status-node id set", () => {
+    // Presentational only — a shelf must never appear in status.json `nodes`.
+    const statusIds = new Set(allNodeIds());
+    for (const k of allKbNodes()) expect(statusIds.has(k.id)).toBe(false);
+  });
+
+  it("wires each specialist to exactly its own shelf", () => {
+    expect(KB_EDGES).toHaveLength(6);
+    for (const e of KB_EDGES) {
+      const kb = kbForSpecialist(e.from);
+      expect(kb).toBeDefined();
+      expect(e.to).toBe(kb?.id);
+    }
+  });
+
+  it("gives every shelf lay-audience copy and a real document count", () => {
+    for (const k of allKbNodes()) {
+      expect(k.blurb.length).toBeGreaterThan(0);
+      expect(k.contains.length).toBeGreaterThan(0);
+      expect(k.explain.length).toBeGreaterThan(40);
+      expect(k.docCount).toBeGreaterThan(0);
+    }
+  });
+
+  it("includes the shelves in the workspace footprint", () => {
+    const { width } = workspaceSize();
+    for (const k of allKbNodes()) expect(k.pos.x).toBeLessThanOrEqual(width);
   });
 });

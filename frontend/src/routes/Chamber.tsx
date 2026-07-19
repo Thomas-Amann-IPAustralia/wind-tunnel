@@ -4,7 +4,7 @@ import { Navigate, useParams } from "react-router-dom";
 import { ActivityLog } from "../components/ActivityLog";
 import { Checkpoint } from "../components/Checkpoint";
 import { FailureState } from "../components/FailureState";
-import { NodeDetail } from "../components/NodeDetail";
+import { KbDetail, NodeDetail } from "../components/NodeDetail";
 import type { NodeEvidence } from "../components/NodeDetail";
 import { PipelineGraph } from "../components/PipelineGraph";
 import { ReportView } from "../components/ReportView";
@@ -15,7 +15,7 @@ import { TunnelWarmup } from "../components/TunnelWarmup";
 import { useStatusPoll } from "../hooks/useStatusPoll";
 import { ApiError, artefactUrl, NetworkError, redispatchRun } from "../lib/api";
 import { isValid } from "../lib/runCode";
-import { allNodes, nodeById } from "../lib/topology";
+import { allNodes, kbNodeById, nodeById } from "../lib/topology";
 import type { StatusDoc } from "../lib/types";
 import "./Chamber.css";
 
@@ -121,7 +121,10 @@ function RunningView({
   const notStarted = !failed && allPending(doc.nodes);
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  // A selection is either a pipeline node or a knowledge-base shelf. A shelf has no
+  // state of its own — it borrows the paired specialist's state + retrieval evidence.
   const selectedNode = selectedId ? nodeById(selectedId) : undefined;
+  const selectedKb = selectedId ? kbNodeById(selectedId) : undefined;
 
   // Escape closes the detail drawer — a graph-canvas convention (§9 keyboard).
   useEffect(() => {
@@ -154,6 +157,13 @@ function RunningView({
               state={doc.nodes[selectedNode.id] ?? "pending"}
               subActivity={subActivity[selectedNode.id]}
               evidence={evidence[selectedNode.id] ?? { retrievals: [], questions: [] }}
+              onClose={() => setSelectedId(null)}
+            />
+          ) : selectedKb ? (
+            <KbDetail
+              kb={selectedKb}
+              state={doc.nodes[selectedKb.specialistId] ?? "pending"}
+              evidence={evidence[selectedKb.specialistId] ?? { retrievals: [], questions: [] }}
               onClose={() => setSelectedId(null)}
             />
           ) : null}
