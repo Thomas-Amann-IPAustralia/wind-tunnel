@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:07:36Z",
+  "updated_at": "2026-07-19T00:07:37Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -14,7 +14,7 @@
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
-    "full.specialist.data_governance": "complete",
+    "full.specialist.data_governance": "active",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "pending",
@@ -3562,9 +3562,16 @@
       "agent": "full.specialist.legal",
       "type": "stage_complete",
       "detail": "Legal & Administrative Law specialist complete"
+    },
+    {
+      "id": "evt_000340",
+      "ts": "2026-07-19T00:07:37Z",
+      "agent": "full.specialist.data_governance",
+      "type": "stage_started",
+      "detail": "Data Governance specialist started"
     }
   ],
-  "log_cursor": 339,
+  "log_cursor": 340,
   "questions": null,
   "failure": null,
   "expected_ranges": {
