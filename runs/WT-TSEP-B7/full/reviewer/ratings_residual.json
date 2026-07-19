@@ -1,0 +1,53 @@
+{
+  "sections": {
+    "3.1": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rating": "Medium",
+      "rationale": "The provision of a static, non-AI alternative guide (8.4.2) and the inclusion of accessibility experts on the project team (10.1) reduce the likelihood of users being completely excluded, though the consequence of the AI tool failing remains moderate."
+    },
+    "3.2": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rating": "Medium",
+      "rationale": "Consultations with human rights advisors (10.2) and planned data coverage/bias checks (6.1) reduce the likelihood of unfair discrimination, though the impact on affected individuals would still be moderate."
+    },
+    "3.3": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "RAI Acceptance Testing (6.4) and anti-discrimination reviews (10.2) make the generation of demeaning representations unlikely, with consequences remaining minor."
+    },
+    "3.4": {
+      "consequence": "Major",
+      "likelihood": "Unlikely",
+      "rating": "Medium",
+      "rationale": "The implementation of a pilot phase (6.5), rigorous accuracy testing (6.4), and legally robust disclaimers (8.2, 12.2) reduce the likelihood of users acting on incorrect advice. However, if they do, the financial and legal harm remains major."
+    },
+    "3.5": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "While privacy controls are proposed (7.1), the unresolved conflict requiring the retention of highly sensitive legal documents as Commonwealth records (8.3) means the likelihood of privacy concerns remains possible."
+    },
+    "3.6": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "The system processes highly sensitive legal data, and IT Security notes that specific operational security measures are not yet detailed (7.3). Combined with the requirement to store this data (8.3), the likelihood of a data security concern remains possible."
+    },
+    "3.7": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rating": "Medium",
+      "rationale": "Planned negative testing, fault injection (6.4), and the implementation of a manual kill-switch (6.7) reduce the likelihood of system vulnerabilities being successfully exploited to an unlikely level."
+    },
+    "3.8": {
+      "consequence": "Major",
+      "likelihood": "Unlikely",
+      "rating": "Medium",
+      "rationale": "The structured pilot phase (6.5), continuous monitoring (6.6), and comprehensive legal reviews (12.1) reduce the likelihood of a reputational failure, though the consequence of a public failure on business.gov remains major."
+    }
+  },
+  "overall_residual": "Medium"
+}

@@ -1,0 +1,21 @@
+[
+  {
+    "topic": "Retention vs. deletion of sensitive user inputs",
+    "position_a": {
+      "specialist": "full.specialist.privacy",
+      "claim": "Uploaded documents should be securely deleted immediately after the session ends to minimise retention risks.",
+      "support": [
+        "(APP Guidelines, p.191)"
+      ]
+    },
+    "position_b": {
+      "specialist": "full.specialist.data_governance",
+      "claim": "The agency must retain user prompts and uploaded source documents to preserve adequate evidence of how AI outputs were generated.",
+      "support": [
+        "(Archives Act 1983, s 24)",
+        "(NAA AI Records Guidance, §Disposal of generative AI assistant prompts and inputs)"
+      ]
+    },
+    "why_unresolved": "Both positions are well supported by their respective frameworks (privacy minimization vs. Commonwealth recordkeeping). Resolution requires a human policy judgement on how to balance privacy risks with evidentiary requirements."
+  }
+]
