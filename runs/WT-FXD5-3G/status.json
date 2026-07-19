@@ -4,14 +4,14 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:05:31Z",
+  "updated_at": "2026-07-19T00:05:32Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
-    "full.specialist.privacy": "complete",
+    "full.specialist.privacy": "active",
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
@@ -2687,9 +2687,16 @@
       "agent": "full.specialist.it_security",
       "type": "stage_complete",
       "detail": "IT Security specialist complete"
+    },
+    {
+      "id": "evt_000258",
+      "ts": "2026-07-19T00:05:32Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_started",
+      "detail": "Privacy specialist started"
     }
   ],
-  "log_cursor": 257,
+  "log_cursor": 258,
   "questions": null,
   "failure": null,
   "expected_ranges": {
