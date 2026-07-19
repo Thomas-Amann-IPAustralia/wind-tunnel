@@ -3,97 +3,42 @@
   "sections": {
     "9.1": "Not applicable. The C&D Claim Evaluator is a public-facing chatbot designed strictly to provide informational support and educational resources to small business owners evaluating cease and desist letters. It does not make, or materially influence, formal administrative decisions or administrative actions that have a legal or significant effect on individuals or organisations.",
     "9.2": "Not applicable. Because the chatbot is an informational tool and does not make or materially influence administrative actions or decisions with legal or significant effects, there are no administrative actions arising from this system to challenge. However, users can provide feedback through standard business.gov feedback mechanisms if they dispute the chatbot's informational outputs.",
-    "10.2": "No. Based on the provided use-case outline and threshold assessment, there is no indication that the project team has yet consulted an appropriate source of advice or conducted a formal assessment to ensure that the AI use case and the use of uploaded legal data align with human rights obligations. Under the precautionary principle, and given that the system processes highly sensitive legal documents containing private disputes, a formal consultation with legal experts or a human rights impact assessment must be undertaken during the design phase to ensure alignment with human rights and anti-discrimination frameworks.",
-    "11.1": "No. The use-case outline does not specify that mechanisms are currently in place to ensure responsibility and accountability by the agency and relevant individuals for the AI system and its outcomes. To comply with the Australian Government's Policy for the responsible use of AI in government, the agency must designate an accountable official to oversee policy implementation and designate an accountable use case owner within 12 months of the policy taking effect. Additionally, because this is a high-risk use case, the agency must report the use case to the Digital Transformation Agency (DTA) and govern it through a designated board or senior executive.",
-    "12.1": "No. While the threshold assessment notes that the AI will analyze text against common legal standards and regulatory frameworks, the project documentation does not yet show that all agency-specific legislation, privacy laws (such as the Privacy Act 1988), or other regulatory instruments relevant to hosting a public-facing legal analysis tool on business.gov have been fully identified and documented. A comprehensive legal review is required to map these requirements, particularly regarding the handling of sensitive and proprietary business information contained in uploaded documents.",
-    "12.2": "Yes. \n\n- 12.2.1: Yes, the need for legal advice has been identified. Given that the chatbot analyzes unstructured legal documents and provides assessments on the validity of legal claims, there is a high risk of severe financial and legal harm if a user acts on incorrect AI advice. External and internal legal advice is essential to review the correctness of the legal interpretations programmed into the AI, draft legally robust disclaimers, and ensure compliance with administrative law, privacy, and liability frameworks.\n\n- 12.2.2: The legal advice is not yet stored as the project is in the conceptual/assessment phase and formal legal advice has not yet been commissioned. Once obtained, the legal advice will be stored in the agency's secure electronic document and records management system (EDRMS) under the project file for the C&D Claim Evaluator (Run ID: WT-TSEP-B7)."
+    "10.2": "Yes. The agency has scheduled or has underway a formal consultation with human rights and anti-discrimination advisors, alongside a Privacy Impact Assessment (PIA), to ensure that the AI use case and the handling of uploaded legal data align with human rights obligations. This aligns with best practices for managing risks of algorithmic bias and discrimination under federal anti-discrimination laws, such as the Racial Discrimination Act 1975 and Disability Discrimination Act 1992, and ensures the system does not produce biased outputs or disadvantage protected groups (HTI State of AI Governance, p.48).",
+    "11.1": "Yes. The agency has established clear accountability mechanisms by designating both an accountable official and an accountable use case owner for the C&D Claim Evaluator system (AI Use Policy v2.0, p.11). Since this use case has been assessed as having a High inherent risk rating, the agency will also report the use case to the Digital Transformation Agency (DTA) through the accountable official and govern it through a designated board or senior executive, establishing a system to regularly review the use case at least every 12 months (AI Use Policy v2.0, p.16).",
+    "12.1": "No. While the threshold assessment notes that the AI will analyze text against common legal standards, the project documentation does not yet show that all relevant agency-specific legislation and regulatory instruments have been fully identified and documented. Key frameworks that must be formally documented include the Privacy Act 1988 (Cth) (ADM Better Practice Guide, p.18), anti-discrimination laws, and the Australian Consumer Law regarding misleading advice or information (HTI State of AI Governance, p.36). A comprehensive legal review is required to map these requirements before deployment.",
+    "12.2": "Yes.\n\n- 12.2.1: Yes, the need for legal advice has been identified. Given that the chatbot analyzes unstructured legal documents and provides assessments on the validity of legal claims, there is a high risk of severe financial and legal harm if a user acts on incorrect AI advice. Legal advice is essential to review the correctness of the legal interpretations programmed into the AI, draft legally robust disclaimers, and ensure compliance with administrative law, privacy, and liability frameworks.\n\n- 12.2.2: The location where the legal advice will be stored is currently unavailable or not yet determined, as the project is in its conceptual and assessment phase and formal legal advice has not yet been finalized or stored in the agency's records management system."
   },
   "citations": {
-    "9.2": [
-      {
-        "short_name": "ADM Better Practice Guide",
-        "locator": "p. 57"
-      }
-    ],
     "10.2": [
       {
-        "short_name": "ADM Better Practice Guide",
-        "locator": "p. 8"
-      },
-      {
-        "short_name": "ADM Better Practice Guide",
-        "locator": "p. 13"
-      },
-      {
-        "short_name": "New Machinery of Government",
-        "locator": "p. 45"
+        "short_name": "HTI State of AI Governance",
+        "locator": "p.48"
       }
     ],
     "11.1": [
       {
         "short_name": "AI Use Policy v2.0",
-        "locator": "p. 11"
+        "locator": "p.11"
       },
       {
         "short_name": "AI Use Policy v2.0",
-        "locator": "p. 16"
+        "locator": "p.16"
       }
     ],
     "12.1": [
       {
         "short_name": "ADM Better Practice Guide",
-        "locator": "p. 28"
+        "locator": "p.18"
       },
       {
         "short_name": "HTI State of AI Governance",
-        "locator": "p. 42"
-      }
-    ],
-    "12.2": [
-      {
-        "short_name": "ADM Better Practice Guide",
-        "locator": "p. 13"
-      },
-      {
-        "short_name": "ADM Better Practice Guide",
-        "locator": "p. 49"
-      },
-      {
-        "short_name": "New Machinery of Government",
-        "locator": "p. 19"
+        "locator": "p.36"
       }
     ]
   },
   "questions": {
-    "why": "To establish formal compliance and record-keeping structures for this high-risk AI use case.",
-    "items": [
-      {
-        "question_id": "legal-1",
-        "text": "Has the agency designated an accountable official and an accountable use case owner for the C&D Claim Evaluator system?",
-        "options": [
-          "Yes, both have been designated",
-          "Only the accountable official has been designated",
-          "No, neither has been designated yet"
-        ],
-        "allow_free_text": true
-      },
-      {
-        "question_id": "legal-2",
-        "text": "Has a formal Privacy Impact Assessment (PIA) or consultation with human rights/anti-discrimination advisors been scheduled for this project?",
-        "options": [
-          "Yes, scheduled or underway",
-          "Completed",
-          "No, not yet scheduled"
-        ],
-        "allow_free_text": true
-      },
-      {
-        "question_id": "legal-3",
-        "text": "Where will the formal legal advice, once obtained, be officially stored within the agency's records management system?",
-        "options": [],
-        "allow_free_text": true
-      }
-    ]
+    "why": "",
+    "items": []
   },
   "gaps": [],
   "provenance": {
