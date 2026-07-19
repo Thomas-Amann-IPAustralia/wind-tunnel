@@ -2,51 +2,51 @@
   "sections": {
     "3.1": {
       "consequence": "Minor",
-      "likelihood": "Unlikely",
-      "rating": "Low",
-      "rationale": "Bounding the 'creativity' dial and providing clear non-AI alternatives (e.g., static FAQs, interactive decision trees) reduces the likelihood of confusion. If users do struggle with the interface, the availability of standard ATO support channels limits the consequence to a short-term, reversible barrier."
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "The introduction of a pilot phase with a small cohort (6.5) and the availability of non-AI fallbacks (6.7, 8.4.2) reduce the severity of access barriers. However, confusion stemming from the 'creativity' dial remains possible for some users, resulting in short-term, reversible barriers."
     },
     "3.2": {
-      "consequence": "Minor",
-      "likelihood": "Unlikely",
-      "rating": "Low",
-      "rationale": "Applying the National AI Centre's Data Quality Checklist to ensure data coverage and grounding responses strictly in official policy via RAG reduces the likelihood of biased outputs. Continuous RAI monitoring ensures any limited unfair treatment is quickly identified and corrected."
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "While data quality checks are planned (6.1), the lack of formal fairness definitions (5.1) and measurement methodologies (5.2) means the risk of inconsistent guidance for non-standard employment types remains largely unmitigated at this stage."
     },
     "3.3": {
-      "consequence": "Insignificant",
-      "likelihood": "Unlikely",
-      "rating": "Low",
-      "rationale": "Input sanitization and output guardrails, combined with strict RAG grounding in neutral tax policy, make generative stereotyping unlikely. Any isolated incidents that bypass guardrails would be mild, quickly fixed via the planned kill-switch and rollback protocols, and cause no lasting harm."
-    },
-    "3.4": {
       "consequence": "Minor",
       "likelihood": "Unlikely",
       "rating": "Low",
-      "rationale": "Mandatory disclaimers and direct RAG citations to official policy documents encourage users to verify guidance, making blind reliance on hallucinations unlikely. If incorrect guidance is given, the consequence is minor as users are explicitly directed to authoritative sources before filing returns."
+      "rationale": "Strict RAG grounding in official policy (6.1) and continuous monitoring for hallucinations (6.6) make the generation of demeaning representations unlikely, limiting any occurrences to isolated incidents."
+    },
+    "3.4": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rating": "Medium",
+      "rationale": "Pilot testing (6.5), continuous monitoring (6.6), and the implementation of a kill-switch (6.7) significantly reduce the likelihood of widespread incorrect guidance. However, if bad advice is followed, the financial impact on individual taxpayers remains a noticeable harm."
     },
     "3.5": {
       "consequence": "Minor",
       "likelihood": "Unlikely",
       "rating": "Low",
-      "rationale": "Real-time automated scrubbing and masking of TFNs and sensitive identifiers from user prompts before LLM processing makes the exposure of sensitive data unlikely. If masking partially fails, the consequence is minor as the system remains strictly isolated from live taxpayer account data."
+      "rationale": "The commitment to onshore data storage (7.1, 7.3) and the implementation of automated scrubbing for TFNs and sensitive identifiers (7.1) substantially lower both the likelihood of a privacy breach and the sensitivity of the exposed data."
     },
     "3.6": {
       "consequence": "Minor",
       "likelihood": "Unlikely",
       "rating": "Low",
-      "rationale": "Because user prompts will be scrubbed of sensitive identifiers prior to processing, the sensitivity of the prompt logs is significantly reduced. Strict access controls on these logs make a breach unlikely, with minor consequences if a small number of records are accessed."
+      "rationale": "Exclusive Australian soil hosting, AES-256 encryption, and strict access controls (7.3) provide strong defenses against data compromise, reducing the likelihood of a breach and limiting potential exposure to a minor scale."
     },
     "3.7": {
-      "consequence": "Minor",
-      "likelihood": "Unlikely",
-      "rating": "Low",
-      "rationale": "Extensive red-teaming, input sanitization, and output guardrails make successful prompt injection or jailbreaking unlikely. The implementation of a rapid kill-switch ensures that any exploited vulnerability results in only a limited breach before being resolved with updates."
-    },
-    "3.8": {
       "consequence": "Moderate",
       "likelihood": "Unlikely",
       "rating": "Medium",
-      "rationale": "Strictly bounding the controversial 'creativity' dial and implementing a rapid kill-switch prevents prolonged public exposure to hallucinations. While a viral screenshot of a hallucination could still cause moderate reputational impact and public questioning, the strict guardrails and disclaimers make this event unlikely."
+      "rationale": "Planned adversarial testing (6.4) and continuous monitoring for injection attacks (6.6) reduce the likelihood of system exploits. However, public-facing LLMs remain targets, and a successful exploit could still cause a contained but serious issue."
+    },
+    "3.8": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "The pilot phase (6.5) and kill-switch (6.7) help contain potential fallout. However, the public-facing nature of the bot and the controversial 'creativity' dial mean that any hallucinated tax advice could still attract media attention and moderately impact public trust."
     }
   },
   "overall_residual": "Medium"

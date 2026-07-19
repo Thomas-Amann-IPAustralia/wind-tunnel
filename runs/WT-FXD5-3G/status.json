@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:18:34Z",
+  "updated_at": "2026-07-19T00:18:57Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -18,7 +18,7 @@
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "complete",
-    "full.reviewer": "active",
+    "full.reviewer": "complete",
     "full.assembly": "complete"
   },
   "log": [
@@ -5207,9 +5207,30 @@
       "agent": "full.reviewer",
       "type": "stage_started",
       "detail": "Adjudicating reviewer started"
+    },
+    {
+      "id": "evt_000501",
+      "ts": "2026-07-19T00:18:35Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Verifying the revision and re-judging the residual risk."
+    },
+    {
+      "id": "evt_000502",
+      "ts": "2026-07-19T00:18:57Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Residual overall risk after your revision (highest-wins): Medium."
+    },
+    {
+      "id": "evt_000503",
+      "ts": "2026-07-19T00:18:57Z",
+      "agent": "full.reviewer",
+      "type": "stage_complete",
+      "detail": "Adjudicating reviewer complete"
     }
   ],
-  "log_cursor": 500,
+  "log_cursor": 503,
   "questions": null,
   "failure": null,
   "expected_ranges": {
