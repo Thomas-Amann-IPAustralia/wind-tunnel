@@ -4,9 +4,9 @@
   "run_code": "WT-TSEP-B7",
   "phase": "threshold",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:36:49Z",
+  "updated_at": "2026-07-19T10:36:56Z",
   "nodes": {
-    "threshold.generalist_a": "active",
+    "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "pending",
     "threshold.rating_engine": "pending",
@@ -77,9 +77,16 @@
       "agent": "threshold.generalist_b",
       "type": "stage_complete",
       "detail": "Assessor B complete"
+    },
+    {
+      "id": "evt_000009",
+      "ts": "2026-07-19T10:36:56Z",
+      "agent": "threshold.generalist_a",
+      "type": "stage_complete",
+      "detail": "Assessor A complete"
     }
   ],
-  "log_cursor": 8,
+  "log_cursor": 9,
   "questions": null,
   "failure": null,
   "expected_ranges": {
