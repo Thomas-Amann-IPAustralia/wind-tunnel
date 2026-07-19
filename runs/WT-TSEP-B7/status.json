@@ -4,7 +4,7 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:47:33Z",
+  "updated_at": "2026-07-19T10:47:35Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -17,7 +17,7 @@
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
-    "full.architect": "pending",
+    "full.architect": "active",
     "full.reviewer": "pending",
     "full.assembly": "pending"
   },
@@ -4006,9 +4006,23 @@
       "agent": "full.specialist.data_governance",
       "type": "stage_complete",
       "detail": "Data Governance specialist complete"
+    },
+    {
+      "id": "evt_000382",
+      "ts": "2026-07-19T10:47:35Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000383",
+      "ts": "2026-07-19T10:47:35Z",
+      "agent": "full.architect",
+      "type": "stage_started",
+      "detail": "Solution Architect (appendix) started"
     }
   ],
-  "log_cursor": 381,
+  "log_cursor": 383,
   "questions": null,
   "failure": null,
   "expected_ranges": {
