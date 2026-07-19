@@ -2,7 +2,31 @@
 
 ## Current stage
 
-**This branch (`claude/brainstorm-file-upload-ybgzdb`): file upload in Brainstorm — a public
+**This branch (`claude/file-upload-not-found-4cgk43`): the "Not Found" file-upload bug — diagnosed
+as a stale backend deploy, with a graceful-degradation frontend fix (TECH_SPEC §7; CLAUDE.md §9).**
+Tom reported that attempting a Brainstorm file upload shows a red **"Not Found"** above the Upload
+button. Diagnosis: **this is not a code bug in the request path.** The frontend POSTs
+`/api/runs/{id}/brainstorm/upload` and the backend registers exactly that route — I booted the app
+with a fake store and the exact URL + body the SPA sends returns **200** (CORS preflight 200 too),
+and all 135 backend upload tests pass. The bare string **"Not Found"** is Starlette's *default* 404
+detail, which fires only when **no route matches** — the backend's own 404s carry real text ("No
+run found for code …"). `brainstorm_upload` landed in commit `f9f2b0d` (the file-upload PR, merged
+as #31). So the **deployed Render backend is running a build older than that commit** and has no
+`/brainstorm/upload` route: the file-upload PR redeployed the frontend (Pages workflow) but the
+backend on Render was not redeployed — exactly the **CLAUDE.md §9 hazard** ("Render auto-deploy is
+OFF or watch-path-scoped"). **The real fix is Tom redeploying the Render backend** (see *Blocked on
+Tom*); merging a backend commit to `main` also fixes it *iff* Render's auto-deploy is watch-scoped
+to `backend/**`. **The code change this branch makes** is the honest degradation the symptom
+deserves: `frontend/src/routes/Brainstorm.tsx`'s `describe()` now translates a *bare* unmatched-route
+404 ("Not Found") into "The server didn't recognise the request to … — it may be running an older
+version that hasn't been updated yet. Please try again shortly, or type your idea into the chat
+instead." Meaningful backend 404s ("No run found for code …") are passed through untouched (only the
+naked framework default is rewritten), so the fix is targeted and applies to any endpoint a stale
+backend is missing, not just upload. **Frontend: 55 tests green (54 prior + 1: bare-404 →
+actionable message), build + strict typecheck + lint (0 err, 1 pre-existing accepted warning) +
+format clean.** Backend/pipeline untouched. No document contradiction to fix.
+
+**Prior branch (`claude/brainstorm-file-upload-ybgzdb`): file upload in Brainstorm — a public
 servant can upload a file instead of chatting, in three formats (TECH_SPEC §7, §9.2, §12.3/§12.4;
 CLAUDE.md §3).** A new `POST /api/runs/{id}/brainstorm/upload` endpoint (valid only at
 `BRAINSTORM`, like the other brainstorm endpoints) accepts a decoded-text file with a `format` and
@@ -551,8 +575,21 @@ pipeline.
 
 ## Done
 
+- **File-upload "Not Found" bug — diagnosed + graceful frontend degradation (TECH_SPEC §7;
+  CLAUDE.md §9; this branch).** Root cause is a **stale Render backend deploy**, not a code bug:
+  the `/api/runs/{id}/brainstorm/upload` route exists and returns 200 to the exact URL + body the
+  SPA sends (verified by booting the app over a fake store; CORS preflight 200; 135 backend tests
+  green), and the bare "Not Found" is Starlette's default 404 for an unmatched route — the endpoint
+  landed in `f9f2b0d` (merged #31) but the deployed backend predates it. The **real fix is a Render
+  redeploy** (see *Blocked on Tom*). Code change: `frontend/src/routes/Brainstorm.tsx` `describe()`
+  now rewrites a *bare* unmatched-route 404 into an honest, actionable message ("…may be running an
+  older version… try again shortly, or type your idea into the chat instead"), while passing the
+  backend's own meaningful 404s ("No run found for code …") through untouched. **Frontend: 55 tests
+  green (54 prior + 1: bare-404 → actionable message), build + strict typecheck + lint (0 err, 1
+  pre-existing accepted warning) + format clean.** Backend/pipeline untouched.
+
 - **Brainstorm file upload — upload a file instead of chatting, in three formats (TECH_SPEC §7,
-  §9.2, §12.3/§12.4; CLAUDE.md §3; this branch).** No pipeline/contract-breaking change; every
+  §9.2, §12.3/§12.4; CLAUDE.md §3; prior branch).** No pipeline/contract-breaking change; every
   invariant held (outline stays the single source of truth; uploads wrapped as untrusted; commits
   via the Contents API; the licence gate never applies to a user submission). **135 backend + 54
   frontend tests green.** The pieces:
@@ -2572,6 +2609,18 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 These block the *next* tasks (CLAUDE.md §8, TECH_SPEC §16). The instrument
 source and Table 1/Table 2 landed July 2026 (see Done) and are no longer here:
+
+- **Redeploy the Render backend so it carries the `/brainstorm/upload` route (and any
+  endpoint newer than the last deploy) — the actual fix for the "Not Found" upload bug.**
+  The file-upload endpoint landed in commit `f9f2b0d` (merged as #31); the deployed backend
+  is running an older build, so the SPA's upload POST hits a route the server doesn't have and
+  gets a bare 404. **Trigger a manual deploy in the Render dashboard** (Manual Deploy → Deploy
+  latest commit), or, if Render's auto-deploy is watch-path-scoped to `backend/**` (CLAUDE.md §9),
+  merging any backend change to `main` will redeploy it. Verify by watching the deploy pick up a
+  commit at/after `f9f2b0d`. This is the deploy-discipline hazard pinned in CLAUDE.md §9 biting for
+  real. The frontend now degrades gracefully in the meantime (an honest "server may be running an
+  older version" message instead of "Not Found"), but the upload only *works* once the backend is
+  redeployed.
 
 - **~~The `WINDTUNNEL_PAT` needs `actions:write` added~~ — RESOLVED (July 2026).**
   Evidenced in the repo history: `governance.yml` now runs on submit (runs `WT-TR4C-DC`,

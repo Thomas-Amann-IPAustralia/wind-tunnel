@@ -439,6 +439,16 @@ function describe(err: unknown, action: string): string {
   if (err instanceof NetworkError) {
     return `Couldn't reach the tunnel to ${action}. It may still be warming up — give it a moment and try again.`;
   }
-  if (err instanceof ApiError) return err.message;
+  if (err instanceof ApiError) {
+    // A bare 404 "Not Found" is the framework default the backend sends when *no route*
+    // matches — i.e. the server is running an older build than this page and hasn't got the
+    // endpoint yet (e.g. after a frontend deploy without the matching backend redeploy). The
+    // backend's own 404s carry meaningful text ("No run found for code …"), so only the bare
+    // default is rewritten — surfacing a naked "Not Found" to a public servant is meaningless.
+    if (err.status === 404 && /^not found\.?$/i.test(err.message.trim())) {
+      return `The server didn't recognise the request to ${action} — it may be running an older version that hasn't been updated yet. Please try again shortly, or type your idea into the chat instead.`;
+    }
+    return err.message;
+  }
   return `Something went wrong trying to ${action}. Please try again.`;
 }

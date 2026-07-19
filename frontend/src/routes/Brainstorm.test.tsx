@@ -33,6 +33,7 @@ vi.mock("../lib/mermaid", () => ({
 }));
 
 import {
+  ApiError,
   brainstormMessage,
   fetchArtefactText,
   generateFlowMap,
@@ -393,5 +394,23 @@ describe("Brainstorm file upload (§7)", () => {
       CODE,
       expect.objectContaining({ format: "html", acknowledgeNoSensitive: true }),
     );
+  });
+
+  it("turns a bare 404 (server missing the endpoint) into an honest, actionable message", async () => {
+    // The reported bug: a backend running an older build than this page has no
+    // /brainstorm/upload route, so it answers the SPA's POST with the framework's default
+    // 404 whose detail is the naked string "Not Found". The user must see why, not that.
+    loadFresh();
+    vi.mocked(uploadBrainstormFile).mockRejectedValue(new ApiError(404, "Not Found"));
+
+    renderBrainstorm();
+    await openUploader();
+    pick("idea.txt", "We run an enquiries team and want AI to help draft replies.");
+    fireEvent.click(await screen.findByLabelText(/no sensitive information/i));
+    fireEvent.click(screen.getByRole("button", { name: /^upload$/i }));
+
+    expect(await screen.findByText(/older version that hasn't been updated/i)).toBeTruthy();
+    // The cryptic default is never surfaced verbatim.
+    expect(screen.queryByText(/^Not Found$/)).toBeNull();
   });
 });
