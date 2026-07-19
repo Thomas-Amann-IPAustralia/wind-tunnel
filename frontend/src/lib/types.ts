@@ -163,6 +163,27 @@ export interface FlowMapResponse {
   mermaid: string;
 }
 
+/** The three formats a public servant can upload during Brainstorm instead of chatting
+ * (§7 file upload): plain text (seed material for the outline), a Mermaid `.mmd` (the run's
+ * flow map), or an HTML file (the run's PoC). The SPA reads the file as text client-side. */
+export type UploadFormat = "text" | "mermaid" | "html";
+
+/** POST /brainstorm/upload — one response shape across the three formats, discriminated on
+ * `produced`: `outline` (plain-text seed → interviewer populated the outline, same tail as a
+ * message turn), `map` (Mermaid committed → `mermaid` source to render + post back), or `poc`
+ * (HTML committed as poc.html). */
+export interface UploadResponse {
+  produced: "outline" | "map" | "poc";
+  // produced === "outline"
+  assistant_message?: string;
+  outline_delta?: OutlineDelta | null;
+  outline_md?: string;
+  sufficiency?: Sufficiency;
+  stage?: string;
+  // produced === "map"
+  mermaid?: string;
+}
+
 /** POST /flow-map/svg — the SPA's client-rendered SVG, committed for the report. */
 export interface FlowMapSvgResponse {
   run_id: string;

@@ -1,0 +1,114 @@
+.wt-upload {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  background: var(--paper-sunken);
+}
+
+.wt-upload--collapsed {
+  padding: 0;
+  border: none;
+  background: none;
+}
+
+.wt-upload__toggle {
+  align-self: flex-start;
+}
+
+.wt-upload__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.wt-upload__title {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  color: var(--ink);
+}
+
+.wt-upload__close {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: var(--text-lg);
+  line-height: 1;
+  color: var(--ink-muted);
+  padding: 0 var(--space-1);
+}
+
+.wt-upload__close:hover {
+  color: var(--ink);
+}
+
+.wt-upload__lead {
+  color: var(--ink-muted);
+  font-size: var(--text-sm);
+  max-width: 46rem;
+}
+
+.wt-upload__lead code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+.wt-upload__detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.wt-upload__file {
+  font-size: var(--text-sm);
+  color: var(--ink);
+}
+
+.wt-upload__file-name {
+  font-family: var(--font-mono);
+  word-break: break-all;
+}
+
+.wt-upload__format {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--ink-muted);
+}
+
+.wt-upload__format select {
+  font: inherit;
+  color: var(--ink);
+  padding: var(--space-1) var(--space-2);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  background: var(--paper);
+}
+
+.wt-upload__ack {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.wt-upload__ack input {
+  margin-top: 0.2em;
+  flex-shrink: 0;
+}
+
+.wt-upload__actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.wt-upload__error {
+  color: var(--clay);
+  font-size: var(--text-sm);
+}

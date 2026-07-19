@@ -24,6 +24,8 @@ import type {
   ReviseResponse,
   RouteResponse,
   StatusDoc,
+  UploadFormat,
+  UploadResponse,
 } from "./types";
 
 export class ApiError extends Error {
@@ -168,6 +170,33 @@ export function brainstormMessage(
 ): Promise<BrainstormMessageResponse> {
   return request<BrainstormMessageResponse>("POST", `/api/runs/${runCode}/brainstorm/message`, {
     message,
+  });
+}
+
+/**
+ * Upload a file during Brainstorm instead of chatting (§7 file upload). The SPA reads the
+ * file as text and posts it here with its format and the acknowledgements. `text` seeds the
+ * outline through the interviewer (the primary path); `mermaid` commits the run's flow map
+ * (returning the source to render + post back, like `/flow-map`); `html` commits the run's
+ * PoC. Every upload asserts `acknowledge_no_sensitive` (the repo is public); a Mermaid upload
+ * additionally asserts `acknowledge_starting_material`. Valid only at BRAINSTORM.
+ */
+export function uploadBrainstormFile(
+  runCode: string,
+  file: {
+    format: UploadFormat;
+    content: string;
+    filename?: string;
+    acknowledgeNoSensitive: boolean;
+    acknowledgeStartingMaterial?: boolean;
+  },
+): Promise<UploadResponse> {
+  return request<UploadResponse>("POST", `/api/runs/${runCode}/brainstorm/upload`, {
+    format: file.format,
+    content: file.content,
+    filename: file.filename,
+    acknowledge_no_sensitive: file.acknowledgeNoSensitive,
+    acknowledge_starting_material: file.acknowledgeStartingMaterial ?? false,
   });
 }
 

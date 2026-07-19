@@ -57,7 +57,10 @@ from brainstorm import (  # noqa: E402
     assess_sufficiency,
     generate_flow_map,
     generate_poc,
+    ingest_seed_material,
     run_interviewer,
+    validate_mermaid,
+    validate_poc_html,
 )
 from brainstorm.feasibility import FeasibilityError  # noqa: E402
 from brainstorm.interviewer import BrainstormError  # noqa: E402
@@ -134,6 +137,24 @@ class ReviseBody(BaseModel):
 
 class MessageBody(BaseModel):
     message: str
+
+
+class UploadBody(BaseModel):
+    """A file a public servant uploads during Brainstorm instead of chatting (§7 file upload).
+    All three formats arrive as decoded text (the SPA reads the file client-side): ``text`` →
+    seed material fed through the interviewer to populate the outline (the primary path);
+    ``mermaid`` → committed as the run's ``flow-map.mmd`` starting material; ``html`` → committed
+    as ``poc.html``. The two acknowledgements gate the upload (both are also enforced client-side,
+    this is the authoritative check): ``acknowledge_no_sensitive`` is required for every upload
+    (the repo is public and world-readable), and ``acknowledge_starting_material`` is
+    additionally required for a Mermaid upload (it is treated as starting material, not an
+    outline-derived artefact)."""
+
+    format: Literal["text", "mermaid", "html"]
+    content: str
+    filename: str | None = None
+    acknowledge_no_sensitive: bool = False
+    acknowledge_starting_material: bool = False
 
 
 class EditOutlineBody(BaseModel):
@@ -433,6 +454,108 @@ def create_app(
             "outline_delta": update.delta,
             **_brainstorm_response(run_id, outline, make_llm()),
         }
+
+    def _upload_seed_text(run_id: str, content: str) -> dict:
+        """The primary upload path (§7): an uploaded plain-text document becomes seed material
+        for the outline. Fed through the interviewer **exactly as a long first message would be**
+        (``ingest_seed_material``) so it populates outline sections, then committed like a normal
+        interview turn — the outline stays the single source of truth (CLAUDE.md §3), the upload
+        is recorded as a user turn in the transcript, and the interviewer's summary as the
+        assistant reply. The document is wrapped as untrusted content inside the agent (§9.2)."""
+        outline = _load_outline(run_id)
+        transcript = Transcript.parse(_get_bytes_optional(run_id, "brainstorm", "transcript.jsonl"))
+        now = statefile.utc_now_iso()
+        client = make_llm()
+        try:
+            result = ingest_seed_material(client, outline_md=outline.render(), seed_text=content)
+        except (LLMError, BrainstormError) as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+
+        update = outline.apply_updates(
+            result.section_updates, title=result.title, summary=result.summary, now=now
+        )
+        # Recorded as a turn so the conversation reads coherently and the next interview turn
+        # carries the document as context (like any long first message would).
+        transcript.append("user", content, now)
+        transcript.append("assistant", result.assistant_message, now)
+
+        files = {_run_path(run_id, "brainstorm", "transcript.jsonl"): transcript.render()}
+        if update.changed:
+            files[_run_path(run_id, "brainstorm", "outline.md")] = outline.render().encode("utf-8")
+        try:
+            github.commit_files(files, f"run {run_id}: uploaded seed material")
+        except GitHubError as exc:
+            raise HTTPException(http_status.HTTP_502_BAD_GATEWAY, str(exc)) from exc
+
+        return {
+            "produced": "outline",
+            "assistant_message": result.assistant_message,
+            "outline_delta": update.delta,
+            **_brainstorm_response(run_id, outline, client),
+        }
+
+    def _upload_mermaid(run_id: str, content: str, *, acknowledged: bool) -> dict:
+        """An uploaded ``.mmd`` file (§7). Validated as Mermaid flowchart source, then committed
+        as the run's ``flow-map.mmd`` — framed as **starting material**, not an outline-derived
+        artefact. The additional starting-material acknowledgement is required (also gated
+        client-side). Returns the source so the SPA renders it to SVG and posts it back via
+        ``/flow-map/svg`` — the same client-render round-trip as a generated map (CLAUDE.md §9).
+        No LLM call: the user supplied the artefact directly."""
+        if not acknowledged:
+            raise HTTPException(
+                http_status.HTTP_400_BAD_REQUEST,
+                "For a Mermaid upload, acknowledge it will be treated as starting material.",
+            )
+        try:
+            validate_mermaid(content)
+        except MapError as exc:
+            raise HTTPException(http_status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+        _commit_brainstorm(
+            run_id,
+            {_run_path(run_id, "brainstorm", "flow-map.mmd"): content.encode("utf-8")},
+            "flow map uploaded as starting material",
+        )
+        return {"produced": "map", "mermaid": content}
+
+    def _upload_html(run_id: str, content: str) -> dict:
+        """An uploaded ``.html`` file (§7). Validated as an HTML document — but the §12.4
+        limitations-banner requirement is **relaxed for a user upload** (``require_banner=False``):
+        a public servant supplying their own mock is exempt. Committed as the run's ``poc.html``,
+        later rendered in the existing ``sandbox=""`` iframe (§12.3). No LLM call."""
+        try:
+            validate_poc_html(content, require_banner=False)
+        except PocError as exc:
+            raise HTTPException(http_status.HTTP_400_BAD_REQUEST, str(exc)) from exc
+        _commit_brainstorm(
+            run_id,
+            {_run_path(run_id, "brainstorm", "poc.html"): content.encode("utf-8")},
+            "proof of concept uploaded",
+        )
+        return {"produced": "poc"}
+
+    @app.post("/api/runs/{run_id}/brainstorm/upload")
+    def brainstorm_upload(body: UploadBody, run_id: str = Depends(_valid_run_id)) -> dict:
+        """Upload a file during Brainstorm instead of chatting (§7). Valid only at ``BRAINSTORM``
+        (like the other brainstorm endpoints). Every upload must carry the no-sensitive-info
+        acknowledgement (the repo is public); a Mermaid upload additionally carries the
+        starting-material acknowledgement. Dispatches on ``format``: ``text`` seeds the outline
+        via the interviewer (primary path); ``mermaid`` commits ``flow-map.mmd``; ``html``
+        commits ``poc.html``. The licence gate (§8) never applies to a user submission."""
+        _require_brainstorm(run_id)
+        if not body.acknowledge_no_sensitive:
+            raise HTTPException(
+                http_status.HTTP_400_BAD_REQUEST,
+                "Confirm the uploaded material contains no sensitive information before "
+                "uploading — the repository is public and world-readable.",
+            )
+        content = body.content
+        if not content.strip():
+            raise HTTPException(http_status.HTTP_400_BAD_REQUEST, "The uploaded file is empty.")
+        if body.format == "mermaid":
+            return _upload_mermaid(run_id, content, acknowledged=body.acknowledge_starting_material)
+        if body.format == "html":
+            return _upload_html(run_id, content)
+        return _upload_seed_text(run_id, content)
 
     @app.get("/api/runs/{run_id}/brainstorm")
     def get_brainstorm(run_id: str = Depends(_valid_run_id)) -> dict:

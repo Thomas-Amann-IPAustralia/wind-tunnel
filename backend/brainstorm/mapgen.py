@@ -84,11 +84,15 @@ def generate_flow_map(
         )
     resp = client.complete_text(prompt.model_role, prompt.system, "\n\n".join(parts))
     mermaid = strip_code_fence(resp.text)
-    _validate(mermaid)
+    validate_mermaid(mermaid)
     return MapResult(mermaid=mermaid, model=resp.model, prompt_version=prompt.version)
 
 
-def _validate(mermaid: str) -> None:
+def validate_mermaid(mermaid: str) -> None:
+    """Assert ``mermaid`` is Mermaid flowchart/graph source, not prose. Raises ``MapError``
+    otherwise. Public because the same check gates a **user-uploaded** ``.mmd`` file (§7 file
+    upload) before it is committed as the run's ``flow-map.mmd`` — a generated map and an
+    uploaded one must both be renderable, so they share one validator (one owner per fact)."""
     first = _first_meaningful_line(mermaid)
     if not first.lower().startswith(_VALID_STARTS):
         raise MapError(
