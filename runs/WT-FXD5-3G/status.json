@@ -3,8 +3,8 @@
   "run_id": "WT-FXD5-3G",
   "run_code": "WT-FXD5-3G",
   "phase": "full",
-  "overall_state": "running",
-  "updated_at": "2026-07-19T00:10:01Z",
+  "overall_state": "complete",
+  "updated_at": "2026-07-19T00:10:02Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
