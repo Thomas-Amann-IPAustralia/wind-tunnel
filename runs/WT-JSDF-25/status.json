@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "run_id": "WT-JSDF-25",
+  "run_code": "WT-JSDF-25",
+  "phase": "threshold",
+  "overall_state": "running",
+  "updated_at": "2026-07-19T09:26:03Z",
+  "nodes": {
+    "threshold.generalist_a": "pending",
+    "threshold.generalist_b": "pending",
+    "threshold.reconciler": "pending",
+    "threshold.rating_engine": "pending",
+    "full.specialist.it_security": "pending",
+    "full.specialist.privacy": "pending",
+    "full.specialist.ethics": "pending",
+    "full.specialist.legal": "pending",
+    "full.specialist.data_governance": "pending",
+    "full.specialist.solution_architect": "pending",
+    "full.checkpoint": "pending",
+    "full.architect": "pending",
+    "full.reviewer": "pending",
+    "full.assembly": "pending"
+  },
+  "log": [],
+  "log_cursor": 0,
+  "questions": null,
+  "failure": null,
+  "expected_ranges": {
+    "threshold": [
+      50,
+      210
+    ],
+    "full": [
+      170,
+      630
+    ]
+  }
+}
