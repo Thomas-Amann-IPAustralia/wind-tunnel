@@ -4,7 +4,7 @@
   "run_code": "WT-FXD5-3G",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T00:09:28Z",
+  "updated_at": "2026-07-19T00:09:57Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -18,7 +18,7 @@
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "complete",
-    "full.reviewer": "active",
+    "full.reviewer": "complete",
     "full.assembly": "pending"
   },
   "log": [
@@ -4235,9 +4235,23 @@
       "agent": "full.reviewer",
       "type": "stage_started",
       "detail": "Adjudicating reviewer started"
+    },
+    {
+      "id": "evt_000405",
+      "ts": "2026-07-19T00:09:29Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Reviewing cycle 1: auditing coverage, coherence and residual risk."
+    },
+    {
+      "id": "evt_000406",
+      "ts": "2026-07-19T00:09:57Z",
+      "agent": "full.reviewer",
+      "type": "stage_complete",
+      "detail": "Adjudicating reviewer complete"
     }
   ],
-  "log_cursor": 404,
+  "log_cursor": 406,
   "questions": null,
   "failure": null,
   "expected_ranges": {
