@@ -127,6 +127,34 @@ def test_reasks_still_respect_the_run_budget():
         client.complete_json(_ROLE, "sys", "ask")
 
 
+def test_budget_charge_is_atomic_under_concurrent_specialists():
+    """The §5.4 fan-out charges one shared budget from several worker threads; the
+    check-and-increment must not tear — exactly ``max_calls`` charges may succeed,
+    never one more (§13)."""
+    import threading
+
+    budget = CallBudget(max_calls=50)
+    granted: list[int] = []  # list.append is GIL-atomic
+
+    def worker():
+        for _ in range(10):
+            try:
+                budget.charge()
+            except LLMError:
+                pass
+            else:
+                granted.append(1)
+
+    threads = [threading.Thread(target=worker) for _ in range(8)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+    assert budget.used == 50
+    assert len(granted) == 50  # 80 attempts, exactly the ceiling admitted
+
+
 # -- response extraction -------------------------------------------------------
 
 

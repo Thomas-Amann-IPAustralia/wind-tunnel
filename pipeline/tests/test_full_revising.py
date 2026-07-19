@@ -16,7 +16,11 @@ from pathlib import Path
 
 import pytest
 
-from agents.prompting import response_type_of, specialist_owned_sections
+from agents.prompting import (
+    response_type_of,
+    specialist_friendly_name,
+    specialist_owned_sections,
+)
 from llm import LLMClient, ScriptedTransport, resolve_model
 from retrieval.db import write_kb
 from run import FakeCommitter, run_pipeline
@@ -231,7 +235,16 @@ def test_skipped_question_can_become_a_gap(tmp_path):
 
 
 def test_revises_multiple_specialists(tmp_path):
-    run_dir, _ = _run_handler(
+    # Two questioners revise concurrently (§5.4), so the transport must route by
+    # prompt content, not FIFO order — a queue would hand a specialist the other
+    # one's amendment depending on scheduling.
+    def handler(*, user, **_):
+        for s in ("privacy", "it_security"):
+            if f"sections owned by {specialist_friendly_name(s)}" in user:
+                return json.dumps(_full_amendment(s))
+        raise AssertionError(f"could not identify specialist from prompt: {user[:200]!r}")
+
+    run_dir = _seed_run_dir(
         tmp_path,
         "WT-REV-MULTI",
         questions=_questions_payload("privacy", "it_security"),
@@ -242,11 +255,26 @@ def test_revises_multiple_specialists(tmp_path):
             ],
             "skips": [],
         },
-        flash_queue=[_full_amendment("privacy"), _full_amendment("it_security")],
     )
+    run = RunState.new("WT-REV-MULTI")
+    run.advance_to(Stage.FULL_REVISING)
+    ctx = StageContext(
+        run_dir=run_dir,
+        run=run,
+        status=StatusModel.initial(run),
+        kb_root=_kb_root(tmp_path),
+        llm=LLMClient(transport=ScriptedTransport(handler=handler)),
+    )
+    full_revising(ctx)
+
     revised = json.loads((run_dir / "full" / "revised.json").read_text())
-    assert set(revised["revised"]) == {"privacy", "it_security"}
+    # Questions-payload order, deterministic regardless of completion order.
+    assert revised["revised"] == ["privacy", "it_security"]
     assert revised["counts"] == {"answered": 2, "skipped": 0}
+    for s in ("privacy", "it_security"):
+        data = json.loads((run_dir / "full" / "specialists" / f"{s}.json").read_text())
+        assert data["specialist"] == s  # each got its own amendment, not the other's
+        assert all(v.startswith(("Revised", "Yes. Revised")) for v in data["sections"].values())
 
 
 def test_amendment_directive_reaches_the_specialist(tmp_path):

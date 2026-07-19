@@ -7,6 +7,7 @@ the real fetch/search path without needing corpus content.
 from __future__ import annotations
 
 import json
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -22,8 +23,9 @@ from agents.specialist import AgentError, run_specialist
 from llm import LLMClient, ScriptedTransport, resolve_model
 from retrieval.db import write_kb
 from retrieval.retrieve import KB
-from run import FakeCommitter, run_pipeline
+from run import FakeCommitter, _make_pulse, run_pipeline
 from stages.context import StageContext
+from stages.fanout import fanout_width
 from stages.full import SPECIALISTS, full_drafting
 from statefile import RunState, Stage, StageStatus
 from status import StatusModel
@@ -536,18 +538,181 @@ def test_pipeline_fails_calmly_when_a_specialist_errors(tmp_path):
 
     assert result.ok is False
     run = RunState.load(run_dir)
-    # it_security/privacy/ethics precede legal in SPECIALISTS order and complete
-    # fine; legal's node is left "active" (never completed) by the failure, so
-    # the generic failing-node scan (§5.6) attributes it correctly.
+    # legal is the only worker that raised, so its node is the only one left
+    # "active" when the driver scans (§5.6) — the failure is attributed to it.
     assert run.stage is Stage.FULL_DRAFTING
     assert run.stage_status is StageStatus.FAILED
     status = json.loads((run_dir / "status.json").read_text())
     assert status["failure"]["stage"] == "full.specialist.legal"
     assert status["nodes"]["full.specialist.legal"] == "failed"
-    assert status["nodes"]["full.specialist.data_governance"] == "pending"
+    assert not (run_dir / "full" / "specialists" / "legal.json").exists()
+    # Under the §5.4 fan-out the other five run concurrently with legal: each is
+    # either complete (it finished — kept, with its draft on disk for the §5.3
+    # idempotent resume) or pending (cancelled before it started). Never a
+    # half-state, and the stage checkpoint (questions.json) is never written.
+    for other in set(SPECIALISTS) - {"legal"}:
+        state = status["nodes"][f"full.specialist.{other}"]
+        assert state in ("complete", "pending")
+        assert (run_dir / "full" / "specialists" / f"{other}.json").exists() == (
+            state == "complete"
+        )
+    assert not (run_dir / "full" / "questions.json").exists()
 
 
 def test_llm_role_resolves_to_flash_for_specialist():
     # Sanity check that the "specialist" role is registered (config/models.yml)
     # and every specialist call routes through it, not a per-specialist role.
     assert resolve_model("specialist")
+
+
+# -- the §5.4 fan-out: bounded concurrency, single-writer commits -----------------
+
+
+def test_specialist_concurrency_comes_from_budgets_yml():
+    # The fan-out width is a §13 rate knob owned by config/budgets.yml — the
+    # committed value is 3 (raise toward 6 as Gemini quota allows). The barrier
+    # test below is calibrated to this value; change them together.
+    assert fanout_width() == 3
+
+
+def test_full_drafting_fans_out_concurrently_within_bound(tmp_path):
+    """Proves the fan-out is real and bounded (§5.4): a 3-party barrier inside the
+    transport only releases when three specialists are simultaneously mid-call, so
+    a serial implementation times the barrier out rather than passing; a counter
+    proves in-flight never exceeds the configured bound. The §6.3 log contract
+    must survive the concurrency: event ids unique and monotonic."""
+    run_dir = _make_full_drafting_run_dir(tmp_path)
+    kb_root = _build_kb_root(tmp_path)
+    run = RunState.new("WT-TEST-CONC")
+    run.advance_to(Stage.FULL_DRAFTING)
+    status = StatusModel.initial(run)
+
+    # Six specialists at one call each = two clean releases of a 3-party barrier.
+    barrier = threading.Barrier(3)
+    gate = threading.Lock()
+    inflight = {"now": 0, "max": 0}
+    inner = _handler_all_draft_immediately()
+
+    def handler(*, model, system, user, response_json):
+        with gate:
+            inflight["now"] += 1
+            inflight["max"] = max(inflight["max"], inflight["now"])
+        try:
+            barrier.wait(timeout=30)  # broken barrier (= serial execution) fails loudly
+            return inner(model=model, system=system, user=user, response_json=response_json)
+        finally:
+            with gate:
+                inflight["now"] -= 1
+
+    ctx = StageContext(
+        run_dir=run_dir, run=run, status=status, llm=_client(handler), kb_root=kb_root
+    )
+    full_drafting(ctx)
+
+    assert inflight["max"] == 3  # the barrier forced 3 up; the pool bound stopped a 4th
+    for specialist in SPECIALISTS:
+        assert status.nodes[f"full.specialist.{specialist}"] == "complete"
+        assert (run_dir / "full" / "specialists" / f"{specialist}.json").is_file()
+    ids = [e.id for e in status.log]
+    assert len(ids) == len(set(ids)), "concurrent narration minted a duplicate event id"
+    assert ids == sorted(ids), "event ids must stay monotonic (§6.3)"
+
+
+def test_full_drafting_commits_only_from_the_coordinating_thread(tmp_path):
+    """The §14 single-writer property under the fan-out: workers narrate (start,
+    drafting, retrieval) from their own threads, but every publish those narrations
+    request must be made by the coordinating thread — a worker-side commit would
+    race the git working copy."""
+    run_dir = _make_full_drafting_run_dir(tmp_path)
+    kb_root = _build_kb_root(tmp_path)
+    run = RunState.new("WT-TEST-1WRT")
+    run.advance_to(Stage.FULL_DRAFTING)
+    status = StatusModel.initial(run)
+
+    class ThreadRecordingCommitter(FakeCommitter):
+        def __init__(self):
+            super().__init__()
+            self.threads: list[int] = []
+
+        def commit(self, run_dir, message):
+            self.threads.append(threading.get_ident())
+            return super().commit(run_dir, message)
+
+    committer = ThreadRecordingCommitter()
+    # min_interval_s=0: every drained pulse publishes, maximising the chance a
+    # worker-side commit path (if one existed) would be caught red-handed.
+    status.pulse = _make_pulse(run_dir, status, committer, min_interval_s=0.0)
+    ctx = StageContext(
+        run_dir=run_dir,
+        run=run,
+        status=status,
+        llm=_client(_handler_all_draft_immediately()),
+        kb_root=kb_root,
+    )
+    full_drafting(ctx)
+
+    assert committer.count > 0  # narration was published while the fan-out ran
+    assert set(committer.threads) == {threading.get_ident()}
+
+
+def test_full_drafting_resume_skips_committed_drafts_and_keeps_their_questions(tmp_path):
+    """Per-specialist idempotence under the fan-out (§5.3): drafts already committed
+    are not re-run — only the missing specialists are submitted to the pool — and a
+    skipped specialist's committed questions still reach the batched payload."""
+    run_dir = _make_full_drafting_run_dir(tmp_path)
+    kb_root = _build_kb_root(tmp_path)
+    run = RunState.new("WT-TEST-SKIP")
+    run.advance_to(Stage.FULL_DRAFTING)
+    status = StatusModel.initial(run)
+
+    q = {
+        "why": "the privacy risk should rest on fact",
+        "items": [
+            {
+                "question_id": "privacy-1",
+                "text": "Where is personal data stored?",
+                "options": None,
+                "allow_free_text": True,
+            }
+        ],
+    }
+    seeded = {"privacy": q, "legal": {"why": "", "items": []}}
+    specialists_dir = run_dir / "full" / "specialists"
+    specialists_dir.mkdir(parents=True)
+    for specialist, questions in seeded.items():
+        (specialists_dir / f"{specialist}.json").write_text(
+            json.dumps(
+                {
+                    "specialist": specialist,
+                    "sections": _draft_sections(specialist),
+                    "citations": {},
+                    "questions": questions,
+                    "gaps": [],
+                    "provenance": {"model": "prior", "prompt_version": "v1"},
+                }
+            ),
+            encoding="utf-8",
+        )
+
+    calls = {"n": 0}
+    gate = threading.Lock()
+    inner = _handler_all_draft_immediately()
+
+    def handler(*, model, system, user, response_json):
+        for skipped in seeded:
+            assert f"sections owned by {specialist_friendly_name(skipped)}" not in user, (
+                f"{skipped} has a committed draft and must not be re-run (§5.3)"
+            )
+        with gate:
+            calls["n"] += 1
+        return inner(model=model, system=system, user=user, response_json=response_json)
+
+    ctx = StageContext(
+        run_dir=run_dir, run=run, status=status, llm=_client(handler), kb_root=kb_root
+    )
+    full_drafting(ctx)
+
+    assert calls["n"] == len(SPECIALISTS) - len(seeded)  # one call per missing draft
+    payload = json.loads((run_dir / "full" / "questions.json").read_text())
+    assert [s["node_id"] for s in payload["specialists"]] == ["full.specialist.privacy"]
+    assert payload["specialists"][0]["items"][0]["question_id"] == "privacy-1"
