@@ -56,42 +56,39 @@ concrete.
 
 ### Bot card
 
-**Purpose.** Windtunnel takes a public servant's loose idea for an AI solution and carries it
-through two phases: a co-design **Brainstorm** conversation that sharpens it into a structured
-concept (with an optional clickable mock-up and information-flow map), then a multi-agent
-**Governance** phase that stress-tests the concept against the Australian Government's *AI
-impact assessment tool* (DTA, v1.0) and produces a substantially complete, fully-cited **draft
-impact assessment** — as a notebook and an HTML report.
+**Purpose.** Windtunnel helps public servants explore AI ideas responsibly from day one. Through
+a guided co-design conversation followed by a multi-agent governance assessment, it transforms an
+early concept into a substantially complete, fully cited draft AI Impact Assessment aligned to
+the Australian Government's AI Impact Assessment Tool (v1.0). A complete, plain-language
+walkthrough is available in
+[`SYSTEM_OVERVIEW.ipynb`](https://github.com/Thomas-Amann-IPAustralia/wind-tunnel/blob/main/SYSTEM_OVERVIEW.ipynb).
 
-**Intended users.** Any public servant with an AI idea who will eventually need to clear the
-mandatory AI impact assessment gate (in force from 15 December 2026) — used early, before formal
-SME and assessing-officer engagement, to arrive at that engagement with a credible starting draft
-rather than a blank page.
+**Intended users.** Public servants who are exploring AI-enabled services and want to understand
+governance implications before engaging formal subject matter experts or assessment panels.
 
-**Information used.** Only what the user volunteers about their own idea, via a guided
-conversation — no production data, no external lookups. Every risk judgement is grounded in the
-Australian Government's AI impact assessment tool and guidance, plus roughly 110 curated,
-publicly redistributable government and standards documents, split across six specialist
-libraries and cited pinpoint-precise on every claim.
+**Information used.** Information voluntarily provided by the user about their proposed AI
+system; a curated library of roughly 110 publicly available government policies, standards and
+guidance documents; the Australian Government AI Impact Assessment Tool and supporting guidance.
 
-**Limitations.** The output is a draft for SME and assessing-officer review — never an approval.
-It is not legal advice and does not replace the assessing, approving, or accountable roles the AI
-policy defines. It is a demonstration system with no login and no security accreditation, and its
-knowledge is bounded by its curated document library, not the entirety of Commonwealth policy.
+**Limitations.** Produces a draft assessment only. Does not provide legal advice or replace
+official governance, approval or assurance processes. Knowledge is limited to its curated
+document library and does not represent all Commonwealth policy.
 
-**Risks (and how the build addresses them).** Public repository/public data, disclosed plainly
-before any input is accepted; a model quietly setting its own risk rating, designed out
-structurally (models argue consequence and likelihood, fixed code computes the rating); prompt
-injection via submitted idea text, addressed by treating all user text as untrusted information,
-never instructions; unsupported claims, addressed by a hard citation requirement or an honest
-gap; an agent overstepping its brief, addressed by structural per-specialist write-scope.
+**Key risks.** Everything submitted or generated is stored in a public, world-readable GitHub
+repository, and the system carries no security accreditation — disclosed prominently before any
+input is accepted. Users may over-rely on AI-generated outputs. AI models may produce unsupported
+conclusions. User-provided content could contain prompt injection attempts. These are mitigated
+through the up-front public-storage disclosure, deterministic risk calculations (models never
+assign a rating), mandatory evidence-based citations, specialist agent boundaries, and treating
+all user input as untrusted data.
 
-**Tools used.** Google Gemini (Flash-Lite / Flash / Pro tiers) for the reasoning agents; Python
-(FastAPI + GitHub Actions) for the backend and governance pipeline; a deterministic, LLM-free
-Python rating engine; React/TypeScript on GitHub Pages for the interface; SQLite/FTS5 knowledge
-bases; Jupyter (`nbformat`/`nbconvert`) for the notebook and report; the GitHub repository itself
-as the durable store and audit trail. Built with **Claude Code** as the engineering tool
-throughout.
+**Tools used.** Google Gemini (Flash-Lite, Flash and Pro) for the reasoning agents; Claude Code
+as the engineering tool throughout; Python, FastAPI (hosted on Render) and GitHub Actions for the
+backend and governance pipeline; React and TypeScript, served via GitHub Pages, for the
+interface; Mermaid.js for client-side flow-map rendering; SQLite (FTS5) for the specialist
+knowledge bases; Jupyter (`nbformat`/`nbconvert`) for the notebook and report; the GitHub
+repository itself as the durable store and audit trail; and ChatGPT plus Adobe Photoshop for the
+loading-animation sprite sheet (AI-generated, then manually corrected).
 
 *(The bot card also stands alone at `docs/bot_card.md` in the repository, should you want to
 lift it out separately.)*
