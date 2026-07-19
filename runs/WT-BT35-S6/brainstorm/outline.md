@@ -7,33 +7,33 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-BT35-S6"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-BT35-S6"
+title: "Manager Performance Assessment Assistant"
+summary: "An AI tool that synthesizes performance data to help managers draft objective and consistent staff evaluations."
 created_at: "2026-07-19T13:02:53Z"
-updated_at: "2026-07-19T13:02:53Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-19T13:04:48Z"
+resolved: ["problem", "solution", "users_stakeholders", "data"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Managers often struggle to provide consistent, objective, and timely performance feedback to their staff, leading to gaps in development and potential bias in evaluations.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+An AI-powered assessment tool that analyzes performance data and feedback logs to generate draft performance summaries and development suggestions for managers to review.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+Primary users are managers; staff members are the primary stakeholders affected by the resulting assessments.
 
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+The system will likely process internal performance review documents, goal-tracking data, and potentially anonymized meeting transcripts or feedback logs.
 
 <!-- section: happy_path -->
 ## 5. Happy path
