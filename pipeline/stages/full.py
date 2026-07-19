@@ -3,14 +3,18 @@ ARCHITECT, REVIEW.
 
 ``full_drafting`` — six specialists each draft their own owned §5–12 sections
 independently, driving their own KB through the bounded fetch/search tool loop
-(``agents/specialist.py``). Each may raise up to three checkpoint questions; if any
-does, ``full/questions.json`` is written and the next stage is the ``FULL_CHECKPOINT``
-user pause (§6.4). If none do, the checkpoint (and ``FULL_REVISING``) is skipped — the
-§5.1 happy path straight to ``architect``.
+(``agents/specialist.py``). They run **concurrently** (§5.4), fanned out over a
+thread pool bounded by ``config/budgets.yml`` ``specialist_concurrency``; workers
+compute and narrate only, while all file writes and commits stay on the
+coordinating thread (see ``_run_specialist_tasks``). Each may raise up to three
+checkpoint questions; if any does, ``full/questions.json`` is written and the next
+stage is the ``FULL_CHECKPOINT`` user pause (§6.4). If none do, the checkpoint
+(and ``FULL_REVISING``) is skipped — the §5.1 happy path straight to ``architect``.
 
 ``full_revising`` — after a ``FULL_CHECKPOINT`` pause, each specialist that raised a
 question revises its own sections once in light of the user's answers (§5.1, §5.8), a
-thin orchestration over ``run_specialist_amendment``. Skipped questions become gaps.
+thin orchestration over ``run_specialist_amendment`` with the same §5.4 fan-out.
+Skipped questions become gaps.
 
 ``architect`` — a single Pro call writes the Implementation Plan appendix, every step
 traceable to a mitigation a specialist actually drafted (§5.5, §12.1).
@@ -26,6 +30,11 @@ this, ``ASSEMBLY``, is not built yet.
 from __future__ import annotations
 
 import json
+import threading
+from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor
+from concurrent.futures import wait as futures_wait
+from dataclasses import dataclass
+from functools import lru_cache
 from pathlib import Path
 from typing import Callable
 
@@ -113,16 +122,160 @@ def _load_index_text(kb_root: Path, specialist: str) -> str:
     return json.dumps(index, ensure_ascii=False)
 
 
+# -- concurrent specialist fan-out (§5.4) --------------------------------------
+
+# How often the coordinating thread wakes to publish worker narration while the
+# fan-out is in flight. Publishing itself stays throttled by the driver's pulse
+# (run.py PULSE_MIN_INTERVAL_S); this only bounds how stale an *urgent* node
+# transition can get before it reaches the repo.
+_PUBLISH_INTERVAL_S = 2.0
+
+
+@lru_cache(maxsize=1)
+def _specialist_concurrency() -> int:
+    """How many specialists run at once (§5.4), from config/budgets.yml
+    ``specialist_concurrency`` — a §13 rate knob, owned there, not hardcoded
+    (CLAUDE.md §6 "one owner per fact"). Bounded below the full six so the
+    burst of tool-loop calls respects the Gemini rate budget; raise it in the
+    config as quota allows."""
+    import yaml
+
+    here = Path(__file__).resolve()
+    for parent in here.parents:
+        candidate = parent / "config" / "budgets.yml"
+        if candidate.is_file():
+            with candidate.open(encoding="utf-8") as fh:
+                budgets = yaml.safe_load(fh) or {}
+            return max(1, int(budgets.get("specialist_concurrency", 3)))
+    raise FileNotFoundError(f"Could not locate config/budgets.yml above {here}.")
+
+
+class _DeferredPulse:
+    """Stands in for ``status.pulse`` while specialist workers run (§5.4).
+
+    Narration from a worker thread asks to publish; publishing means
+    ``status.save`` plus a git commit, and the working copy is single-writer
+    (§14) — a commit from a worker would race the coordinator's commits and
+    could stage a file another part of the stage is mid-writing. So worker
+    pulses are only *recorded* here; the coordinating thread drains the request
+    between waits and publishes through the driver's real pulse, keeping every
+    commit on one thread. Lock ordering is acyclic: this lock is only ever held
+    for the flag flip — the coordinator drains (this lock), releases, and only
+    then publishes (which takes the status lock inside ``save``)."""
+
+    def __init__(self) -> None:
+        self._lock = threading.Lock()
+        self._dirty = False
+        self._urgent = False
+
+    def __call__(self, urgent: bool) -> None:
+        with self._lock:
+            self._dirty = True
+            self._urgent = self._urgent or urgent
+
+    def drain(self) -> bool | None:
+        """The pending request's urgency, or None if nothing was asked. Clears it."""
+        with self._lock:
+            if not self._dirty:
+                return None
+            urgent = self._urgent
+            self._dirty = self._urgent = False
+            return urgent
+
+
+@dataclass
+class _SpecialistTask:
+    """One specialist's unit of concurrent work (§5.4).
+
+    ``work`` runs on a worker thread: narration (the thread-safe status model)
+    plus LLM/KB compute only — **never a file write or a commit**. ``finish``
+    runs on the coordinating thread once ``work`` returns: it writes the
+    specialist's files and completes its node, so every disk write the committer
+    can stage, and every commit, stays single-threaded (§14)."""
+
+    specialist: str
+    work: Callable[[], SpecialistDraft]
+    finish: Callable[[SpecialistDraft], None]
+
+
+def _run_specialist_tasks(ctx: StageContext, tasks: list[_SpecialistTask]) -> None:
+    """Fan ``tasks`` out over a bounded thread pool (§5.4 — at most
+    ``specialist_concurrency`` in flight; the KB each worker opens is its own,
+    the write scope of each result is disjoint by construction, §9.3/§6.2).
+
+    While workers run, ``ctx.status.pulse`` is swapped for a :class:`_DeferredPulse`
+    and the coordinator publishes on their behalf between waits, so narration
+    still reaches the repo on the §6.3 cadence but only ever from this thread.
+    Each task's ``finish`` runs here as its worker completes — a finished draft
+    is written and pulse-committed without waiting for the slowest specialist,
+    preserving the per-draft resume granularity (§5.3).
+
+    On a worker failure: not-yet-started tasks are cancelled (their specialists
+    stay ``pending`` and re-run on resume), already-running ones are allowed to
+    end and their results are still finished (their files are on disk, so the
+    failure commit preserves them and the §5.3 idempotent skip honours them),
+    and the first error then propagates to the driver's calm-failure path
+    (§5.6)."""
+    if not tasks:
+        return
+    deferred = _DeferredPulse()
+    original_pulse = ctx.status.pulse
+    ctx.status.pulse = deferred
+
+    def publish() -> None:
+        urgent = deferred.drain()
+        if urgent is not None and original_pulse is not None:
+            original_pulse(urgent)
+
+    first_error: BaseException | None = None
+    try:
+        with ThreadPoolExecutor(
+            max_workers=min(_specialist_concurrency(), len(tasks)),
+            thread_name_prefix="specialist",
+        ) as pool:
+            pending = {pool.submit(task.work): task for task in tasks}
+            while pending:
+                done, _ = futures_wait(
+                    pending, timeout=_PUBLISH_INTERVAL_S, return_when=FIRST_COMPLETED
+                )
+                for future in done:
+                    task = pending.pop(future)
+                    try:
+                        result = future.result()
+                    except BaseException as exc:  # BaseException: includes CancelledError
+                        if first_error is None:
+                            first_error = exc
+                            for other in pending:
+                                other.cancel()  # only not-yet-started tasks cancel
+                        continue
+                    try:
+                        task.finish(result)
+                    except BaseException:
+                        # A coordinator-side failure (write/serialise): stop admitting
+                        # queued work before propagating, as with a worker failure.
+                        for other in pending:
+                            other.cancel()
+                        raise
+                publish()
+        # The pool has exited: every worker has ended, so restoring the pulse
+        # below cannot race a late worker narration into a worker-side commit.
+    finally:
+        ctx.status.pulse = original_pulse
+    publish()
+    if first_error is not None:
+        raise first_error
+
+
 def full_drafting(ctx: StageContext) -> None:
-    """Every specialist drafts its owned sections independently (§5.1, §9.3).
-    Outputs ``full/specialists/<id>.json`` + ``.md`` for each, and
-    ``full/questions.json`` — always, with an empty ``specialists`` list when no
-    question was raised. The questions file is part of the stage checkpoint
-    (run.py): drafts are pulse-committed one by one as they finish, so "all six
-    drafts exist" alone no longer proves the stage ran to its end — without the
-    questions file in the checkpoint, a death between the last draft and the
-    questions write would let resume skip the stage and silently drop raised
-    questions.
+    """Every specialist drafts its owned sections independently — and concurrently,
+    fanned out over the bounded §5.4 pool (§5.1, §9.3). Outputs
+    ``full/specialists/<id>.json`` + ``.md`` for each, and ``full/questions.json``
+    — always, with an empty ``specialists`` list when no question was raised. The
+    questions file is part of the stage checkpoint (run.py): drafts are
+    pulse-committed one by one as they finish, so "all six drafts exist" alone no
+    longer proves the stage ran to its end — without the questions file in the
+    checkpoint, a death between the last draft and the questions write would let
+    resume skip the stage and silently drop raised questions.
 
     Each specialist is individually idempotent (§5.3): a retry skips any draft
     already committed — its questions are reloaded from the committed file so the
@@ -131,20 +284,46 @@ def full_drafting(ctx: StageContext) -> None:
     outline = ctx.outline()
     threshold_md = ctx.read_text("threshold/threshold_assessment.md")
 
-    raised: list[tuple[str, SpecialistDraft]] = []
+    drafts: dict[str, SpecialistDraft] = {}
+    tasks: list[_SpecialistTask] = []
     for specialist in SPECIALISTS:
-        node = f"full.specialist.{specialist}"
         relpath = f"full/specialists/{specialist}.json"
         if ctx.path(relpath).is_file():
-            draft = SpecialistDraft.from_dict(ctx.read_json(relpath))
-            if draft.questions:
-                raised.append((node, draft))
+            drafts[specialist] = SpecialistDraft.from_dict(ctx.read_json(relpath))
             continue
+        tasks.append(_draft_task(ctx, specialist, kb_root, outline, threshold_md, drafts))
+    _run_specialist_tasks(ctx, tasks)
+
+    # Collected in SPECIALISTS order — not completion order — so the questions
+    # payload (and its committed JSON) is deterministic across re-runs.
+    raised = [
+        (f"{_SPECIALIST_NODE_PREFIX}{s}", drafts[s]) for s in SPECIALISTS if drafts[s].questions
+    ]
+    ctx.write_json(QUESTIONS_RELPATH, _build_questions_payload(raised))
+    for node, draft in raised:
+        for item in draft.questions:
+            ctx.status.question_raised(node, item["question_id"], item["text"])
+
+
+def _draft_task(
+    ctx: StageContext,
+    specialist: str,
+    kb_root: Path,
+    outline: str,
+    threshold_md: str,
+    drafts: dict[str, SpecialistDraft],
+) -> _SpecialistTask:
+    """One specialist's FULL_DRAFTING task (§5.4): the worker narrates its own
+    start and drives its own KB through the tool loop; the coordinator writes the
+    finished draft and completes the node."""
+    node = f"{_SPECIALIST_NODE_PREFIX}{specialist}"
+
+    def work() -> SpecialistDraft:
         ctx.status.start_node(node)
         ctx.status.drafting(node, f"drafting {specialist}'s owned sections")
         index_text = _load_index_text(kb_root, specialist)
         with KB(kb_root / f"{specialist}.sqlite") as kb:
-            draft = run_specialist(
+            return run_specialist(
                 ctx.llm,
                 specialist,
                 outline,
@@ -154,16 +333,14 @@ def full_drafting(ctx: StageContext) -> None:
                 status=ctx.status,
                 node_id=node,
             )
-        ctx.write_json(relpath, draft.to_dict())
+
+    def finish(draft: SpecialistDraft) -> None:
+        ctx.write_json(f"full/specialists/{specialist}.json", draft.to_dict())
         ctx.write_text(f"full/specialists/{specialist}.md", render_specialist_markdown(draft))
         ctx.status.complete_node(node)
-        if draft.questions:
-            raised.append((node, draft))
+        drafts[specialist] = draft
 
-    ctx.write_json(QUESTIONS_RELPATH, _build_questions_payload(raised))
-    for node, draft in raised:
-        for item in draft.questions:
-            ctx.status.question_raised(node, item["question_id"], item["text"])
+    return _SpecialistTask(specialist=specialist, work=work, finish=finish)
 
 
 # -- FULL_REVISING -------------------------------------------------------------
@@ -180,14 +357,15 @@ _REVISION_INTRO = (
 
 def full_revising(ctx: StageContext) -> None:
     """Each specialist that raised a checkpoint question revises its own sections once in
-    light of the user's answers (§5.1 FULL_REVISING, §5.8). This is a thin orchestration
-    over ``run_specialist_amendment`` (§11.3): the answers are the directive, and the
-    specialist's whole owned set is the target (a question is not tied to one section, so
-    the specialist re-drafts its slice with the new facts in hand). A skipped question is
-    presented as an unavailable fact, so a section it still cannot ground becomes a gap
-    (§5.1 "skipped questions → gaps"). Specialists that raised no question are untouched.
-    Writes updated ``full/specialists/*`` and ``full/revised.json`` (the checkpoint marker
-    + a record of what was revised)."""
+    light of the user's answers (§5.1 FULL_REVISING, §5.8), the questioners fanned out
+    concurrently (§5.4). This is a thin orchestration over ``run_specialist_amendment``
+    (§11.3): the answers are the directive, and the specialist's whole owned set is the
+    target (a question is not tied to one section, so the specialist re-drafts its slice
+    with the new facts in hand). A skipped question is presented as an unavailable fact,
+    so a section it still cannot ground becomes a gap (§5.1 "skipped questions → gaps").
+    Specialists that raised no question are untouched. Writes updated
+    ``full/specialists/*`` and ``full/revised.json`` (the checkpoint marker + a record
+    of what was revised)."""
     questions = ctx.read_json(QUESTIONS_RELPATH)
     answers = ctx.read_json(ANSWERS_RELPATH)
     outline = ctx.outline()
@@ -197,34 +375,67 @@ def full_revising(ctx: StageContext) -> None:
     answer_by_id = {a["question_id"]: a.get("value", "") for a in (answers.get("answers") or [])}
     skipped_ids = set(answers.get("skips") or [])
 
-    revised: list[str] = []
     answered_count = 0
     skipped_count = 0
+    tasks: list[_SpecialistTask] = []
     for entry in questions.get("specialists") or []:
         specialist = _specialist_from_node(entry["node_id"])
-        node = f"{_SPECIALIST_NODE_PREFIX}{specialist}"
         items = entry.get("items") or []
         directive_context, n_ans, n_skip = _render_answers_directive(
             items, answer_by_id, skipped_ids
         )
         answered_count += n_ans
         skipped_count += n_skip
+        tasks.append(
+            _revise_task(
+                ctx,
+                specialist,
+                kb_root,
+                outline,
+                threshold_md,
+                directive_context,
+                _revision_seed_terms(items, answer_by_id),
+            )
+        )
+    _run_specialist_tasks(ctx, tasks)
 
-        targets = specialist_owned_sections(specialist)
-        prior = SpecialistDraft.from_dict(ctx.read_json(f"full/specialists/{specialist}.json"))
+    # Task order (the questions-payload order), not completion order — deterministic.
+    revised = [t.specialist for t in tasks]
+    ctx.write_json(
+        REVISED_RELPATH,
+        {"revised": revised, "counts": {"answered": answered_count, "skipped": skipped_count}},
+    )
+
+
+def _revise_task(
+    ctx: StageContext,
+    specialist: str,
+    kb_root: Path,
+    outline: str,
+    threshold_md: str,
+    directive_context: str,
+    seed_terms: str,
+) -> _SpecialistTask:
+    """One questioning specialist's FULL_REVISING task (§5.4): re-draft its whole
+    owned set with the user's answers in hand (§5.1, §11.3 machinery)."""
+    node = f"{_SPECIALIST_NODE_PREFIX}{specialist}"
+    targets = specialist_owned_sections(specialist)
+    prior = SpecialistDraft.from_dict(ctx.read_json(f"full/specialists/{specialist}.json"))
+
+    def work() -> SpecialistDraft:
         ctx.status.start_node(node)
         ctx.status.revision(
             node, f"revising {specialist}'s sections in light of your answers", target=specialist
         )
         index_text = _load_index_text(kb_root, specialist)
         with KB(kb_root / f"{specialist}.sqlite") as kb:
-            new_draft = run_specialist_amendment(
+            return run_specialist_amendment(
                 ctx.llm,
                 specialist,
                 prior,
                 targets,
                 directive_context,
-                _revision_seed_terms(items, answer_by_id),
+                seed_terms,
                 outline,
                 threshold_md,
                 kb,
@@ -234,15 +445,13 @@ def full_revising(ctx: StageContext) -> None:
                 status=ctx.status,
                 node_id=node,
             )
+
+    def finish(new_draft: SpecialistDraft) -> None:
         ctx.write_json(f"full/specialists/{specialist}.json", new_draft.to_dict())
         ctx.write_text(f"full/specialists/{specialist}.md", render_specialist_markdown(new_draft))
         ctx.status.complete_node(node)
-        revised.append(specialist)
 
-    ctx.write_json(
-        REVISED_RELPATH,
-        {"revised": revised, "counts": {"answered": answered_count, "skipped": skipped_count}},
-    )
+    return _SpecialistTask(specialist=specialist, work=work, finish=finish)
 
 
 def _specialist_from_node(node_id: str) -> str:
@@ -517,31 +726,53 @@ def _apply_amendments(
     detail: Callable[[tuple[str, ...]], str] | None = None,
 ) -> dict[str, dict]:
     """Apply a set of amend directives: each targeted specialist amends its own directed
-    sections (§11.3), re-driving its KB. Directives are grouped per specialist so a
-    specialist amends all its directed sections in one pass. Shared by the REVIEW loop
-    (``cycle`` set, default narration) and USER_REVISION (``detail`` set, no cycle) — the
-    machinery is identical; only the ``revision``-event wording and the loop-counter differ."""
+    sections (§11.3), re-driving its KB — targeted specialists fanned out concurrently
+    (§5.4). Directives are grouped per specialist so a specialist amends all its directed
+    sections in one pass. Shared by the REVIEW loop (``cycle`` set, default narration) and
+    USER_REVISION (``detail`` set, no cycle) — the machinery is identical; only the
+    ``revision``-event wording and the loop-counter differ."""
     kb_root = ctx.kb_root or _default_kb_root()
     by_spec: dict[str, list[dict]] = {}
     for d in directives:
         by_spec.setdefault(d["target_specialist"], []).append(d)
 
-    for spec, dirs in by_spec.items():
-        node = f"full.specialist.{spec}"
-        target_sections = tuple(
-            sorted({s for d in dirs for s in d["target_sections"]}, key=_section_sort_key)
-        )
-        detail_text = (
-            detail(target_sections)
-            if detail is not None
-            else f"amending {', '.join(target_sections)} per reviewer cycle {cycle}"
-        )
-        prior = SpecialistDraft.from_dict(drafts[spec])
+    tasks = [
+        _amend_task(ctx, spec, dirs, kb_root, outline, threshold_md, drafts, cycle, detail)
+        for spec, dirs in by_spec.items()
+    ]
+    _run_specialist_tasks(ctx, tasks)
+    return drafts
+
+
+def _amend_task(
+    ctx: StageContext,
+    spec: str,
+    dirs: list[dict],
+    kb_root: Path,
+    outline: str,
+    threshold_md: str,
+    drafts: dict[str, dict],
+    cycle: int | None,
+    detail: Callable[[tuple[str, ...]], str] | None,
+) -> _SpecialistTask:
+    """One targeted specialist's amendment task (§5.4, §11.3)."""
+    node = f"{_SPECIALIST_NODE_PREFIX}{spec}"
+    target_sections = tuple(
+        sorted({s for d in dirs for s in d["target_sections"]}, key=_section_sort_key)
+    )
+    detail_text = (
+        detail(target_sections)
+        if detail is not None
+        else f"amending {', '.join(target_sections)} per reviewer cycle {cycle}"
+    )
+    prior = SpecialistDraft.from_dict(drafts[spec])
+
+    def work() -> SpecialistDraft:
         ctx.status.start_node(node)
         ctx.status.revision(node, detail_text, cycle=cycle, target=spec)
         index_text = _load_index_text(kb_root, spec)
         with KB(kb_root / f"{spec}.sqlite") as kb:
-            new_draft = run_specialist_amendment(
+            return run_specialist_amendment(
                 ctx.llm,
                 spec,
                 prior,
@@ -555,11 +786,14 @@ def _apply_amendments(
                 status=ctx.status,
                 node_id=node,
             )
+
+    def finish(new_draft: SpecialistDraft) -> None:
         ctx.write_json(f"full/specialists/{spec}.json", new_draft.to_dict())
         ctx.write_text(f"full/specialists/{spec}.md", render_specialist_markdown(new_draft))
         ctx.status.complete_node(node)
         drafts[spec] = new_draft.to_dict()
-    return drafts
+
+    return _SpecialistTask(specialist=spec, work=work, finish=finish)
 
 
 def _render_directives(dirs: list[dict]) -> str:

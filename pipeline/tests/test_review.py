@@ -18,6 +18,7 @@ import pytest
 from agents.prompting import (
     RISK_SECTIONS,
     response_type_of,
+    specialist_friendly_name,
     specialist_instrument_context,
     specialist_owned_sections,
 )
@@ -514,6 +515,55 @@ def test_review_applies_amendment_then_settles(tmp_path):
     assert any(e.type == "revision" for e in status.log)
 
 
+def test_review_amends_two_specialists_concurrently_then_settles(tmp_path):
+    """A cycle directing two specialists fans both amendments out at once (§5.4), so
+    the flash transport must route by prompt content — each specialist gets its own
+    amendment regardless of completion order — and both land before cycle 2."""
+    run_dir = _seed_review_run_dir(tmp_path, "WT-REV-2SPEC")
+    run = RunState.new("WT-REV-2SPEC")
+    run.advance_to(Stage.REVIEW)
+    status = StatusModel.initial(run)
+
+    pro_queue = [
+        _reviewer_payload(
+            directives=[
+                _directive("privacy", ("7.2",)),
+                _directive("ethics", ("5.1",)),
+            ]
+        ),
+        _reviewer_payload(),
+    ]
+    amendments = {
+        "privacy": {"action": "draft", "sections": {"7.2": "Privacy amended."}, "gaps": []},
+        "ethics": {"action": "draft", "sections": {"5.1": "Yes. Ethics amended."}, "gaps": []},
+    }
+
+    def handler(*, model, system, user, response_json):
+        if model == resolve_model("reviewer"):
+            return json.dumps(pro_queue.pop(0))
+        for spec, payload in amendments.items():
+            if f"sections owned by {specialist_friendly_name(spec)}" in user:
+                return json.dumps(payload)
+        raise AssertionError(f"could not identify specialist from prompt: {user[:200]!r}")
+
+    ctx = StageContext(
+        run_dir=run_dir,
+        run=run,
+        status=status,
+        kb_root=_kb_root(tmp_path),
+        llm=_client(handler=handler),
+    )
+    review(ctx)
+
+    privacy = json.loads((run_dir / "full" / "specialists" / "privacy.json").read_text())
+    ethics = json.loads((run_dir / "full" / "specialists" / "ethics.json").read_text())
+    assert privacy["sections"]["7.2"] == "Privacy amended."
+    assert ethics["sections"]["5.1"] == "Yes. Ethics amended."
+    assert run.review_cycles == 2
+    assert status.nodes["full.specialist.privacy"] == "complete"
+    assert status.nodes["full.specialist.ethics"] == "complete"
+
+
 def test_review_records_unresolved_when_cap_reached(tmp_path):
     run_dir = _seed_review_run_dir(tmp_path, "WT-REV-CAP")
     run = RunState.new("WT-REV-CAP")
@@ -616,10 +666,12 @@ def test_pipeline_runs_full_path_drafting_to_complete(tmp_path):
     run.save(run_dir)
     StatusModel.initial(run).save(run_dir)
 
-    specialist_drafts = [
-        {**_draft_dict(s), "action": "draft", "questions": {"why": "", "items": []}}
+    # The six drafts route by prompt content — the specialists draft concurrently
+    # (§5.4), so a FIFO queue would hand a specialist another one's owned sections.
+    specialist_drafts = {
+        s: {**_draft_dict(s), "action": "draft", "questions": {"why": "", "items": []}}
         for s in SPECIALISTS
-    ]
+    }
     architect_payload = {
         "overview": "Deliver the system in sequenced phases.",
         "steps": [
@@ -632,15 +684,21 @@ def test_pipeline_runs_full_path_drafting_to_complete(tmp_path):
             }
         ],
     }
-    responses = {
-        resolve_model("specialist"): [json.dumps(d) for d in specialist_drafts],
-        # Architect and reviewer both resolve to the Pro id — FIFO in call order.
-        resolve_model("reviewer"): [json.dumps(architect_payload), json.dumps(_reviewer_payload())],
-    }
+    # Architect and reviewer both resolve to the Pro id and run serially on the
+    # coordinating thread — FIFO in call order is still deterministic for them.
+    pro_queue = [json.dumps(architect_payload), json.dumps(_reviewer_payload())]
+
+    def handler(*, model, system, user, response_json):
+        if model == resolve_model("reviewer"):
+            return pro_queue.pop(0)
+        for s, payload in specialist_drafts.items():
+            if f"sections owned by {specialist_friendly_name(s)}" in user:
+                return json.dumps(payload)
+        raise AssertionError(f"could not identify specialist from prompt: {user[:200]!r}")
 
     result = run_pipeline(
         run_dir,
-        llm=_client(responses=responses),
+        llm=_client(handler=handler),
         committer=FakeCommitter(),
         kb_root=_kb_root(tmp_path),
     )

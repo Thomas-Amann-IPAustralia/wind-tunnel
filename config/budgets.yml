@@ -33,3 +33,8 @@ stages:
 
 # Global guard: hard ceiling across a whole run (scaffold — raise if legitimate).
 run_max_calls: 60
+
+# §5.4 fan-out width: how many specialists draft/revise at once within one job.
+# Bounded below the full six so the burst of tool-loop calls respects the Gemini
+# rate budget (§13) — raise toward 6 as quota allows.
+specialist_concurrency: 3

@@ -2,7 +2,42 @@
 
 ## Current stage
 
-**This branch (`claude/file-upload-not-found-4cgk43`): the "Not Found" file-upload bug — diagnosed
+**This branch (`claude/concurrent-specialists-aqb0t9`): the specialists now run concurrently —
+the §5.4 fan-out the tech spec always mandated, replacing the serial one-after-another loop
+(TECH_SPEC §5.4, §13, §14; CLAUDE.md §3 "one poll fully determines visible state").** Tom asked
+for three specialists drafting at once. TECH_SPEC §5.4 already required exactly this
+("FULL_DRAFTING/FULL_REVISING … run their agents concurrently … respecting the rate-limit budget
+(§13)"), so this is spec-alignment, not a new design. The three specialist loops — `full_drafting`
+(all six), `full_revising` (the questioners), and `_apply_amendments` (REVIEW + USER_REVISION
+targets) — now build per-specialist `_SpecialistTask`s and fan them out through one shared runner
+(`_run_specialist_tasks`, `pipeline/stages/full.py`) over a `ThreadPoolExecutor` bounded by
+**`specialist_concurrency: 3` in `config/budgets.yml`** (a §13 rate knob, one owner; raise toward
+6 as Gemini quota allows — design §7.2's "six bloom at once" is the unthrottled ideal). The
+threading discipline is strict and structural: **workers compute and narrate only** (their own KB
+connection, the shared thread-safe `StatusModel`, the shared budget-locked `LLMClient`); **every
+file write and every commit stays on the coordinating thread** — each task's `finish` runs there
+as its worker completes, so drafts are still written + pulse-committed one by one (per-draft §5.3
+resume granularity preserved) and the §14 single-writer commit property holds by construction.
+While workers run, `status.pulse` is swapped for a `_DeferredPulse` (workers' publish requests are
+flags the coordinator drains every ≤2s and publishes through the driver's real pulse). Supporting
+hardening: `StatusModel` gained one RLock making every mutation atomic — the §6.3 node+event
+coupling can never tear and event ids (minted from log length) stay unique/monotonic under
+concurrent narration; `CallBudget.charge` is now an atomic check-and-increment. Failure semantics:
+first worker error cancels unstarted tasks (they stay `pending`, re-run on resume), running ones
+finish and are kept (their committed drafts honoured by idempotent skip), then the error propagates
+to the §5.6 calm-failure path. **Pipeline: 219 tests green (213 prior — two rewritten: the
+specialist-failure driver test now asserts concurrent semantics, and two FIFO-scripted fixtures
+became content-routed handlers since queue order is scheduling-dependent under the fan-out — plus 6
+new: barrier-proven 3-wide overlap + bound + event-id monotonicity, single-writer commit-thread
+proof, partial-resume skip keeping committed questions, atomic budget under 8 threads, two-specialist
+concurrent amendment via REVIEW, budgets-knob read), 8 consecutive full-suite runs flake-free, ruff
+format + check clean.** TECH_SPEC §5.4 extended with one sentence naming the knob and the
+single-writer rule. Backend/frontend untouched — `status.json`'s whole-graph `nodes` map was built
+for several actives at once (the Chamber animates it already). Handoff note: `threshold_drafting`'s
+two generalists still run serially — §5.4 names them too; the runner is generic enough to lift if
+wanted.
+
+**Prior branch (`claude/file-upload-not-found-4cgk43`): the "Not Found" file-upload bug — diagnosed
 as a stale backend deploy, with a graceful-degradation frontend fix (TECH_SPEC §7; CLAUDE.md §9).**
 Tom reported that attempting a Brainstorm file upload shows a red **"Not Found"** above the Upload
 button. Diagnosis: **this is not a code bug in the request path.** The frontend POSTs
@@ -1925,6 +1960,15 @@ Corpus observations for whoever builds ingestion (from the July 2026 review):
 
 ## Decisions made (that the documents were silent on)
 
+- **The §5.4 fan-out is thread-based, width 3, owned by `config/budgets.yml`
+  (`claude/concurrent-specialists-aqb0t9` branch).** §5.4 says "async fan-out" without naming a
+  mechanism or width. Decided: `ThreadPoolExecutor` (the transport is blocking `urllib`; the work
+  is I/O-bound, so threads deliver the fan-out with no async rewrite of the seam), width from a
+  new `specialist_concurrency` budgets key — Tom asked for 3, and it leaves Gemini rate headroom
+  (§13). Design §7.2's "six bloom at once" is read as the unthrottled ideal; the knob reaches it
+  when quota does. Corollary decided at the same time: workers never write files or commit — all
+  writes/commits stay on the coordinating thread, which is how §5.4's "no repo-commit race" and
+  §14's single-writer property survive per-draft progress commits.
 - **A specialist owns a section *and everything under it*; sub-question keys fold, not fail
   (WT-H2A8-H3 branch).** The docs define write-scope (§9.3) at subsection granularity (`12.2`),
   but `questions.json` nests real sub-questions (`12.2.1`/`12.2.2`, `8.4.1`/`8.4.2`) under some
