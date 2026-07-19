@@ -2,7 +2,32 @@
 
 ## Current stage
 
-**This branch (`claude/reword-public-availability-warning-8137wz`): reworded the usage warning
+**This branch (`claude/readme-system-overview-revision-u7hf9h`): rewrote `SYSTEM_OVERVIEW.ipynb`
+into a comprehensive, plain-language, illustrated tour, and slimmed `README.md` to defer to it
+(documentation only — no code or behaviour change).** The overview now carries 14 figures under
+`docs/img/overview/`: two hand-built explainer diagrams (the three-programs-plus-shared-store
+architecture, and the run lifecycle with its two pauses) and twelve real screenshots captured from
+the **actual SPA** — landing, usage gate, Brainstorm canvas, the Chamber mid-run, threshold review,
+the rating table, the question checkpoint, the report view, the proof-of-concept, the flow map,
+in-report citations, and the gap register. Four are annotated with numbered callouts + a legend.
+It also excerpts the **real agent prompts** (interviewer, threshold generalist, specialist,
+architect, reviewer) and follows one worked example throughout (the ATO Deduction Assistant run
+`WT-FXD5-3G`). Everything factual was pulled from the repo so the narrative matches the build:
+model tiers from `config/models.yml`, the specialist↔section ownership map + KB counts
+(13/8/17/11/5/56 = 110 docs) from `instrument/sections.json`, and provenance/citation examples from
+real completed runs. Deliberately kept jargon-free (mechanisms described in plain cause-and-effect,
+not "CORS/ETag/workflow_dispatch/FTS5"). Notebook is all-markdown, non-executable, validated with
+`nbformat` (4.5). Screenshots were produced by pointing the real `frontend/` (via `npm run dev`) at
+a throwaway mock backend that served committed `runs/` files and a git-historical mid-run
+`status.json` snapshot; **nothing under `frontend/`, `backend/`, `pipeline/`, `config/`, or
+`runs/` was changed** — the only new/edited paths are `README.md`, `SYSTEM_OVERVIEW.ipynb`,
+`docs/img/overview/*.png`, and this note.
+
+---
+
+*Prior entry (retained for history):*
+
+**Branch `claude/reword-public-availability-warning-8137wz`: reworded the usage warning
 to drop the "sensitivity ceiling is OFFICIAL" claim (PROJECT_BRIEF §3; TECH_SPEC §4/§12.2;
 DESIGN_BRIEF §4.1; CLAUDE.md §2).** Tom asked for the pre-input warning to disclose public
 availability and ask users to keep sensitive material out, **without** the system claiming any
