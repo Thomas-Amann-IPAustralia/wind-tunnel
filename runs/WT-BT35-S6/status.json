@@ -4,7 +4,7 @@
   "run_code": "WT-BT35-S6",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T13:08:49Z",
+  "updated_at": "2026-07-19T13:09:10Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -380,9 +380,856 @@
         "doc": "ADM Guide (earlier ed.)",
         "locator": "p.30"
       }
+    },
+    {
+      "id": "evt_000042",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000043",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000044",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000045",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000046",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000047",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000048",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000049",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000050",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§AI Ethics Principles at a glance"
+      }
+    },
+    {
+      "id": "evt_000051",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000052",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000053",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§The rise of AI and ethics"
+      }
+    },
+    {
+      "id": "evt_000054",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000055",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000056",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000057",
+      "ts": "2026-07-19T13:08:52Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.32"
+      }
+    },
+    {
+      "id": "evt_000058",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000059",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§AI Ethics Principles at a glance"
+      }
+    },
+    {
+      "id": "evt_000060",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000061",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading TRS AI Guidelines",
+      "ref": {
+        "doc": "TRS AI Guidelines",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000062",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§A requirement for a technical explanation?"
+      }
+    },
+    {
+      "id": "evt_000063",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000064",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§The rise of AI and ethics"
+      }
+    },
+    {
+      "id": "evt_000065",
+      "ts": "2026-07-19T13:08:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000066",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Top 5",
+      "ref": {
+        "doc": "OAIC AI Training Top 5",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000067",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000068",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000069",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.91"
+      }
+    },
+    {
+      "id": "evt_000070",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000071",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000072",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000073",
+      "ts": "2026-07-19T13:08:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000074",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000075",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000076",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000077",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000078",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000079",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000080",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000081",
+      "ts": "2026-07-19T13:08:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000082",
+      "ts": "2026-07-19T13:09:00Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 33D"
+      }
+    },
+    {
+      "id": "evt_000083",
+      "ts": "2026-07-19T13:09:00Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000084",
+      "ts": "2026-07-19T13:09:00Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.40"
+      }
+    },
+    {
+      "id": "evt_000085",
+      "ts": "2026-07-19T13:09:00Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 33D"
+      }
+    },
+    {
+      "id": "evt_000086",
+      "ts": "2026-07-19T13:09:00Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 33D"
+      }
+    },
+    {
+      "id": "evt_000087",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000088",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000089",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000090",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.43"
+      }
+    },
+    {
+      "id": "evt_000091",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.27"
+      }
+    },
+    {
+      "id": "evt_000092",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000093",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000094",
+      "ts": "2026-07-19T13:09:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000095",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000096",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.50"
+      }
+    },
+    {
+      "id": "evt_000097",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000098",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000099",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000100",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000101",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000102",
+      "ts": "2026-07-19T13:09:02Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading TRS AI Guidelines",
+      "ref": {
+        "doc": "TRS AI Guidelines",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000103",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000104",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000105",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000106",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000107",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000108",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000109",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000110",
+      "ts": "2026-07-19T13:09:05Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000111",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.33"
+      }
+    },
+    {
+      "id": "evt_000112",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000113",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§AI Ethics Principles at a glance"
+      }
+    },
+    {
+      "id": "evt_000114",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000115",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading eSafety GenAI Position Statement",
+      "ref": {
+        "doc": "eSafety GenAI Position Statement",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000116",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.17"
+      }
+    },
+    {
+      "id": "evt_000117",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§The rise of AI and ethics"
+      }
+    },
+    {
+      "id": "evt_000118",
+      "ts": "2026-07-19T13:09:10Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 7"
+      }
     }
   ],
-  "log_cursor": 41,
+  "log_cursor": 118,
   "questions": null,
   "failure": null,
   "expected_ranges": {
