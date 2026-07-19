@@ -4,7 +4,7 @@
   "run_code": "WT-TSEP-B7",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-19T10:47:00Z",
+  "updated_at": "2026-07-19T10:47:21Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -15,7 +15,7 @@
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "active",
-    "full.specialist.solution_architect": "active",
+    "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "pending",
     "full.reviewer": "pending",
@@ -3970,9 +3970,38 @@
       "agent": "full.specialist.privacy",
       "type": "stage_complete",
       "detail": "Privacy specialist complete"
+    },
+    {
+      "id": "evt_000378",
+      "ts": "2026-07-19T10:47:11Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Archives Act 1983",
+      "ref": {
+        "doc": "Archives Act 1983",
+        "locator": "s 24"
+      }
+    },
+    {
+      "id": "evt_000379",
+      "ts": "2026-07-19T10:47:11Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Archives Act 1983",
+      "ref": {
+        "doc": "Archives Act 1983",
+        "locator": "s 26"
+      }
+    },
+    {
+      "id": "evt_000380",
+      "ts": "2026-07-19T10:47:21Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_complete",
+      "detail": "Solution Architect (sections) complete"
     }
   ],
-  "log_cursor": 377,
+  "log_cursor": 380,
   "questions": null,
   "failure": null,
   "expected_ranges": {
