@@ -1,0 +1,63 @@
+{
+  "revision": 1,
+  "coherence_findings": [],
+  "unresolved": [],
+  "declined": [],
+  "residual": {
+    "sections": {
+      "3.1": {
+        "consequence": "Minor",
+        "likelihood": "Possible",
+        "rating": "Medium",
+        "rationale": "The introduction of a pilot phase with a small cohort (6.5) and the availability of non-AI fallbacks (6.7, 8.4.2) reduce the severity of access barriers. However, confusion stemming from the 'creativity' dial remains possible for some users, resulting in short-term, reversible barriers."
+      },
+      "3.2": {
+        "consequence": "Moderate",
+        "likelihood": "Possible",
+        "rating": "Medium",
+        "rationale": "While data quality checks are planned (6.1), the lack of formal fairness definitions (5.1) and measurement methodologies (5.2) means the risk of inconsistent guidance for non-standard employment types remains largely unmitigated at this stage."
+      },
+      "3.3": {
+        "consequence": "Minor",
+        "likelihood": "Unlikely",
+        "rating": "Low",
+        "rationale": "Strict RAG grounding in official policy (6.1) and continuous monitoring for hallucinations (6.6) make the generation of demeaning representations unlikely, limiting any occurrences to isolated incidents."
+      },
+      "3.4": {
+        "consequence": "Moderate",
+        "likelihood": "Unlikely",
+        "rating": "Medium",
+        "rationale": "Pilot testing (6.5), continuous monitoring (6.6), and the implementation of a kill-switch (6.7) significantly reduce the likelihood of widespread incorrect guidance. However, if bad advice is followed, the financial impact on individual taxpayers remains a noticeable harm."
+      },
+      "3.5": {
+        "consequence": "Minor",
+        "likelihood": "Unlikely",
+        "rating": "Low",
+        "rationale": "The commitment to onshore data storage (7.1, 7.3) and the implementation of automated scrubbing for TFNs and sensitive identifiers (7.1) substantially lower both the likelihood of a privacy breach and the sensitivity of the exposed data."
+      },
+      "3.6": {
+        "consequence": "Minor",
+        "likelihood": "Unlikely",
+        "rating": "Low",
+        "rationale": "Exclusive Australian soil hosting, AES-256 encryption, and strict access controls (7.3) provide strong defenses against data compromise, reducing the likelihood of a breach and limiting potential exposure to a minor scale."
+      },
+      "3.7": {
+        "consequence": "Moderate",
+        "likelihood": "Unlikely",
+        "rating": "Medium",
+        "rationale": "Planned adversarial testing (6.4) and continuous monitoring for injection attacks (6.6) reduce the likelihood of system exploits. However, public-facing LLMs remain targets, and a successful exploit could still cause a contained but serious issue."
+      },
+      "3.8": {
+        "consequence": "Moderate",
+        "likelihood": "Possible",
+        "rating": "Medium",
+        "rationale": "The pilot phase (6.5) and kill-switch (6.7) help contain potential fallout. However, the public-facing nature of the bot and the controversial 'creativity' dial mean that any hallucinated tax advice could still attract media attention and moderately impact public trust."
+      }
+    },
+    "overall_residual": "Medium"
+  },
+  "provenance": {
+    "model": "gemini-3.1-pro-preview",
+    "prompt_version": "v1"
+  }
+}
