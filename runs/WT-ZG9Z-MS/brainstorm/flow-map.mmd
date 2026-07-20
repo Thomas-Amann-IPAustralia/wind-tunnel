@@ -1,43 +1,32 @@
 flowchart TD
-    subgraph Actors ["Stakeholders & Field Users"]
-        Farmer["Farmer / Producer"]
-        Inspector["Field Inspector / Vet"]
-        Analyst["Department Analyst"]
+    subgraph Data_Sources [Data Providers]
+        Farmer[Farmer / Livestock Owner]
+        Inspector[Field Inspector / Vet]
     end
 
-    subgraph Ingestion ["Data Ingestion & Storage"]
-        Portal["Ingestion Portal (Web/Mobile)"]
-        DB[("Livestock Health & Registry DB")]
+    subgraph Core_System [Livestock Data Management System]
+        Ingest[Ingestion API]
+        DB[(Livestock & Ag Database)]
+        Dashboard[Department Dashboard]
+        Alerts[Alerting Service]
     end
 
-    subgraph AI ["AI Analytics Core"]
-        Anomaly["Anomaly & Outbreak Detector"]
-        Predictive["Resource & Trend Predictor"]
+    subgraph AI_Layer [AI Analysis Engine]
+        AIEngine[AI Health & Risk Predictor]
+        ExtData[(External Weather & Registry Data)]
     end
 
-    subgraph External ["External Context"]
-        EnvData["Weather & Environmental APIs"]
+    subgraph Consumers [Department & Field Staff]
+        Analyst[Department Analyst]
     end
 
-    subgraph Output ["Insights & Action"]
-        Dashboard["Department Dashboard"]
-        Alerts["Alerting System"]
-    end
-
-    %% Data Flow
-    Farmer -->|Submits health & movement logs| Portal
-    Inspector -->|Uploads clinical reports| Portal
-    Portal -->|Structured telemetry & records| DB
-
-    %% AI Processing
-    DB -->|Historical & current health data| Anomaly
-    EnvData -->|Environmental context| Anomaly
-    Anomaly -->|Detected anomalies & risk scores| Predictive
-    Predictive -->|Outbreak predictions & resource forecasts| Dashboard
-
-    %% Feedback Loop / Actions
-    Dashboard -->|Visualizations & trends| Analyst
-    Predictive -->|High-risk triggers| Alerts
-    Alerts -->|Automated health alerts| Farmer
-    Alerts -->|Urgent dispatch alerts| Inspector
-    Analyst -->|Coordinates response & resources| Inspector
+    Farmer -->|Telemetry & movement logs| Ingest
+    Inspector -->|Clinical health reports| Ingest
+    Ingest -->|Structured records| DB
+    DB -->|Raw health & history data| AIEngine
+    ExtData -->|Environmental context| AIEngine
+    AIEngine -->|Risk scores & anomaly alerts| DB
+    DB -->|Aggregated insights| Dashboard
+    DB -->|Trigger thresholds| Alerts
+    Dashboard -->|Resource planning| Analyst
+    Alerts -->|Urgent health alerts| Inspector
