@@ -4,11 +4,11 @@
   "run_code": "WT-ZG9Z-MS",
   "phase": "threshold",
   "overall_state": "running",
-  "updated_at": "2026-07-20T01:58:20Z",
+  "updated_at": "2026-07-20T01:59:20Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
-    "threshold.reconciler": "active",
+    "threshold.reconciler": "complete",
     "threshold.rating_engine": "pending",
     "full.specialist.it_security": "pending",
     "full.specialist.privacy": "pending",
@@ -98,9 +98,16 @@
       "agent": "threshold.reconciler",
       "type": "stage_started",
       "detail": "Reconciler started"
+    },
+    {
+      "id": "evt_000012",
+      "ts": "2026-07-20T01:59:20Z",
+      "agent": "threshold.reconciler",
+      "type": "stage_complete",
+      "detail": "Reconciler complete"
     }
   ],
-  "log_cursor": 11,
+  "log_cursor": 12,
   "questions": null,
   "failure": null,
   "expected_ranges": {
