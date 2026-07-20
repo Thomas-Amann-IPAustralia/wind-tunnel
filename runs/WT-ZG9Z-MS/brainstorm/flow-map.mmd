@@ -1,0 +1,43 @@
+flowchart TD
+    subgraph Actors ["Stakeholders & Field Users"]
+        Farmer["Farmer / Producer"]
+        Inspector["Field Inspector / Vet"]
+        Analyst["Department Analyst"]
+    end
+
+    subgraph Ingestion ["Data Ingestion & Storage"]
+        Portal["Ingestion Portal (Web/Mobile)"]
+        DB[("Livestock Health & Registry DB")]
+    end
+
+    subgraph AI ["AI Analytics Core"]
+        Anomaly["Anomaly & Outbreak Detector"]
+        Predictive["Resource & Trend Predictor"]
+    end
+
+    subgraph External ["External Context"]
+        EnvData["Weather & Environmental APIs"]
+    end
+
+    subgraph Output ["Insights & Action"]
+        Dashboard["Department Dashboard"]
+        Alerts["Alerting System"]
+    end
+
+    %% Data Flow
+    Farmer -->|Submits health & movement logs| Portal
+    Inspector -->|Uploads clinical reports| Portal
+    Portal -->|Structured telemetry & records| DB
+
+    %% AI Processing
+    DB -->|Historical & current health data| Anomaly
+    EnvData -->|Environmental context| Anomaly
+    Anomaly -->|Detected anomalies & risk scores| Predictive
+    Predictive -->|Outbreak predictions & resource forecasts| Dashboard
+
+    %% Feedback Loop / Actions
+    Dashboard -->|Visualizations & trends| Analyst
+    Predictive -->|High-risk triggers| Alerts
+    Alerts -->|Automated health alerts| Farmer
+    Alerts -->|Urgent dispatch alerts| Inspector
+    Analyst -->|Coordinates response & resources| Inspector
