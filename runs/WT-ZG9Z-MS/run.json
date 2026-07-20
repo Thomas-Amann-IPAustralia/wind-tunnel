@@ -2,9 +2,9 @@
   "schema_version": 1,
   "run_id": "WT-ZG9Z-MS",
   "created_at": "2026-07-20T01:52:01Z",
-  "updated_at": "2026-07-20T01:59:24Z",
-  "stage": "THRESHOLD_REVIEW",
-  "stage_status": "awaiting_user",
+  "updated_at": "2026-07-20T01:59:50Z",
+  "stage": "CONCLUDED",
+  "stage_status": "complete",
   "phase": "threshold",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "05426f987a36fdf544d883cba4e83841c8a43272",
