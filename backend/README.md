@@ -14,7 +14,7 @@ DESIGN_BRIEF.md §6.
 | --- | --- |
 | `app.py` | FastAPI endpoints (§7) |
 | `brainstorm/` | interviewer, sufficiency, poc, map, feasibility gate |
-| `github_io.py` | commit helper: Contents/Git-Data API, serialise-per-run, retry on non-fast-forward (§14) |
+| `github_io.py` | commit helper: Contents/Git-Data API, serialise-per-run, retry on non-fast-forward + transient 5xx/network (§14) |
 | `dispatch.py` | `workflow_dispatch` trigger + handshake (§5.7, §14) |
 
 ## Load-bearing constraints

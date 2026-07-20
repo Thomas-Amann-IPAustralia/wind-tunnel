@@ -15,6 +15,20 @@ durable; every read and write goes through the GitHub HTTP API instead of
     re-reading the tip and retrying (§14); because every writer touches only
     its own disjoint ``runs/<run-id>/...`` path, the retry always succeeds.
 
+Two independent kinds of failure are absorbed, at two layers — the same
+belt-and-suspenders shape ``pipeline/llm.py`` uses for the Gemini seam:
+
+  * **Transient upstream failure** — a 429/5xx or a network blip — is retried at
+    the *transport* level (``_request``) with a short backoff. GitHub's Git Data
+    API intermittently returns ``503 "No server is currently available to
+    service your request"``; with no retry a single such blip anywhere in the
+    tree→commit→ref sequence killed the whole commit (the reported bug). This
+    covers reads too, so the status proxy's steady-state polling rides over a
+    momentary GitHub hiccup instead of surfacing it to the SPA.
+  * **Non-fast-forward** — a genuine write race on the ref — is retried at the
+    *commit* level (``commit_files``), which re-reads the tip and rebuilds. It is
+    a business-level conflict, not a transport failure, so it stays its own loop.
+
 Following ``pipeline/llm.py``'s pattern: one injectable ``GitHubClient``
 Protocol, a real implementation over stdlib ``urllib`` (no new HTTP-client
 dependency), and an in-memory fake for tests — nothing above this module knows
@@ -32,6 +46,15 @@ from typing import Literal, Protocol
 
 _API_ROOT = "https://api.github.com"
 _DEFAULT_TIMEOUT_S = 20
+
+# Transient HTTP statuses the client retries (rate limit + GitHub server-side).
+# The live ``503 "No server is currently available to service your request"``
+# that killed a commit is exactly this class. Everything else is permanent here
+# and returns to the caller unretried: 401/403 (bad token), 404 (missing file —
+# a legitimate ``get_file`` outcome), and 409/422 (a non-fast-forward ref update,
+# which has its own re-read-and-retry loop in ``commit_files``). Mirrors
+# ``llm.RETRYABLE_HTTP`` so the two seams treat upstream failure identically.
+RETRYABLE_HTTP = frozenset({429, 500, 502, 503, 504})
 
 
 class GitHubError(RuntimeError):
@@ -71,7 +94,13 @@ class RestGitHubClient:
     The token is read lazily (a field default, not a constructor requirement)
     so constructing a client at import time never fails even when the env is
     unconfigured — the same pattern ``llm.GeminiTransport`` uses; the loud
-    error surfaces only when a call is actually made without one."""
+    error surfaces only when a call is actually made without one.
+
+    Two retry knobs, one per failure kind: ``transient_retry_delays_s`` is the
+    transport-level backoff for a 429/5xx/network blip (so ``1 + len`` attempts
+    per HTTP call), ``commit_retries`` is the commit-level count for a
+    non-fast-forward ref race. Both drive the injectable ``sleep``, so tests
+    assert the backoff without waiting."""
 
     owner: str
     repo: str
@@ -79,6 +108,7 @@ class RestGitHubClient:
     token: str = field(default_factory=lambda: os.environ.get("WINDTUNNEL_PAT", ""))
     timeout_s: int = _DEFAULT_TIMEOUT_S
     commit_retries: int = 4
+    transient_retry_delays_s: tuple[float, ...] = (2.0, 5.0, 12.0)
     sleep: object = field(default=time.sleep)
 
     def get_file(self, path: str, *, if_none_match: str | None = None) -> GetFileResult:
@@ -187,6 +217,34 @@ class RestGitHubClient:
     def _request(
         self, method: str, url: str, *, headers: dict[str, str], body: dict | None = None
     ) -> tuple[int, bytes, dict[str, str]]:
+        """One HTTP call, retrying transient upstream failure (429/5xx, a network
+        blip, a timeout) with a short backoff before giving up loudly — the
+        hardening the live ``503 "No server is currently available"`` needed.
+        Permanent statuses (a 2xx/3xx success, or a 4xx the caller must branch on
+        such as 404-missing or 422-non-fast-forward) return unretried."""
+        attempts = 1 + len(self.transient_retry_delays_s)
+        last: _TransientHTTP | None = None
+        for attempt in range(attempts):
+            try:
+                return self._request_once(method, url, headers=headers, body=body)
+            except _TransientHTTP as exc:
+                last = exc
+                if attempt < attempts - 1:
+                    self.sleep(self.transient_retry_delays_s[attempt])
+        assert last is not None  # the loop only leaves early via a successful return
+        raise GitHubError(
+            f"{method} {url} failed after {attempts} attempts: {last}"
+        ) from last.__cause__
+
+    def _request_once(
+        self, method: str, url: str, *, headers: dict[str, str], body: dict | None = None
+    ) -> tuple[int, bytes, dict[str, str]]:
+        """The raw call. Raises ``_TransientHTTP`` on a retryable status or a
+        network error (for ``_request`` to absorb); returns any other status to
+        the caller. Retrying a POST (create tree/commit) is safe — git objects are
+        content-addressed, so a repeat yields the same tree sha or an unreferenced
+        orphan commit; retrying the ref PATCH re-sends the same target sha, which
+        GitHub treats as a no-op when the ref already moved there."""
         import urllib.error
         import urllib.request
 
@@ -198,14 +256,26 @@ class RestGitHubClient:
             with urllib.request.urlopen(req, timeout=self.timeout_s) as resp:
                 return resp.status, resp.read(), dict(resp.headers)
         except urllib.error.HTTPError as exc:
-            return exc.code, exc.read(), dict(exc.headers or {})
-        except urllib.error.URLError as exc:
-            raise GitHubError(f"{method} {url} failed: {exc.reason}") from exc
+            payload = exc.read()
+            if exc.code in RETRYABLE_HTTP:
+                raise _TransientHTTP(
+                    f"{method} {url} → HTTP {exc.code}: {payload[:200]!r}"
+                ) from exc
+            return exc.code, payload, dict(exc.headers or {})
+        except (urllib.error.URLError, TimeoutError) as exc:
+            reason = getattr(exc, "reason", exc)
+            raise _TransientHTTP(f"{method} {url} failed: {reason}") from exc
 
 
 class _NonFastForward(RuntimeError):
     """Internal: the ref update lost a race. Caught by ``commit_files``' retry
     loop — never escapes this module."""
+
+
+class _TransientHTTP(RuntimeError):
+    """Internal: a retryable transport failure — a 429/5xx or a network blip.
+    Caught by ``_request``'s retry loop; on exhaustion it becomes a loud
+    ``GitHubError``. Never escapes this module (cf. ``llm._TransientHTTP``)."""
 
 
 def _quote(path: str) -> str:

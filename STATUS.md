@@ -2,7 +2,50 @@
 
 ## Current stage
 
-**This branch (`claude/readme-system-overview-revision-u7hf9h`): rewrote `SYSTEM_OVERVIEW.ipynb`
+**This branch (`claude/windtunnel-http-503-y01ix0`): the backend commit helper now absorbs
+transient GitHub 5xx/network failures, not just non-fast-forward races — fixing the
+`Could not create tree: HTTP 503: "No server is currently available to service your request"`
+that killed a live commit while a user was accessing the tool (TECH_SPEC §14; CLAUDE.md §4, §9).**
+Tom hit the 503 and asked whether it was a multi-user collision. **It is not.** The 503 is
+GitHub's own generic server-side unavailability, returned on the `POST /git/trees` step of the
+Git Data API commit sequence (`backend/github_io.py`) — a transient upstream hiccup, the same
+class as the Gemini 503 the pipeline already rides over (WT-PX5H-3D). A genuine two-user write
+race looks completely different and was **already** handled: it surfaces as a non-fast-forward
+(409/422) on the ref PATCH, caught by `commit_files`' re-read-and-retry loop, and because every
+writer touches only its own disjoint `runs/<run-id>/…` path (TECH_SPEC §14) those retries always
+succeed. The real gap: `commit_files` retried **only** non-fast-forward, never a transient
+5xx/network error, so a single GitHub blip anywhere in the tree→commit→ref sequence was instantly
+fatal (surfaced as a 502/503 to the SPA) — inconsistent with `pipeline/llm.py`, whose
+`GeminiTransport` already absorbs 429/5xx/network with bounded backoff. Fix = give the commit
+helper the same transport layer:
+- **`backend/github_io.py` — transient retry at the HTTP boundary.** `_request` split into a
+  retry loop + `_request_once`; a retryable status (`RETRYABLE_HTTP = {429,500,502,503,504}`) or a
+  network error/timeout raises the internal `_TransientHTTP` marker, retried over
+  `transient_retry_delays_s = (2,5,12)` (so 1+3 attempts) before becoming a loud `GitHubError`.
+  Permanent statuses return unretried — 404 (a legitimate `get_file` "missing"), 401/403 (bad
+  token), 409/422 (a non-fast-forward, which keeps its **own** commit-level loop). Two independent
+  layers, one per failure kind. Reads are covered too, so the status-proxy poll rides over a
+  momentary GitHub 5xx instead of erroring the SPA. POST/PATCH retries are safe (git objects are
+  content-addressed; a re-sent ref PATCH to the same sha is a no-op) — noted in the code.
+- **Tests (`backend/tests/test_github_io.py`, new, 9):** the transport retries a 503 then
+  succeeds / retries a network blip / does **not** retry a permanent 404 or a non-fast-forward 422 /
+  gives up loudly after exhausting; `get_file` rides over a 5xx; and end-to-end — `commit_files`
+  **survives a transient tree 503**, still fails **loudly** on a permanent tree 422 (the "Could not
+  create tree" guard unchanged), and still **retries a non-fast-forward** ref race. All monkeypatch
+  `urllib.request.urlopen` with a recorded `sleep`, network-/git-free (§15), mirroring
+  `pipeline/tests/test_llm.py`.
+- **Docs:** the module docstring + `backend/README.md` note the transient layer. **No document
+  contradiction to fix** — TECH_SPEC §14 covers non-fast-forward retry but is *silent* on transient
+  5xx for the commit helper; per CLAUDE.md §2 silence is a decision to record, made here. The
+  pipeline side commits via a working-copy `git push` in Actions (a different mechanism, its own
+  fetch→rebase→push durability) and is unaffected.
+
+**Verified:** backend 144 tests green (135 prior + 9), ruff format + check clean. Pipeline and
+frontend untouched.
+
+---
+
+**Prior branch (`claude/readme-system-overview-revision-u7hf9h`): rewrote `SYSTEM_OVERVIEW.ipynb`
 into a comprehensive, plain-language, illustrated tour, and slimmed `README.md` to defer to it
 (documentation only — no code or behaviour change).** The overview now carries 14 figures under
 `docs/img/overview/`: two hand-built explainer diagrams (the three-programs-plus-shared-store
