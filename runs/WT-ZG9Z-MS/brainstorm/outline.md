@@ -7,18 +7,18 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-ZG9Z-MS"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-ZG9Z-MS"
+title: ""
+summary: ""
 created_at: "2026-07-20T01:52:01Z"
-updated_at: "2026-07-20T01:52:01Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-20T01:52:44Z"
+resolved: ["problem"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Hello
 
 <!-- section: solution -->
 ## 2. Proposed solution
