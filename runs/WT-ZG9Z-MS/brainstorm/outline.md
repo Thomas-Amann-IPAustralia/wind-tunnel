@@ -8,17 +8,17 @@
 ---
 schema_version: 1
 run_id: "WT-ZG9Z-MS"
-title: ""
-summary: ""
+title: "Livestock Data Management System"
+summary: "An AI-driven system to streamline the tracking and analysis of livestock health and agricultural data."
 created_at: "2026-07-20T01:52:01Z"
-updated_at: "2026-07-20T01:52:44Z"
+updated_at: "2026-07-20T01:55:24Z"
 resolved: ["problem"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-Hello
+Public agricultural departments struggle to efficiently track and analyze large-scale livestock data, leading to delays in health monitoring and resource management.
 
 <!-- section: solution -->
 ## 2. Proposed solution
