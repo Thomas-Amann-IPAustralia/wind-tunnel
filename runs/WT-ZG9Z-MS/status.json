@@ -4,9 +4,9 @@
   "run_code": "WT-ZG9Z-MS",
   "phase": "threshold",
   "overall_state": "running",
-  "updated_at": "2026-07-20T01:57:51Z",
+  "updated_at": "2026-07-20T01:58:15Z",
   "nodes": {
-    "threshold.generalist_a": "active",
+    "threshold.generalist_a": "complete",
     "threshold.generalist_b": "active",
     "threshold.reconciler": "pending",
     "threshold.rating_engine": "pending",
@@ -70,9 +70,16 @@
       "agent": "threshold.generalist_b",
       "type": "drafting",
       "detail": "drafting threshold sections 1–4"
+    },
+    {
+      "id": "evt_000008",
+      "ts": "2026-07-20T01:58:15Z",
+      "agent": "threshold.generalist_a",
+      "type": "stage_complete",
+      "detail": "Assessor A complete"
     }
   ],
-  "log_cursor": 7,
+  "log_cursor": 8,
   "questions": null,
   "failure": null,
   "expected_ranges": {
