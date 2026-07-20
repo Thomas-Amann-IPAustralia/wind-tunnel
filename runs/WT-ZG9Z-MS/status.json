@@ -3,8 +3,8 @@
   "run_id": "WT-ZG9Z-MS",
   "run_code": "WT-ZG9Z-MS",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-20T01:59:22Z",
+  "overall_state": "paused",
+  "updated_at": "2026-07-20T01:59:24Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",

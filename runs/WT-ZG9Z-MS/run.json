@@ -2,11 +2,14 @@
   "schema_version": 1,
   "run_id": "WT-ZG9Z-MS",
   "created_at": "2026-07-20T01:52:01Z",
-  "updated_at": "2026-07-20T01:57:49Z",
-  "stage": "THRESHOLD_DRAFTING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-20T01:59:24Z",
+  "stage": "THRESHOLD_REVIEW",
+  "stage_status": "awaiting_user",
   "phase": "threshold",
-  "checkpoints": {},
+  "checkpoints": {
+    "THRESHOLD_DRAFTING": "05426f987a36fdf544d883cba4e83841c8a43272",
+    "THRESHOLD_RECONCILING": "5a67489e6f9fd205b7e0d411ab0aea9b08de90a0"
+  },
   "revisions": {
     "poc": 0,
     "flow_map": 0,
