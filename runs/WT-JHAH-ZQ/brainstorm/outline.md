@@ -7,18 +7,18 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-JHAH-ZQ"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-JHAH-ZQ"
+title: ""
+summary: ""
 created_at: "2026-07-21T11:58:17Z"
-updated_at: "2026-07-21T11:58:17Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-21T11:59:56Z"
+resolved: ["problem"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Most people don't keep up with the leading edge capabilities of AI. Therefor it can be difficult for people to understand the implications of the technology and what it might mean for their job and the work they do for Australians.
 
 <!-- section: solution -->
 ## 2. Proposed solution
