@@ -11,14 +11,14 @@ run_id: "WT-62FF-CY"
 title: "Austudy Application Modernisation"
 summary: "An AI-assisted triage and guidance tool that helps students submit complete applications while providing processing officers with pre-verified summaries to accelerate eligibility decisions."
 created_at: "2026-07-24T05:59:18Z"
-updated_at: "2026-07-24T06:30:41Z"
+updated_at: "2026-07-24T06:31:51Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-The current Austudy application process is manual, document-heavy, and prone to delays caused by incomplete submissions or complex eligibility verification, leading to long wait times for students.
+The current Austudy application process is manual, document-heavy, and prone to delays, with processing times stretching up to six months due to incomplete submissions and complex eligibility verification.
 
 <!-- section: solution -->
 ## 2. Proposed solution
@@ -58,4 +58,4 @@ Must comply with strict privacy and data sovereignty requirements for sensitive 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-A 30% reduction in average processing time and a measurable decrease in 'request for information' (RFI) notices sent to students due to incomplete initial applications.
+A significant reduction in total application processing time from six months to a target of weeks, alongside a measurable decrease in 'request for information' (RFI) notices sent to students.
