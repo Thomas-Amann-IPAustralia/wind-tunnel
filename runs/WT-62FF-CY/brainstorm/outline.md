@@ -9,10 +9,10 @@
 schema_version: 1
 run_id: "WT-62FF-CY"
 title: "Austudy Application Modernisation"
-summary: "An AI-assisted triage tool to accelerate Austudy eligibility verification by automating document review and flagging application gaps."
+summary: "An AI-assisted triage and guidance tool that helps students submit complete applications while providing processing officers with pre-verified summaries to accelerate eligibility decisions."
 created_at: "2026-07-24T05:59:18Z"
-updated_at: "2026-07-24T06:30:20Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "alternatives"]
+updated_at: "2026-07-24T06:30:41Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
 <!-- section: problem -->
@@ -38,7 +38,7 @@ Sensitive personal information, including financial records, enrolment status, a
 <!-- section: happy_path -->
 ## 5. Happy path
 
-*One ordinary, successful use — narrated start to finish.*
+A student uploads documents via the portal; the AI provides real-time feedback on missing fields or unclear evidence. Once submitted, the AI generates a summary report for the processing officer, highlighting verified data points and flagging potential policy conflicts, allowing the officer to approve the application in minutes rather than hours.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
@@ -48,14 +48,14 @@ Non-AI options include digitising the existing paper-based workflow, hiring more
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-*What the user sees and touches — or an honest "nothing; it's headless."*
+A dual-interface system: a student-facing 'application assistant' widget that provides real-time validation feedback, and an internal dashboard for officers that displays AI-extracted evidence summaries alongside the original documents.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-*The hard limits and strong preferences: technical, organisational, maintenance.*
+Must comply with strict privacy and data sovereignty requirements for sensitive personal information; the system must maintain a clear audit trail of all AI-assisted suggestions for human oversight.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-*How you'd know, six months in, that it worked.*
+A 30% reduction in average processing time and a measurable decrease in 'request for information' (RFI) notices sent to students due to incomplete initial applications.

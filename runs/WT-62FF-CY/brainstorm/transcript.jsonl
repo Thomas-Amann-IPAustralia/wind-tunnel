@@ -1,2 +1,4 @@
 {"role": "user", "text": "Modernise the process for getting access to austudy", "ts": "2026-07-24T06:30:20Z"}
 {"role": "assistant", "text": "That's a high-impact area; I've assumed we're focusing on automating the document verification and eligibility assessment to reduce wait times for students. To get us started, are we looking at a tool that assists the internal processing staff, or one that interacts directly with the students to help them submit a 'perfect' application the first time?", "ts": "2026-07-24T06:30:20Z"}
+{"role": "user", "text": "Both", "ts": "2026-07-24T06:30:41Z"}
+{"role": "assistant", "text": "That's a powerful dual-approach: the AI guides the student to submit clean data, then pre-verifies it for the officer. To make this work, how do we handle the 'trust' gap—if the AI tells a student they're eligible, but an officer later disagrees, how do we manage that discrepancy?", "ts": "2026-07-24T06:30:41Z"}
