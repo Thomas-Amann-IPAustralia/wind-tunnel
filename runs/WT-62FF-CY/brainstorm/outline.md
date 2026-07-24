@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-62FF-CY"
 title: "Austudy Application Modernisation"
-summary: "An AI-assisted triage and guidance tool that uses real-time ATO data integration to verify eligibility and accelerate application processing."
+summary: "An AI-assisted triage and guidance tool that uses real-time ATO data and student profile verification to accelerate application processing."
 created_at: "2026-07-24T05:59:18Z"
-updated_at: "2026-07-24T06:36:45Z"
+updated_at: "2026-07-24T06:38:24Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -38,7 +38,7 @@ Sensitive personal information, including financial records, enrolment status, a
 <!-- section: happy_path -->
 ## 5. Happy path
 
-A student uploads documents and provides consent for ATO data matching. The AI validates the application in real-time; if data matches, it is queued for automated approval. In the 10% of cases where the AI detects a discrepancy between self-reported data and ATO records, the system flags the specific conflict for a human officer, providing a side-by-side 'diff' comparison of the conflicting data points to facilitate rapid resolution.
+A student uploads documents and provides consent for ATO data matching. The AI validates the application in real-time by cross-referencing ATO income data with age and recent school enrolment records. If data matches, it is queued for automated approval. In the 10% of cases where the AI detects a discrepancy—such as conflicting income data or ambiguous study history—the system flags the specific conflict for a human officer, providing a side-by-side 'diff' comparison of the conflicting data points and a summary of the policy-relevant age/schooling factors to facilitate rapid resolution.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
