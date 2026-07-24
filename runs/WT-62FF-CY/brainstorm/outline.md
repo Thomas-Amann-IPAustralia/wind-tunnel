@@ -11,7 +11,7 @@ run_id: "WT-62FF-CY"
 title: "Austudy Application Modernisation"
 summary: "An AI-assisted triage and guidance tool that uses real-time ATO data integration to verify eligibility and accelerate application processing."
 created_at: "2026-07-24T05:59:18Z"
-updated_at: "2026-07-24T06:32:27Z"
+updated_at: "2026-07-24T06:33:14Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -53,7 +53,7 @@ A dual-interface system: a student-facing 'application assistant' widget that pr
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-Must comply with strict privacy and data sovereignty requirements for sensitive personal information; the system must maintain a clear audit trail of all AI-assisted suggestions for human oversight.
+Must comply with strict privacy and data sovereignty requirements for sensitive personal information; the system must maintain a clear audit trail of all AI-assisted suggestions for human oversight. We assume a policy-driven approach to cross-agency data sharing for operational efficiency, provided it remains within the bounds of existing legislative frameworks for data usage.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
