@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-62FF-CY"
 title: "Austudy Application Modernisation"
-summary: "An AI-assisted triage and guidance tool that helps students submit complete applications while providing processing officers with pre-verified summaries to accelerate eligibility decisions."
+summary: "An AI-assisted triage and guidance tool that uses real-time ATO data integration to verify eligibility and accelerate application processing."
 created_at: "2026-07-24T05:59:18Z"
-updated_at: "2026-07-24T06:31:51Z"
+updated_at: "2026-07-24T06:32:27Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -33,7 +33,7 @@ Primary users are Centrelink processing officers; students are the primary stake
 <!-- section: data -->
 ## 4. Data
 
-Sensitive personal information, including financial records, enrolment status, and identity documents sourced directly from student applications.
+Sensitive personal information, including financial records, enrolment status, and identity documents sourced from student applications, supplemented by real-time income and employment data retrieved via secure API from the Australian Taxation Office (ATO).
 
 <!-- section: happy_path -->
 ## 5. Happy path
