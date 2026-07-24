@@ -11,7 +11,7 @@ run_id: "WT-62FF-CY"
 title: "Austudy Application Modernisation"
 summary: "An AI-assisted triage and guidance tool that uses real-time ATO data integration to verify eligibility and accelerate application processing."
 created_at: "2026-07-24T05:59:18Z"
-updated_at: "2026-07-24T06:33:14Z"
+updated_at: "2026-07-24T06:33:58Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -38,7 +38,7 @@ Sensitive personal information, including financial records, enrolment status, a
 <!-- section: happy_path -->
 ## 5. Happy path
 
-A student uploads documents via the portal; the AI provides real-time feedback on missing fields or unclear evidence. Once submitted, the AI generates a summary report for the processing officer, highlighting verified data points and flagging potential policy conflicts, allowing the officer to approve the application in minutes rather than hours.
+A student uploads documents and provides consent for ATO data matching. The AI validates the application in real-time; if data matches, it is queued for automated approval. In the 10% of cases where the AI detects a discrepancy between self-reported data and ATO records, the system flags the specific conflict for a human officer, providing a side-by-side comparison of the conflicting data points to facilitate rapid resolution.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
@@ -53,7 +53,7 @@ A dual-interface system: a student-facing 'application assistant' widget that pr
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-Must comply with strict privacy and data sovereignty requirements for sensitive personal information; the system must maintain a clear audit trail of all AI-assisted suggestions for human oversight. We assume a policy-driven approach to cross-agency data sharing for operational efficiency, provided it remains within the bounds of existing legislative frameworks for data usage.
+Must comply with strict privacy and data sovereignty requirements. The system must maintain a clear audit trail of all AI-assisted suggestions. We assume a policy-driven approach to cross-agency data sharing, with a defined 'human-in-the-loop' protocol for the 10% of cases where automated verification fails or identifies discrepancies.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
