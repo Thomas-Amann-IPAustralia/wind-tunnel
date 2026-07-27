@@ -4,7 +4,7 @@
   "run_code": "WT-GCDX-T3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-27T04:52:53Z",
+  "updated_at": "2026-07-27T04:53:09Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
-    "full.specialist.legal": "active",
+    "full.specialist.legal": "complete",
     "full.specialist.data_governance": "active",
     "full.specialist.solution_architect": "active",
     "full.checkpoint": "pending",
@@ -1631,9 +1631,489 @@
       "agent": "full.specialist.ethics",
       "type": "stage_complete",
       "detail": "Ethics & Fairness specialist complete"
+    },
+    {
+      "id": "evt_000159",
+      "ts": "2026-07-27T04:52:53Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading QB4AIRA",
+      "ref": {
+        "doc": "QB4AIRA",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000160",
+      "ts": "2026-07-27T04:52:53Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000161",
+      "ts": "2026-07-27T04:52:53Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Pattern Catalogue",
+      "ref": {
+        "doc": "RAI Pattern Catalogue",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000162",
+      "ts": "2026-07-27T04:52:53Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.25"
+      }
+    },
+    {
+      "id": "evt_000163",
+      "ts": "2026-07-27T04:52:53Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading QB4AIRA",
+      "ref": {
+        "doc": "QB4AIRA",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000164",
+      "ts": "2026-07-27T04:52:53Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000165",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000166",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Pattern Catalogue Mapping",
+      "ref": {
+        "doc": "RAI Pattern Catalogue Mapping",
+        "locator": "RAI pattern catalogue!r26"
+      }
+    },
+    {
+      "id": "evt_000167",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Suitability Assessment",
+      "ref": {
+        "doc": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000168",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Continuous RAI Validator",
+      "ref": {
+        "doc": "Continuous RAI Validator",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000169",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000170",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r105"
+      }
+    },
+    {
+      "id": "evt_000171",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000172",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Acceptance Testing",
+      "ref": {
+        "doc": "RAI Acceptance Testing",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000173",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000174",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000175",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000176",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000177",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000178",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000179",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000180",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000181",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000182",
+      "ts": "2026-07-27T04:52:56Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Records supporting development and implementation of AI systems"
+      }
+    },
+    {
+      "id": "evt_000183",
+      "ts": "2026-07-27T04:52:58Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r8"
+      }
+    },
+    {
+      "id": "evt_000184",
+      "ts": "2026-07-27T04:52:58Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000185",
+      "ts": "2026-07-27T04:52:58Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Pattern Catalogue Mapping",
+      "ref": {
+        "doc": "RAI Pattern Catalogue Mapping",
+        "locator": "RAI pattern catalogue!r26"
+      }
+    },
+    {
+      "id": "evt_000186",
+      "ts": "2026-07-27T04:52:58Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Suitability Assessment",
+      "ref": {
+        "doc": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000187",
+      "ts": "2026-07-27T04:52:58Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Continuous RAI Validator",
+      "ref": {
+        "doc": "Continuous RAI Validator",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000188",
+      "ts": "2026-07-27T04:52:58Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000189",
+      "ts": "2026-07-27T04:52:58Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000190",
+      "ts": "2026-07-27T04:52:58Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000191",
+      "ts": "2026-07-27T04:53:01Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000192",
+      "ts": "2026-07-27T04:53:01Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000193",
+      "ts": "2026-07-27T04:53:01Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.32"
+      }
+    },
+    {
+      "id": "evt_000194",
+      "ts": "2026-07-27T04:53:01Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000195",
+      "ts": "2026-07-27T04:53:01Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000196",
+      "ts": "2026-07-27T04:53:01Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r8"
+      }
+    },
+    {
+      "id": "evt_000197",
+      "ts": "2026-07-27T04:53:01Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.35"
+      }
+    },
+    {
+      "id": "evt_000198",
+      "ts": "2026-07-27T04:53:01Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000199",
+      "ts": "2026-07-27T04:53:04Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§General principles for managing records generated by AI"
+      }
+    },
+    {
+      "id": "evt_000200",
+      "ts": "2026-07-27T04:53:04Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Determining how long to keep AI generated records"
+      }
+    },
+    {
+      "id": "evt_000201",
+      "ts": "2026-07-27T04:53:04Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Archives Act 1983",
+      "ref": {
+        "doc": "Archives Act 1983",
+        "locator": "s 24"
+      }
+    },
+    {
+      "id": "evt_000202",
+      "ts": "2026-07-27T04:53:09Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_complete",
+      "detail": "Legal & Administrative Law specialist complete"
     }
   ],
-  "log_cursor": 158,
+  "log_cursor": 202,
   "questions": null,
   "failure": null,
   "expected_ranges": {
