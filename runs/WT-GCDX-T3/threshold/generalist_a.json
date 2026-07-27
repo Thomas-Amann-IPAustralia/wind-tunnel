@@ -1,0 +1,54 @@
+{
+  "label": "generalist_a",
+  "sections": {
+    "1": "### 1.1 AI Use Case Profile\n**Title:** Policy Impact Mapper (WT-GCDX-T3)\n**Summary:** An AI tool that automates the identification of internal policy dependencies by cross-referencing new legislation against a version-controlled snapshot of agency documentation.\n\n### 1.2 Establishing Impact Assessment Responsibilities\nNot stated in the outline.\n\n### 1.3 Additional Roles and Responsibilities\nNot stated in the outline.\n\n### 1.4 AI Use Case Description\nThe Policy Impact Mapper ingests new legislative requirements and cross-references them against an agency's internal document repository to flag affected policies, forms, and processes with clear citations.\n\n### 1.5 In-scope Use Case\nYes. The tool is designed to assist policy, legal, compliance, and operational staff in identifying policy dependencies.\n\n### 1.6 Type of AI Technology\nAI-powered impact mapping and retrieval technology. The specific model architecture is not stated in the outline.\n\n### 1.7 Usage Pattern\nDecision-support tool (human-in-the-loop). Users upload source text, view a generated impact map, and interact with a 'review/reject/assign' workflow. No automated changes are made.\n\n### 1.8 Administrative Decisions\nThe tool does not make administrative decisions; it is strictly restricted to decision-support with no automated changes.\n\n### 1.9 Domain\nInternal policy, compliance, and legislative alignment.\n\n### 1.10 Expert Contributions\nNot stated in the outline.\n\n### 1.11 Impact Assessment Review Log\nNot stated in the outline.",
+    "2": "### 2.1 Problem Definition\nGovernment agencies struggle to manually track how new legislation or policy updates impact existing internal frameworks, leading to slow response times and the risk of missing critical dependencies.\n\n### 2.2 AI Use Case Purpose\nTo automate the identification of internal policy dependencies by cross-referencing new legislation against a version-controlled snapshot of agency documentation, flagging affected policies, forms, and processes with clear citations.\n\n### 2.3 Non-AI Alternatives\nManual review via cross-departmental working groups, or keyword-based search tools that lack semantic understanding of legislative intent.\n\n### 2.4 Identifying Stakeholders\nPrimary users are policy, legal, compliance, and operational staff. Affected stakeholders include the public and frontline staff who rely on accurate, up-to-date agency guidance.\n\n### 2.5 Expected Benefits\nFaster discovery of policy dependencies compared to manual review, higher accuracy in identifying affected internal frameworks, and reduced risk of missing critical legislative dependencies.",
+    "4": "### 4.1 Assessing Officer Recommendation\nThe Policy Impact Mapper (WT-GCDX-T3) is proposed as a decision-support tool to assist policy and compliance staff in mapping legislative changes to internal agency documents. While the tool maintains a human-in-the-loop workflow and is restricted to unclassified data, several inherent risks must be carefully managed. Specifically, the risk of false negatives (missing critical policy dependencies) could lead to operational non-compliance, outdated public guidance, and subsequent reputational damage. It is recommended that the project team establish rigorous validation protocols during the proof-of-concept phase, utilizing the 'gold standard' historical dataset to calibrate retrieval thresholds. Furthermore, clear guidelines must be provided to policy officers emphasizing that the tool is strictly for decision support and does not replace comprehensive manual legal review. Continuous monitoring of the ratio of confirmed versus rejected suggestions will be critical to ensuring the system's ongoing accuracy and safety."
+  },
+  "risks": {
+    "3.1": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "If the tool fails to identify a critical policy dependency (a false negative), frontline staff may continue to operate under outdated guidelines. This could lead to noticeable access issues or incorrect service delivery for specific cohorts of the public who rely on accurate agency guidance."
+    },
+    "3.2": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "If the AI fails to flag a legislative change that removes a discriminatory barrier or introduces new protections, the agency may continue to apply outdated, discriminatory internal policies. This could cause noticeable harm to affected individuals or groups before the error is manually caught and corrected."
+    },
+    "3.3": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rationale": "The system operates on formal legislative texts and curated internal policy documents. While the risk of demeaning representations is low due to the nature of the input data, there is a minor risk that outdated terminology in historical documents could be surfaced or propagated if not carefully managed."
+    },
+    "3.4": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "A failure to identify a critical legislative dependency (e.g., a change in safety standards or compliance obligations) could result in the agency operating out of alignment with the law. This could cause noticeable operational, financial, or regulatory harm to the organisation and the public relying on its services."
+    },
+    "3.5": {
+      "consequence": "Minor",
+      "likelihood": "Possible",
+      "rationale": "The system is designed to process unclassified internal policy documents and public legislation. While it is not intended to handle sensitive personal information, there is a possibility that internal documents may contain minor personal data (e.g., staff contact details, authors). A minor breach or exposure of this data is possible but would cause limited distress."
+    },
+    "3.6": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "Although restricted to unclassified data, the system ingests a comprehensive snapshot of the agency's internal document repository. A security compromise of this data store could expose sensitive internal operational procedures, guidelines, or draft policies, raising moderate security and privacy concerns that would require investigation."
+    },
+    "3.7": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "The system uses a web-based dashboard for uploading source text and interacting with policy mappings. A vulnerability in this interface or the underlying document ingestion pipeline could lead to unauthorized access or data leaks of internal policy structures, which is a serious but containable system security concern."
+    },
+    "3.8": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "If the agency fails to implement a major legislative change because the AI tool missed the dependency, and this leads to incorrect service delivery or legal non-compliance, it would likely attract media attention and public scrutiny. This would raise questions about the agency's oversight of its AI tools, causing a moderate impact on public trust."
+    }
+  },
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
