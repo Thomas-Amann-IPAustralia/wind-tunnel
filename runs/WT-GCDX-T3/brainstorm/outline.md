@@ -11,7 +11,7 @@ run_id: "WT-GCDX-T3"
 title: "Policy Impact Mapper"
 summary: "An AI tool that automates the identification of internal policy dependencies by cross-referencing new legislation against a version-controlled snapshot of agency documentation."
 created_at: "2026-07-27T04:44:01Z"
-updated_at: "2026-07-27T04:48:35Z"
+updated_at: "2026-07-27T04:49:41Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -53,9 +53,9 @@ A web-based dashboard where users can upload source text, view a generated impac
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-Must remain a decision-support tool only; no automated changes. Restricted to unclassified internal data. For the POC, it will use a manually curated, frozen document set rather than live repository integration to ensure data integrity and auditability.
+Must remain a decision-support tool only; no automated changes. Restricted to unclassified internal data. For the POC, it will use a manually curated, frozen document set. The system will be seeded with a 'gold standard' set of 10-15 historical changes to calibrate retrieval rules, glossary usage, and confidence thresholds before any live testing.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-The success criteria now include a structured evaluation framework: tracking the ratio of confirmed versus rejected suggestions, categorizing false positives to inform system tuning, and measuring 'human-only' discoveries to identify gaps in the AI's retrieval logic. Performance will be validated through regression testing against a fixed set of examples after each iterative update.
+Success is defined by the tool finding a useful proportion of known dependencies from the gold standard set, with reviewers confirming that the review process is faster than manual discovery. Metrics include the ratio of confirmed vs. rejected suggestions, categorization of false positives to refine retrieval logic, and regression testing against the fixed example set after every iteration.
