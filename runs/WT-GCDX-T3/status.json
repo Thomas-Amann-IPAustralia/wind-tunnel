@@ -4,7 +4,7 @@
   "run_code": "WT-GCDX-T3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-27T04:53:09Z",
+  "updated_at": "2026-07-27T04:53:19Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -15,7 +15,7 @@
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "active",
-    "full.specialist.solution_architect": "active",
+    "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "pending",
     "full.reviewer": "pending",
@@ -2111,9 +2111,16 @@
       "agent": "full.specialist.legal",
       "type": "stage_complete",
       "detail": "Legal & Administrative Law specialist complete"
+    },
+    {
+      "id": "evt_000203",
+      "ts": "2026-07-27T04:53:19Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_complete",
+      "detail": "Solution Architect (sections) complete"
     }
   ],
-  "log_cursor": 202,
+  "log_cursor": 203,
   "questions": null,
   "failure": null,
   "expected_ranges": {

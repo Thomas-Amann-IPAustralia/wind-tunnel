@@ -1,0 +1,70 @@
+{
+  "specialist": "solution_architect",
+  "sections": {
+    "6.3": "Not applicable. The Policy Impact Mapper is currently being developed as an internal Proof of Concept (POC) using a manually curated, frozen document set, and the outline does not indicate that an external AI model or system is being procured. If procurement of a commercial model or third-party system is considered in future phases, a formal suitability assessment will be required to ensure the technology aligns with the agency's specific compliance and operational needs, and that its benefits outweigh the complexity and risks of adoption.",
+    "6.4": "Yes. The AI system's reliability and safety will be tested using a 'gold standard' set of 10-15 historical changes to calibrate retrieval rules, glossary usage, and confidence thresholds before any live testing occurs. Additionally, the project plan incorporates regression testing against this fixed example set after every iteration to ensure that updates do not degrade performance, which aligns with established responsible AI acceptance testing practices to verify that ethical and operational requirements are met.",
+    "6.5": "Yes. The project is currently in a Proof of Concept (POC) stage, which serves as a controlled pilot. During this phase, the system will be restricted to unclassified internal data and a frozen document set to safely evaluate whether the tool can identify a useful proportion of known dependencies and speed up the discovery process compared to manual review before any broader deployment is considered.",
+    "6.6": "Yes. A performance monitoring and evaluation plan has been established. The system will track key metrics, including the ratio of confirmed versus rejected suggestions and the categorization of false positives to continuously refine the retrieval logic. This continuous validation approach is essential for identifying potential drift and ensuring the system's outputs remain accurate and aligned with defined objectives over time.",
+    "6.8": "No. Although the threshold assessment strongly recommends implementing mandatory training and clear guidelines to address automation bias and ensure policy officers critically evaluate AI-generated suggestions, the current use-case outline does not state that a formal training process or curriculum has been established yet. To comply with government standards, a structured training program must be developed prior to deployment to ensure operators are sufficiently skilled in interpreting AI outputs and understanding the tool's limitations."
+  },
+  "citations": {
+    "6.3": [
+      {
+        "short_name": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      }
+    ],
+    "6.4": [
+      {
+        "short_name": "RAI Acceptance Testing",
+        "locator": "§(document start)"
+      }
+    ],
+    "6.6": [
+      {
+        "short_name": "Continuous RAI Validator",
+        "locator": "§(document start)"
+      },
+      {
+        "short_name": "Agentic AI Addendum",
+        "locator": "p.7"
+      }
+    ],
+    "6.8": [
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r8"
+      }
+    ]
+  },
+  "questions": {
+    "why": "To clarify the procurement strategy and operator training plans which are not fully detailed in the current outline.",
+    "items": [
+      {
+        "question_id": "solution_architect-1",
+        "text": "Is the Policy Impact Mapper being developed entirely in-house, or will it rely on a procured commercial-off-the-shelf (COTS) AI model or API?",
+        "options": [
+          "Entirely in-house development",
+          "Procured commercial model/API",
+          "Hybrid approach"
+        ],
+        "allow_free_text": true
+      },
+      {
+        "question_id": "solution_architect-2",
+        "text": "Has a specific training curriculum or set of guidelines been drafted to help policy officers identify and mitigate automation bias when reviewing AI suggestions?",
+        "options": [
+          "Yes, guidelines are drafted",
+          "No, but training development is planned",
+          "No training is currently planned"
+        ],
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
