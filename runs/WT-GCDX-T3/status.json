@@ -3,8 +3,8 @@
   "run_id": "WT-GCDX-T3",
   "run_code": "WT-GCDX-T3",
   "phase": "full",
-  "overall_state": "running",
-  "updated_at": "2026-07-27T04:53:31Z",
+  "overall_state": "paused",
+  "updated_at": "2026-07-27T04:53:33Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -16,7 +16,7 @@
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
-    "full.checkpoint": "pending",
+    "full.checkpoint": "waiting_user",
     "full.architect": "pending",
     "full.reviewer": "pending",
     "full.assembly": "pending"
@@ -2125,10 +2125,242 @@
       "agent": "full.specialist.data_governance",
       "type": "stage_complete",
       "detail": "Data Governance specialist complete"
+    },
+    {
+      "id": "evt_000205",
+      "ts": "2026-07-27T04:53:32Z",
+      "agent": "full.specialist.it_security",
+      "type": "question_raised",
+      "detail": "Will the web-based dashboard for the Policy Impact Mapper be integrated with the agency's existing Single Sign-On (SSO) and identity management systems to enforce strict access controls?",
+      "ref": {
+        "specialist": "it_security",
+        "question_id": "it_security-1"
+      }
+    },
+    {
+      "id": "evt_000206",
+      "ts": "2026-07-27T04:53:32Z",
+      "agent": "full.specialist.it_security",
+      "type": "question_raised",
+      "detail": "Is there a documented fallback or business continuity plan for policy officers to resume manual compliance mapping if the AI system is disengaged or offline?",
+      "ref": {
+        "specialist": "it_security",
+        "question_id": "it_security-2"
+      }
+    },
+    {
+      "id": "evt_000207",
+      "ts": "2026-07-27T04:53:32Z",
+      "agent": "full.specialist.privacy",
+      "type": "question_raised",
+      "detail": "Where are the privacy threshold assessment and privacy impact assessment for the Policy Impact Mapper stored?",
+      "ref": {
+        "specialist": "privacy",
+        "question_id": "privacy-1"
+      }
+    },
+    {
+      "id": "evt_000208",
+      "ts": "2026-07-27T04:53:32Z",
+      "agent": "full.specialist.ethics",
+      "type": "question_raised",
+      "detail": "Will the project team include accessibility, diversity, or social inclusion specialists during the calibration and testing of the gold standard set to ensure that policy changes affecting marginalised groups are correctly mapped?",
+      "ref": {
+        "specialist": "ethics",
+        "question_id": "ethics-1"
+      }
+    },
+    {
+      "id": "evt_000209",
+      "ts": "2026-07-27T04:53:32Z",
+      "agent": "full.specialist.ethics",
+      "type": "question_raised",
+      "detail": "Are there plans to conduct broader stakeholder consultations with frontline staff who rely on the accuracy of these policies before the tool is deployed beyond the POC stage?",
+      "ref": {
+        "specialist": "ethics",
+        "question_id": "ethics-2"
+      }
+    },
+    {
+      "id": "evt_000210",
+      "ts": "2026-07-27T04:53:32Z",
+      "agent": "full.specialist.legal",
+      "type": "question_raised",
+      "detail": "Where is the legal advice for this AI use case stored? Please specify the document management system, case file, or repository path.",
+      "ref": {
+        "specialist": "legal",
+        "question_id": "legal-1"
+      }
+    },
+    {
+      "id": "evt_000211",
+      "ts": "2026-07-27T04:53:32Z",
+      "agent": "full.specialist.data_governance",
+      "type": "question_raised",
+      "detail": "Will the Policy Impact Mapper integrate directly with the agency's approved Electronic Documents and Records Management System (EDRMS) to automatically capture generated impact maps, user decisions, and metadata as Commonwealth records?",
+      "ref": {
+        "specialist": "data_governance",
+        "question_id": "data_governance-1"
+      }
+    },
+    {
+      "id": "evt_000212",
+      "ts": "2026-07-27T04:53:32Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "question_raised",
+      "detail": "Is the Policy Impact Mapper being developed entirely in-house, or will it rely on a procured commercial-off-the-shelf (COTS) AI model or API?",
+      "ref": {
+        "specialist": "solution_architect",
+        "question_id": "solution_architect-1"
+      }
+    },
+    {
+      "id": "evt_000213",
+      "ts": "2026-07-27T04:53:32Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "question_raised",
+      "detail": "Has a specific training curriculum or set of guidelines been drafted to help policy officers identify and mitigate automation bias when reviewing AI suggestions?",
+      "ref": {
+        "specialist": "solution_architect",
+        "question_id": "solution_architect-2"
+      }
     }
   ],
-  "log_cursor": 204,
-  "questions": null,
+  "log_cursor": 213,
+  "questions": {
+    "batch_id": "q-1",
+    "specialists": [
+      {
+        "node_id": "full.specialist.it_security",
+        "friendly": "IT Security specialist",
+        "why": "To clarify operational security controls and business continuity planning for the Policy Impact Mapper.",
+        "items": [
+          {
+            "question_id": "it_security-1",
+            "text": "Will the web-based dashboard for the Policy Impact Mapper be integrated with the agency's existing Single Sign-On (SSO) and identity management systems to enforce strict access controls?",
+            "options": [
+              "Yes",
+              "No",
+              "Under consideration"
+            ],
+            "allow_free_text": true
+          },
+          {
+            "question_id": "it_security-2",
+            "text": "Is there a documented fallback or business continuity plan for policy officers to resume manual compliance mapping if the AI system is disengaged or offline?",
+            "options": [
+              "Yes",
+              "No",
+              "Under consideration"
+            ],
+            "allow_free_text": true
+          }
+        ]
+      },
+      {
+        "node_id": "full.specialist.privacy",
+        "friendly": "Privacy specialist",
+        "why": "The storage location of the privacy threshold assessment and privacy impact assessment is not specified in the project documentation.",
+        "items": [
+          {
+            "question_id": "privacy-1",
+            "text": "Where are the privacy threshold assessment and privacy impact assessment for the Policy Impact Mapper stored?",
+            "options": [],
+            "allow_free_text": true
+          }
+        ]
+      },
+      {
+        "node_id": "full.specialist.ethics",
+        "friendly": "Ethics & Fairness specialist",
+        "why": "To clarify the inclusion of diverse perspectives and broader stakeholder feedback channels during the POC and subsequent phases.",
+        "items": [
+          {
+            "question_id": "ethics-1",
+            "text": "Will the project team include accessibility, diversity, or social inclusion specialists during the calibration and testing of the gold standard set to ensure that policy changes affecting marginalised groups are correctly mapped?",
+            "options": [
+              "Yes",
+              "No",
+              "Under consideration"
+            ],
+            "allow_free_text": true
+          },
+          {
+            "question_id": "ethics-2",
+            "text": "Are there plans to conduct broader stakeholder consultations with frontline staff who rely on the accuracy of these policies before the tool is deployed beyond the POC stage?",
+            "options": [
+              "Yes",
+              "No",
+              "Under consideration"
+            ],
+            "allow_free_text": true
+          }
+        ]
+      },
+      {
+        "node_id": "full.specialist.legal",
+        "friendly": "Legal & Administrative Law specialist",
+        "why": "To confirm the exact storage location of the legal advice for section 12.2.2, as this is not specified in the project outline.",
+        "items": [
+          {
+            "question_id": "legal-1",
+            "text": "Where is the legal advice for this AI use case stored? Please specify the document management system, case file, or repository path.",
+            "options": [],
+            "allow_free_text": true
+          }
+        ]
+      },
+      {
+        "node_id": "full.specialist.data_governance",
+        "friendly": "Data Governance specialist",
+        "why": "To ensure compliance with National Archives of Australia guidance, which requires AI-generated outputs and metadata to be captured in an approved records management system.",
+        "items": [
+          {
+            "question_id": "data_governance-1",
+            "text": "Will the Policy Impact Mapper integrate directly with the agency's approved Electronic Documents and Records Management System (EDRMS) to automatically capture generated impact maps, user decisions, and metadata as Commonwealth records?",
+            "options": [
+              "Yes, direct integration is planned",
+              "No, records will be exported and captured manually",
+              "Under consideration / undecided"
+            ],
+            "allow_free_text": true
+          }
+        ]
+      },
+      {
+        "node_id": "full.specialist.solution_architect",
+        "friendly": "Solution Architect (sections)",
+        "why": "To clarify the procurement strategy and operator training plans which are not fully detailed in the current outline.",
+        "items": [
+          {
+            "question_id": "solution_architect-1",
+            "text": "Is the Policy Impact Mapper being developed entirely in-house, or will it rely on a procured commercial-off-the-shelf (COTS) AI model or API?",
+            "options": [
+              "Entirely in-house development",
+              "Procured commercial model/API",
+              "Hybrid approach"
+            ],
+            "allow_free_text": true
+          },
+          {
+            "question_id": "solution_architect-2",
+            "text": "Has a specific training curriculum or set of guidelines been drafted to help policy officers identify and mitigate automation bias when reviewing AI suggestions?",
+            "options": [
+              "Yes, guidelines are drafted",
+              "No, but training development is planned",
+              "No training is currently planned"
+            ],
+            "allow_free_text": true
+          }
+        ]
+      }
+    ],
+    "counts": {
+      "total": 9,
+      "answered": 0,
+      "skipped": 0
+    }
+  },
   "failure": null,
   "expected_ranges": {
     "threshold": [
