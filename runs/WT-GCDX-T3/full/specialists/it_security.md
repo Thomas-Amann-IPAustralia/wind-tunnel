@@ -1,0 +1,13 @@
+# it_security — owned sections
+
+## 6.7
+
+Yes. The Policy Impact Mapper is designed strictly as a decision-support tool with a mandatory human-in-the-loop workflow, meaning that no automated changes are made to agency documentation or systems (Outline, Section 8). This architecture ensures that human operators retain ultimate responsibility and control to review, reject, or assign any AI-generated suggestions (AI in OT Principles, p.19). Additionally, the system is designed to flag version conflicts or duplicates for human resolution rather than guessing (Outline, Section 4). While the human-in-the-loop design serves as the primary mechanism for intervention, formal operational procedures for completely disengaging or bypassing the AI system (e.g., reverting to traditional manual review processes) in the event of a critical failure or unresolvable issue are still being finalized as part of the POC's transition to operational status (AI in OT Principles, p.20).
+
+*Citations: [AI in OT Principles, p.19], [AI in OT Principles, p.20]*
+
+## 7.3
+
+Yes. To address security risks arising from the operation of the Policy Impact Mapper, several measures are implemented or planned for the POC. First, the system is strictly restricted to unclassified internal data and public legislation, minimizing the risk of exposing highly sensitive or classified information (Outline, Section 8). Second, for the POC, the system operates on a manually curated, frozen document set, which prevents dynamic data poisoning or unauthorized live data modification (Outline, Section 8). Third, the system relies on a version-controlled snapshot of agency documentation and maintains a strict audit trail of which specific document versions were used for each analysis, ensuring data integrity and traceability (Outline, Section 4; Deploying AI Securely, p.6). However, because the system is accessed via a web-based dashboard and processes uploaded source text, it remains exposed to traditional web vulnerabilities and AI-specific threats such as prompt injection (ISM, p.171; OWASP LLM Top 10, p.7). To mitigate these, standard security controls—including strict access controls, user authentication, and secure logging—must be enforced (AI in OT Principles, p.7; Secure AI Dev Guidelines, p.12). Additionally, the system must undergo regular testing for robustness and vulnerability to prompt injection before transitioning beyond the POC phase (Deploying AI Securely, p.6).
+
+*Citations: [Deploying AI Securely, p.6], [ISM, p.171], [OWASP LLM Top 10, p.7], [AI in OT Principles, p.7], [Secure AI Dev Guidelines, p.12]*
