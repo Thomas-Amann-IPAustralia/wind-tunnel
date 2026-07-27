@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-GCDX-T3"
 title: "Policy Impact Mapper"
-summary: "An AI tool that automates the identification of internal policy and process dependencies when new legislation or government requirements are introduced."
+summary: "An AI tool that automates the identification of internal policy dependencies by cross-referencing new legislation against a version-controlled snapshot of agency documentation."
 created_at: "2026-07-27T04:44:01Z"
-updated_at: "2026-07-27T04:46:30Z"
+updated_at: "2026-07-27T04:47:37Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -33,7 +33,7 @@ Primary users are policy, legal, compliance, and operational staff. Affected sta
 <!-- section: data -->
 ## 4. Data
 
-The system processes public legislation/policy and internal, unclassified agency documents (policies, guidance, forms). Data is sensitive in terms of operational integrity but is not classified.
+The system ingests public legislation and a curated, version-controlled snapshot of internal documents. It relies on metadata (owner, status, version, dates) to ensure it operates on the current approved state. It is designed to flag version conflicts or duplicates for human resolution rather than guessing, and it maintains an audit trail of which specific document versions were used for each analysis.
 
 <!-- section: happy_path -->
 ## 5. Happy path
@@ -53,7 +53,7 @@ A web-based dashboard where users can upload source text, view a generated impac
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-Must remain a decision-support tool only; no automated changes to systems or policies. Must be restricted to unclassified internal data.
+Must remain a decision-support tool only; no automated changes. Restricted to unclassified internal data. For the POC, it will use a manually curated, frozen document set rather than live repository integration to ensure data integrity and auditability.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
