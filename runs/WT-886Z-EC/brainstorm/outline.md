@@ -7,28 +7,28 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-886Z-EC"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-886Z-EC"
+title: "Document Sense-Making Engine"
+summary: "An AI-driven platform to synthesize and extract actionable insights from large-scale unstructured document repositories."
 created_at: "2026-07-27T06:04:43Z"
-updated_at: "2026-07-27T06:04:43Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-27T06:08:36Z"
+resolved: ["problem", "solution", "users_stakeholders"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Public sector organizations are overwhelmed by the volume of unstructured documentation, making it difficult to extract actionable insights, identify cross-departmental dependencies, or maintain consistent institutional knowledge.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+An AI-powered document analysis engine that ingests, indexes, and synthesizes large repositories of text. The AI sits as an extraction and reasoning layer, transforming raw documents into structured summaries and thematic maps.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+Primary users are policy analysts and researchers; stakeholders include department heads who rely on these insights and the public who are affected by the resulting policy decisions.
 
 <!-- section: data -->
 ## 4. Data
