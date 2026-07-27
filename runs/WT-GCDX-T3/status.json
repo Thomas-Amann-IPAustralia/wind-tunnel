@@ -4,16 +4,16 @@
   "run_code": "WT-GCDX-T3",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-27T04:52:17Z",
+  "updated_at": "2026-07-27T04:52:26Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "active",
-    "full.specialist.privacy": "active",
+    "full.specialist.privacy": "complete",
     "full.specialist.ethics": "active",
-    "full.specialist.legal": "pending",
+    "full.specialist.legal": "active",
     "full.specialist.data_governance": "pending",
     "full.specialist.solution_architect": "pending",
     "full.checkpoint": "pending",
@@ -1084,9 +1084,118 @@
         "doc": "Secure AI Dev Guidelines",
         "locator": "p.6"
       }
+    },
+    {
+      "id": "evt_000106",
+      "ts": "2026-07-27T04:52:18Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.17"
+      }
+    },
+    {
+      "id": "evt_000107",
+      "ts": "2026-07-27T04:52:18Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000108",
+      "ts": "2026-07-27T04:52:18Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.50"
+      }
+    },
+    {
+      "id": "evt_000109",
+      "ts": "2026-07-27T04:52:18Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.23"
+      }
+    },
+    {
+      "id": "evt_000110",
+      "ts": "2026-07-27T04:52:18Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Guidance for AI Adoption",
+      "ref": {
+        "doc": "Guidance for AI Adoption",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000111",
+      "ts": "2026-07-27T04:52:18Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000112",
+      "ts": "2026-07-27T04:52:18Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.14"
+      }
+    },
+    {
+      "id": "evt_000113",
+      "ts": "2026-07-27T04:52:18Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000114",
+      "ts": "2026-07-27T04:52:26Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_started",
+      "detail": "Legal & Administrative Law specialist started"
+    },
+    {
+      "id": "evt_000115",
+      "ts": "2026-07-27T04:52:26Z",
+      "agent": "full.specialist.legal",
+      "type": "drafting",
+      "detail": "drafting legal's owned sections"
+    },
+    {
+      "id": "evt_000116",
+      "ts": "2026-07-27T04:52:26Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_complete",
+      "detail": "Privacy specialist complete"
     }
   ],
-  "log_cursor": 105,
+  "log_cursor": 116,
   "questions": null,
   "failure": null,
   "expected_ranges": {
