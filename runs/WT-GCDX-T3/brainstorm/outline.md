@@ -11,7 +11,7 @@ run_id: "WT-GCDX-T3"
 title: "Policy Impact Mapper"
 summary: "An AI tool that automates the identification of internal policy dependencies by cross-referencing new legislation against a version-controlled snapshot of agency documentation."
 created_at: "2026-07-27T04:44:01Z"
-updated_at: "2026-07-27T04:47:37Z"
+updated_at: "2026-07-27T04:48:35Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -58,4 +58,4 @@ Must remain a decision-support tool only; no automated changes. Restricted to un
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-A measurable reduction in the time taken to identify impacted areas compared to manual processes, and a high 'hit rate' where human experts confirm the AI's identified dependencies as relevant.
+The success criteria now include a structured evaluation framework: tracking the ratio of confirmed versus rejected suggestions, categorizing false positives to inform system tuning, and measuring 'human-only' discoveries to identify gaps in the AI's retrieval logic. Performance will be validated through regression testing against a fixed set of examples after each iterative update.
