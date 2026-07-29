@@ -7,33 +7,33 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-SX76-K5"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-SX76-K5"
+title: "Legacy Code Modernization Assistant"
+summary: "An AI-driven tool to analyze, document, and map legacy software systems to accelerate modernization and security compliance."
 created_at: "2026-07-29T23:53:46Z"
-updated_at: "2026-07-29T23:53:46Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-29T23:58:41Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "alternatives"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Government agencies are burdened by opaque, undocumented legacy software systems that are difficult to maintain, secure, or integrate with modern services.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+A sovereign AI-powered analysis tool that ingests legacy source code to generate documentation, identify modular components for abstraction, and produce Software Bills of Materials (SBOMs) to guide modernization efforts.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+Primary users are software engineers and system architects within government IT departments; stakeholders include security officers, procurement leads, and the public who rely on the stability of these services.
 
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+The system will process proprietary legacy source code, configuration files, and existing technical documentation. This data is highly sensitive and must remain within a sovereign, air-gapped or highly secure environment.
 
 <!-- section: happy_path -->
 ## 5. Happy path
@@ -43,7 +43,7 @@ resolved: []          # section ids populated so far; maintained by the backend 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
 
-*What else could solve this, including at least one non-AI option.*
+Manual code audits by external consultants, static analysis tools (non-AI), or complete system replacement (rip-and-replace) which is often cost-prohibitive.
 
 <!-- section: ux_ui -->
 ## 7. UX and interface
