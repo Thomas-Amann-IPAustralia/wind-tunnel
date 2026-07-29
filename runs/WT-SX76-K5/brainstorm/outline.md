@@ -9,10 +9,10 @@
 schema_version: 1
 run_id: "WT-SX76-K5"
 title: "Legacy Code Modernization Assistant"
-summary: "An AI-driven tool to analyze, document, and map legacy software systems to accelerate modernization and security compliance."
+summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems to accelerate modernization and security compliance."
 created_at: "2026-07-29T23:53:46Z"
-updated_at: "2026-07-29T23:58:41Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "alternatives"]
+updated_at: "2026-07-29T23:59:09Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "alternatives", "ux_ui", "constraints"]
 ---
 
 <!-- section: problem -->
@@ -48,12 +48,12 @@ Manual code audits by external consultants, static analysis tools (non-AI), or c
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-*What the user sees and touches — or an honest "nothing; it's headless."*
+The interface will be a developer-focused CLI for ingestion and analysis, paired with a web-based dashboard for visualizing system architecture, dependency maps, and generated documentation.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-*The hard limits and strong preferences: technical, organisational, maintenance.*
+The system must be platform-agnostic, supporting a wide range of legacy languages, and must operate entirely within a sovereign, air-gapped environment to ensure data security.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
