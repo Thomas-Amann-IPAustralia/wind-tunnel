@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-KPDA-QG"
 title: "Workflow Discovery AI Agent"
-summary: "An AI agent that interviews staff to document workflows, identify bottlenecks, and map process branching."
+summary: "An iterative AI agent that interviews staff to dynamically map complex workflows, identify bottlenecks, and build a structured process knowledge base."
 created_at: "2026-07-30T05:13:52Z"
-updated_at: "2026-07-30T05:15:22Z"
+updated_at: "2026-07-30T05:16:54Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -23,7 +23,7 @@ Teams often struggle to document complex workflows, leading to hidden bottleneck
 <!-- section: solution -->
 ## 2. Proposed solution
 
-An AI-driven conversational agent that interviews team members to map out their current workflows, identifying branching logic, pain points, and operational bottlenecks.
+An AI-driven conversational agent that conducts iterative, stateful interviews to map workflows. It dynamically generates follow-up questions based on previous responses to uncover branching logic, pain points, and bottlenecks, progressively building a structured knowledge base of the process.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
@@ -38,7 +38,7 @@ The agent will process transcripts of internal interviews and potentially existi
 <!-- section: happy_path -->
 ## 5. Happy path
 
-A team member initiates a session with the agent, which asks targeted questions about their daily tasks. The agent identifies a recurring bottleneck in a specific approval step, summarizes the workflow, and exports a structured process map for the team lead.
+A team member starts a session, and the agent asks initial discovery questions. As the user provides details, the agent identifies gaps and asks targeted follow-up questions to clarify branching logic. Once the agent has sufficient information, it generates a draft process map for the user to review and confirm, which is then exported for management.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
