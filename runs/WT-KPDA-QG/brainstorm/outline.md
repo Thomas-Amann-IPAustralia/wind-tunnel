@@ -11,7 +11,7 @@ run_id: "WT-KPDA-QG"
 title: "Workflow Discovery AI Agent"
 summary: "An iterative AI agent that interviews staff to map workflows, cross-referencing multi-user inputs to resolve process conflicts while enforcing a separation between operational discovery and technical solutioning."
 created_at: "2026-07-30T05:13:52Z"
-updated_at: "2026-07-30T05:33:45Z"
+updated_at: "2026-07-30T05:35:09Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -23,7 +23,7 @@ Teams often struggle to document complex workflows, leading to hidden bottleneck
 <!-- section: solution -->
 ## 2. Proposed solution
 
-An AI-driven conversational agent that conducts iterative, stateful interviews to map workflows. The process begins with a Business Analyst (BA) seeding the agent with foundational concepts and policy documentation. The agent cross-references inputs from multiple team members, prioritizing SME operational reality over BA foundational data while actively identifying and flagging 'solutioning' attempts by staff as out-of-scope. It flags irreconcilable process conflicts for human management review. The final output is a visual process map and a structured report, including a 'To BA's Attention' section for unresolved conflicts and an automated summary of changes between versioned iterations.
+An AI-driven conversational agent that conducts iterative, stateful interviews to map workflows. The process begins with a Business Analyst (BA) seeding the agent with foundational concepts and policy documentation. The agent cross-references inputs from multiple team members, prioritizing SME operational reality over BA foundational data. It actively identifies and flags 'solutioning' attempts by staff, providing a gentle nudge to refocus the conversation on the underlying problem. It flags irreconcilable process conflicts for human management review. The final output is a visual process map and a structured report, including a 'To BA's Attention' section for unresolved conflicts and an automated summary of changes between versioned iterations.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
