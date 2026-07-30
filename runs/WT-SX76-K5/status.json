@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T03:24:54Z",
+  "updated_at": "2026-07-30T03:24:56Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -12,9 +12,9 @@
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
-    "full.specialist.ethics": "failed",
+    "full.specialist.ethics": "active",
     "full.specialist.legal": "active",
-    "full.specialist.data_governance": "pending",
+    "full.specialist.data_governance": "active",
     "full.specialist.solution_architect": "pending",
     "full.checkpoint": "pending",
     "full.architect": "pending",
@@ -1588,9 +1588,256 @@
       "agent": "pipeline",
       "type": "heartbeat",
       "detail": ""
+    },
+    {
+      "id": "evt_000158",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000159",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_started",
+      "detail": "Ethics & Fairness specialist started"
+    },
+    {
+      "id": "evt_000160",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.ethics",
+      "type": "drafting",
+      "detail": "drafting ethics's owned sections"
+    },
+    {
+      "id": "evt_000161",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_started",
+      "detail": "Legal & Administrative Law specialist started"
+    },
+    {
+      "id": "evt_000162",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.legal",
+      "type": "drafting",
+      "detail": "drafting legal's owned sections"
+    },
+    {
+      "id": "evt_000163",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.data_governance",
+      "type": "stage_started",
+      "detail": "Data Governance specialist started"
+    },
+    {
+      "id": "evt_000164",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.data_governance",
+      "type": "drafting",
+      "detail": "drafting data_governance's owned sections"
+    },
+    {
+      "id": "evt_000165",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000166",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000167",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Disposal of generative AI assistant prompts and inputs"
+      }
+    },
+    {
+      "id": "evt_000168",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Example: AI technologies incorporated into a regulatory compliance assessment business system"
+      }
+    },
+    {
+      "id": "evt_000169",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000170",
+      "ts": "2026-07-30T03:24:55Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Managing AI technologies incorporated into business systems"
+      }
+    },
+    {
+      "id": "evt_000171",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000172",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000173",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000174",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000175",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000176",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000177",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000178",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000179",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000180",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000181",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000182",
+      "ts": "2026-07-30T03:24:56Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.30"
+      }
     }
   ],
-  "log_cursor": 157,
+  "log_cursor": 182,
   "questions": null,
   "failure": null,
   "expected_ranges": {
