@@ -11,7 +11,7 @@ run_id: "WT-KPDA-QG"
 title: "Workflow Discovery AI Agent"
 summary: "An iterative AI agent that interviews staff to map workflows, cross-referencing multi-user inputs to resolve process conflicts and maintaining a versioned history of process evolution with automated change summaries."
 created_at: "2026-07-30T05:13:52Z"
-updated_at: "2026-07-30T05:25:09Z"
+updated_at: "2026-07-30T05:30:49Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -23,7 +23,7 @@ Teams often struggle to document complex workflows, leading to hidden bottleneck
 <!-- section: solution -->
 ## 2. Proposed solution
 
-An AI-driven conversational agent that conducts iterative, stateful interviews to map workflows. It dynamically generates follow-up questions to uncover branching logic and pain points, cross-referencing inputs from multiple team members to identify conflicts. When irreconcilable differences arise, the agent flags these for human management review. The final output is a visual process map accompanied by a structured report, including a 'To BA's Attention' section for unresolved conflicts and an automated summary of changes between versioned iterations.
+An AI-driven conversational agent that conducts iterative, stateful interviews to map workflows. The process begins with a Business Analyst (BA) seeding the agent with foundational concepts and policy documentation. The agent then conducts interviews, dynamically generating follow-up questions to uncover branching logic and pain points. It cross-references inputs from multiple team members to identify conflicts, flagging irreconcilable differences for human management review. The final output is a visual process map and a structured report, including a 'To BA's Attention' section for unresolved conflicts and an automated summary of changes between versioned iterations.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
@@ -33,7 +33,7 @@ Internal team members are the primary users; process owners and management are t
 <!-- section: data -->
 ## 4. Data
 
-The agent will process transcripts of internal interviews and potentially existing process documentation; this data is internal and likely contains sensitive operational details.
+The agent processes transcripts of internal interviews, existing process documentation, and foundational knowledge provided by the BA; this data is internal and contains sensitive operational details.
 
 <!-- section: happy_path -->
 ## 5. Happy path
