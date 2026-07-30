@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-SX76-K5"
 title: "Legacy Code Modernization Assistant"
-summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems while providing automated compliance and architectural governance."
+summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems while providing automated compliance and architectural governance within sovereign infrastructure."
 created_at: "2026-07-29T23:53:46Z"
-updated_at: "2026-07-30T00:15:15Z"
+updated_at: "2026-07-30T00:16:23Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -53,7 +53,7 @@ The interface includes a developer-focused CLI for ingestion and analysis, a web
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-The system must be platform-agnostic, operate within a sovereign, air-gapped environment, and adhere to Australian Whole-of-Government (WofG) standards for security and interoperability.
+The system must be platform-agnostic, operate within a sovereign, air-gapped environment, and adhere to Australian Whole-of-Government (WofG) standards. Crucially, the LLM endpoint must be hosted on sovereign or self-managed infrastructure to ensure data sovereignty and security.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
