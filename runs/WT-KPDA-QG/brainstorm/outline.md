@@ -11,7 +11,7 @@ run_id: "WT-KPDA-QG"
 title: "Workflow Discovery AI Agent"
 summary: "An iterative AI agent that interviews staff to map workflows, cross-referencing multi-user inputs to resolve process conflicts while enforcing a separation between operational discovery and technical solutioning."
 created_at: "2026-07-30T05:13:52Z"
-updated_at: "2026-07-30T05:35:09Z"
+updated_at: "2026-07-30T05:35:35Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
