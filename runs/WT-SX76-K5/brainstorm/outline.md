@@ -11,7 +11,7 @@ run_id: "WT-SX76-K5"
 title: "Legacy Code Modernization Assistant"
 summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems to accelerate modernization, track refactoring progress, and provide portfolio-wide visibility."
 created_at: "2026-07-29T23:53:46Z"
-updated_at: "2026-07-30T00:04:31Z"
+updated_at: "2026-07-30T00:05:52Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -38,7 +38,7 @@ The system will process proprietary legacy source code, configuration files, and
 <!-- section: happy_path -->
 ## 5. Happy path
 
-A developer runs the CLI tool against a legacy repository, which ingests the code and maps its internal dependencies. The developer then opens the web dashboard to view a visual dependency graph, where the AI has highlighted a specific, isolated module as a candidate for extraction. The developer uses the CLI to generate a refactoring plan and a corresponding SBOM for that module, allowing them to proceed with modernization while maintaining security compliance.
+A developer runs the CLI to ingest a legacy repository, generating a baseline SBOM and architectural map. As they refactor, the CI/CD pipeline triggers the tool to compare the new state against the planned configuration. The dashboard updates in real-time, highlighting drift or successful modularization, allowing the developer to reconcile manual changes with the evolving modernization roadmap.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
@@ -58,4 +58,4 @@ The system must be platform-agnostic, supporting a wide range of legacy language
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-Success is measured in two phases: first, by the speed and accuracy of the baseline SBOM and multi-layered architectural maps during the PoC. Second, by the tool's ability to track and visualize the delta between the baseline and the refactored state across multiple iterations, eventually providing a portfolio-wide view of modernization progress.
+Success is measured by the accuracy of baseline SBOMs and architectural maps during the PoC, followed by the tool's ability to track the delta between baseline and refactored states. Long-term success is defined by the tool's integration into CI/CD pipelines to monitor configuration drift and visualize modernization progress across entire government portfolios.
