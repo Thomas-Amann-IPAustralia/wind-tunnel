@@ -1,0 +1,26 @@
+flowchart TD
+    subgraph User_Space [User Interface]
+        User([Public Servant])
+        SPA[Windtunnel SPA]
+    end
+
+    subgraph Core_Platform [Windtunnel Orchestration]
+        Backend[Windtunnel Backend]
+        DB[(Run Database & Git Store)]
+    end
+
+    subgraph AI_Engine [AI Analysis & Generation]
+        LLM[LLM Engine]
+        CodeGen[Prototype Generator]
+    end
+
+    User -->|1. Submits AI Idea & Constraints| SPA
+    SPA -->|2. API Request (Create Run)| Backend
+    Backend -->|3. Initialize Run State| DB
+    Backend -->|4. Send Outline & Prompts| LLM
+    LLM -->|5. Generate Feasibility & Architecture| Backend
+    Backend -->|6. Request Interactive Prototype| CodeGen
+    CodeGen -->|7. Generate Tailwind/HTML/JS| Backend
+    Backend -->|8. Commit Assets & Update Run| DB
+    Backend -->|9. Stream Assessment & Prototype| SPA
+    SPA -->|10. Render Interactive Sandbox & Map| User
