@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-KPDA-QG"
 title: "Workflow Discovery AI Agent"
-summary: "An iterative AI agent that interviews staff to map workflows, cross-referencing multi-user inputs to resolve process conflicts and maintain a versioned history of process evolution for human review."
+summary: "An iterative AI agent that interviews staff to map workflows, cross-referencing multi-user inputs to resolve process conflicts and maintaining a versioned history of process evolution with automated change summaries."
 created_at: "2026-07-30T05:13:52Z"
-updated_at: "2026-07-30T05:24:23Z"
+updated_at: "2026-07-30T05:25:09Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -23,7 +23,7 @@ Teams often struggle to document complex workflows, leading to hidden bottleneck
 <!-- section: solution -->
 ## 2. Proposed solution
 
-An AI-driven conversational agent that conducts iterative, stateful interviews to map workflows. It dynamically generates follow-up questions to uncover branching logic and pain points, cross-referencing inputs from multiple team members to identify conflicts. When irreconcilable differences arise, the agent flags these for human management review. The final output is a visual process map accompanied by a structured report, which includes a dedicated 'To BA's Attention' section for unresolved conflicts and bottlenecks.
+An AI-driven conversational agent that conducts iterative, stateful interviews to map workflows. It dynamically generates follow-up questions to uncover branching logic and pain points, cross-referencing inputs from multiple team members to identify conflicts. When irreconcilable differences arise, the agent flags these for human management review. The final output is a visual process map accompanied by a structured report, including a 'To BA's Attention' section for unresolved conflicts and an automated summary of changes between versioned iterations.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
@@ -53,7 +53,7 @@ A chat-based interface (e.g., Slack or a web portal) for the interview process, 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-Must ensure data privacy for sensitive internal processes, maintain a verifiable audit trail of user confirmations, support version history for all generated maps and reports, and be capable of integrating with existing documentation tools.
+Must ensure data privacy for sensitive internal processes, maintain a verifiable audit trail of user confirmations, support version history for all generated maps and reports with automated change summaries, and be capable of integrating with existing documentation tools.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
