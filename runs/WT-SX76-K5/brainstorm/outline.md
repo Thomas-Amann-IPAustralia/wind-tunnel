@@ -11,7 +11,7 @@ run_id: "WT-SX76-K5"
 title: "Legacy Code Modernization Assistant"
 summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems to accelerate modernization, track refactoring progress, and provide portfolio-wide visibility."
 created_at: "2026-07-29T23:53:46Z"
-updated_at: "2026-07-30T00:07:01Z"
+updated_at: "2026-07-30T00:12:41Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -38,7 +38,7 @@ The system will process proprietary legacy source code, configuration files, and
 <!-- section: happy_path -->
 ## 5. Happy path
 
-A developer runs the CLI to ingest a legacy repository, generating a baseline SBOM and architectural map. As they refactor, the CI/CD pipeline triggers the tool to compare the new state against the planned configuration. If a deviation occurs, the tool flags a conflict for triage, providing an impact analysis of the manual change versus the original roadmap. The developer reviews these projections in the dashboard, allowing them to either accept the new approach or reconcile the code to align with the modernization plan.
+A developer runs the CLI to ingest a legacy repository, generating a baseline SBOM and architectural map. As they refactor, the CI/CD pipeline triggers the tool to compare the new state against the planned configuration. If a deviation occurs, the tool flags a conflict for triage, providing an impact analysis of the manual change versus the original roadmap. The developer reviews these projections in the dashboard; significant deviations are surfaced to an Architecture Decision Group, which reviews the AI-generated risk/benefit report before approving the merge or requiring reconciliation.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
@@ -48,7 +48,7 @@ Manual code audits by external consultants, static analysis tools (non-AI), or c
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-The interface will be a developer-focused CLI for ingestion and analysis, paired with a web-based dashboard for visualizing system architecture, dependency maps, and generated documentation.
+The interface includes a developer-focused CLI for ingestion and analysis, a web-based dashboard for visualizing system architecture and dependency maps, and a dedicated 'Governance Review' module where architects can triage deviations and approve architectural changes.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
