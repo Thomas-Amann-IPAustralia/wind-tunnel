@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T04:11:25Z",
+  "updated_at": "2026-07-30T04:11:58Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -2440,9 +2440,23 @@
         "doc": "ADM Guide (earlier ed.)",
         "locator": "p.30"
       }
+    },
+    {
+      "id": "evt_000242",
+      "ts": "2026-07-30T04:11:58Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_started",
+      "detail": "Solution Architect (sections) started"
+    },
+    {
+      "id": "evt_000243",
+      "ts": "2026-07-30T04:11:58Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "drafting",
+      "detail": "drafting solution_architect's owned sections"
     }
   ],
-  "log_cursor": 241,
+  "log_cursor": 243,
   "questions": null,
   "failure": null,
   "expected_ranges": {
