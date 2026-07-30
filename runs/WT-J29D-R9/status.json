@@ -3,14 +3,14 @@
   "run_id": "WT-J29D-R9",
   "run_code": "WT-J29D-R9",
   "phase": "full",
-  "overall_state": "running",
-  "updated_at": "2026-07-30T05:59:36Z",
+  "overall_state": "failed",
+  "updated_at": "2026-07-30T05:59:38Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
-    "full.specialist.it_security": "active",
+    "full.specialist.it_security": "failed",
     "full.specialist.privacy": "active",
     "full.specialist.ethics": "active",
     "full.specialist.legal": "complete",
@@ -731,11 +731,23 @@
       "agent": "full.specialist.legal",
       "type": "stage_complete",
       "detail": "Legal & Administrative Law specialist complete"
+    },
+    {
+      "id": "evt_000075",
+      "ts": "2026-07-30T05:59:38Z",
+      "agent": "full.specialist.it_security",
+      "type": "error",
+      "detail": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-J29D-R9 to resume from the last checkpoint."
     }
   ],
-  "log_cursor": 74,
+  "log_cursor": 75,
   "questions": null,
-  "failure": null,
+  "failure": {
+    "stage": "full.specialist.it_security",
+    "message": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-J29D-R9 to resume from the last checkpoint.",
+    "run_code": "WT-J29D-R9",
+    "technical": "LLMError: Gemini HTTP 503 for model 'gemini-3.5-flash': {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n (attempt 4/4)"
+  },
   "expected_ranges": {
     "threshold": [
       50,
