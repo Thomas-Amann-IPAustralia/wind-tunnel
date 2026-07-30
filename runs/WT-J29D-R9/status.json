@@ -3,8 +3,8 @@
   "run_id": "WT-J29D-R9",
   "run_code": "WT-J29D-R9",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-30T05:54:43Z",
+  "overall_state": "paused",
+  "updated_at": "2026-07-30T05:54:45Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
