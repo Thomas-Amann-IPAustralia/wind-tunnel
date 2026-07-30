@@ -11,7 +11,7 @@ run_id: "WT-J29D-R9"
 title: "Automated Web Compliance Monitor"
 summary: "An internal AI-driven tool to identify and streamline the registration of problematic websites through human-in-the-loop oversight and continuous model refinement."
 created_at: "2026-07-30T04:09:22Z"
-updated_at: "2026-07-30T04:42:27Z"
+updated_at: "2026-07-30T04:42:48Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -48,12 +48,12 @@ Manual web crawling and reporting by staff, or using standard keyword-based web 
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-A web-based dashboard for staff to review flagged sites, inspect the AI's reasoning, and approve or reject the proposed registration action. The interface will include a feedback mechanism for officers to mark false positives, which will be used to refine the model's future performance.
+A web-based dashboard for staff to review flagged sites, inspect the AI's reasoning, and approve or reject the proposed registration action. The interface will display a confidence score for each flag to help officers prioritize their workload. A feedback mechanism allows officers to mark false positives, which will be used to refine the model's future performance.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-Must comply with privacy laws, ensure auditable AI logic, and maintain a human-in-the-loop. The system will be deployed on internal, containerized infrastructure. Snapshots will be cryptographically hashed at the time of capture and stored in an immutable, append-only environment (WORM-compliant) to ensure legal admissibility. We are currently prioritizing high-precision flagging over exhaustive recall.
+Must comply with privacy laws, ensure auditable AI logic, and maintain a human-in-the-loop. The system will be deployed on internal, containerized infrastructure. Snapshots will be cryptographically hashed at the time of capture and stored in an immutable, WORM-compliant environment to ensure legal admissibility. We are prioritizing high-precision flagging over exhaustive recall, supported by explicit confidence scoring for all AI outputs.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
