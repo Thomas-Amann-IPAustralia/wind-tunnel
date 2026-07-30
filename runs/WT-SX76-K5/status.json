@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T02:00:35Z",
+  "updated_at": "2026-07-30T02:01:18Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -776,9 +776,97 @@
         "doc": "OAIC AI Training Top 5",
         "locator": "p.1"
       }
+    },
+    {
+      "id": "evt_000082",
+      "ts": "2026-07-30T02:01:18Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000083",
+      "ts": "2026-07-30T02:01:18Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000084",
+      "ts": "2026-07-30T02:01:18Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000085",
+      "ts": "2026-07-30T02:01:18Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000086",
+      "ts": "2026-07-30T02:01:18Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000087",
+      "ts": "2026-07-30T02:01:18Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000088",
+      "ts": "2026-07-30T02:01:18Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000089",
+      "ts": "2026-07-30T02:01:18Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.5"
+      }
     }
   ],
-  "log_cursor": 81,
+  "log_cursor": 89,
   "questions": null,
   "failure": null,
   "expected_ranges": {
