@@ -3,8 +3,8 @@
   "run_id": "WT-SX76-K5",
   "run_code": "WT-SX76-K5",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-30T00:56:36Z",
+  "overall_state": "paused",
+  "updated_at": "2026-07-30T00:56:39Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
