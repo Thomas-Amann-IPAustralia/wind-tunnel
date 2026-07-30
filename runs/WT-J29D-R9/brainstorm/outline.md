@@ -11,7 +11,7 @@ run_id: "WT-J29D-R9"
 title: "Automated Web Compliance Monitor"
 summary: "An internal AI-driven tool to identify and streamline the registration of problematic websites through human-in-the-loop oversight and continuous model refinement."
 created_at: "2026-07-30T04:09:22Z"
-updated_at: "2026-07-30T04:13:38Z"
+updated_at: "2026-07-30T04:13:55Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -33,7 +33,7 @@ Primary users are compliance officers and administrative staff; stakeholders inc
 <!-- section: data -->
 ## 4. Data
 
-The system will process public web content, URLs, and metadata from existing registry databases. While the source data is public, the internal analysis and flagging results are treated as sensitive administrative information.
+The system processes public web content, URLs, and metadata. Snapshots are stored as long-term legal evidence, requiring immutable storage, strict access controls, and audit logging to ensure admissibility for potential enforcement actions.
 
 <!-- section: happy_path -->
 ## 5. Happy path
