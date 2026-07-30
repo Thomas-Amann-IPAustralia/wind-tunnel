@@ -11,7 +11,7 @@ run_id: "WT-SX76-K5"
 title: "Legacy Code Modernization Assistant"
 summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems to accelerate modernization, track refactoring progress, and provide portfolio-wide visibility."
 created_at: "2026-07-29T23:53:46Z"
-updated_at: "2026-07-30T00:14:01Z"
+updated_at: "2026-07-30T00:14:18Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -53,7 +53,7 @@ The interface includes a developer-focused CLI for ingestion and analysis, a web
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-The system must be platform-agnostic, supporting a wide range of legacy languages, and must operate entirely within a sovereign, air-gapped environment to ensure data security.
+The system must be platform-agnostic, operate within a sovereign, air-gapped environment, and adhere to Australian Whole-of-Government (WofG) standards for security and interoperability.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
