@@ -11,7 +11,7 @@ run_id: "WT-SX76-K5"
 title: "Legacy Code Modernization Assistant"
 summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems to accelerate modernization, track refactoring progress, and provide portfolio-wide visibility."
 created_at: "2026-07-29T23:53:46Z"
-updated_at: "2026-07-30T00:05:52Z"
+updated_at: "2026-07-30T00:07:01Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -38,7 +38,7 @@ The system will process proprietary legacy source code, configuration files, and
 <!-- section: happy_path -->
 ## 5. Happy path
 
-A developer runs the CLI to ingest a legacy repository, generating a baseline SBOM and architectural map. As they refactor, the CI/CD pipeline triggers the tool to compare the new state against the planned configuration. The dashboard updates in real-time, highlighting drift or successful modularization, allowing the developer to reconcile manual changes with the evolving modernization roadmap.
+A developer runs the CLI to ingest a legacy repository, generating a baseline SBOM and architectural map. As they refactor, the CI/CD pipeline triggers the tool to compare the new state against the planned configuration. If a deviation occurs, the tool flags a conflict for triage, providing an impact analysis of the manual change versus the original roadmap. The developer reviews these projections in the dashboard, allowing them to either accept the new approach or reconcile the code to align with the modernization plan.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
