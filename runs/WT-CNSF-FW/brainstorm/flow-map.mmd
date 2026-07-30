@@ -1,41 +1,38 @@
 flowchart TD
-    subgraph Sources [Internal Data Sources]
-        Docs[Policy Docs & Reports]
-        Comms[Meeting Minutes & Emails]
-        Wikis[Internal Wikis]
+    subgraph Sources ["Internal Data Sources (Siloed)"]
+        Docs["Policy Docs & Project Reports"]
+        Comms["Meeting Minutes & Emails"]
+        Wikis["Internal Wikis"]
     end
 
-    subgraph Pipeline [AI Knowledge Graph Pipeline]
-        Ingest[Ingestion & Preprocessing]
-        AIExtract[AI Entity & Relation Extractor]
-        GraphDB[(Knowledge Graph Database)]
+    subgraph Pipeline ["AI Processing Pipeline"]
+        Ingest["Ingestion & Text Extraction"]
+        AIExtract["AI Entity & Relation Extractor (LLM)"]
     end
 
-    subgraph UI [Access Interfaces]
-        SearchUI[Search & Graph Visualization UI]
-        GovPortal[Governance & Security Control]
+    subgraph Storage ["Secure Storage"]
+        GraphDB[("Knowledge Graph Database")]
     end
 
-    subgraph Users [Consumers & Governance]
-        Staff[Departmental Staff & Researchers]
-        Leader[Leadership Team]
-        ITGov[IT & Data Governance]
+    subgraph Access ["User Access & Discovery"]
+        UI["Search & Graph Visualization UI"]
+        Staff["Departmental Staff & Researchers"]
     end
 
-    Docs -->|Unstructured text| Ingest
-    Comms -->|Unstructured text| Ingest
-    Wikis -->|Unstructured text| Ingest
+    subgraph Governance ["Governance & Security"]
+        Gov["IT & Data Governance Team"]
+    end
 
-    Ingest -->|Cleaned text chunks| AIExtract
-    AIExtract -->|Extracted nodes & edges| GraphDB
+    Docs -->|Raw Files| Ingest
+    Comms -->|Raw Files| Ingest
+    Wikis -->|Raw Files| Ingest
+    Ingest -->|Cleaned Text| AIExtract
+    AIExtract -->|Extracted Nodes & Edges| GraphDB
 
-    Staff -->|Search query / Entity lookup| SearchUI
-    SearchUI -->|Graph query| GraphDB
-    GraphDB -->|Connected entities & context| SearchUI
-    SearchUI -->|Visualized relationships| Staff
+    Staff -->|Search Query / Entity Lookup| UI
+    UI -->|Graph Query| GraphDB
+    GraphDB -->|Subgraphs & Connected Entities| UI
+    UI -->|Visualized Relationships & Insights| Staff
 
-    Leader -->|Strategic insight request| SearchUI
-    SearchUI -->|Org-wide relationship maps| Leader
-
-    ITGov -->|Access policies & sensitivity rules| GovPortal
-    GovPortal -->|Enforce security constraints| GraphDB
+    Gov -->|Access Control & Security Policies| GraphDB
+    Gov -->|Compliance Auditing| UI
