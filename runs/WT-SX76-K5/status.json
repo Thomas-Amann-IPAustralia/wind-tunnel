@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T05:44:44Z",
+  "updated_at": "2026-07-30T05:44:50Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -2869,9 +2869,23 @@
         "doc": "HTI State of AI Governance",
         "locator": "p.36"
       }
+    },
+    {
+      "id": "evt_000285",
+      "ts": "2026-07-30T05:44:50Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_started",
+      "detail": "Solution Architect (sections) started"
+    },
+    {
+      "id": "evt_000286",
+      "ts": "2026-07-30T05:44:50Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "drafting",
+      "detail": "drafting solution_architect's owned sections"
     }
   ],
-  "log_cursor": 284,
+  "log_cursor": 286,
   "questions": null,
   "failure": null,
   "expected_ranges": {
