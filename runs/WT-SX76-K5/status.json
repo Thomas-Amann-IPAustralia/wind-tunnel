@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T01:59:00Z",
+  "updated_at": "2026-07-30T02:00:35Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -721,9 +721,64 @@
         "doc": "ADM Guide (earlier ed.)",
         "locator": "p.30"
       }
+    },
+    {
+      "id": "evt_000077",
+      "ts": "2026-07-30T02:00:35Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000078",
+      "ts": "2026-07-30T02:00:35Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000079",
+      "ts": "2026-07-30T02:00:35Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000080",
+      "ts": "2026-07-30T02:00:35Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000081",
+      "ts": "2026-07-30T02:00:35Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Top 5",
+      "ref": {
+        "doc": "OAIC AI Training Top 5",
+        "locator": "p.1"
+      }
     }
   ],
-  "log_cursor": 76,
+  "log_cursor": 81,
   "questions": null,
   "failure": null,
   "expected_ranges": {
