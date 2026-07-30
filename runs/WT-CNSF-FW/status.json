@@ -3,14 +3,14 @@
   "run_id": "WT-CNSF-FW",
   "run_code": "WT-CNSF-FW",
   "phase": "full",
-  "overall_state": "running",
-  "updated_at": "2026-07-30T04:21:06Z",
+  "overall_state": "failed",
+  "updated_at": "2026-07-30T04:23:39Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
-    "full.specialist.it_security": "active",
+    "full.specialist.it_security": "failed",
     "full.specialist.privacy": "active",
     "full.specialist.ethics": "active",
     "full.specialist.legal": "active",
@@ -1076,11 +1076,89 @@
       "agent": "full.specialist.legal",
       "type": "drafting",
       "detail": "drafting legal's owned sections"
+    },
+    {
+      "id": "evt_000114",
+      "ts": "2026-07-30T04:21:06Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000115",
+      "ts": "2026-07-30T04:21:06Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000116",
+      "ts": "2026-07-30T04:21:06Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000117",
+      "ts": "2026-07-30T04:21:06Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000118",
+      "ts": "2026-07-30T04:21:06Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000119",
+      "ts": "2026-07-30T04:21:06Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000120",
+      "ts": "2026-07-30T04:23:39Z",
+      "agent": "full.specialist.it_security",
+      "type": "error",
+      "detail": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-CNSF-FW to resume from the last checkpoint."
     }
   ],
-  "log_cursor": 113,
+  "log_cursor": 120,
   "questions": null,
-  "failure": null,
+  "failure": {
+    "stage": "full.specialist.it_security",
+    "message": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-CNSF-FW to resume from the last checkpoint.",
+    "run_code": "WT-CNSF-FW",
+    "technical": "LLMError: Gemini HTTP 503 for model 'gemini-3.5-flash': {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n (attempt 4/4)"
+  },
   "expected_ranges": {
     "threshold": [
       50,
