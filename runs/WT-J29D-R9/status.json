@@ -4,7 +4,7 @@
   "run_code": "WT-J29D-R9",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T05:56:39Z",
+  "updated_at": "2026-07-30T05:57:18Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -394,9 +394,251 @@
       "agent": "full.specialist.legal",
       "type": "drafting",
       "detail": "drafting legal's owned sections"
+    },
+    {
+      "id": "evt_000044",
+      "ts": "2026-07-30T05:56:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000045",
+      "ts": "2026-07-30T05:56:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000046",
+      "ts": "2026-07-30T05:56:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000047",
+      "ts": "2026-07-30T05:56:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000048",
+      "ts": "2026-07-30T05:56:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000049",
+      "ts": "2026-07-30T05:56:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000050",
+      "ts": "2026-07-30T05:56:51Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000051",
+      "ts": "2026-07-30T05:56:51Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.65"
+      }
+    },
+    {
+      "id": "evt_000052",
+      "ts": "2026-07-30T05:56:51Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000053",
+      "ts": "2026-07-30T05:56:51Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000054",
+      "ts": "2026-07-30T05:56:51Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000055",
+      "ts": "2026-07-30T05:56:51Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.67"
+      }
+    },
+    {
+      "id": "evt_000056",
+      "ts": "2026-07-30T05:56:51Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000057",
+      "ts": "2026-07-30T05:56:51Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.68"
+      }
+    },
+    {
+      "id": "evt_000058",
+      "ts": "2026-07-30T05:57:18Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.5"
+      }
+    },
+    {
+      "id": "evt_000059",
+      "ts": "2026-07-30T05:57:18Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000060",
+      "ts": "2026-07-30T05:57:18Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000061",
+      "ts": "2026-07-30T05:57:18Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000062",
+      "ts": "2026-07-30T05:57:18Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ABA AI Year 2 Report",
+      "ref": {
+        "doc": "ABA AI Year 2 Report",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000063",
+      "ts": "2026-07-30T05:57:18Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000064",
+      "ts": "2026-07-30T05:57:18Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000065",
+      "ts": "2026-07-30T05:57:18Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.65"
+      }
     }
   ],
-  "log_cursor": 43,
+  "log_cursor": 65,
   "questions": null,
   "failure": null,
   "expected_ranges": {
