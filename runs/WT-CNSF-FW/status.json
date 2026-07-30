@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T04:41:06Z",
+  "updated_at": "2026-07-30T04:41:56Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -1832,9 +1832,23 @@
         "doc": "ADM Guide (earlier ed.)",
         "locator": "p.30"
       }
+    },
+    {
+      "id": "evt_000190",
+      "ts": "2026-07-30T04:41:56Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_started",
+      "detail": "Legal & Administrative Law specialist started"
+    },
+    {
+      "id": "evt_000191",
+      "ts": "2026-07-30T04:41:56Z",
+      "agent": "full.specialist.legal",
+      "type": "drafting",
+      "detail": "drafting legal's owned sections"
     }
   ],
-  "log_cursor": 189,
+  "log_cursor": 191,
   "questions": null,
   "failure": null,
   "expected_ranges": {
