@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T04:57:51Z",
+  "updated_at": "2026-07-30T04:58:39Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -2693,9 +2693,97 @@
         "doc": "New Machinery of Government",
         "locator": "p.5"
       }
+    },
+    {
+      "id": "evt_000273",
+      "ts": "2026-07-30T04:58:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000274",
+      "ts": "2026-07-30T04:58:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000275",
+      "ts": "2026-07-30T04:58:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.11"
+      }
+    },
+    {
+      "id": "evt_000276",
+      "ts": "2026-07-30T04:58:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.34"
+      }
+    },
+    {
+      "id": "evt_000277",
+      "ts": "2026-07-30T04:58:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000278",
+      "ts": "2026-07-30T04:58:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ABA AI Year 2 Report",
+      "ref": {
+        "doc": "ABA AI Year 2 Report",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000279",
+      "ts": "2026-07-30T04:58:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000280",
+      "ts": "2026-07-30T04:58:39Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.19"
+      }
     }
   ],
-  "log_cursor": 272,
+  "log_cursor": 280,
   "questions": null,
   "failure": null,
   "expected_ranges": {
