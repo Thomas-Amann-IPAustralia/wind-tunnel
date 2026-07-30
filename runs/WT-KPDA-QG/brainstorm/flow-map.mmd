@@ -1,0 +1,50 @@
+flowchart TD
+    subgraph Stakeholders [Users & Stakeholders]
+        BA[Business Analyst]
+        SME[Subject Matter Expert / Staff]
+        MGR[Management / Process Owner]
+    end
+
+    subgraph Presentation [Interface Layer]
+        Chat[Chat Interface\nSlack / Web Portal]
+        Dash[Dashboard View]
+    end
+
+    subgraph AgentSystem [Workflow Discovery AI Agent]
+        Engine[Stateful Interview Engine]
+        Rules[Policy Enforcer\nNo-Interpolation & Solutioning Flags]
+        KB[(Versioned Knowledge Base)]
+    end
+
+    subgraph Enterprise [Enterprise Systems]
+        Repo[(Existing Documentation Repository)]
+    end
+
+    %% 1. Initialization
+    BA -->|"Seeds foundational concepts"| Chat
+    Chat -->|"Initial parameters"| Engine
+    Repo -->|"Pulls foundational policy data"| Engine
+
+    %% 2. Interview Loop
+    Engine -->|"Iterative discovery questions"| Chat
+    Chat -->|"Prompts & clarification requests"| SME
+    SME -->|"Operational reality & feedback"| Chat
+    Chat -->|"Transcripts & inputs"| Engine
+
+    %% 3. Policy & Conflict Enforcement
+    Engine <-->|"Cross-references inputs"| Rules
+    Rules -->|"Flags solutioning & process conflicts"| Chat
+
+    %% 4. Validation & Storage
+    Engine -->|"Draft summary for review"| Chat
+    SME -->|"Timestamped approval & validation"| Chat
+    Chat -->|"Committed validated data"| KB
+
+    %% 5. Output & Reporting
+    KB -->|"Consolidated workflow data"| Engine
+    Engine -->|"Visual process maps & structured reports"| Dash
+    Engine -->|"Pushes final maps & reports"| Repo
+
+    %% 6. Consumption
+    Dash -->|"Reviews maps & unresolved friction"| MGR
+    Dash -->|"Accesses 'To BA's Attention' section"| BA
