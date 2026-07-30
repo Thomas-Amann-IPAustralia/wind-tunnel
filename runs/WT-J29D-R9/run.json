@@ -2,10 +2,10 @@
   "schema_version": 1,
   "run_id": "WT-J29D-R9",
   "created_at": "2026-07-30T04:09:22Z",
-  "updated_at": "2026-07-30T05:54:45Z",
-  "stage": "THRESHOLD_REVIEW",
-  "stage_status": "awaiting_user",
-  "phase": "threshold",
+  "updated_at": "2026-07-30T05:55:27Z",
+  "stage": "FULL_DRAFTING",
+  "stage_status": "in_progress",
+  "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "9e7bb3e6d7e114df5ca0c3094804511b72f92920",
     "THRESHOLD_RECONCILING": "23ebbf53465028d85e6b4e9d82080ae1082c94da"
