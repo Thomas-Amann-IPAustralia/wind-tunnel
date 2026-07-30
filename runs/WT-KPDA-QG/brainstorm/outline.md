@@ -11,7 +11,7 @@ run_id: "WT-KPDA-QG"
 title: "Workflow Discovery AI Agent"
 summary: "An iterative AI agent that interviews staff to map workflows, requiring SME validation and timestamping for all inputs to ensure accuracy and auditability."
 created_at: "2026-07-30T05:13:52Z"
-updated_at: "2026-07-30T05:40:27Z"
+updated_at: "2026-07-30T05:40:59Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
