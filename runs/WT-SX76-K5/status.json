@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T03:26:20Z",
+  "updated_at": "2026-07-30T03:29:05Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -2003,9 +2003,97 @@
         "doc": "HTI State of AI Governance",
         "locator": "p.27"
       }
+    },
+    {
+      "id": "evt_000199",
+      "ts": "2026-07-30T03:29:05Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Pattern Catalogue Mapping",
+      "ref": {
+        "doc": "RAI Pattern Catalogue Mapping",
+        "locator": "RAI pattern catalogue!r26"
+      }
+    },
+    {
+      "id": "evt_000200",
+      "ts": "2026-07-30T03:29:05Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Suitability Assessment",
+      "ref": {
+        "doc": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000201",
+      "ts": "2026-07-30T03:29:05Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r37"
+      }
+    },
+    {
+      "id": "evt_000202",
+      "ts": "2026-07-30T03:29:05Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Mode Switcher",
+      "ref": {
+        "doc": "AI Mode Switcher",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000203",
+      "ts": "2026-07-30T03:29:05Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000204",
+      "ts": "2026-07-30T03:29:05Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r82"
+      }
+    },
+    {
+      "id": "evt_000205",
+      "ts": "2026-07-30T03:29:05Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Continuous RAI Validator",
+      "ref": {
+        "doc": "Continuous RAI Validator",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000206",
+      "ts": "2026-07-30T03:29:05Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Acceptance Testing",
+      "ref": {
+        "doc": "RAI Acceptance Testing",
+        "locator": "§(document start)"
+      }
     }
   ],
-  "log_cursor": 198,
+  "log_cursor": 206,
   "questions": null,
   "failure": null,
   "expected_ranges": {
