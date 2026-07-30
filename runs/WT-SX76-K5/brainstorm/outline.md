@@ -11,8 +11,8 @@ run_id: "WT-SX76-K5"
 title: "Legacy Code Modernization Assistant"
 summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems to accelerate modernization and security compliance."
 created_at: "2026-07-29T23:53:46Z"
-updated_at: "2026-07-30T00:00:02Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints"]
+updated_at: "2026-07-30T00:02:02Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
 <!-- section: problem -->
@@ -58,4 +58,4 @@ The system must be platform-agnostic, supporting a wide range of legacy language
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-*How you'd know, six months in, that it worked.*
+Success will be measured by the tool's ability to provide a comprehensive, accurate baseline SBOM and architectural map within a defined timeframe, and subsequently by the number of modular components successfully extracted or refactored based on the tool's recommendations within six months.
