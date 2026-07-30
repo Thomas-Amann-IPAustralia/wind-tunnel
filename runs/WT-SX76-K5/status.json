@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T05:50:11Z",
+  "updated_at": "2026-07-30T05:51:52Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "active",
-    "full.specialist.legal": "active",
+    "full.specialist.legal": "complete",
     "full.specialist.data_governance": "active",
     "full.specialist.solution_architect": "active",
     "full.checkpoint": "pending",
@@ -3125,9 +3125,16 @@
         "doc": "AI Use Policy v2.0",
         "locator": "p.12"
       }
+    },
+    {
+      "id": "evt_000309",
+      "ts": "2026-07-30T05:51:52Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_complete",
+      "detail": "Legal & Administrative Law specialist complete"
     }
   ],
-  "log_cursor": 308,
+  "log_cursor": 309,
   "questions": null,
   "failure": null,
   "expected_ranges": {

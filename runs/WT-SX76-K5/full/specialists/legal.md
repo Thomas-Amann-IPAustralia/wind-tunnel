@@ -1,0 +1,37 @@
+# legal — owned sections
+
+## 9.1
+
+Not applicable. The Legacy Code Modernization Assistant is an internal-facing IT tool used by software engineers and system architects to analyze, document, and map legacy software systems (Threshold Assessment §1.7, §2.4). It does not make or materially influence administrative decisions or actions that have a legal or significant effect on the rights, interests, or obligations of individuals, groups, or communities (Threshold Assessment §1.8, §3.1). Therefore, notification of AI influence is not applicable.
+
+## 9.2
+
+Not applicable. Because the tool is an internal software engineering assistant and does not make or materially influence administrative actions affecting external parties (Threshold Assessment §1.8, §3.1), there are no administrative actions or decisions arising from its use that would require a process for individuals to challenge (ADM Better Practice Guide, p.10).
+
+*Citations: [ADM Better Practice Guide, p.10]*
+
+## 10.2
+
+No. While the tool is an internal IT modernization assistant, the threshold assessment notes that legacy code may contain embedded business logic or eligibility rules that could affect rights if misinterpreted (Threshold Assessment §3.2). No formal consultation with an appropriate source of advice (such as human rights commissioners or legal experts) has been conducted yet to ensure alignment with human rights obligations, but this should be integrated as the project progresses, particularly before refactoring code that contains business logic (ADM Better Practice Guide, p.13, p.49).
+
+*Citations: [ADM Better Practice Guide, p.13], [ADM Better Practice Guide, p.49]*
+
+## 11.1
+
+No. Although the system incorporates a human-in-the-loop model where AI-generated drafts are reviewed line-by-line by human auditors and an Architecture Decision Group (Threshold Assessment §1.7), formal agency-level accountability mechanisms under the Policy for the responsible use of AI in government—such as designating an accountable official, registering the use case on an internal register, and establishing senior executive or board governance for this High-risk use case—are not yet established or documented (AI Use Policy v2.0, p.11, p.16; Threshold Assessment §1.2, §1.3, §4.1).
+
+*Citations: [AI Use Policy v2.0, p.11], [AI Use Policy v2.0, p.16]*
+
+## 12.1
+
+No. While the use case outline identifies general alignment with Australian Whole-of-Government (WofG) standards and the Policy for the responsible use of AI in government (Outline §8; Threshold Assessment §1.5, §2.5), specific agency-enabling legislation or regulatory instruments governing the legacy systems being analyzed have not yet been individually identified or documented. As legacy code may contain embedded business logic or statutory rules, identifying the specific legislative frameworks of the systems undergoing modernization is a critical next step (ADM Better Practice Guide, p.28; Threshold Assessment §3.2).
+
+*Citations: [ADM Better Practice Guide, p.28]*
+
+## 12.2
+
+Yes.
+- 12.2.1: Yes, the need for legal advice has been identified. Given that the tool analyzes legacy code which may contain embedded business logic or statutory rules (Threshold Assessment §3.2) and generates draft compliance attestations (Threshold Assessment §1.4), legal advice is essential to ensure compliance with administrative law, statutory authority, and WofG standards (ADM Better Practice Guide, p.13, p.49).
+- 12.2.2: Not applicable/None yet stored. As the project is currently in the concept/PoC phase, formal legal advice has not yet been commissioned or stored. Once obtained, all legal advices will be stored in the agency's secure electronic document and records management system (EDRMS) under the 'Legacy Code Modernization Assistant - Legal & Governance' file series.
+
+*Citations: [ADM Better Practice Guide, p.13], [ADM Better Practice Guide, p.49]*
