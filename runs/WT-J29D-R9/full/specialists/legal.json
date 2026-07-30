@@ -1,0 +1,97 @@
+{
+  "specialist": "legal",
+  "sections": {
+    "9.1": "No. The current project outline does not specify whether individuals, groups, or organisations will be notified if an administrative action (such as the registration of their website as problematic) is materially influenced by the AI system. Under administrative law and best practice, agencies should ensure that notice is provided to affected individuals before or at the time a decision is made, particularly when automated or AI-assisted systems are used to make decisions that materially impact their legal or other significant rights.",
+    "9.2": "No. The outline does not identify any timely or accessible process for affected parties to challenge the administrative actions or registrations influenced by the AI system. Establishing clear review options and dispute resolution mechanisms is a core requirement of administrative law and contestability principles to ensure that decisions can be reviewed for legality, fairness, and reasonableness.",
+    "10.2": "No. There is no indication in the current outline or threshold assessment that human rights advice has been sought or that a formal assessment of human rights alignment has been conducted. Ensuring compliance with human rights obligations is a critical component of determining whether an automated system is suitable for deployment, and the agency should consult appropriate sources of advice to ensure alignment.",
+    "11.1": "No. The threshold assessment notes that impact assessment responsibilities and additional roles are 'not stated in the outline'. To align with the Policy for the responsible use of AI in government, the agency must establish clear governance arrangements, including designating accountable officials and accountable use case owners who are identifiable and responsible for the AI system's outcomes throughout its lifecycle.",
+    "12.1": "No. The specific legislative authority and regulatory instruments governing the identification and registration of 'problematic' websites are not documented in the current outline. Scoping must include a detailed examination of the enabling legislation to ensure the AI system operates within lawful boundaries, has clear statutory authorization, and does not impermissibly constrain administrative discretion.",
+    "12.2": "Yes. The threshold assessment identifies a clear need for legal advice, recommending a legal audit of the correctness of legal interpretation and validation of data security and privacy. However, because the project is in its early stages, no formal legal advice has been obtained yet, and thus no storage repository (such as a document management system or case file) has been established. Seeking external legal advice on the specific risks of automation in the agency's statutory context is highly recommended before proceeding."
+  },
+  "citations": {
+    "9.1": [
+      {
+        "short_name": "ADM Better Practice Guide",
+        "locator": "p. 42"
+      }
+    ],
+    "9.2": [
+      {
+        "short_name": "ADM Better Practice Guide",
+        "locator": "p. 10"
+      },
+      {
+        "short_name": "ADM Better Practice Guide",
+        "locator": "p. 57"
+      }
+    ],
+    "10.2": [
+      {
+        "short_name": "ADM Better Practice Guide",
+        "locator": "p. 12"
+      },
+      {
+        "short_name": "ADM Better Practice Guide",
+        "locator": "p. 49"
+      }
+    ],
+    "11.1": [
+      {
+        "short_name": "AI Use Policy v2.0",
+        "locator": "p. 4"
+      },
+      {
+        "short_name": "AI Use Policy v2.0",
+        "locator": "p. 10"
+      }
+    ],
+    "12.1": [
+      {
+        "short_name": "ADM Better Practice Guide",
+        "locator": "p. 12"
+      },
+      {
+        "short_name": "ADM Better Practice Guide",
+        "locator": "p. 28"
+      }
+    ],
+    "12.2": [
+      {
+        "short_name": "ADM Better Practice Guide",
+        "locator": "p. 12"
+      },
+      {
+        "short_name": "ADM Better Practice Guide",
+        "locator": "p. 49"
+      }
+    ]
+  },
+  "questions": {
+    "why": "These questions are necessary to establish the lawful authority for the system, ensure administrative law compliance regarding notification and review rights, and identify accountable owners as required by federal AI policy.",
+    "items": [
+      {
+        "question_id": "legal-1",
+        "text": "What is the specific enabling legislation or statutory authority under which the agency identifies and registers 'problematic' websites?",
+        "options": null,
+        "allow_free_text": true
+      },
+      {
+        "question_id": "legal-2",
+        "text": "Will website owners or affected individuals be notified when their site is flagged or registered, and what formal channels will be available for them to challenge or appeal these decisions?",
+        "options": null,
+        "allow_free_text": true
+      },
+      {
+        "question_id": "legal-3",
+        "text": "Has the agency designated an accountable official and an accountable use case owner for this AI system, and where will the formal legal advice and privacy impact assessments be stored?",
+        "options": null,
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}

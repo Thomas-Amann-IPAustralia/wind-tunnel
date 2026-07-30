@@ -4,7 +4,7 @@
   "run_code": "WT-J29D-R9",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T05:58:33Z",
+  "updated_at": "2026-07-30T05:59:36Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "active",
     "full.specialist.privacy": "active",
     "full.specialist.ethics": "active",
-    "full.specialist.legal": "active",
+    "full.specialist.legal": "complete",
     "full.specialist.data_governance": "pending",
     "full.specialist.solution_architect": "pending",
     "full.checkpoint": "pending",
@@ -724,9 +724,16 @@
         "doc": "New Machinery of Government",
         "locator": "p.87"
       }
+    },
+    {
+      "id": "evt_000074",
+      "ts": "2026-07-30T05:59:36Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_complete",
+      "detail": "Legal & Administrative Law specialist complete"
     }
   ],
-  "log_cursor": 73,
+  "log_cursor": 74,
   "questions": null,
   "failure": null,
   "expected_ranges": {
