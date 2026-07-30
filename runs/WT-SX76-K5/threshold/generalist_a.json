@@ -1,0 +1,54 @@
+{
+  "label": "generalist_a",
+  "sections": {
+    "1": "### 1.1 AI use case profile\n* **Name**: Legacy Code Modernization Assistant\n* **Run ID**: WT-SX76-K5\n\n### 1.2 Establishing impact assessment responsibilities\nNot stated in the outline.\n\n### 1.3 Additional roles and responsibilities\nNot stated in the outline.\n\n### 1.4 AI use case description\nThe Legacy Code Modernization Assistant is an AI-driven, platform-agnostic tool designed to analyze, document, and map legacy software systems. It ingests legacy source code, configuration files, and existing technical documentation to generate baseline Software Bills of Materials (SBOMs), architectural maps, and draft compliance attestations.\n\n### 1.5 In-scope use case\nYes, the tool is used to analyze legacy codebases, generate documentation, and assist in architectural governance.\n\n### 1.6 Type of AI technology\nLarge Language Model (LLM) / Generative AI (used for generating high-level impact reports, architectural maps, and draft compliance attestations).\n\n### 1.7 Usage pattern\nThe system operates via a developer-focused CLI for code ingestion and analysis, a web-based dashboard for visualizing system architecture, and a CI/CD pipeline integration to monitor configuration drift.\n\n### 1.8 Administrative decisions\nNot stated in the outline. However, the tool generates draft compliance attestations which are reviewed line-by-line by human auditors before final sign-off.\n\n### 1.9 Domain\nGovernment IT, software engineering, and architectural governance.\n\n### 1.10 Expert contributions\nNot stated in the outline.\n\n### 1.11 Impact assessment review log\nNot stated in the outline.",
+    "2": "### 2.1 Problem definition\nGovernment agencies are burdened by opaque, undocumented legacy software systems that are difficult to maintain, secure, or integrate with modern services.\n\n### 2.2 AI use case purpose\nThe purpose of the AI use case is to ingest legacy source code to generate documentation, identify modular components for abstraction, and produce Software Bills of Materials (SBOMs) to guide modernization efforts.\n\n### 2.3 Non-AI alternatives\nAlternatives considered include manual code audits by external consultants, non-AI static analysis tools, or complete system replacement (rip-and-replace), which is often cost-prohibitive.\n\n### 2.4 Identifying stakeholders\n* **Primary Users**: Software engineers and system architects within government IT departments.\n* **Stakeholders**: Security officers, procurement leads, and the public who rely on the stability of these services.\n\n### 2.5 Expected benefits\nThe expected benefits include accurate baseline SBOMs and architectural maps, tracking of configuration drift in CI/CD pipelines, visualization of modernization progress across government portfolios, and automated compliance attestations aligned with Australian Whole-of-Government (WofG) standards.",
+    "4": "### 4.1 Assessing officer recommendation\nThe Legacy Code Modernization Assistant presents a highly valuable capability for addressing technical debt across government agencies. However, because it processes highly sensitive proprietary legacy source code and configuration files, rigorous safeguards must be established.\n\nIt is recommended that:\n1. **Sovereign Deployment**: The LLM endpoint must be hosted strictly on sovereign, self-managed, or air-gapped infrastructure as preferred in the outline, to prevent any external exposure of government source code.\n2. **Human-in-the-Loop (HITL)**: All AI-generated outputs, particularly Software Bills of Materials (SBOMs) and draft compliance attestations, must continue to undergo strict, line-by-line human verification by qualified engineers and auditors before final sign-off.\n3. **Security Auditing**: A comprehensive security assessment of the tool's integration into CI/CD pipelines should be conducted to ensure that the automated analysis does not introduce new attack vectors or expose sensitive configuration data.\n4. **Model Provenance**: Future implementation phases must explicitly define and verify model provenance and residency requirements to align with Australian Whole-of-Government standards."
+  },
+  "risks": {
+    "3.1": {
+      "consequence": "Minor",
+      "likelihood": "Possible",
+      "rationale": "The tool is an internal developer assistant and does not directly interface with the public. However, if the tool generates incorrect architectural maps or SBOMs that lead to deployment failures, it could cause short-term, reversible barriers to public-facing services. In line with the precautionary principle, the likelihood is set to Possible."
+    },
+    "3.2": {
+      "consequence": "Insignificant",
+      "likelihood": "Rare",
+      "rationale": "The system processes technical source code and configuration files rather than personal or demographic data. The risk of unfair discrimination against individuals or groups is negligible."
+    },
+    "3.3": {
+      "consequence": "Insignificant",
+      "likelihood": "Rare",
+      "rationale": "The input data consists of legacy source code and technical documentation. There is no reasonable pathway for this tool to generate or perpetuate stereotyping or demeaning representations of individuals or communities."
+    },
+    "3.4": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "The tool generates SBOMs and compliance attestations. If the AI fails to identify a critical security vulnerability or dependency, and this is missed during human review, it could lead to the deployment of insecure software, potentially exposing public services to cyber threats or outages."
+    },
+    "3.5": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "Legacy source code and configuration files may contain hardcoded secrets, credentials, or references to legacy databases containing personal information. While the system is intended to run in a sovereign, air-gapped environment, the ingestion of such sensitive technical data raises potential privacy concerns if not handled securely."
+    },
+    "3.6": {
+      "consequence": "Major",
+      "likelihood": "Possible",
+      "rationale": "The system processes highly sensitive proprietary legacy source code and configuration files. A data breach or unauthorized access to this repository would expose the inner workings and potential vulnerabilities of government IT infrastructure, posing a major security risk."
+    },
+    "3.7": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "The tool relies on an LLM endpoint. Although the outline specifies a preference for sovereign or self-managed infrastructure, the specific model provenance and residency requirements are deferred to future phases. If the system is implemented with external dependencies or insecure integrations, it could introduce vulnerabilities."
+    },
+    "3.8": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "If the AI-generated compliance attestations or SBOMs are found to be inaccurate after being signed off, it could lead to public questioning of the government's technical oversight and modernization integrity, causing moderate reputational damage."
+    }
+  },
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
