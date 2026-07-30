@@ -7,55 +7,55 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-KPDA-QG"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-KPDA-QG"
+title: "Workflow Discovery AI Agent"
+summary: "An AI agent that interviews staff to document workflows, identify bottlenecks, and map process branching."
 created_at: "2026-07-30T05:13:52Z"
-updated_at: "2026-07-30T05:13:52Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-30T05:15:22Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Teams often struggle to document complex workflows, leading to hidden bottlenecks and inconsistent processes that are difficult to analyze or improve.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+An AI-driven conversational agent that interviews team members to map out their current workflows, identifying branching logic, pain points, and operational bottlenecks.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+Internal team members are the primary users; process owners and management are the stakeholders who consume the resulting workflow maps.
 
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+The agent will process transcripts of internal interviews and potentially existing process documentation; this data is internal and likely contains sensitive operational details.
 
 <!-- section: happy_path -->
 ## 5. Happy path
 
-*One ordinary, successful use — narrated start to finish.*
+A team member initiates a session with the agent, which asks targeted questions about their daily tasks. The agent identifies a recurring bottleneck in a specific approval step, summarizes the workflow, and exports a structured process map for the team lead.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
 
-*What else could solve this, including at least one non-AI option.*
+Manual interviews conducted by a business analyst, or using standard process mining software that tracks system logs rather than human-reported pain points.
 
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-*What the user sees and touches — or an honest "nothing; it's headless."*
+A chat-based interface (e.g., Slack or a web portal) where the agent guides the user through a structured interview.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-*The hard limits and strong preferences: technical, organisational, maintenance.*
+Must ensure data privacy for sensitive internal processes and be capable of integrating with existing documentation tools.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-*How you'd know, six months in, that it worked.*
+The agent successfully maps at least three core workflows that are validated by process owners as accurate and actionable.
