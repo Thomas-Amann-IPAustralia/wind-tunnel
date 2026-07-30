@@ -11,7 +11,7 @@ run_id: "WT-J29D-R9"
 title: "Automated Web Compliance Monitor"
 summary: "An internal AI-driven tool to identify and streamline the registration of problematic websites through human-in-the-loop oversight and continuous model refinement."
 created_at: "2026-07-30T04:09:22Z"
-updated_at: "2026-07-30T04:13:55Z"
+updated_at: "2026-07-30T04:14:18Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -53,7 +53,7 @@ A web-based dashboard for staff to review flagged sites, inspect the AI's reason
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-Must comply with privacy laws regarding data collection, ensure the AI's flagging logic is fully auditable, and maintain a clear human-in-the-loop requirement for all registration actions.
+Must comply with privacy laws, ensure auditable AI logic, and maintain a human-in-the-loop. The system will be deployed on internal, containerized infrastructure to ensure strict control over the environment and data integrity for legal evidence.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
