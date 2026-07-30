@@ -11,7 +11,7 @@ run_id: "WT-KPDA-QG"
 title: "Workflow Discovery AI Agent"
 summary: "An iterative AI agent that interviews staff to map workflows, cross-referencing multi-user inputs to resolve process conflicts and identify bottlenecks."
 created_at: "2026-07-30T05:13:52Z"
-updated_at: "2026-07-30T05:20:54Z"
+updated_at: "2026-07-30T05:21:35Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -23,7 +23,7 @@ Teams often struggle to document complex workflows, leading to hidden bottleneck
 <!-- section: solution -->
 ## 2. Proposed solution
 
-An AI-driven conversational agent that conducts iterative, stateful interviews to map workflows. It dynamically generates follow-up questions to uncover branching logic and pain points, while cross-referencing inputs from multiple team members to identify and probe conflicting accounts or overlapping responsibilities.
+An AI-driven conversational agent that conducts iterative, stateful interviews to map workflows. It dynamically generates follow-up questions to uncover branching logic and pain points, cross-referencing inputs from multiple team members to identify conflicts. When irreconcilable differences arise between staff, the agent flags these specific nodes for human management review rather than attempting to synthesize a compromise.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
