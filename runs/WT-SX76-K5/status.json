@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T05:44:05Z",
+  "updated_at": "2026-07-30T05:44:44Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -2781,9 +2781,97 @@
         "doc": "ADM Guide (earlier ed.)",
         "locator": "p.30"
       }
+    },
+    {
+      "id": "evt_000277",
+      "ts": "2026-07-30T05:44:44Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.65"
+      }
+    },
+    {
+      "id": "evt_000278",
+      "ts": "2026-07-30T05:44:44Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000279",
+      "ts": "2026-07-30T05:44:44Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000280",
+      "ts": "2026-07-30T05:44:44Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.57"
+      }
+    },
+    {
+      "id": "evt_000281",
+      "ts": "2026-07-30T05:44:44Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000282",
+      "ts": "2026-07-30T05:44:44Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000283",
+      "ts": "2026-07-30T05:44:44Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.46"
+      }
+    },
+    {
+      "id": "evt_000284",
+      "ts": "2026-07-30T05:44:44Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.36"
+      }
     }
   ],
-  "log_cursor": 276,
+  "log_cursor": 284,
   "questions": null,
   "failure": null,
   "expected_ranges": {
