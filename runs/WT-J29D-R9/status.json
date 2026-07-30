@@ -4,7 +4,7 @@
   "run_code": "WT-J29D-R9",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T06:00:07Z",
+  "updated_at": "2026-07-30T06:00:49Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -992,9 +992,97 @@
         "doc": "ADM Guide (earlier ed.)",
         "locator": "p.30"
       }
+    },
+    {
+      "id": "evt_000102",
+      "ts": "2026-07-30T06:00:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000103",
+      "ts": "2026-07-30T06:00:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000104",
+      "ts": "2026-07-30T06:00:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000105",
+      "ts": "2026-07-30T06:00:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000106",
+      "ts": "2026-07-30T06:00:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC AI Guidance",
+      "ref": {
+        "doc": "AHRC AI Guidance",
+        "locator": "§Disadvantaging"
+      }
+    },
+    {
+      "id": "evt_000107",
+      "ts": "2026-07-30T06:00:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000108",
+      "ts": "2026-07-30T06:00:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000109",
+      "ts": "2026-07-30T06:00:49Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.22"
+      }
     }
   ],
-  "log_cursor": 101,
+  "log_cursor": 109,
   "questions": null,
   "failure": null,
   "expected_ranges": {
