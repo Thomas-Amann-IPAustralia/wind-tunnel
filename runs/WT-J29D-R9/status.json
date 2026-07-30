@@ -4,7 +4,7 @@
   "run_code": "WT-J29D-R9",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T06:00:49Z",
+  "updated_at": "2026-07-30T06:01:15Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -1080,9 +1080,185 @@
         "doc": "NAIC RAI Tools",
         "locator": "p.22"
       }
+    },
+    {
+      "id": "evt_000110",
+      "ts": "2026-07-30T06:00:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000111",
+      "ts": "2026-07-30T06:00:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000112",
+      "ts": "2026-07-30T06:00:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.14"
+      }
+    },
+    {
+      "id": "evt_000113",
+      "ts": "2026-07-30T06:00:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000114",
+      "ts": "2026-07-30T06:00:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.46"
+      }
+    },
+    {
+      "id": "evt_000115",
+      "ts": "2026-07-30T06:00:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000116",
+      "ts": "2026-07-30T06:00:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000117",
+      "ts": "2026-07-30T06:00:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.27"
+      }
+    },
+    {
+      "id": "evt_000118",
+      "ts": "2026-07-30T06:01:15Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000119",
+      "ts": "2026-07-30T06:01:15Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000120",
+      "ts": "2026-07-30T06:01:15Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000121",
+      "ts": "2026-07-30T06:01:15Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AHRC HRT Report",
+      "ref": {
+        "doc": "AHRC HRT Report",
+        "locator": "§A requirement for a technical explanation?"
+      }
+    },
+    {
+      "id": "evt_000122",
+      "ts": "2026-07-30T06:01:15Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Guidance for AI Adoption",
+      "ref": {
+        "doc": "Guidance for AI Adoption",
+        "locator": "p.22"
+      }
+    },
+    {
+      "id": "evt_000123",
+      "ts": "2026-07-30T06:01:15Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.17"
+      }
+    },
+    {
+      "id": "evt_000124",
+      "ts": "2026-07-30T06:01:15Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§**AI Ethics Principle 6: Transparency and explainability**"
+      }
+    },
+    {
+      "id": "evt_000125",
+      "ts": "2026-07-30T06:01:15Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading TRS AI Guidelines",
+      "ref": {
+        "doc": "TRS AI Guidelines",
+        "locator": "p.2"
+      }
     }
   ],
-  "log_cursor": 109,
+  "log_cursor": 125,
   "questions": null,
   "failure": null,
   "expected_ranges": {
