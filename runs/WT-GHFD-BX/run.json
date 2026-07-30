@@ -2,11 +2,14 @@
   "schema_version": 1,
   "run_id": "WT-GHFD-BX",
   "created_at": "2026-07-30T04:42:18Z",
-  "updated_at": "2026-07-30T04:45:10Z",
-  "stage": "THRESHOLD_DRAFTING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-30T04:46:14Z",
+  "stage": "THRESHOLD_REVIEW",
+  "stage_status": "awaiting_user",
   "phase": "threshold",
-  "checkpoints": {},
+  "checkpoints": {
+    "THRESHOLD_DRAFTING": "c0e81dc48d6edf27748d74f0186ba4b4ec781a85",
+    "THRESHOLD_RECONCILING": "b747fdebac4ec862d9774aca0d41f1b35ac06248"
+  },
   "revisions": {
     "poc": 0,
     "flow_map": 0,

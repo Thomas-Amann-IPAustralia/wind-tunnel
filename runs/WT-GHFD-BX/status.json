@@ -3,8 +3,8 @@
   "run_id": "WT-GHFD-BX",
   "run_code": "WT-GHFD-BX",
   "phase": "threshold",
-  "overall_state": "running",
-  "updated_at": "2026-07-30T04:46:11Z",
+  "overall_state": "paused",
+  "updated_at": "2026-07-30T04:46:14Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
