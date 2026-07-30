@@ -11,7 +11,7 @@ run_id: "WT-J29D-R9"
 title: "Automated Web Compliance Monitor"
 summary: "An internal AI-driven tool to identify and streamline the registration of problematic websites through human-in-the-loop oversight and continuous model refinement."
 created_at: "2026-07-30T04:09:22Z"
-updated_at: "2026-07-30T04:13:19Z"
+updated_at: "2026-07-30T04:13:38Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -38,7 +38,7 @@ The system will process public web content, URLs, and metadata from existing reg
 <!-- section: happy_path -->
 ## 5. Happy path
 
-The AI scans a target list of domains, identifies a site violating policy, and flags it for a human officer. The officer reviews the AI's evidence on a dashboard, confirms the violation, and clicks 'register' to initiate the formal process.
+The AI scans a target list of domains, identifies a site violating policy, and flags it for a human officer. The officer reviews the AI's evidence, which includes a full visual snapshot of the page and highlighted text, confirms the violation, and clicks 'register' to initiate the formal process.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
