@@ -1,0 +1,54 @@
+{
+  "label": "generalist_b",
+  "sections": {
+    "1": "# Section 1 — Basic information\n\n## 1.1 AI use case profile\n- **Name of AI use case**: Automated Data Governance Toolkit\n- **Run ID**: WT-GHFD-BX\n\n## 1.2 Establishing impact assessment responsibilities\n- **Assessing Officer**: Not stated in the outline\n- **Approving Officer**: Not stated in the outline\n\n## 1.3 Additional roles and responsibilities\n- Not stated in the outline\n\n## 1.4 AI use case description\nAn AI-powered toolkit designed to automate the classification and policy enforcement of internal government datasets. The system scans, classifies, and suggests governance actions for datasets, acting as an automated assistant for data stewards.\n\n## 1.5 In-scope use case\nYes, the system is designed to scan, classify, and suggest governance actions for internal datasets.\n\n## 1.6 Type of AI technology\nAI-powered classification and policy enforcement toolkit. The specific underlying model architecture is not stated in the outline.\n\n## 1.7 Usage pattern\nAutomated assistant suggesting governance actions to human data stewards.\n\n## 1.8 Administrative decisions\nNot stated in the outline.\n\n## 1.9 Domain\nData governance, compliance, and information management.\n\n## 1.10 Expert contributions\nNot stated in the outline.\n\n## 1.11 Impact assessment review log\nNot stated in the outline.",
+    "2": "# Section 2 — Purpose and expected benefits\n\n## 2.1 Problem definition\nPublic sector teams struggle to maintain consistent data governance. This often results in manual, error-prone classification of sensitive information and inconsistent application of data retention policies.\n\n## 2.2 AI use case purpose\nTo automate the scanning, classification, and suggestion of governance actions for internal datasets, thereby assisting data stewards in maintaining consistent data governance.\n\n## 2.3 Non-AI alternatives\nNot stated in the outline.\n\n## 2.4 Identifying stakeholders\n- **Primary Users**: Data stewards and IT administrators.\n- **Affected Stakeholders**: The public (whose data is protected) and internal compliance officers.\n\n## 2.5 Expected benefits\n- Reduction in manual, error-prone classification of sensitive information.\n- Consistent application of data retention policies.\n- Improved efficiency for public sector data governance teams.",
+    "4": "# Section 4 — Threshold assessment outcome\n\n## 4.1 Assessing officer recommendation\nThe proposed Automated Data Governance Toolkit aims to address critical inefficiencies in manual data classification and policy enforcement. However, because the toolkit is designed to scan and process internal datasets that likely contain personally identifiable information (PII) and sensitive government data, it introduces notable risks regarding privacy, data security, and potential classification bias.\n\nTo ensure safe and compliant implementation, it is recommended that the project team establish strict human-in-the-loop validation protocols, ensuring that the AI only acts as an assistant and does not execute policy enforcement without human sign-off. Additionally, a comprehensive privacy impact assessment should be conducted, and the classification models must be rigorously tested against diverse datasets to prevent systematic misclassification. These measures will help safeguard sensitive information and maintain public trust."
+  },
+  "risks": {
+    "3.1": {
+      "consequence": "Insignificant",
+      "likelihood": "Possible",
+      "rationale": "The toolkit is an internal administrative tool designed for data stewards and IT administrators, rather than a public-facing service. A system failure or glitch would not directly block public access to essential services. However, because the outline is silent on the exact integration of this tool with public-facing databases, we adopt a precautionary likelihood of Possible while keeping the consequence Insignificant."
+    },
+    "3.2": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "The toolkit scans and classifies datasets containing PII. If the AI model contains underlying biases, it might systematically misclassify or apply inconsistent retention/access policies to datasets associated with specific demographic groups or vulnerable communities. Since the outline does not specify bias-mitigation or testing protocols, we adopt a precautionary stance."
+    },
+    "3.3": {
+      "consequence": "Minor",
+      "likelihood": "Possible",
+      "rationale": "There is a risk that the AI's classification taxonomy or automated suggestions could perpetuate biased or demeaning representations when processing unstructured documents. Because this is primarily an internal metadata classification tool, the public exposure is limited, but a precautionary likelihood of Possible is applied due to the lack of detail on the classification criteria."
+    },
+    "3.4": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "If the AI incorrectly applies retention policies, it could lead to the premature deletion of critical records or the unauthorized exposure of PII. This could cause noticeable distress or operational harm to individuals and compliance teams. Given the lack of detail on safeguards in the outline, we assume a precautionary likelihood of Possible."
+    },
+    "3.5": {
+      "consequence": "Major",
+      "likelihood": "Possible",
+      "rationale": "The system is explicitly designed to handle datasets likely containing PII. If the AI misclassifies sensitive personal data or suggests incorrect access policies, it could lead to large-scale privacy breaches or unauthorized internal access, severely damaging public trust. A precautionary likelihood of Possible is selected as security controls are not detailed."
+    },
+    "3.6": {
+      "consequence": "Major",
+      "likelihood": "Possible",
+      "rationale": "The toolkit processes sensitive government information and structured/unstructured databases. Misclassification of highly restricted or classified data could lead to major security breaches or unauthorized exposure of government assets. In the absence of detailed security classification protocols in the outline, we adopt a precautionary stance."
+    },
+    "3.7": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "Integrating an AI scanning toolkit across multiple internal databases introduces potential system-level vulnerabilities (e.g., data pipeline leaks or model exploitation). If a vulnerability is exploited, it could cause a serious, contained data leak. We default the likelihood to Possible as system architecture details are not provided."
+    },
+    "3.8": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rationale": "If the AI-driven toolkit fails, leading to the loss of sensitive public records or a privacy breach of PII, it would attract media attention and cause the public to question the government's oversight of automated systems. A precautionary likelihood of Possible is applied."
+    }
+  },
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
