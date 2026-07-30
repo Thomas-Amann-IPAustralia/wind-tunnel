@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T04:55:04Z",
+  "updated_at": "2026-07-30T04:55:29Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -2187,9 +2187,251 @@
       "agent": "full.specialist.legal",
       "type": "drafting",
       "detail": "drafting legal's owned sections"
+    },
+    {
+      "id": "evt_000227",
+      "ts": "2026-07-30T04:55:04Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000228",
+      "ts": "2026-07-30T04:55:04Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000229",
+      "ts": "2026-07-30T04:55:04Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000230",
+      "ts": "2026-07-30T04:55:04Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000231",
+      "ts": "2026-07-30T04:55:04Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000232",
+      "ts": "2026-07-30T04:55:04Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000233",
+      "ts": "2026-07-30T04:55:16Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000234",
+      "ts": "2026-07-30T04:55:16Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.50"
+      }
+    },
+    {
+      "id": "evt_000235",
+      "ts": "2026-07-30T04:55:16Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000236",
+      "ts": "2026-07-30T04:55:16Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000237",
+      "ts": "2026-07-30T04:55:16Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000238",
+      "ts": "2026-07-30T04:55:16Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000239",
+      "ts": "2026-07-30T04:55:16Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading AI Ethics Principles",
+      "ref": {
+        "doc": "AI Ethics Principles",
+        "locator": "§AI Ethics Principles at a glance"
+      }
+    },
+    {
+      "id": "evt_000240",
+      "ts": "2026-07-30T04:55:16Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading VAISS",
+      "ref": {
+        "doc": "VAISS",
+        "locator": "s 10"
+      }
+    },
+    {
+      "id": "evt_000241",
+      "ts": "2026-07-30T04:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000242",
+      "ts": "2026-07-30T04:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000243",
+      "ts": "2026-07-30T04:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000244",
+      "ts": "2026-07-30T04:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000245",
+      "ts": "2026-07-30T04:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000246",
+      "ts": "2026-07-30T04:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.120"
+      }
+    },
+    {
+      "id": "evt_000247",
+      "ts": "2026-07-30T04:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000248",
+      "ts": "2026-07-30T04:55:29Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.8"
+      }
     }
   ],
-  "log_cursor": 226,
+  "log_cursor": 248,
   "questions": null,
   "failure": null,
   "expected_ranges": {
