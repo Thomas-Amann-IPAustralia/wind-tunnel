@@ -4,7 +4,7 @@
   "run_code": "WT-J29D-R9",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T06:02:19Z",
+  "updated_at": "2026-07-30T06:03:13Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -1344,9 +1344,97 @@
         "doc": "NIST SP 800-61r3",
         "locator": "p.21"
       }
+    },
+    {
+      "id": "evt_000134",
+      "ts": "2026-07-30T06:03:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000135",
+      "ts": "2026-07-30T06:03:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI Data Security CSI",
+      "ref": {
+        "doc": "AI Data Security CSI",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000136",
+      "ts": "2026-07-30T06:03:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000137",
+      "ts": "2026-07-30T06:03:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI Data Security CSI",
+      "ref": {
+        "doc": "AI Data Security CSI",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000138",
+      "ts": "2026-07-30T06:03:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading LLMSVS",
+      "ref": {
+        "doc": "LLMSVS",
+        "locator": "§Control objective"
+      }
+    },
+    {
+      "id": "evt_000139",
+      "ts": "2026-07-30T06:03:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000140",
+      "ts": "2026-07-30T06:03:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000141",
+      "ts": "2026-07-30T06:03:13Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.34"
+      }
     }
   ],
-  "log_cursor": 133,
+  "log_cursor": 141,
   "questions": null,
   "failure": null,
   "expected_ranges": {
