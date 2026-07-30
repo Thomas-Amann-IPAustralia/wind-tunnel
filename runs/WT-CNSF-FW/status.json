@@ -3,14 +3,14 @@
   "run_id": "WT-CNSF-FW",
   "run_code": "WT-CNSF-FW",
   "phase": "full",
-  "overall_state": "running",
-  "updated_at": "2026-07-30T04:58:39Z",
+  "overall_state": "failed",
+  "updated_at": "2026-07-30T05:00:56Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
-    "full.specialist.it_security": "active",
+    "full.specialist.it_security": "failed",
     "full.specialist.privacy": "active",
     "full.specialist.ethics": "active",
     "full.specialist.legal": "active",
@@ -2781,11 +2781,23 @@
         "doc": "AI Use Policy v2.0",
         "locator": "p.19"
       }
+    },
+    {
+      "id": "evt_000281",
+      "ts": "2026-07-30T05:00:56Z",
+      "agent": "full.specialist.it_security",
+      "type": "error",
+      "detail": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-CNSF-FW to resume from the last checkpoint."
     }
   ],
-  "log_cursor": 280,
+  "log_cursor": 281,
   "questions": null,
-  "failure": null,
+  "failure": {
+    "stage": "full.specialist.it_security",
+    "message": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-CNSF-FW to resume from the last checkpoint.",
+    "run_code": "WT-CNSF-FW",
+    "technical": "LLMError: Gemini HTTP 503 for model 'gemini-3.5-flash': {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n (attempt 4/4)"
+  },
   "expected_ranges": {
     "threshold": [
       50,
