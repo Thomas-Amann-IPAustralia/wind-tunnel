@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T04:56:27Z",
+  "updated_at": "2026-07-30T04:57:14Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -2517,9 +2517,97 @@
         "doc": "ISM",
         "locator": "p.120"
       }
+    },
+    {
+      "id": "evt_000257",
+      "ts": "2026-07-30T04:57:14Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000258",
+      "ts": "2026-07-30T04:57:14Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.57"
+      }
+    },
+    {
+      "id": "evt_000259",
+      "ts": "2026-07-30T04:57:14Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.65"
+      }
+    },
+    {
+      "id": "evt_000260",
+      "ts": "2026-07-30T04:57:14Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000261",
+      "ts": "2026-07-30T04:57:14Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000262",
+      "ts": "2026-07-30T04:57:14Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.46"
+      }
+    },
+    {
+      "id": "evt_000263",
+      "ts": "2026-07-30T04:57:14Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.36"
+      }
+    },
+    {
+      "id": "evt_000264",
+      "ts": "2026-07-30T04:57:14Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.47"
+      }
     }
   ],
-  "log_cursor": 256,
+  "log_cursor": 264,
   "questions": null,
   "failure": null,
   "expected_ranges": {
