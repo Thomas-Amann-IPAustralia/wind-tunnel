@@ -11,7 +11,7 @@ run_id: "WT-SX76-K5"
 title: "Legacy Code Modernization Assistant"
 summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems to accelerate modernization, track refactoring progress, and provide portfolio-wide visibility."
 created_at: "2026-07-29T23:53:46Z"
-updated_at: "2026-07-30T00:13:31Z"
+updated_at: "2026-07-30T00:14:01Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -38,7 +38,7 @@ The system will process proprietary legacy source code, configuration files, and
 <!-- section: happy_path -->
 ## 5. Happy path
 
-A developer runs the CLI to ingest a legacy repository, generating a baseline SBOM and architectural map. As they refactor, the CI/CD pipeline triggers the tool to compare the new state against the planned configuration. If a deviation occurs, the tool flags a conflict for triage, providing an impact analysis of the manual change versus the original roadmap. The developer reviews these projections in the dashboard; significant deviations are surfaced to an Architecture Decision Group. The group reviews AI-generated high-level impact reports, with the ability to drill down into specific code diffs or dependency changes before approving the merge or requiring reconciliation.
+A developer runs the CLI to ingest a legacy repository, generating a baseline SBOM and architectural map. As they refactor, the CI/CD pipeline triggers the tool to compare the new state against the planned configuration. If a deviation occurs, the tool flags a conflict for triage. The developer reviews these projections in the dashboard; significant deviations are surfaced to an Architecture Decision Group. The group reviews AI-generated high-level impact reports, with the ability to use progressive disclosure to drill down into specific code diffs or dependency changes before approving the merge or requiring reconciliation.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
