@@ -7,33 +7,33 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-CNSF-FW"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-CNSF-FW"
+title: "Departmental Knowledge Graph"
+summary: "Building an AI-powered knowledge graph to map and connect fragmented internal departmental information."
 created_at: "2026-07-30T04:05:35Z"
-updated_at: "2026-07-30T04:05:35Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-30T04:07:17Z"
+resolved: ["problem", "solution", "users_stakeholders", "data"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Departmental information is currently siloed and fragmented, making it difficult for staff to discover relevant internal knowledge, policies, or project history efficiently.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+An automated knowledge graph that ingests internal documents and communications to map relationships between entities, using AI to extract nodes and edges from unstructured text.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+Primary users are departmental staff and policy researchers; stakeholders include IT/data governance teams responsible for information security and the leadership team seeking better organizational insights.
 
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+Internal unstructured data including policy documents, meeting minutes, project reports, and potentially internal wikis or email archives; sensitivity is likely high given the internal nature of the content.
 
 <!-- section: happy_path -->
 ## 5. Happy path
