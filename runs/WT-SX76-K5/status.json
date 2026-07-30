@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T02:03:30Z",
+  "updated_at": "2026-07-30T02:04:01Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -1215,9 +1215,97 @@
         "doc": "AI in OT Principles",
         "locator": "p.16"
       }
+    },
+    {
+      "id": "evt_000123",
+      "ts": "2026-07-30T02:04:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000124",
+      "ts": "2026-07-30T02:04:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading LLMSVS",
+      "ref": {
+        "doc": "LLMSVS",
+        "locator": "§Control objective"
+      }
+    },
+    {
+      "id": "evt_000125",
+      "ts": "2026-07-30T02:04:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000126",
+      "ts": "2026-07-30T02:04:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.34"
+      }
+    },
+    {
+      "id": "evt_000127",
+      "ts": "2026-07-30T02:04:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.224"
+      }
+    },
+    {
+      "id": "evt_000128",
+      "ts": "2026-07-30T02:04:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI Data Security CSI",
+      "ref": {
+        "doc": "AI Data Security CSI",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000129",
+      "ts": "2026-07-30T02:04:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading LLMSVS",
+      "ref": {
+        "doc": "LLMSVS",
+        "locator": "§Control objective"
+      }
+    },
+    {
+      "id": "evt_000130",
+      "ts": "2026-07-30T02:04:01Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.20"
+      }
     }
   ],
-  "log_cursor": 122,
+  "log_cursor": 130,
   "questions": null,
   "failure": null,
   "expected_ranges": {
