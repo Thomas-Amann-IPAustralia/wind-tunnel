@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T02:02:22Z",
+  "updated_at": "2026-07-30T02:02:29Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -1040,9 +1040,23 @@
         "doc": "NIST SP 800-61r3",
         "locator": "p.15"
       }
+    },
+    {
+      "id": "evt_000106",
+      "ts": "2026-07-30T02:02:29Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_started",
+      "detail": "Legal & Administrative Law specialist started"
+    },
+    {
+      "id": "evt_000107",
+      "ts": "2026-07-30T02:02:29Z",
+      "agent": "full.specialist.legal",
+      "type": "drafting",
+      "detail": "drafting legal's owned sections"
     }
   ],
-  "log_cursor": 105,
+  "log_cursor": 107,
   "questions": null,
   "failure": null,
   "expected_ranges": {
