@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T03:24:56Z",
+  "updated_at": "2026-07-30T03:25:37Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -15,7 +15,7 @@
     "full.specialist.ethics": "active",
     "full.specialist.legal": "active",
     "full.specialist.data_governance": "active",
-    "full.specialist.solution_architect": "pending",
+    "full.specialist.solution_architect": "active",
     "full.checkpoint": "pending",
     "full.architect": "pending",
     "full.reviewer": "pending",
@@ -1835,9 +1835,23 @@
         "doc": "ADM Guide (earlier ed.)",
         "locator": "p.30"
       }
+    },
+    {
+      "id": "evt_000183",
+      "ts": "2026-07-30T03:25:37Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_started",
+      "detail": "Solution Architect (sections) started"
+    },
+    {
+      "id": "evt_000184",
+      "ts": "2026-07-30T03:25:37Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "drafting",
+      "detail": "drafting solution_architect's owned sections"
     }
   ],
-  "log_cursor": 182,
+  "log_cursor": 184,
   "questions": null,
   "failure": null,
   "expected_ranges": {
