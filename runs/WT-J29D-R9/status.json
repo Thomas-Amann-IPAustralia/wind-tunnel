@@ -4,7 +4,7 @@
   "run_code": "WT-J29D-R9",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T06:03:14Z",
+  "updated_at": "2026-07-30T06:03:55Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -1512,9 +1512,185 @@
         "doc": "NAA AI Records Guidance",
         "locator": "§Managing AI technologies incorporated into business systems"
       }
+    },
+    {
+      "id": "evt_000150",
+      "ts": "2026-07-30T06:03:21Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.61"
+      }
+    },
+    {
+      "id": "evt_000151",
+      "ts": "2026-07-30T06:03:21Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.82"
+      }
+    },
+    {
+      "id": "evt_000152",
+      "ts": "2026-07-30T06:03:21Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000153",
+      "ts": "2026-07-30T06:03:21Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.101"
+      }
+    },
+    {
+      "id": "evt_000154",
+      "ts": "2026-07-30T06:03:21Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Top 5",
+      "ref": {
+        "doc": "OAIC AI Training Top 5",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000155",
+      "ts": "2026-07-30T06:03:21Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.92"
+      }
+    },
+    {
+      "id": "evt_000156",
+      "ts": "2026-07-30T06:03:21Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 33J"
+      }
+    },
+    {
+      "id": "evt_000157",
+      "ts": "2026-07-30T06:03:21Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 26GA"
+      }
+    },
+    {
+      "id": "evt_000158",
+      "ts": "2026-07-30T06:03:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.61"
+      }
+    },
+    {
+      "id": "evt_000159",
+      "ts": "2026-07-30T06:03:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 33J"
+      }
+    },
+    {
+      "id": "evt_000160",
+      "ts": "2026-07-30T06:03:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 26GA"
+      }
+    },
+    {
+      "id": "evt_000161",
+      "ts": "2026-07-30T06:03:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.82"
+      }
+    },
+    {
+      "id": "evt_000162",
+      "ts": "2026-07-30T06:03:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 26R"
+      }
+    },
+    {
+      "id": "evt_000163",
+      "ts": "2026-07-30T06:03:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 26F"
+      }
+    },
+    {
+      "id": "evt_000164",
+      "ts": "2026-07-30T06:03:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000165",
+      "ts": "2026-07-30T06:03:55Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 26Q"
+      }
     }
   ],
-  "log_cursor": 149,
+  "log_cursor": 165,
   "questions": null,
   "failure": null,
   "expected_ranges": {
