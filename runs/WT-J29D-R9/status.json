@@ -4,7 +4,7 @@
   "run_code": "WT-J29D-R9",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T05:55:49Z",
+  "updated_at": "2026-07-30T05:56:39Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "active",
     "full.specialist.privacy": "active",
     "full.specialist.ethics": "active",
-    "full.specialist.legal": "pending",
+    "full.specialist.legal": "active",
     "full.specialist.data_governance": "pending",
     "full.specialist.solution_architect": "pending",
     "full.checkpoint": "pending",
@@ -380,9 +380,23 @@
         "doc": "ADM Guide (earlier ed.)",
         "locator": "p.30"
       }
+    },
+    {
+      "id": "evt_000042",
+      "ts": "2026-07-30T05:56:39Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_started",
+      "detail": "Legal & Administrative Law specialist started"
+    },
+    {
+      "id": "evt_000043",
+      "ts": "2026-07-30T05:56:39Z",
+      "agent": "full.specialist.legal",
+      "type": "drafting",
+      "detail": "drafting legal's owned sections"
     }
   ],
-  "log_cursor": 41,
+  "log_cursor": 43,
   "questions": null,
   "failure": null,
   "expected_ranges": {
