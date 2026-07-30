@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-SX76-K5"
 title: "Legacy Code Modernization Assistant"
-summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems to accelerate modernization, track refactoring progress, and provide portfolio-wide visibility."
+summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems while providing automated compliance and architectural governance."
 created_at: "2026-07-29T23:53:46Z"
-updated_at: "2026-07-30T00:14:18Z"
+updated_at: "2026-07-30T00:14:44Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -58,4 +58,4 @@ The system must be platform-agnostic, operate within a sovereign, air-gapped env
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-Success is measured by the accuracy of baseline SBOMs and architectural maps during the PoC, followed by the tool's ability to track the delta between baseline and refactored states. Long-term success is defined by the tool's integration into CI/CD pipelines to monitor configuration drift and visualize modernization progress across entire government portfolios.
+Success is measured by the accuracy of baseline SBOMs and architectural maps during the PoC, followed by the tool's ability to track the delta between baseline and refactored states. Long-term success is defined by the tool's integration into CI/CD pipelines to monitor configuration drift, visualize modernization progress across government portfolios, and generate automated compliance attestations aligned with Australian WofG standards.
