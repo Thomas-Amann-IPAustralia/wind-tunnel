@@ -11,8 +11,8 @@ run_id: "WT-SX76-K5"
 title: "Legacy Code Modernization Assistant"
 summary: "An AI-driven, platform-agnostic tool to analyze, document, and map legacy software systems to accelerate modernization and security compliance."
 created_at: "2026-07-29T23:53:46Z"
-updated_at: "2026-07-29T23:59:09Z"
-resolved: ["problem", "solution", "users_stakeholders", "data", "alternatives", "ux_ui", "constraints"]
+updated_at: "2026-07-30T00:00:02Z"
+resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints"]
 ---
 
 <!-- section: problem -->
@@ -38,7 +38,7 @@ The system will process proprietary legacy source code, configuration files, and
 <!-- section: happy_path -->
 ## 5. Happy path
 
-*One ordinary, successful use — narrated start to finish.*
+A developer runs the CLI tool against a legacy repository, which ingests the code and maps its internal dependencies. The developer then opens the web dashboard to view a visual dependency graph, where the AI has highlighted a specific, isolated module as a candidate for extraction. The developer uses the CLI to generate a refactoring plan and a corresponding SBOM for that module, allowing them to proceed with modernization while maintaining security compliance.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
