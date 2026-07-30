@@ -3,8 +3,8 @@
   "run_id": "WT-SX76-K5",
   "run_code": "WT-SX76-K5",
   "phase": "full",
-  "overall_state": "failed",
-  "updated_at": "2026-07-30T03:32:58Z",
+  "overall_state": "running",
+  "updated_at": "2026-07-30T04:11:24Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -2186,16 +2186,18 @@
       "agent": "full.specialist.ethics",
       "type": "error",
       "detail": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-SX76-K5 to resume from the last checkpoint."
+    },
+    {
+      "id": "evt_000216",
+      "ts": "2026-07-30T04:11:24Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 215,
+  "log_cursor": 216,
   "questions": null,
-  "failure": {
-    "stage": "full.specialist.ethics",
-    "message": "Something went wrong while drafting the full assessment specialist sections. Your run is safe — paste the run code WT-SX76-K5 to resume from the last checkpoint.",
-    "run_code": "WT-SX76-K5",
-    "technical": "LLMError: Gemini HTTP 503 for model 'gemini-3.5-flash': {\n  \"error\": {\n    \"code\": 503,\n    \"message\": \"This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.\",\n    \"status\": \"UNAVAILABLE\"\n  }\n}\n (attempt 4/4)"
-  },
+  "failure": null,
   "expected_ranges": {
     "threshold": [
       50,
