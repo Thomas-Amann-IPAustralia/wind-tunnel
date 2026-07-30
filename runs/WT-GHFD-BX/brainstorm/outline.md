@@ -7,33 +7,33 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-GHFD-BX"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-GHFD-BX"
+title: "Automated Data Governance Toolkit"
+summary: "An AI-powered toolkit to automate the classification and policy enforcement of internal government datasets."
 created_at: "2026-07-30T04:42:18Z"
-updated_at: "2026-07-30T04:42:18Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-07-30T04:43:30Z"
+resolved: ["problem", "solution", "users_stakeholders", "data"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Public sector teams struggle to maintain consistent data governance, often resulting in manual, error-prone classification of sensitive information and inconsistent application of retention policies.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+A toolkit that uses AI to scan, classify, and suggest governance actions for datasets, acting as an automated assistant for data stewards.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+Primary users are data stewards and IT administrators; stakeholders include the public (whose data is protected) and internal compliance officers.
 
 <!-- section: data -->
 ## 4. Data
 
-*What data it touches: what kind, where it comes from, how sensitive it is.*
+Internal datasets, including structured databases and unstructured documents, likely containing PII or sensitive government information.
 
 <!-- section: happy_path -->
 ## 5. Happy path
