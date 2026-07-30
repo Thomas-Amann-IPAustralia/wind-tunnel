@@ -1,26 +1,36 @@
 flowchart TD
-    subgraph User_Space [User Interface]
-        User([Public Servant])
-        SPA[Windtunnel SPA]
+    subgraph CitizenSpace ["Citizen / External User"]
+        A[Citizen]
     end
 
-    subgraph Core_Platform [Windtunnel Orchestration]
-        Backend[Windtunnel Backend]
-        DB[(Run Database & Git Store)]
+    subgraph Frontend ["Agency Interface"]
+        B[Public Portal]
+        F[Staff Review Dashboard]
     end
 
-    subgraph AI_Engine [AI Analysis & Generation]
-        LLM[LLM Engine]
-        CodeGen[Prototype Generator]
+    subgraph Storage ["Data Layer"]
+        C[(Application Database)]
+        G[(Policy & Knowledge Base)]
+        H[(Audit Log)]
     end
 
-    User -->|1. Submits AI Idea & Constraints| SPA
-    SPA -->|2. API Request (Create Run)| Backend
-    Backend -->|3. Initialize Run State| DB
-    Backend -->|4. Send Outline & Prompts| LLM
-    LLM -->|5. Generate Feasibility & Architecture| Backend
-    Backend -->|6. Request Interactive Prototype| CodeGen
-    CodeGen -->|7. Generate Tailwind/HTML/JS| Backend
-    Backend -->|8. Commit Assets & Update Run| DB
-    Backend -->|9. Stream Assessment & Prototype| SPA
-    SPA -->|10. Render Interactive Sandbox & Map| User
+    subgraph AI_Engine ["AI Processing Layer"]
+        D[AI Analysis & Draft Generator]
+    end
+
+    subgraph Internal ["Agency Operations"]
+        E[Public Servant / Reviewer]
+    end
+
+    A -->|1. Submits application or enquiry| B
+    B -->|2. Saves raw submission| C
+    B -->|3. Triggers processing| D
+    G -->|4. Provides policy context & RAG data| D
+    D -->|5. Generates draft response & risk score| C
+    D -->|6. Logs AI decision parameters| H
+    C -->|7. Fetches raw data & AI draft| F
+    F -->|8. Presents case file| E
+    E -->|9. Reviews, edits & approves| F
+    F -->|10. Dispatches final decision| B
+    B -->|11. Sends notification & outcome| A
+    F -->|12. Logs human approval action| H
