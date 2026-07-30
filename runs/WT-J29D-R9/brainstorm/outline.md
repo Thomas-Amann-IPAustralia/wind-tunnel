@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-J29D-R9"
 title: "Automated Web Compliance Monitor"
-summary: "An AI-driven tool to identify and streamline the registration of problematic websites."
+summary: "An internal AI-driven tool to identify and streamline the registration of problematic websites through human-in-the-loop oversight."
 created_at: "2026-07-30T04:09:22Z"
-updated_at: "2026-07-30T04:11:48Z"
+updated_at: "2026-07-30T04:12:34Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -23,7 +23,7 @@ Public servants currently lack an efficient way to identify and track problemati
 <!-- section: solution -->
 ## 2. Proposed solution
 
-An AI-powered monitoring tool that scans web content to identify sites meeting specific 'problematic' criteria, then triggers a workflow for registration or administrative action.
+An internal AI-powered monitoring tool that scans web content to identify sites meeting specific 'problematic' criteria, then triggers a workflow for human review and administrative action.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
@@ -33,29 +33,29 @@ Primary users are compliance officers and administrative staff; stakeholders inc
 <!-- section: data -->
 ## 4. Data
 
-The system will process public web content, URLs, and potentially metadata from existing registry databases. This data is generally public, but the analysis results may be sensitive.
+The system will process public web content, URLs, and metadata from existing registry databases. While the source data is public, the internal analysis and flagging results are treated as sensitive administrative information.
 
 <!-- section: happy_path -->
 ## 5. Happy path
 
-The AI scans a target list of domains, identifies a site violating policy, flags it for a human officer, who then reviews the evidence and clicks 'register' to initiate the formal process.
+The AI scans a target list of domains, identifies a site violating policy, and flags it for a human officer. The officer reviews the AI's evidence on a dashboard, confirms the violation, and clicks 'register' to initiate the formal process.
 
 <!-- section: alternatives -->
 ## 6. Alternatives considered
 
-Manual web crawling and reporting by staff, or using standard keyword-based web filtering tools without AI analysis.
+Manual web crawling and reporting by staff, or using standard keyword-based web filtering tools that lack the contextual understanding of AI.
 
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-A dashboard for staff to review flagged sites, view the AI's reasoning, and approve or reject the proposed registration action.
+A web-based dashboard for staff to review flagged sites, inspect the AI's reasoning, and approve or reject the proposed registration action.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
 
-Must comply with privacy laws regarding data collection and ensure the AI's flagging logic is auditable and explainable.
+Must comply with privacy laws regarding data collection, ensure the AI's flagging logic is fully auditable, and maintain a clear human-in-the-loop requirement for all registration actions.
 
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-A measurable reduction in the time taken to identify and register problematic sites compared to the current manual baseline.
+A measurable reduction in the time taken to identify and register problematic sites compared to the current manual baseline, alongside a high officer-approval rate for AI-flagged items.
