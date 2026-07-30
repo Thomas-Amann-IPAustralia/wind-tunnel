@@ -4,7 +4,7 @@
   "run_code": "WT-J29D-R9",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T05:57:18Z",
+  "updated_at": "2026-07-30T05:58:33Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -636,9 +636,97 @@
         "doc": "HTI State of AI Governance",
         "locator": "p.65"
       }
+    },
+    {
+      "id": "evt_000066",
+      "ts": "2026-07-30T05:58:33Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.65"
+      }
+    },
+    {
+      "id": "evt_000067",
+      "ts": "2026-07-30T05:58:33Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.57"
+      }
+    },
+    {
+      "id": "evt_000068",
+      "ts": "2026-07-30T05:58:33Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.24"
+      }
+    },
+    {
+      "id": "evt_000069",
+      "ts": "2026-07-30T05:58:33Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.65"
+      }
+    },
+    {
+      "id": "evt_000070",
+      "ts": "2026-07-30T05:58:33Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000071",
+      "ts": "2026-07-30T05:58:33Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading Perry J (2021)",
+      "ref": {
+        "doc": "Perry J (2021)",
+        "locator": "¶27"
+      }
+    },
+    {
+      "id": "evt_000072",
+      "ts": "2026-07-30T05:58:33Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.49"
+      }
+    },
+    {
+      "id": "evt_000073",
+      "ts": "2026-07-30T05:58:33Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.87"
+      }
     }
   ],
-  "log_cursor": 65,
+  "log_cursor": 73,
   "questions": null,
   "failure": null,
   "expected_ranges": {
