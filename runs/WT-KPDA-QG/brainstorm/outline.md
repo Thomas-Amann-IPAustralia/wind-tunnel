@@ -9,9 +9,9 @@
 schema_version: 1
 run_id: "WT-KPDA-QG"
 title: "Workflow Discovery AI Agent"
-summary: "An iterative AI agent that interviews staff to map workflows, cross-referencing multi-user inputs to resolve process conflicts and identify bottlenecks."
+summary: "An iterative AI agent that interviews staff to map workflows, cross-referencing multi-user inputs to resolve process conflicts and identify bottlenecks for human review."
 created_at: "2026-07-30T05:13:52Z"
-updated_at: "2026-07-30T05:21:35Z"
+updated_at: "2026-07-30T05:23:30Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -23,7 +23,7 @@ Teams often struggle to document complex workflows, leading to hidden bottleneck
 <!-- section: solution -->
 ## 2. Proposed solution
 
-An AI-driven conversational agent that conducts iterative, stateful interviews to map workflows. It dynamically generates follow-up questions to uncover branching logic and pain points, cross-referencing inputs from multiple team members to identify conflicts. When irreconcilable differences arise between staff, the agent flags these specific nodes for human management review rather than attempting to synthesize a compromise.
+An AI-driven conversational agent that conducts iterative, stateful interviews to map workflows. It dynamically generates follow-up questions to uncover branching logic and pain points, cross-referencing inputs from multiple team members to identify conflicts. When irreconcilable differences arise, the agent flags these for human management review. The final output is a visual process map accompanied by a structured report, which includes a dedicated 'To BA's Attention' section for unresolved conflicts and bottlenecks.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
@@ -48,7 +48,7 @@ Manual interviews conducted by a business analyst, or using standard process min
 <!-- section: ux_ui -->
 ## 7. UX and interface
 
-A chat-based interface (e.g., Slack or a web portal) where the agent guides the user through a structured interview.
+A chat-based interface (e.g., Slack or a web portal) for the interview process, with a dashboard view for managers to access the generated visual process maps and structured reports.
 
 <!-- section: constraints -->
 ## 8. Constraints and preferences
