@@ -11,7 +11,7 @@ run_id: "WT-KPDA-QG"
 title: "Workflow Discovery AI Agent"
 summary: "An iterative AI agent that interviews staff to map workflows, cross-referencing multi-user inputs to resolve process conflicts while enforcing a separation between operational discovery and technical solutioning."
 created_at: "2026-07-30T05:13:52Z"
-updated_at: "2026-07-30T05:35:54Z"
+updated_at: "2026-07-30T05:36:22Z"
 resolved: ["problem", "solution", "users_stakeholders", "data", "happy_path", "alternatives", "ux_ui", "constraints", "success_criteria"]
 ---
 
@@ -58,4 +58,4 @@ The system must operate within standard internal data privacy protocols. It requ
 <!-- section: success_criteria -->
 ## 9. Success criteria
 
-The agent successfully maps at least three core workflows that are validated by process owners as accurate and actionable, with a measurable reduction in time spent by BAs on initial discovery interviews.
+Success will be measured by the speed at which teams reach consensus on process changes, validated by a reduction in the time required for management to resolve process conflicts compared to manual discovery methods.
