@@ -4,7 +4,7 @@
   "run_code": "WT-SX76-K5",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-30T02:01:18Z",
+  "updated_at": "2026-07-30T02:02:22Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -864,9 +864,185 @@
         "doc": "Secure AI Dev Guidelines",
         "locator": "p.5"
       }
+    },
+    {
+      "id": "evt_000090",
+      "ts": "2026-07-30T02:01:27Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.185"
+      }
+    },
+    {
+      "id": "evt_000091",
+      "ts": "2026-07-30T02:01:27Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading Privacy Act 1988",
+      "ref": {
+        "doc": "Privacy Act 1988",
+        "locator": "s 100"
+      }
+    },
+    {
+      "id": "evt_000092",
+      "ts": "2026-07-30T02:01:27Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000093",
+      "ts": "2026-07-30T02:01:27Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.178"
+      }
+    },
+    {
+      "id": "evt_000094",
+      "ts": "2026-07-30T02:01:27Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.188"
+      }
+    },
+    {
+      "id": "evt_000095",
+      "ts": "2026-07-30T02:01:27Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.189"
+      }
+    },
+    {
+      "id": "evt_000096",
+      "ts": "2026-07-30T02:01:27Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.190"
+      }
+    },
+    {
+      "id": "evt_000097",
+      "ts": "2026-07-30T02:01:27Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.26"
+      }
+    },
+    {
+      "id": "evt_000098",
+      "ts": "2026-07-30T02:02:22Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000099",
+      "ts": "2026-07-30T02:02:22Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.14"
+      }
+    },
+    {
+      "id": "evt_000100",
+      "ts": "2026-07-30T02:02:22Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000101",
+      "ts": "2026-07-30T02:02:22Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.46"
+      }
+    },
+    {
+      "id": "evt_000102",
+      "ts": "2026-07-30T02:02:22Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000103",
+      "ts": "2026-07-30T02:02:22Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000104",
+      "ts": "2026-07-30T02:02:22Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.27"
+      }
+    },
+    {
+      "id": "evt_000105",
+      "ts": "2026-07-30T02:02:22Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.15"
+      }
     }
   ],
-  "log_cursor": 89,
+  "log_cursor": 105,
   "questions": null,
   "failure": null,
   "expected_ranges": {
