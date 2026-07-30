@@ -1,0 +1,7 @@
+{
+  "feasible": true,
+  "reason": "A mock interface can effectively demonstrate the chat-based interview flow and the subsequent dashboard view for reviewing process maps and reports.",
+  "model": "gemini-3.1-flash-lite",
+  "prompt_version": "v1",
+  "assessed_at": "2026-07-30T06:25:15Z"
+}

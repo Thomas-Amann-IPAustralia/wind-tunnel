@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workflow Discovery AI Agent - Prototype</title>
+  <style>
+    :root {
+      --primary: #1e293b;
+      --primary-light: #334155;
+      --accent: #0f766e;
+      --accent-light: #ccfbf1;
+      --warning: #b45309;
+      --warning-light: #fef3c7;
+      --danger: #be123c;
+      --danger-light: #ffe4e6;
+      --success: #15803d;
+      --success-light: #dcfce7;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 24px;
+    }
+
+    /* Limitations Banner */
+    .poc-limitations {
+      background-color: var(--warning-light);
+      border: 2px solid #f59e0b;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .poc-limitations h2 {
+      color: var(--warning);
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .poc-limitations p {
+      font-size: 0.95rem;
+      color: #78350f;
+      margin-bottom: 12px;
+    }
+
+    .poc-limitations ul {
+      margin-left: 20px;
+      font-size: 0.9rem;
+      color: #78350f;
+    }
+
+    .poc-limitations li {
+      margin-bottom: 4px;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 24px;
+    }
+
+    .brand h1 {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+
+    .brand p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .run-badge {
+      background-color: var(--primary-light);
+      color: #ffffff;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-family: monospace;
+    }
+
+    /* Layout Grid */
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+    }
+
+    /* Sidebar Navigation */
+    aside {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: none;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      text-align: left;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-btn:hover {
+      background-color: #f1f5f9;
+      color: var(--primary);
+    }
+
+    .nav-btn.active {
+      background-color: var(--primary);
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .nav-btn .badge {
+      margin-left: auto;
+      background-color: var(--danger);
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+    }
+
+    /* Main Content Area */
+    main {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px;
+      min-height: 600px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Typography & Helpers */
+    h2.section-title {
+      font-size: 1.25rem;
+      margin-bottom: 16px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-top: -12px;
+      margin-bottom: 20px;
+    }
+
+    /* Chat Interface */
+    .chat-container {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 20px;
+      height: 500px;
+    }
+
+    .chat-feed {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      background-color: #fafafa;
+      overflow: hidden;
+    }
+
+    .messages {
+      flex-grow: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .message {
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      position: relative;
+    }
+
+    .message.agent {
+      background-color: #ffffff;
+      border: 1px solid var(--border);
+      align-self: flex-start;
+      border-left: 4px solid var(--accent);
+    }
+
+    .message.user {
+      background-color: var(--primary);
+      color: #ffffff;
+      align-self: flex-end;
+    }
+
+    .message .sender {
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .message.agent .sender {
+      color: var(--accent);
+    }
+
+    .message.user .sender {
+      color: #94a3b8;
+    }
+
+    /* Flagged Alerts in Chat */
+    .flag-alert {
+      margin-top: 8px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .flag-alert.solutioning {
+      background-color: var(--warning-light);
+      border: 1px solid #f59e0b;
+      color: #78350f;
+    }
+
+    .flag-alert.conflict {
+      background-color: var(--danger-light);
+      border: 1px solid #f43f5e;
+      color: #9f1239;
+    }
+
+    .chat-input-area {
+      padding: 12px;
+      border-top: 1px solid var(--border);
+      background-color: #ffffff;
+      display: flex;
+      gap: 8px;
+    }
+
+    .chat-input-area input {
+      flex-grow: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .chat-input-area button {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .chat-input-area button:hover {
+      background-color: #0d5c56;
+    }
+
+    /* Sidebar Panel for Validation */
+    .validation-panel {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .validation-card {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 12px;
+      background-color: var(--bg);
+    }
+
+    .validation-card h4 {
+      font-size: 0.85rem;
+      color: var(--primary);
+      margin-bottom: 6px;
+    }
+
+    .validation-card p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .btn-validate {
+      width: 100%;
+      background-color: var(--success);
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-validate:hover {
+      background-color: #166534;
+    }
+
+    .validation-status {
+      font-size: 0.75rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .status-draft {
+      background-color: var(--warning-light);
+      color: var(--warning);
+    }
+
+    .status-validated {
+      background-color: var(--success-light);
+      color: var(--success);
+    }
+
+    /* Interactive Simulation Controls */
+    .simulation-controls {
+      margin-top: 12px;
+      padding: 12px;
+      background-color: #f1f5f9;
+      border-radius: 6px;
+      border: 1px dashed var(--border);
+    }
+
+    .simulation-controls p {
+      font-size: 0.8rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: var(--primary-light);
+    }
+
+    .sim-btn {
+      background-color: #ffffff;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      margin-right: 6px;
+      margin-bottom: 6px;
+      transition: all 0.2s;
+    }
+
+    .sim-btn:hover {
+      background-color: var(--accent-light);
+      border-color: var(--accent);
+    }
+
+    /* Process Map & Reports Tab */
+    .report-grid {
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      gap: 24px;
+    }
+
+    .map-container {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      background-color: #fafafa;
+    }
+
+    .map-legend {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      font-size: 0.8rem;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+
+    /* SVG Process Map Styling */
+    .process-svg {
+      width: 100%;
+      height: auto;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    .node {
+      transition: opacity 0.3s;
+      cursor: pointer;
+    }
+
+    .node rect {
+      fill: #f8fafc;
+      stroke: #cbd5e1;
+      stroke-width: 2;
+    }
+
+    .node.consensus rect {
+      fill: #f0fdf4;
+      stroke: #86efac;
+    }
+
+    .node.friction rect {
+      fill: #fff1f2;
+      stroke: #fca5a5;
+    }
+
+    .node:hover rect {
+      filter: brightness(0.95);
+    }
+
+    /* Report Panels */
+    .report-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .report-card {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      background-color: #ffffff;
+    }
+
+    .report-card.ba-attention {
+      border-left: 4px solid var(--danger);
+    }
+
+    .report-card h3 {
+      font-size: 1rem;
+      margin-bottom: 12px;
+      color: var(--primary);
+    }
+
+    .attention-item {
+      font-size: 0.85rem;
+      padding: 8px;
+      background-color: var(--danger-light);
+      border-radius: 4px;
+      margin-bottom: 8px;
+      color: #9f1239;
+    }
+
+    .version-list {
+      list-style: none;
+      font-size: 0.85rem;
+    }
+
+    .version-item {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .version-item:last-child {
+      border-bottom: none;
+    }
+
+    .version-meta {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      margin-bottom: 2px;
+    }
+
+    /* BA Configuration Tab */
+    .config-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 600px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .form-group input, .form-group textarea {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      height: 120px;
+    }
+
+    .btn-save {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      align-self: flex-start;
+    }
+
+    .btn-save:hover {
+      background-color: var(--primary-light);
+    }
+
+    /* Audit Log Table */
+    .audit-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 0.8rem;
+    }
+
+    .audit-table th, .audit-table td {
+      border: 1px solid var(--border);
+      padding: 8px;
+      text-align: left;
+    }
+
+    .audit-table th {
+      background-color: var(--bg);
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. LIMITATIONS BANNER (First in reading order, class="poc-limitations") -->
+  <div class="poc-limitations">
+    <h2>⚠️ Prototype Limitations & Sandbox Notice</h2>
+    <p>This is an interactive proof-of-concept demonstrating the Workflow Discovery AI Agent interface. It runs entirely in your browser with simulated logic. Please note the following limitations:</p>
+    <ul>
+      <li><strong>No Real AI Processing:</strong> The conversational agent, "solutioning" detection, and "no-interpolation" clarification prompts are pre-scripted simulations.</li>
+      <li><strong>No Real Database or Integrations:</strong> No data is saved to a server, and it does not connect to Slack, internal wikis, or real document repositories.</li>
+      <li><strong>Simulated Timestamps:</strong> The SME validation timestamps are generated locally in your browser session and do not write to an immutable audit log.</li>
+      <li><strong>Static Process Map:</strong> The visual workflow diagram is a pre-rendered SVG illustration, not dynamically generated from the chat text.</li>
+    </ul>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="brand">
+      <h1>Workflow Discovery AI Agent</h1>
+      <p>Iterative SME Interviewing & Process Mapping Portal</p>
+    </div>
+    <div class="run-badge">RUN ID: WT-KPDA-QG</div>
+  </header>
+
+  <!-- Dashboard Layout -->
+  <div class="dashboard-layout">
+    
+    <!-- Sidebar Navigation -->
+    <aside>
+      <button class="nav-btn active" onclick="switchTab('interview')">
+        💬 SME Interview Portal
+        <span class="badge" id="conflict-badge">1</span>
+      </button>
+      <button class="nav-btn" onclick="switchTab('reports')">
+        📊 Process Map & Reports
+      </button>
+      <button class="nav-btn" onclick="switchTab('config')">
+        ⚙️ BA Configuration
+      </button>
+    </aside>
+
+    <!-- Main Content -->
+    <main>
+      
+      <!-- TAB 1: SME Interview Portal -->
+      <div id="tab-interview" class="tab-content active">
+        <h2 class="section-title">Active Discovery Session: Invoice Approvals</h2>
+        <p class="subtitle">Interviewing: <strong>Sarah Jenkins (SME, Accounts Payable)</strong>. Prioritizing operational reality over BA seed data.</p>
+        
+        <div class="chat-container">
+          <!-- Chat Feed -->
+          <div class="chat-feed">
+            <div class="messages" id="chat-messages">
+              <div class="message agent">
+                <span class="sender">Discovery Agent</span>
+                Hello Sarah. I am mapping the Invoice Approval process. Based on the foundational policy, all invoices require manager approval. Can you walk me through how you handle invoices under $5,000?
+              </div>
+              <div class="message user">
+                <span class="sender">Sarah Jenkins (SME)</span>
+                Actually, that's not how it works in reality. If an invoice is under $5,000 and comes from a pre-approved vendor, we pay it immediately without waiting for manager approval to avoid delays.
+              </div>
+              <div class="message agent">
+                <span class="sender">Discovery Agent</span>
+                <span style="color: var(--danger); font-weight: bold;">[Conflict Flagged]</span> Operational reality differs from BA Seed Policy (which states all invoices require manager approval). 
+                <br><br>
+                Sarah, to ensure I do not interpolate: does "pay immediately" mean you manually trigger the payment in the ERP, or does the system auto-release it?
+              </div>
+              <div class="message user">
+                <span class="sender">Sarah Jenkins (SME)</span>
+                We manually trigger it in the ERP. But honestly, we should just build an automated script to auto-approve everything under $5k. It would save us so much time.
+              </div>
+              <div class="message agent">
+                <span class="sender">Discovery Agent</span>
+                <div class="flag-alert solutioning">
+                  <strong>💡 Refocus Nudge (Solutioning Flagged):</strong> "We should just build an automated script..."
+                  <br>Let's focus on documenting how the process is currently executed today. We will capture automation ideas for the BA's attention later.
+                </div>
+                <br>Understood. So for invoices under $5,000 from pre-approved vendors, you manually trigger the payment in the ERP. Is this correct?
+              </div>
+            </div>
+            
+            <!-- Chat Input -->
+            <div class="chat-input-area">
+              <input type="text" id="chat-input" placeholder="Type your response here..." disabled>
+              <button disabled>Send</button>
+            </div>
+          </div>
+
+          <!-- Validation & Audit Panel -->
+          <div class="validation-panel">
+            <h3>SME Validation Panel</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">Every input must be validated and timestamped by the SME before being committed to the knowledge base.</p>
+            
+            <div class="validation-card" id="val-card-1">
+              <span class="validation-status status-draft" id="val-status-1">Pending Validation</span>
+              <h4>Step 3: Exception Handling (Under $5k)</h4>
+              <p><strong>Draft Process:</strong> Invoices under $5,000 from pre-approved vendors are manually triggered for payment in the ERP by the SME without manager approval.</p>
+              <button class="btn-validate" id="btn-val-1" onclick="validateStep(1)">
+                ✓ Validate & Timestamp
+              </button>
+            </div>
+
+            <div class="simulation-controls">
+              <p>Simulate SME Actions:</p>
+              <button class="sim-btn" onclick="simulateSmeResponse('conflict')">Simulate Process Conflict</button>
+              <button class="sim-btn" onclick="simulateSmeResponse('solutioning')">Simulate Solutioning Attempt</button>
+            </div>
+
+            <div>
+              <h4 style="font-size: 0.85rem; margin-bottom: 6px;">Session Audit Log</h4>
+              <table class="audit-table">
+                <thead>
+                  <tr>
+                    <th>Step</th>
+                    <th>SME</th>
+                    <th>Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-log-body">
+                  <tr>
+                    <td>Step 1: Intake</td>
+                    <td>S. Jenkins</td>
+                    <td>2026-07-30 05:15:12</td>
+                  </tr>
+                  <tr>
+                    <td>Step 2: Verification</td>
+                    <td>S. Jenkins</td>
+                    <td>2026-07-30 05:22:40</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: Process Map & Reports -->
+      <div id="tab-reports" class="tab-content">
+        <h2 class="section-title">Generated Process Map & Structured Report</h2>
+        <p class="subtitle">Consolidated view of consensus, friction points, and versioned changes.</p>
+
+        <div class="report-grid">
+          <!-- Process Map -->
+          <div class="map-container">
+            <h3>Visual Process Map</h3>
+            <div class="map-legend">
+              <div class="legend-item">
+                <div class="legend-color" style="background-color: #f0fdf4; border: 1px solid #86efac;"></div>
+                <span>Consensus (Validated)</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-color" style="background-color: #fff1f2; border: 1px solid #fca5a5;"></div>
+                <span>Friction / Conflict</span>
+              </div>
+            </div>
+
+            <!-- SVG Process Map -->
+            <svg class="process-svg" viewBox="0 0 500 300">
+              <!-- Step 1 -->
+              <g class="node consensus" onclick="alert('Step 1: Invoice Intake. Status: Validated by S. Jenkins.')">
+                <rect x="20" y="110" width="100" height="60" rx="5" />
+                <text x="70" y="140" font-size="10" text-anchor="middle" fill="#1e293b" font-weight="bold">1. Invoice Intake</text>
+                <text x="70" y="155" font-size="8" text-anchor="middle" fill="#15803d">Validated</text>
+              </g>
+              
+              <!-- Arrow 1 -->
+              <path d="M 120 140 L 160 140" stroke="#94a3b8" stroke-width="2" fill="none" />
+              <polygon points="160,140 152,135 152,145" fill="#94a3b8" />
+
+              <!-- Step 2 -->
+              <g class="node consensus" onclick="alert('Step 2: Verification. Status: Validated by S. Jenkins.')">
+                <rect x="160" y="110" width="100" height="60" rx="5" />
+                <text x="210" y="140" font-size="10" text-anchor="middle" fill="#1e293b" font-weight="bold">2. Verification</text>
+                <text x="210" y="155" font-size="8" text-anchor="middle" fill="#15803d">Validated</text>
+              </g>
+
+              <!-- Arrow 2 -->
+              <path d="M 260 140 L 300 140" stroke="#94a3b8" stroke-width="2" fill="none" />
+              <polygon points="300,140 292,135 292,145" fill="#94a3b8" />
+
+              <!-- Step 3 (Conflict/Friction) -->
+              <g class="node friction" id="map-step-3" onclick="alert('Step 3: Exception Handling. Status: Conflict flagged between BA Policy and SME Reality.')">
+                <rect x="300" y="110" width="120" height="60" rx="5" />
+                <text x="360" y="135" font-size="10" text-anchor="middle" fill="#1e293b" font-weight="bold">3. Exception &lt; $5k</text>
+                <text x="360" y="150" font-size="8" text-anchor="middle" fill="#be123c" id="map-step-3-status">Friction Flagged</text>
+                <text x="360" y="160" font-size="7" text-anchor="middle" fill="#be123c">Click for details</text>
+              </g>
+            </svg>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px; text-align: center;">Interactive Map: Click nodes to view audit details.</p>
+          </div>
+
+          <!-- Reports Sidebar -->
+          <div class="report-sidebar">
+            <!-- To BA's Attention -->
+            <div class="report-card ba-attention">
+              <h3>⚠️ To BA's Attention</h3>
+              <div class="attention-item">
+                <strong>Process Conflict:</strong> SME states invoices under $5k bypass manager approval. BA Seed Policy states all invoices require approval. Human review required to reconcile.
+              </div>
+              <div class="attention-item" style="background-color: var(--warning-light); color: #78350f; border-left: 3px solid var(--warning);">
+                <strong>SME Suggestion (Solutioning):</strong> Sarah Jenkins suggested automating all under-$5k approvals via script. (Flagged & deferred to future state design).
+              </div>
+            </div>
+
+            <!-- Versioned Changes -->
+            <div class="report-card">
+              <h3>🔄 Versioned Changes</h3>
+              <ul class="version-list">
+                <li class="version-item">
+                  <div class="version-meta">
+                    <span>v1.2 (Current)</span>
+                    <span>Just now</span>
+                  </div>
+                  <strong>Updated Step 3:</strong> Added SME operational reality regarding pre-approved vendors.
+                </li>
+                <li class="version-item">
+                  <div class="version-meta">
+                    <span>v1.1</span>
+                    <span>30 mins ago</span>
+                  </div>
+                  <strong>Updated Step 2:</strong> Verified verification steps with SME.
+                </li>
+                <li class="version-item">
+                  <div class="version-meta">
+                    <span>v1.0</span>
+                    <span>1 hour ago</span>
+                  </div>
+                  <strong>Initial Seed:</strong> Imported foundational policy from BA.
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: BA Configuration -->
+      <div id="tab-config" class="tab-content">
+        <h2 class="section-title">BA Configuration & Foundational Seed</h2>
+        <p class="subtitle">Establish the baseline policy and concepts before the agent begins interviewing staff.</p>
+
+        <div class="config-form">
+          <div class="form-group">
+            <label for="process-name">Process Name</label>
+            <input type="text" id="process-name" value="Accounts Payable - Invoice Approvals">
+          </div>
+          <div class="form-group">
+            <label for="seed-policy">Foundational Policy / Rules (BA Seed)</label>
+            <textarea id="seed-policy">1. All incoming invoices must be logged in the ERP.
+2. Verification requires matching the invoice to a valid Purchase Order (PO).
+3. Every invoice requires explicit manager approval before payment is released.
+4. Standard payment terms are Net 30.</textarea>
+          </div>
+          <div class="form-group">
+            <label for="target-smes">Target SMEs</label>
+            <input type="text" id="target-smes" value="Sarah Jenkins (AP Specialist), David Miller (AP Manager)">
+          </div>
+          <button class="btn-save" onclick="alert('Configuration saved! The agent will use this seed to guide future interviews.')">Save & Re-seed Agent</button>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Interactive Script -->
+  <script>
+    function switchTab(tabId) {
+      // Update active tab button
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+
+      // Update active content
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.getElementById('tab-' + tabId).classList.add('active');
+    }
+
+    function validateStep(stepId) {
+      const card = document.getElementById('val-card-' + stepId);
+      const status = document.getElementById('val-status-' + stepId);
+      const btn = document.getElementById('btn-val-' + stepId);
+      
+      // Update Status Badge
+      status.className = "validation-status status-validated";
+      status.innerText = "Validated & Timestamped";
+      
+      // Disable Button
+      btn.disabled = true;
+      btn.innerText = "✓ Validated";
+      btn.style.backgroundColor = "#166534";
+
+      // Generate local timestamp
+      const now = new Date();
+      const timestampStr = now.toISOString().replace('T', ' ').substring(0, 19);
+
+      // Add to Audit Log Table
+      const tbody = document.getElementById('audit-log-body');
+      const newRow = document.createElement('tr');
+      newRow.innerHTML = `
+        <td>Step 3: Exception Handling</td>
+        <td>S. Jenkins</td>
+        <td>${timestampStr}</td>
+      `;
+      tbody.appendChild(newRow);
+
+      // Update Process Map Node Visual
+      const mapStep = document.getElementById('map-step-3');
+      const mapStatus = document.getElementById('map-step-3-status');
+      mapStep.setAttribute('class', 'node consensus');
+      mapStatus.innerText = 'Validated';
+      mapStatus.setAttribute('fill', '#15803d');
+
+      // Clear conflict badge
+      document.getElementById('conflict-badge').style.display = 'none';
+
+      alert(`Step 3 successfully validated and committed to knowledge base at ${timestampStr}`);
+    }
+
+    function simulateSmeResponse(type) {
+      const chatMessages = document.getElementById('chat-messages');
+      
+      if (type === 'conflict') {
+        // Append SME message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'message user';
+        userMsg.innerHTML = `
+          <span class="sender">Sarah Jenkins (SME)</span>
+          Actually, David says we don't need POs for utilities, but the policy says we do. We just pay them.
+        `;
+        chatMessages.appendChild(userMsg);
+
+        // Append Agent response with conflict flag
+        setTimeout(() => {
+          const agentMsg = document.createElement('div');
+          agentMsg.className = 'message agent';
+          agentMsg.innerHTML = `
+            <span class="sender">Discovery Agent</span>
+            <div class="flag-alert conflict">
+              <strong>⚠️ Process Conflict Flagged:</strong> Utility payments bypassing PO matching.
+              <br>This conflicts with Rule #2 (PO matching required). I have logged this for human management review.
+            </div>
+            <br>Sarah, to clarify without interpolating: are there any other categories besides utilities that bypass PO matching?
+          `;
+          chatMessages.appendChild(agentMsg);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+          
+          // Show conflict badge again
+          const badge = document.getElementById('conflict-badge');
+          badge.style.display = 'inline-block';
+          badge.innerText = '1';
+        }, 1000);
+
+      } else if (type === 'solutioning') {
+        // Append SME message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'message user';
+        userMsg.innerHTML = `
+          <span class="sender">Sarah Jenkins (SME)</span>
+          We should buy an AI tool that automatically reads utility bills and pays them.
+        `;
+        chatMessages.appendChild(userMsg);
+
+        // Append Agent response with solutioning flag
+        setTimeout(() => {
+          const agentMsg = document.createElement('div');
+          agentMsg.className = 'message agent';
+          agentMsg.innerHTML = `
+            <span class="sender">Discovery Agent</span>
+            <div class="flag-alert solutioning">
+              <strong>💡 Refocus Nudge (Solutioning Flagged):</strong> "We should buy an AI tool..."
+              <br>Let's stay focused on documenting the current 'as-is' process. I will note this automation idea for the BA's future planning.
+            </div>
+            <br>Let's return to the current process: how do you currently receive utility bills?
+          `;
+          chatMessages.appendChild(agentMsg);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 1000);
+      }
+
+      // Scroll chat to bottom
+      setTimeout(() => {
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 100);
+    }
+  </script>
+</body>
+</html>
