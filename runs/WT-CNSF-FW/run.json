@@ -2,11 +2,14 @@
   "schema_version": 1,
   "run_id": "WT-CNSF-FW",
   "created_at": "2026-07-30T04:05:35Z",
-  "updated_at": "2026-07-30T04:08:19Z",
-  "stage": "THRESHOLD_DRAFTING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-30T04:09:26Z",
+  "stage": "THRESHOLD_REVIEW",
+  "stage_status": "awaiting_user",
   "phase": "threshold",
-  "checkpoints": {},
+  "checkpoints": {
+    "THRESHOLD_DRAFTING": "8c54de359ea41063986a28459686822c5a66d0fb",
+    "THRESHOLD_RECONCILING": "81829f91097cd824866d872a357c056a2c55fec4"
+  },
   "revisions": {
     "poc": 0,
     "flow_map": 0,
