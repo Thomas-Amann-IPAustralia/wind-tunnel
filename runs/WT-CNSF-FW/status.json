@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-31T04:09:28Z",
+  "updated_at": "2026-07-31T04:09:31Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -15,7 +15,7 @@
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "active",
     "full.specialist.data_governance": "active",
-    "full.specialist.solution_architect": "active",
+    "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "pending",
     "full.reviewer": "pending",
@@ -5151,9 +5151,16 @@
         "doc": "DDGS",
         "locator": "p.21"
       }
+    },
+    {
+      "id": "evt_000507",
+      "ts": "2026-07-31T04:09:31Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_complete",
+      "detail": "Solution Architect (sections) complete"
     }
   ],
-  "log_cursor": 506,
+  "log_cursor": 507,
   "questions": null,
   "failure": null,
   "expected_ranges": {
