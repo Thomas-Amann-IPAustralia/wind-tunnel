@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-07-31T04:09:11Z",
+  "updated_at": "2026-07-31T04:09:28Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -4623,9 +4623,537 @@
       "agent": "full.specialist.ethics",
       "type": "stage_complete",
       "detail": "Ethics & Fairness specialist complete"
+    },
+    {
+      "id": "evt_000459",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000460",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000461",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000462",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.56"
+      }
+    },
+    {
+      "id": "evt_000463",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.36"
+      }
+    },
+    {
+      "id": "evt_000464",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.42"
+      }
+    },
+    {
+      "id": "evt_000465",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000466",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.40"
+      }
+    },
+    {
+      "id": "evt_000467",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r37"
+      }
+    },
+    {
+      "id": "evt_000468",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000469",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Pattern Catalogue Mapping",
+      "ref": {
+        "doc": "RAI Pattern Catalogue Mapping",
+        "locator": "RAI pattern catalogue!r26"
+      }
+    },
+    {
+      "id": "evt_000470",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Suitability Assessment",
+      "ref": {
+        "doc": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000471",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Continuous RAI Validator",
+      "ref": {
+        "doc": "Continuous RAI Validator",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000472",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Mode Switcher",
+      "ref": {
+        "doc": "AI Mode Switcher",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000473",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000474",
+      "ts": "2026-07-31T04:09:13Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r105"
+      }
+    },
+    {
+      "id": "evt_000475",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r37"
+      }
+    },
+    {
+      "id": "evt_000476",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000477",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Pattern Catalogue Mapping",
+      "ref": {
+        "doc": "RAI Pattern Catalogue Mapping",
+        "locator": "RAI pattern catalogue!r26"
+      }
+    },
+    {
+      "id": "evt_000478",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Suitability Assessment",
+      "ref": {
+        "doc": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000479",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Continuous RAI Validator",
+      "ref": {
+        "doc": "Continuous RAI Validator",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000480",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Mode Switcher",
+      "ref": {
+        "doc": "AI Mode Switcher",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000481",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000482",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r105"
+      }
+    },
+    {
+      "id": "evt_000483",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.65"
+      }
+    },
+    {
+      "id": "evt_000484",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.10"
+      }
+    },
+    {
+      "id": "evt_000485",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.34"
+      }
+    },
+    {
+      "id": "evt_000486",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.57"
+      }
+    },
+    {
+      "id": "evt_000487",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.47"
+      }
+    },
+    {
+      "id": "evt_000488",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading New Machinery of Government",
+      "ref": {
+        "doc": "New Machinery of Government",
+        "locator": "p.17"
+      }
+    },
+    {
+      "id": "evt_000489",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.12"
+      }
+    },
+    {
+      "id": "evt_000490",
+      "ts": "2026-07-31T04:09:16Z",
+      "agent": "full.specialist.legal",
+      "type": "retrieval",
+      "detail": "reading HTI State of AI Governance",
+      "ref": {
+        "doc": "HTI State of AI Governance",
+        "locator": "p.46"
+      }
+    },
+    {
+      "id": "evt_000491",
+      "ts": "2026-07-31T04:09:19Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r8"
+      }
+    },
+    {
+      "id": "evt_000492",
+      "ts": "2026-07-31T04:09:19Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r31"
+      }
+    },
+    {
+      "id": "evt_000493",
+      "ts": "2026-07-31T04:09:19Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000494",
+      "ts": "2026-07-31T04:09:19Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000495",
+      "ts": "2026-07-31T04:09:19Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000496",
+      "ts": "2026-07-31T04:09:19Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading AI Technical Standard",
+      "ref": {
+        "doc": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r105"
+      }
+    },
+    {
+      "id": "evt_000497",
+      "ts": "2026-07-31T04:09:19Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading OECD AI in Public Audit",
+      "ref": {
+        "doc": "OECD AI in Public Audit",
+        "locator": "p.16"
+      }
+    },
+    {
+      "id": "evt_000498",
+      "ts": "2026-07-31T04:09:19Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Acceptance Testing",
+      "ref": {
+        "doc": "RAI Acceptance Testing",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000499",
+      "ts": "2026-07-31T04:09:28Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000500",
+      "ts": "2026-07-31T04:09:28Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§More information on the use of AI in Australian Government"
+      }
+    },
+    {
+      "id": "evt_000501",
+      "ts": "2026-07-31T04:09:28Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000502",
+      "ts": "2026-07-31T04:09:28Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.26"
+      }
+    },
+    {
+      "id": "evt_000503",
+      "ts": "2026-07-31T04:09:28Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000504",
+      "ts": "2026-07-31T04:09:28Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000505",
+      "ts": "2026-07-31T04:09:28Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000506",
+      "ts": "2026-07-31T04:09:28Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.21"
+      }
     }
   ],
-  "log_cursor": 458,
+  "log_cursor": 506,
   "questions": null,
   "failure": null,
   "expected_ranges": {
