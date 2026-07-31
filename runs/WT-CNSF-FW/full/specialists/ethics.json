@@ -1,0 +1,74 @@
+{
+  "specialist": "ethics",
+  "sections": {},
+  "citations": {},
+  "questions": {
+    "why": "The outline lacks details on user interface design, stakeholder consultation, and ethical governance frameworks (fairness, diversity, and explainability) required to complete the assessment.",
+    "items": [
+      {
+        "question_id": "ethics-1",
+        "text": "Has the department established a clear definition and measurement framework for fairness in the context of AI-driven entity extraction from internal communications?",
+        "options": [
+          "Yes, both are defined and documented",
+          "A definition is established, but measurement methods are still being developed",
+          "No, fairness frameworks have not yet been defined for this use case"
+        ],
+        "allow_free_text": true
+      },
+      {
+        "question_id": "ethics-2",
+        "text": "Have the primary users (departmental staff and policy researchers) and IT/data governance teams been consulted regarding the design and deployment of the knowledge graph?",
+        "options": [
+          "Yes, all identified stakeholder groups have been consulted",
+          "Some stakeholders have been consulted (e.g., IT/data governance), but not end-users",
+          "No consultation has taken place yet"
+        ],
+        "allow_free_text": true
+      },
+      {
+        "question_id": "ethics-3",
+        "text": "Will the system's interface disclose when relationships are AI-generated, provide explanations for those links, and offer a non-AI search alternative?",
+        "options": [
+          "Yes, the interface will support disclosures, explanations, and non-AI alternatives",
+          "It will support disclosures and explanations, but no non-AI alternative is planned",
+          "No interface features for disclosure or explanation have been defined yet"
+        ],
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [
+    {
+      "section": "5.1",
+      "reason": "The outline does not state if a definition of fairness has been established for the extraction of entities and relationships from internal documents."
+    },
+    {
+      "section": "5.2",
+      "reason": "The outline does not specify any qualitative or quantitative metrics to measure or monitor the fairness of the AI's extractions."
+    },
+    {
+      "section": "8.1",
+      "reason": "The outline does not confirm whether the identified stakeholders (staff, researchers, IT/data governance, leadership) have been consulted."
+    },
+    {
+      "section": "8.2",
+      "reason": "The outline does not mention whether any information about this internal knowledge graph will be made publicly available."
+    },
+    {
+      "section": "8.4",
+      "reason": "The outline does not detail the user interface, whether users will be notified of AI-generated outputs, or if non-AI alternatives are provided."
+    },
+    {
+      "section": "8.5",
+      "reason": "The outline does not state whether the system will provide explanations of the factors leading to the AI-extracted relationships."
+    },
+    {
+      "section": "10.1",
+      "reason": "The outline does not provide information on the composition of the project team or how diversity has been incorporated into the lifecycle."
+    }
+  ],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
