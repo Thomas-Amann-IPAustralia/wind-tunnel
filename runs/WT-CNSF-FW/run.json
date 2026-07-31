@@ -2,13 +2,14 @@
   "schema_version": 1,
   "run_id": "WT-CNSF-FW",
   "created_at": "2026-07-30T04:05:35Z",
-  "updated_at": "2026-07-31T04:08:40Z",
-  "stage": "FULL_DRAFTING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-07-31T04:10:01Z",
+  "stage": "FULL_CHECKPOINT",
+  "stage_status": "awaiting_user",
   "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "8c54de359ea41063986a28459686822c5a66d0fb",
-    "THRESHOLD_RECONCILING": "81829f91097cd824866d872a357c056a2c55fec4"
+    "THRESHOLD_RECONCILING": "81829f91097cd824866d872a357c056a2c55fec4",
+    "FULL_DRAFTING": "ea69c96412d1f49275566d1b99cc3c562db48309"
   },
   "revisions": {
     "poc": 0,
