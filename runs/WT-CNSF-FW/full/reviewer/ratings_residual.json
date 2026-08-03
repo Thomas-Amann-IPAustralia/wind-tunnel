@@ -1,0 +1,53 @@
+{
+  "sections": {
+    "3.1": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "As the Ethics and Solution Architecture sections regarding user interface, accessibility, and testing remain gapped, no specific mitigations have been proposed to address service accessibility. Therefore, the residual risk remains at the inherent precautionary levels."
+    },
+    "3.2": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "Data Governance (6.1) mandates applying the Data Quality Checklist to address data coverage and bias, while Legal (10.2) requires a formal human rights alignment review. These mitigations reduce the likelihood of unfair discrimination to Unlikely and the consequence to Minor."
+    },
+    "3.3": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "The requirement to address data bias (6.1) and conduct a human rights review (10.2) will help identify and filter out outdated or biased representations from historical documents, reducing the likelihood to Unlikely and consequence to Minor."
+    },
+    "3.4": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "IT Security (6.7) mandates human-in-the-loop controls for sensitive relationship extractions and rollback capabilities. This oversight significantly reduces the likelihood of incorrect mappings causing internal distress to Unlikely, with Minor consequences."
+    },
+    "3.5": {
+      "consequence": "Moderate",
+      "likelihood": "Possible",
+      "rating": "Medium",
+      "rationale": "Privacy (7.1) requires robust data minimisation and de-identification, and IT Security (7.3) mandates fine-grained access controls. While these significantly reduce the risk, the inherent sensitivity of mining email archives means some privacy risk remains, lowering likelihood to Possible and consequence to Moderate."
+    },
+    "3.6": {
+      "consequence": "Moderate",
+      "likelihood": "Unlikely",
+      "rating": "Medium",
+      "rationale": "IT Security (7.3) mandates strict least privilege and permission-aware vector stores, directly addressing the risk of bypassing siloed access controls. This reduces the likelihood of unauthorized internal access to Unlikely, and limits the blast radius of any compromise, reducing the consequence to Moderate."
+    },
+    "3.7": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "IT Security (7.3) requires robust input validation, sanitization against prompt injection, and continuous monitoring. These technical safeguards reduce the likelihood of system vulnerabilities being exploited to Unlikely, with Minor consequences."
+    },
+    "3.8": {
+      "consequence": "Minor",
+      "likelihood": "Unlikely",
+      "rating": "Low",
+      "rationale": "Implementing the proposed privacy frameworks (7.1), legal reviews (12.1, 12.2), and strict security controls (7.3) demonstrates responsible governance, reducing the likelihood of internal or external reputational damage to Unlikely and consequence to Minor."
+    }
+  },
+  "overall_residual": "Medium"
+}
