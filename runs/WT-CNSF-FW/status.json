@@ -4,15 +4,15 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-08-03T23:39:52Z",
+  "updated_at": "2026-08-03T23:39:53Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
-    "full.specialist.it_security": "complete",
-    "full.specialist.privacy": "complete",
-    "full.specialist.ethics": "complete",
+    "full.specialist.it_security": "active",
+    "full.specialist.privacy": "active",
+    "full.specialist.ethics": "active",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
@@ -5527,9 +5527,265 @@
       "agent": "pipeline",
       "type": "heartbeat",
       "detail": ""
+    },
+    {
+      "id": "evt_000543",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000544",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "stage_started",
+      "detail": "IT Security specialist started"
+    },
+    {
+      "id": "evt_000545",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "revision",
+      "detail": "revising it_security's sections in light of your answers",
+      "ref": {
+        "target": "it_security"
+      }
+    },
+    {
+      "id": "evt_000546",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_started",
+      "detail": "Privacy specialist started"
+    },
+    {
+      "id": "evt_000547",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "revision",
+      "detail": "revising privacy's sections in light of your answers",
+      "ref": {
+        "target": "privacy"
+      }
+    },
+    {
+      "id": "evt_000548",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_started",
+      "detail": "Ethics & Fairness specialist started"
+    },
+    {
+      "id": "evt_000549",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.ethics",
+      "type": "revision",
+      "detail": "revising ethics's sections in light of your answers",
+      "ref": {
+        "target": "ethics"
+      }
+    },
+    {
+      "id": "evt_000550",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.8"
+      }
+    },
+    {
+      "id": "evt_000551",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000552",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000553",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§APP 11 — Security of personal information"
+      }
+    },
+    {
+      "id": "evt_000554",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Tool",
+      "ref": {
+        "doc": "OAIC PIA Tool",
+        "locator": "§Privacy Impact Assessment Tool"
+      }
+    },
+    {
+      "id": "evt_000555",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC PIA Guide",
+      "ref": {
+        "doc": "OAIC PIA Guide",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000556",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.34"
+      }
+    },
+    {
+      "id": "evt_000557",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI Data Security CSI",
+      "ref": {
+        "doc": "AI Data Security CSI",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000558",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000559",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI Data Security CSI",
+      "ref": {
+        "doc": "AI Data Security CSI",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000560",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.33"
+      }
+    },
+    {
+      "id": "evt_000561",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.7"
+      }
+    },
+    {
+      "id": "evt_000562",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.51"
+      }
+    },
+    {
+      "id": "evt_000563",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.30"
+      }
+    },
+    {
+      "id": "evt_000564",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Better Practice Guide",
+      "ref": {
+        "doc": "ADM Better Practice Guide",
+        "locator": "p.57"
+      }
+    },
+    {
+      "id": "evt_000565",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.26"
+      }
+    },
+    {
+      "id": "evt_000566",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading ADM Guide (earlier ed.)",
+      "ref": {
+        "doc": "ADM Guide (earlier ed.)",
+        "locator": "p.34"
+      }
+    },
+    {
+      "id": "evt_000567",
+      "ts": "2026-08-03T23:39:53Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Diversity & Inclusion in AI",
+      "ref": {
+        "doc": "Diversity & Inclusion in AI",
+        "locator": "p.12"
+      }
     }
   ],
-  "log_cursor": 542,
+  "log_cursor": 567,
   "questions": null,
   "failure": null,
   "expected_ranges": {
