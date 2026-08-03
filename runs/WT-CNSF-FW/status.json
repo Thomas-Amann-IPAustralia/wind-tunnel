@@ -3,8 +3,8 @@
   "run_id": "WT-CNSF-FW",
   "run_code": "WT-CNSF-FW",
   "phase": "full",
-  "overall_state": "paused",
-  "updated_at": "2026-07-31T04:10:01Z",
+  "overall_state": "running",
+  "updated_at": "2026-08-03T23:39:32Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -5513,169 +5513,17 @@
         "specialist": "solution_architect",
         "question_id": "solution_architect-3"
       }
+    },
+    {
+      "id": "evt_000541",
+      "ts": "2026-08-03T23:39:32Z",
+      "agent": "backend",
+      "type": "heartbeat",
+      "detail": ""
     }
   ],
-  "log_cursor": 540,
-  "questions": {
-    "batch_id": "q-1",
-    "specialists": [
-      {
-        "node_id": "full.specialist.it_security",
-        "friendly": "IT Security specialist",
-        "why": "The project outline lacks detail on operational security controls and human oversight mechanisms planned for the Departmental Knowledge Graph.",
-        "items": [
-          {
-            "question_id": "it_security-1",
-            "text": "Have any specific human-in-the-loop validation processes or automated rollback mechanisms been planned for the entity extraction and relationship mapping?",
-            "options": null,
-            "allow_free_text": true
-          },
-          {
-            "question_id": "it_security-2",
-            "text": "What specific security controls (e.g., model scanners, data sanitization, or access controls) are planned to protect the knowledge graph from data poisoning or unauthorized data inference?",
-            "options": null,
-            "allow_free_text": true
-          }
-        ]
-      },
-      {
-        "node_id": "full.specialist.privacy",
-        "friendly": "Privacy specialist",
-        "why": "The assessment requires identifying the specific administrative repository where the privacy compliance documents are stored.",
-        "items": [
-          {
-            "question_id": "privacy-1",
-            "text": "Where are the completed Privacy Threshold Assessment (PTA) and/or Privacy Impact Assessment (PIA) stored for this project (e.g., specific document management system, case file, or repository)?",
-            "options": null,
-            "allow_free_text": true
-          }
-        ]
-      },
-      {
-        "node_id": "full.specialist.ethics",
-        "friendly": "Ethics & Fairness specialist",
-        "why": "The outline lacks details on user interface design, stakeholder consultation, and ethical governance frameworks (fairness, diversity, and explainability) required to complete the assessment.",
-        "items": [
-          {
-            "question_id": "ethics-1",
-            "text": "Has the department established a clear definition and measurement framework for fairness in the context of AI-driven entity extraction from internal communications?",
-            "options": [
-              "Yes, both are defined and documented",
-              "A definition is established, but measurement methods are still being developed",
-              "No, fairness frameworks have not yet been defined for this use case"
-            ],
-            "allow_free_text": true
-          },
-          {
-            "question_id": "ethics-2",
-            "text": "Have the primary users (departmental staff and policy researchers) and IT/data governance teams been consulted regarding the design and deployment of the knowledge graph?",
-            "options": [
-              "Yes, all identified stakeholder groups have been consulted",
-              "Some stakeholders have been consulted (e.g., IT/data governance), but not end-users",
-              "No consultation has taken place yet"
-            ],
-            "allow_free_text": true
-          },
-          {
-            "question_id": "ethics-3",
-            "text": "Will the system's interface disclose when relationships are AI-generated, provide explanations for those links, and offer a non-AI search alternative?",
-            "options": [
-              "Yes, the interface will support disclosures, explanations, and non-AI alternatives",
-              "It will support disclosures and explanations, but no non-AI alternative is planned",
-              "No interface features for disclosure or explanation have been defined yet"
-            ],
-            "allow_free_text": true
-          }
-        ]
-      },
-      {
-        "node_id": "full.specialist.legal",
-        "friendly": "Legal & Administrative Law specialist",
-        "why": "To clarify the legal and compliance steps already taken or planned for the ingestion of sensitive internal communications.",
-        "items": [
-          {
-            "question_id": "legal-1",
-            "text": "Has the department consulted with its internal legal team or the Attorney-General's Department regarding the privacy and secrecy implications of ingesting employee email archives into an AI-powered knowledge graph?",
-            "options": [],
-            "allow_free_text": true
-          },
-          {
-            "question_id": "legal-2",
-            "text": "Are there any specific agency-enabling statutes or secrecy provisions that restrict the sharing or cross-referencing of the internal documents and communications planned for ingestion?",
-            "options": [],
-            "allow_free_text": true
-          },
-          {
-            "question_id": "legal-3",
-            "text": "Has a Privacy Impact Assessment (PIA) been scheduled or completed for the Departmental Knowledge Graph project?",
-            "options": [],
-            "allow_free_text": true
-          }
-        ]
-      },
-      {
-        "node_id": "full.specialist.data_governance",
-        "friendly": "Data Governance specialist",
-        "why": "The assessment requires clarification on whether Indigenous data is in scope to determine the applicability of the Framework for Governance of Indigenous Data, and whether recordkeeping processes have been planned to comply with the Archives Act 1983.",
-        "items": [
-          {
-            "question_id": "data_governance-1",
-            "text": "Does the ingested unstructured data (e.g., policy documents, meeting minutes, email archives) contain Indigenous data or information relating to Aboriginal and Torres Strait Islander people?",
-            "options": [
-              "Yes",
-              "No",
-              "Unsure"
-            ],
-            "allow_free_text": true
-          },
-          {
-            "question_id": "data_governance-2",
-            "text": "Have any recordkeeping processes or metadata standards been defined for capturing the AI-extracted entities, relationships, and system configuration into the department's approved records management system?",
-            "options": [
-              "Yes",
-              "No",
-              "In development"
-            ],
-            "allow_free_text": true
-          }
-        ]
-      },
-      {
-        "node_id": "full.specialist.solution_architect",
-        "friendly": "Solution Architect (sections)",
-        "why": "The use-case outline lacks critical technical implementation, testing, piloting, monitoring, and training details required to complete Section 6.",
-        "items": [
-          {
-            "question_id": "solution_architect-1",
-            "text": "Is the AI model or system being procured from an external vendor, or is it being developed in-house?",
-            "options": [
-              "Procured",
-              "In-house development",
-              "Hybrid / Undecided"
-            ],
-            "allow_free_text": true
-          },
-          {
-            "question_id": "solution_architect-2",
-            "text": "What plans, if any, have been established for testing, piloting, and continuously monitoring the AI system's performance and reliability?",
-            "options": null,
-            "allow_free_text": true
-          },
-          {
-            "question_id": "solution_architect-3",
-            "text": "What training processes or programs will be implemented to ensure operators and users are sufficiently skilled?",
-            "options": null,
-            "allow_free_text": true
-          }
-        ]
-      }
-    ],
-    "counts": {
-      "total": 14,
-      "answered": 0,
-      "skipped": 0
-    }
-  },
+  "log_cursor": 541,
+  "questions": null,
   "failure": null,
   "expected_ranges": {
     "threshold": [

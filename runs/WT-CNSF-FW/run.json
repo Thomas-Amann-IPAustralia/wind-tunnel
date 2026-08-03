@@ -2,9 +2,9 @@
   "schema_version": 1,
   "run_id": "WT-CNSF-FW",
   "created_at": "2026-07-30T04:05:35Z",
-  "updated_at": "2026-07-31T04:10:01Z",
-  "stage": "FULL_CHECKPOINT",
-  "stage_status": "awaiting_user",
+  "updated_at": "2026-08-03T23:39:32Z",
+  "stage": "FULL_REVISING",
+  "stage_status": "in_progress",
   "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "8c54de359ea41063986a28459686822c5a66d0fb",
