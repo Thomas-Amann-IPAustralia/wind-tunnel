@@ -4,16 +4,16 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-08-03T23:39:53Z",
+  "updated_at": "2026-08-03T23:40:09Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
     "threshold.reconciler": "complete",
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "active",
-    "full.specialist.privacy": "active",
+    "full.specialist.privacy": "complete",
     "full.specialist.ethics": "active",
-    "full.specialist.legal": "complete",
+    "full.specialist.legal": "active",
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
@@ -5783,9 +5783,473 @@
         "doc": "Diversity & Inclusion in AI",
         "locator": "p.12"
       }
+    },
+    {
+      "id": "evt_000568",
+      "ts": "2026-08-03T23:39:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000569",
+      "ts": "2026-08-03T23:39:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Top 5",
+      "ref": {
+        "doc": "OAIC AI Training Top 5",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000570",
+      "ts": "2026-08-03T23:39:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000571",
+      "ts": "2026-08-03T23:39:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading APP Guidelines",
+      "ref": {
+        "doc": "APP Guidelines",
+        "locator": "p.91"
+      }
+    },
+    {
+      "id": "evt_000572",
+      "ts": "2026-08-03T23:39:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000573",
+      "ts": "2026-08-03T23:39:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Training Checklist",
+      "ref": {
+        "doc": "OAIC AI Training Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000574",
+      "ts": "2026-08-03T23:39:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000575",
+      "ts": "2026-08-03T23:39:56Z",
+      "agent": "full.specialist.privacy",
+      "type": "retrieval",
+      "detail": "reading OAIC AI Selection Checklist",
+      "ref": {
+        "doc": "OAIC AI Selection Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000576",
+      "ts": "2026-08-03T23:39:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000577",
+      "ts": "2026-08-03T23:39:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000578",
+      "ts": "2026-08-03T23:39:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000579",
+      "ts": "2026-08-03T23:39:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000580",
+      "ts": "2026-08-03T23:39:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000581",
+      "ts": "2026-08-03T23:39:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading LLMSVS",
+      "ref": {
+        "doc": "LLMSVS",
+        "locator": "§Control objective"
+      }
+    },
+    {
+      "id": "evt_000582",
+      "ts": "2026-08-03T23:39:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.120"
+      }
+    },
+    {
+      "id": "evt_000583",
+      "ts": "2026-08-03T23:39:58Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000584",
+      "ts": "2026-08-03T23:40:02Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000585",
+      "ts": "2026-08-03T23:40:02Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000586",
+      "ts": "2026-08-03T23:40:02Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.21"
+      }
+    },
+    {
+      "id": "evt_000587",
+      "ts": "2026-08-03T23:40:02Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.19"
+      }
+    },
+    {
+      "id": "evt_000588",
+      "ts": "2026-08-03T23:40:02Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading LLMSVS",
+      "ref": {
+        "doc": "LLMSVS",
+        "locator": "§Control objective"
+      }
+    },
+    {
+      "id": "evt_000589",
+      "ts": "2026-08-03T23:40:02Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.120"
+      }
+    },
+    {
+      "id": "evt_000590",
+      "ts": "2026-08-03T23:40:02Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Deploying AI Securely",
+      "ref": {
+        "doc": "Deploying AI Securely",
+        "locator": "p.6"
+      }
+    },
+    {
+      "id": "evt_000591",
+      "ts": "2026-08-03T23:40:02Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading OWASP LLM Top 10",
+      "ref": {
+        "doc": "OWASP LLM Top 10",
+        "locator": "p.9"
+      }
+    },
+    {
+      "id": "evt_000592",
+      "ts": "2026-08-03T23:40:03Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.17"
+      }
+    },
+    {
+      "id": "evt_000593",
+      "ts": "2026-08-03T23:40:03Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.17"
+      }
+    },
+    {
+      "id": "evt_000594",
+      "ts": "2026-08-03T23:40:03Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.18"
+      }
+    },
+    {
+      "id": "evt_000595",
+      "ts": "2026-08-03T23:40:03Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.32"
+      }
+    },
+    {
+      "id": "evt_000596",
+      "ts": "2026-08-03T23:40:03Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading NAIC RAI Tools",
+      "ref": {
+        "doc": "NAIC RAI Tools",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000597",
+      "ts": "2026-08-03T23:40:03Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Guidance for AI Adoption",
+      "ref": {
+        "doc": "Guidance for AI Adoption",
+        "locator": "p.17"
+      }
+    },
+    {
+      "id": "evt_000598",
+      "ts": "2026-08-03T23:40:03Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Guidance for AI Adoption",
+      "ref": {
+        "doc": "Guidance for AI Adoption",
+        "locator": "p.22"
+      }
+    },
+    {
+      "id": "evt_000599",
+      "ts": "2026-08-03T23:40:03Z",
+      "agent": "full.specialist.ethics",
+      "type": "retrieval",
+      "detail": "reading Guidance for AI Adoption",
+      "ref": {
+        "doc": "Guidance for AI Adoption",
+        "locator": "p.23"
+      }
+    },
+    {
+      "id": "evt_000600",
+      "ts": "2026-08-03T23:40:08Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading Secure AI Dev Guidelines",
+      "ref": {
+        "doc": "Secure AI Dev Guidelines",
+        "locator": "p.14"
+      }
+    },
+    {
+      "id": "evt_000601",
+      "ts": "2026-08-03T23:40:08Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000602",
+      "ts": "2026-08-03T23:40:08Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000603",
+      "ts": "2026-08-03T23:40:08Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading PSPF PA001-2026",
+      "ref": {
+        "doc": "PSPF PA001-2026",
+        "locator": "p.4"
+      }
+    },
+    {
+      "id": "evt_000604",
+      "ts": "2026-08-03T23:40:08Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.24"
+      }
+    },
+    {
+      "id": "evt_000605",
+      "ts": "2026-08-03T23:40:08Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading AI in OT Principles",
+      "ref": {
+        "doc": "AI in OT Principles",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000606",
+      "ts": "2026-08-03T23:40:08Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading NIST SP 800-61r3",
+      "ref": {
+        "doc": "NIST SP 800-61r3",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000607",
+      "ts": "2026-08-03T23:40:08Z",
+      "agent": "full.specialist.it_security",
+      "type": "retrieval",
+      "detail": "reading ISM",
+      "ref": {
+        "doc": "ISM",
+        "locator": "p.15"
+      }
+    },
+    {
+      "id": "evt_000608",
+      "ts": "2026-08-03T23:40:09Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_started",
+      "detail": "Legal & Administrative Law specialist started"
+    },
+    {
+      "id": "evt_000609",
+      "ts": "2026-08-03T23:40:09Z",
+      "agent": "full.specialist.legal",
+      "type": "revision",
+      "detail": "revising legal's sections in light of your answers",
+      "ref": {
+        "target": "legal"
+      }
+    },
+    {
+      "id": "evt_000610",
+      "ts": "2026-08-03T23:40:09Z",
+      "agent": "full.specialist.privacy",
+      "type": "stage_complete",
+      "detail": "Privacy specialist complete"
     }
   ],
-  "log_cursor": 567,
+  "log_cursor": 610,
   "questions": null,
   "failure": null,
   "expected_ranges": {
