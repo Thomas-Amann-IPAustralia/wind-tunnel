@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-08-03T23:45:35Z",
+  "updated_at": "2026-08-03T23:45:37Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -19,7 +19,7 @@
     "full.checkpoint": "pending",
     "full.architect": "complete",
     "full.reviewer": "complete",
-    "full.assembly": "pending"
+    "full.assembly": "active"
   },
   "log": [
     {
@@ -7384,9 +7384,30 @@
       "agent": "full.reviewer",
       "type": "stage_complete",
       "detail": "Adjudicating reviewer complete"
+    },
+    {
+      "id": "evt_000720",
+      "ts": "2026-08-03T23:45:36Z",
+      "agent": "full.reviewer",
+      "type": "review_finding",
+      "detail": "Residual overall risk after mitigation (highest-wins): Medium."
+    },
+    {
+      "id": "evt_000721",
+      "ts": "2026-08-03T23:45:37Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000722",
+      "ts": "2026-08-03T23:45:37Z",
+      "agent": "full.assembly",
+      "type": "stage_started",
+      "detail": "Assembly started"
     }
   ],
-  "log_cursor": 719,
+  "log_cursor": 722,
   "questions": null,
   "failure": null,
   "expected_ranges": {
