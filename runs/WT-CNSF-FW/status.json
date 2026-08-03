@@ -3,8 +3,8 @@
   "run_id": "WT-CNSF-FW",
   "run_code": "WT-CNSF-FW",
   "phase": "full",
-  "overall_state": "running",
-  "updated_at": "2026-08-03T23:45:39Z",
+  "overall_state": "complete",
+  "updated_at": "2026-08-03T23:45:40Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",

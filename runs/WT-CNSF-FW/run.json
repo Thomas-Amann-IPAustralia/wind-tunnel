@@ -2,14 +2,18 @@
   "schema_version": 1,
   "run_id": "WT-CNSF-FW",
   "created_at": "2026-07-30T04:05:35Z",
-  "updated_at": "2026-08-03T23:39:32Z",
-  "stage": "FULL_REVISING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-08-03T23:45:40Z",
+  "stage": "COMPLETE",
+  "stage_status": "complete",
   "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "8c54de359ea41063986a28459686822c5a66d0fb",
     "THRESHOLD_RECONCILING": "81829f91097cd824866d872a357c056a2c55fec4",
-    "FULL_DRAFTING": "ea69c96412d1f49275566d1b99cc3c562db48309"
+    "FULL_DRAFTING": "ea69c96412d1f49275566d1b99cc3c562db48309",
+    "FULL_REVISING": "70a9bc10df1cf509d5821f86e7ec85674eeda1e5",
+    "ARCHITECT": "ba27e4001be74923eb01967f2c61af56413c12e8",
+    "REVIEW": "3dbe57a7614aba884e2db13401439f6394fa8af6",
+    "ASSEMBLY": "2c799b37b726c10a1f1bdd3efdd68eb11ff7be0e"
   },
   "revisions": {
     "poc": 0,
@@ -17,7 +21,7 @@
     "threshold": 0,
     "full": 0
   },
-  "review_cycles": 0,
+  "review_cycles": 1,
   "attestation": {
     "sensitivity_ceiling": "OFFICIAL",
     "attested": false
