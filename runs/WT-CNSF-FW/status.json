@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-08-03T23:42:07Z",
+  "updated_at": "2026-08-03T23:42:33Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -14,7 +14,7 @@
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
-    "full.specialist.data_governance": "active",
+    "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "active",
     "full.checkpoint": "pending",
     "full.architect": "pending",
@@ -7028,9 +7028,214 @@
         "doc": "RAI Pattern Catalogue",
         "locator": "§(document start)"
       }
+    },
+    {
+      "id": "evt_000684",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000685",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000686",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000687",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.1"
+      }
+    },
+    {
+      "id": "evt_000688",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000689",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000690",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.2"
+      }
+    },
+    {
+      "id": "evt_000691",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000692",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000693",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000694",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000695",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading Data Quality Checklist",
+      "ref": {
+        "doc": "Data Quality Checklist",
+        "locator": "p.3"
+      }
+    },
+    {
+      "id": "evt_000696",
+      "ts": "2026-08-03T23:42:09Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§Records supporting development and implementation of AI systems"
+      }
+    },
+    {
+      "id": "evt_000697",
+      "ts": "2026-08-03T23:42:13Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.13"
+      }
+    },
+    {
+      "id": "evt_000698",
+      "ts": "2026-08-03T23:42:13Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading AI Use Policy v2.0",
+      "ref": {
+        "doc": "AI Use Policy v2.0",
+        "locator": "p.20"
+      }
+    },
+    {
+      "id": "evt_000699",
+      "ts": "2026-08-03T23:42:13Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.31"
+      }
+    },
+    {
+      "id": "evt_000700",
+      "ts": "2026-08-03T23:42:13Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading NAA AI Records Guidance",
+      "ref": {
+        "doc": "NAA AI Records Guidance",
+        "locator": "§More information on the use of AI in Australian Government"
+      }
+    },
+    {
+      "id": "evt_000701",
+      "ts": "2026-08-03T23:42:13Z",
+      "agent": "full.specialist.data_governance",
+      "type": "retrieval",
+      "detail": "reading DDGS",
+      "ref": {
+        "doc": "DDGS",
+        "locator": "p.23"
+      }
+    },
+    {
+      "id": "evt_000702",
+      "ts": "2026-08-03T23:42:33Z",
+      "agent": "full.specialist.data_governance",
+      "type": "stage_complete",
+      "detail": "Data Governance specialist complete"
     }
   ],
-  "log_cursor": 683,
+  "log_cursor": 702,
   "questions": null,
   "failure": null,
   "expected_ranges": {
