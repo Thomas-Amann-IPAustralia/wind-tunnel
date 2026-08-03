@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-08-03T23:43:04Z",
+  "updated_at": "2026-08-03T23:43:06Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -17,7 +17,7 @@
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
-    "full.architect": "pending",
+    "full.architect": "active",
     "full.reviewer": "pending",
     "full.assembly": "pending"
   },
@@ -7328,9 +7328,23 @@
       "agent": "full.specialist.solution_architect",
       "type": "stage_complete",
       "detail": "Solution Architect (sections) complete"
+    },
+    {
+      "id": "evt_000712",
+      "ts": "2026-08-03T23:43:06Z",
+      "agent": "pipeline",
+      "type": "heartbeat",
+      "detail": ""
+    },
+    {
+      "id": "evt_000713",
+      "ts": "2026-08-03T23:43:06Z",
+      "agent": "full.architect",
+      "type": "stage_started",
+      "detail": "Solution Architect (appendix) started"
     }
   ],
-  "log_cursor": 711,
+  "log_cursor": 713,
   "questions": null,
   "failure": null,
   "expected_ranges": {
