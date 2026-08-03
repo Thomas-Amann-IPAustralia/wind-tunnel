@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-08-03T23:40:24Z",
+  "updated_at": "2026-08-03T23:40:33Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -12,9 +12,9 @@
     "threshold.rating_engine": "complete",
     "full.specialist.it_security": "active",
     "full.specialist.privacy": "complete",
-    "full.specialist.ethics": "active",
+    "full.specialist.ethics": "complete",
     "full.specialist.legal": "active",
-    "full.specialist.data_governance": "complete",
+    "full.specialist.data_governance": "active",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "pending",
@@ -6753,9 +6753,33 @@
         "doc": "ADM Better Practice Guide",
         "locator": "p.29"
       }
+    },
+    {
+      "id": "evt_000657",
+      "ts": "2026-08-03T23:40:33Z",
+      "agent": "full.specialist.data_governance",
+      "type": "stage_started",
+      "detail": "Data Governance specialist started"
+    },
+    {
+      "id": "evt_000658",
+      "ts": "2026-08-03T23:40:33Z",
+      "agent": "full.specialist.data_governance",
+      "type": "revision",
+      "detail": "revising data_governance's sections in light of your answers",
+      "ref": {
+        "target": "data_governance"
+      }
+    },
+    {
+      "id": "evt_000659",
+      "ts": "2026-08-03T23:40:33Z",
+      "agent": "full.specialist.ethics",
+      "type": "stage_complete",
+      "detail": "Ethics & Fairness specialist complete"
     }
   ],
-  "log_cursor": 656,
+  "log_cursor": 659,
   "questions": null,
   "failure": null,
   "expected_ranges": {

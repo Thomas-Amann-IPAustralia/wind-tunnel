@@ -2,10 +2,10 @@
 
 ## Gaps
 
-- **5.1**: The outline does not state if a definition of fairness has been established for the extraction of entities and relationships from internal documents.
-- **5.2**: The outline does not specify any qualitative or quantitative metrics to measure or monitor the fairness of the AI's extractions.
-- **8.1**: The outline does not confirm whether the identified stakeholders (staff, researchers, IT/data governance, leadership) have been consulted.
-- **8.2**: The outline does not mention whether any information about this internal knowledge graph will be made publicly available.
-- **8.4**: The outline does not detail the user interface, whether users will be notified of AI-generated outputs, or if non-AI alternatives are provided.
-- **8.5**: The outline does not state whether the system will provide explanations of the factors leading to the AI-extracted relationships.
-- **10.1**: The outline does not provide information on the composition of the project team or how diversity has been incorporated into the lifecycle.
+- **5.1**: The outline and threshold assessment do not state if a clear definition of fairness has been established for this use case.
+- **5.2**: There is no information in the outline or threshold assessment regarding qualitative or quantitative measures for fairness.
+- **8.1**: The outline does not confirm whether the identified stakeholders have been consulted, and the checkpoint question was unanswered.
+- **8.2**: It is not specified whether any information about this internal knowledge graph will be made publicly available.
+- **8.4**: The outline does not detail the user interface, disclosure of AI interactions, or availability of non-AI alternatives.
+- **8.5**: There is no information on whether the system will offer explanations of the factors leading to AI-extracted relationships.
+- **10.1**: The project team composition and incorporation of diversity throughout the lifecycle are not detailed in the outline.
