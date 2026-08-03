@@ -8,10 +8,14 @@ No. The current project outline does not indicate that processes for human inter
 
 ## 7.3
 
-No. The current project outline does not specify the operational security measures in place for the AI system. To address security risks arising from the operation of the AI, the following measures should be implemented: 
-1. **Data Sanitization and Anomaly Detection:** Since the system ingests highly sensitive unstructured data (such as email archives), the department should apply data sanitization (filtering, normalization) and anomaly detection algorithms during pre-processing to identify and remove poisoned or malicious inputs before they affect the knowledge graph (AI Data Security CSI, p.14).
-2. **Access Control and Least Privilege:** Apply strict least privilege principles to limit the AI system's access to data repositories and restrict user access to the system's output based on existing security classifications (Secure AI Dev Guidelines, p.10; OWASP LLM Top 10, p.9).
-3. **Continuous Monitoring and Logging:** Implement continuous monitoring of model behavior and configure comprehensive logging of all AI decisions, inputs, and outputs to track anomalies and support incident response (Deploying AI Securely, p.6; AI in OT Principles, p.19).
-4. **Supply Chain and Asset Security:** Store all code, configurations, and model artifacts in a secure version control system, and thoroughly inspect any imported pre-trained models in a secure development zone prior to deployment (Deploying AI Securely, p.6).
+No. The current project outline does not specify the operational security measures in place for the AI system. To address security risks arising from the operation of the AI, the following measures should be implemented:
 
-*Citations: [AI Data Security CSI, p.14], [Secure AI Dev Guidelines, p.10], [OWASP LLM Top 10, p.9], [Deploying AI Securely, p.6], [AI in OT Principles, p.19]*
+1. **Data Sanitization and Validation:** Since the system ingests highly sensitive unstructured data (such as email archives), the department should apply robust validation and sanitization protocols for all input data to reduce the risk of malicious input or prompt injection (Deploying AI Securely, p.7). Additionally, the department should implement robust data validation pipelines for knowledge sources and regularly audit the integrity of the knowledge base to prevent data poisoning (OWASP LLM Top 10, p.34).
+
+2. **Access Control and Least Privilege:** Apply strict least privilege principles to limit the AI system's access to data repositories (OWASP LLM Top 10, p.9). Implement fine-grained access controls and permission-aware vector and embedding stores to prevent unauthorized access between different classes of users or different groups (OWASP LLM Top 10, p.34).
+
+3. **Continuous Monitoring and Logging:** Implement continuous monitoring of model behavior and perform continuous scans of AI models and their hosting environments to identify possible tampering (Deploying AI Securely, p.6). Configure comprehensive logging of all AI decisions, inputs, and outputs to track anomalies and support compliance and forensic analysis (AI in OT Principles, p.19).
+
+4. **Supply Chain and Asset Security:** Store all forms of code, configurations, and model artifacts in a version control system with proper access controls, and thoroughly inspect any imported pre-trained models in a secure development zone prior to deployment (Deploying AI Securely, p.6).
+
+*Citations: [Deploying AI Securely, p.7], [OWASP LLM Top 10, p.34], [OWASP LLM Top 10, p.9], [Deploying AI Securely, p.6], [AI in OT Principles, p.19]*
