@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-08-03T23:43:06Z",
+  "updated_at": "2026-08-03T23:44:20Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -17,7 +17,7 @@
     "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
-    "full.architect": "active",
+    "full.architect": "complete",
     "full.reviewer": "pending",
     "full.assembly": "pending"
   },
@@ -7342,9 +7342,23 @@
       "agent": "full.architect",
       "type": "stage_started",
       "detail": "Solution Architect (appendix) started"
+    },
+    {
+      "id": "evt_000714",
+      "ts": "2026-08-03T23:43:07Z",
+      "agent": "full.architect",
+      "type": "drafting",
+      "detail": "Writing an implementation plan that answers the risks the specialists raised."
+    },
+    {
+      "id": "evt_000715",
+      "ts": "2026-08-03T23:44:20Z",
+      "agent": "full.architect",
+      "type": "stage_complete",
+      "detail": "Solution Architect (appendix) complete"
     }
   ],
-  "log_cursor": 713,
+  "log_cursor": 715,
   "questions": null,
   "failure": null,
   "expected_ranges": {
