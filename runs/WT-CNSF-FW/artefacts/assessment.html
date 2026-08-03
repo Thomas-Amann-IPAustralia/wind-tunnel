@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI impact assessment</title>
+<style>
+/* The Report register (TECH_SPEC §12.5, design §8): quiet authority — serif body,
+   sans headings, mono for data and citations. Fonts are role-based (design §3.3, §11):
+   IBM Plex where installed, otherwise a faithful serif/sans/mono system fallback, so the
+   render depends on no external font fetch. Colour is never the only cue (design §3.2):
+   every risk chip carries a leading shape glyph and its text label, legible in greyscale. */
+
+:root {
+  --serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+  --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
+  --ink: #1a1a1a;
+  --muted: #55585c;
+  --rule: #d5d7da;
+  --panel: #f4f2ee;
+  --panel-border: #b9b3a7;
+  --link: #1c4f8f;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #eceae6;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.report {
+  max-width: 46rem;
+  margin: 0 auto;
+  padding: 3rem 2.5rem 5rem;
+  background: #fff;
+}
+
+/* Headings — sans, exact DTA numbering carried in the content itself. */
+h1, h2, h3, h4 { font-family: var(--sans); line-height: 1.25; color: var(--ink); }
+h1 { font-size: 1.7rem; font-weight: 600; margin: 2.6rem 0 1rem; padding-bottom: .4rem; border-bottom: 2px solid var(--ink); }
+h2 { font-size: 1.28rem; font-weight: 600; margin: 2rem 0 .6rem; }
+h3 { font-size: 1.08rem; font-weight: 600; margin: 1.4rem 0 .4rem; }
+p { margin: .6rem 0; }
+a { color: var(--link); }
+code { font-family: var(--mono); font-size: .9em; }
+
+/* Title block — the document announces what it is before section 1. */
+.title-block {
+  border: 1px solid var(--rule);
+  border-top: 5px solid var(--ink);
+  padding: 1.8rem 2rem 1.6rem;
+  margin-bottom: 1.5rem;
+}
+.title-block h1 { border: 0; margin: .2rem 0 .6rem; font-size: 2rem; }
+.title-block .draft-mark {
+  font-family: var(--mono);
+  font-size: .72rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #8a5a00;
+  margin: 0;
+}
+.title-block .rev { font-family: var(--sans); font-weight: 600; color: var(--muted); margin: 0 0 .4rem; }
+.title-block .meta { font-family: var(--mono); font-size: .85rem; color: var(--muted); margin: .2rem 0; }
+.title-block .disclaimer { font-family: var(--sans); font-size: .9rem; color: var(--muted); margin-top: .8rem; }
+
+.attribution { font-family: var(--sans); font-size: .82rem; color: var(--muted); margin: 0 0 .4rem; }
+
+/* Citations — a scannable first-class apparatus, mono, never buried. */
+.citations { font-family: var(--mono); font-size: .82rem; color: var(--muted); margin: .3rem 0 0; }
+
+/* Risk table + chips. Chips carry a shape glyph + label so greyscale/poor-projector
+   reading never depends on colour (design §3.2). */
+.risk-table { width: 100%; border-collapse: collapse; margin: .8rem 0; font-family: var(--sans); font-size: .92rem; }
+.risk-table th, .risk-table td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); }
+.risk-table th { font-weight: 600; border-bottom: 2px solid var(--ink); }
+.overall { font-family: var(--sans); font-weight: 600; margin: .8rem 0; }
+
+.chip { display: inline-block; font-family: var(--sans); font-weight: 600; font-size: .82rem; padding: .05rem .5rem; border-radius: 999px; border: 1.5px solid var(--ink); white-space: nowrap; }
+.chip::before { margin-right: .35rem; font-weight: 700; }
+.chip-low { background: #e7f2e7; } .chip-low::before { content: "●"; }
+.chip-medium { background: #fbf0d8; } .chip-medium::before { content: "◆"; }
+.chip-high { background: #f6dcd6; } .chip-high::before { content: "▲"; }
+
+.human-action, .gap-note { font-family: var(--sans); font-size: .9rem; }
+.human-action { border-left: 3px solid var(--panel-border); background: var(--panel); padding: .6rem .8rem; margin: 1rem 0; }
+.gap-note { color: #7a3b00; border-left: 3px solid #c98a3a; padding-left: .7rem; }
+
+/* Unresolved disagreement — calm, confident, a bordered panel in neutral tones, not an
+   error box. Styled to be found, not skimmed past (design §8). */
+.unresolved-intro { font-family: var(--sans); font-style: italic; color: var(--muted); margin: .6rem 0 1rem; }
+.unresolved-panel { border: 1px solid var(--panel-border); background: var(--panel); border-radius: 4px; padding: 1rem 1.2rem; margin: 1rem 0; }
+.unresolved-panel h3 { margin-top: 0; font-size: 1rem; }
+.unresolved-panel .position { margin: .4rem 0; }
+.unresolved-panel .why { font-style: italic; color: var(--muted); margin-top: .6rem; }
+
+/* Provenance — the audit trail, mono, a clean record. */
+.provenance { font-family: var(--mono); font-size: .82rem; color: var(--muted); background: #fafafa; border: 1px solid var(--rule); padding: 1rem 1.2rem; }
+.provenance ul { margin: .3rem 0; padding-left: 1.2rem; }
+.provenance .attestation { color: var(--ink); }
+
+.references .reference { font-size: .9rem; margin: .5rem 0; }
+.references .unresolved-ref { font-family: var(--sans); font-size: .8rem; color: #7a3b00; }
+
+.poc-frame { width: 100%; height: 30rem; border: 1px solid var(--rule); }
+
+.running-footer { display: none; }
+
+@media (max-width: 40rem) {
+  .report { padding: 1.5rem 1.1rem 3rem; }
+  body { font-size: 16px; }
+}
+
+/* Print — the standing disclaimer on every page, risk tables never split across a page
+   break, chips legible in greyscale (the shape glyph carries the level). */
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .report { max-width: none; padding: 0; }
+  .running-footer { display: block; position: fixed; bottom: 0; left: 0; right: 0; font-family: var(--sans); font-size: 8pt; color: #333; text-align: center; padding: .3rem; border-top: 1px solid var(--rule); }
+  .report { margin-bottom: 2rem; }
+  .risk-table, .unresolved-panel, .provenance { break-inside: avoid; page-break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; page-break-after: avoid; }
+  .chip { border-color: #000; }
+  a { color: #000; text-decoration: underline; }
+}
+
+</style>
+</head>
+<body>
+<main class="report">
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=75284edb"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="title-block">
+<p class="draft-mark">DRAFT — for SME review</p>
+<h1>AI impact assessment</h1>
+<p class="meta">Run <code>WT-CNSF-FW</code> · Generated 2026-08-03T23:45:38Z</p>
+<p class="disclaimer">Draft for SME review — not an approval, not legal advice.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=c43d7d2d"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Threshold-assessment-%E2%80%94-sections-1%E2%80%934">Threshold assessment — sections 1–4<a class="anchor-link" href="#Threshold-assessment-%E2%80%94-sections-1%E2%80%934">¶</a></h1><h1 id="Threshold-AI-impact-assessment-%E2%80%94-WT-CNSF-FW">Threshold AI impact assessment — WT-CNSF-FW<a class="anchor-link" href="#Threshold-AI-impact-assessment-%E2%80%94-WT-CNSF-FW">¶</a></h1><h2 id="1.-Basic-information">1. Basic information<a class="anchor-link" href="#1.-Basic-information">¶</a></h2><h3 id="1.1-AI-use-case-profile">1.1 AI use case profile<a class="anchor-link" href="#1.1-AI-use-case-profile">¶</a></h3><ul>
+<li><strong>Title:</strong> Departmental Knowledge Graph</li>
+<li><strong>Run ID:</strong> WT-CNSF-FW</li>
+</ul>
+<h3 id="1.2-Establishing-impact-assessment-responsibilities">1.2 Establishing impact assessment responsibilities<a class="anchor-link" href="#1.2-Establishing-impact-assessment-responsibilities">¶</a></h3><ul>
+<li>Not stated in the outline.</li>
+</ul>
+<h3 id="1.3-Additional-roles-and-responsibilities">1.3 Additional roles and responsibilities<a class="anchor-link" href="#1.3-Additional-roles-and-responsibilities">¶</a></h3><ul>
+<li>Not stated in the outline.</li>
+</ul>
+<h3 id="1.4-AI-use-case-description">1.4 AI use case description<a class="anchor-link" href="#1.4-AI-use-case-description">¶</a></h3><p>An automated knowledge graph designed to ingest internal departmental documents and communications. It uses AI to extract nodes (entities) and edges (relationships) from unstructured text to map and connect fragmented internal information.</p>
+<h3 id="1.5-In-scope-use-case">1.5 In-scope use case<a class="anchor-link" href="#1.5-In-scope-use-case">¶</a></h3><p>Yes, the project involves building an AI-powered knowledge graph to map and connect fragmented internal departmental information.</p>
+<h3 id="1.6-Type-of-AI-technology">1.6 Type of AI technology<a class="anchor-link" href="#1.6-Type-of-AI-technology">¶</a></h3><p>Natural Language Processing (NLP) / Information Extraction AI used to extract entities (nodes) and relationships (edges) from unstructured text.</p>
+<h3 id="1.7-Usage-pattern">1.7 Usage pattern<a class="anchor-link" href="#1.7-Usage-pattern">¶</a></h3><p>Internal tool for departmental staff and policy researchers.</p>
+<h3 id="1.8-Administrative-decisions">1.8 Administrative decisions<a class="anchor-link" href="#1.8-Administrative-decisions">¶</a></h3><p>Not stated in the outline.</p>
+<h3 id="1.9-Domain">1.9 Domain<a class="anchor-link" href="#1.9-Domain">¶</a></h3><p>Internal knowledge management, information discovery, and policy research.</p>
+<h3 id="1.10-Expert-contributions">1.10 Expert contributions<a class="anchor-link" href="#1.10-Expert-contributions">¶</a></h3><p>Not stated in the outline.</p>
+<h3 id="1.11-Impact-assessment-review-log">1.11 Impact assessment review log<a class="anchor-link" href="#1.11-Impact-assessment-review-log">¶</a></h3><p>Not stated in the outline.</p>
+<h2 id="2.-Purpose-and-expected-benefits">2. Purpose and expected benefits<a class="anchor-link" href="#2.-Purpose-and-expected-benefits">¶</a></h2><h3 id="2.1-Problem-definition">2.1 Problem definition<a class="anchor-link" href="#2.1-Problem-definition">¶</a></h3><p>Departmental information is currently siloed and fragmented, making it difficult for staff to discover relevant internal knowledge, policies, or project history efficiently.</p>
+<h3 id="2.2-AI-use-case-purpose">2.2 AI use case purpose<a class="anchor-link" href="#2.2-AI-use-case-purpose">¶</a></h3><p>To build an automated knowledge graph that maps relationships between entities across unstructured text, connecting fragmented internal information and enabling efficient discovery of internal knowledge, policies, and project history.</p>
+<h3 id="2.3-Non-AI-alternatives">2.3 Non-AI alternatives<a class="anchor-link" href="#2.3-Non-AI-alternatives">¶</a></h3><p>Not stated in the outline.</p>
+<h3 id="2.4-Identifying-stakeholders">2.4 Identifying stakeholders<a class="anchor-link" href="#2.4-Identifying-stakeholders">¶</a></h3><ul>
+<li><strong>Primary Users:</strong> Departmental staff and policy researchers.</li>
+<li><strong>Stakeholders:</strong> IT/data governance teams (responsible for information security) and the leadership team (seeking better organizational insights).</li>
+</ul>
+<h3 id="2.5-Expected-benefits">2.5 Expected benefits<a class="anchor-link" href="#2.5-Expected-benefits">¶</a></h3><ul>
+<li>Improved discovery of internal knowledge, policies, and project history.</li>
+<li>Reduced information siloing.</li>
+<li>Enhanced organizational insights for the leadership team.</li>
+</ul>
+<h2 id="3.-Inherent-risk-assessment">3. Inherent risk assessment<a class="anchor-link" href="#3.-Inherent-risk-assessment">¶</a></h2><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Consequence</th>
+<th>Likelihood</th>
+<th>Risk rating</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3.1 Reducing service accessibility and inclusion</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.2 Unfair discrimination</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.3 Stereotyping or demeaning representations</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.4 Harm</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.5 Privacy concerns</td>
+<td>Major</td>
+<td>Likely</td>
+<td>High</td>
+</tr>
+<tr>
+<td>3.6 Security concerns — data aspects</td>
+<td>Major</td>
+<td>Likely</td>
+<td>High</td>
+</tr>
+<tr>
+<td>3.7 Security concerns — system aspects</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3.8 Reputation or public confidence</td>
+<td>Moderate</td>
+<td>Possible</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3.9 Overall inherent risk rating (highest-wins): High</strong></p>
+<h3 id="3.1-Reducing-service-accessibility-and-inclusion">3.1 Reducing service accessibility and inclusion<a class="anchor-link" href="#3.1-Reducing-service-accessibility-and-inclusion">¶</a></h3><p>Since the outline does not detail the user interface or accessibility features, we must precautionarily assume that noticeability of access issues could be Moderate if staff rely on this tool for policy research and encounter barriers. The likelihood is set to Possible as a precautionary default in the absence of specific design constraints.</p>
+<p><em>Divergence: Assessor A rated the consequence as Moderate, while Assessor B rated it as Minor. The higher tier (Moderate) stands, reflecting the precautionary assumption that access issues could cause noticeable barriers for staff relying on the tool for policy research.</em></p>
+<h3 id="3.2-Unfair-discrimination">3.2 Unfair discrimination<a class="anchor-link" href="#3.2-Unfair-discrimination">¶</a></h3><p>Ingesting unstructured communications (like emails and meeting minutes) and using AI to extract entities and relationships carries a risk of extracting biased or unfair associations. Precautionarily, this could cause noticeable harm or bias concerns for internal staff (e.g., misattributing project responsibilities or policy positions), requiring intervention. Likelihood is Possible given the unstructured nature of the source data.</p>
+<h3 id="3.3-Stereotyping-or-demeaning-representations">3.3 Stereotyping or demeaning representations<a class="anchor-link" href="#3.3-Stereotyping-or-demeaning-representations">¶</a></h3><p>The system ingests historical internal documents and email archives which may contain outdated language or biased representations. The AI could systematically extract and map these as valid relationships, perpetuating stereotypes internally. In the absence of explicit filtering mechanisms in the outline, we precautionarily rate the consequence as Moderate and likelihood as Possible.</p>
+<h3 id="3.4-Harm">3.4 Harm<a class="anchor-link" href="#3.4-Harm">¶</a></h3><p>Incorrect entity extraction or relationship mapping from sensitive internal communications (like emails) could lead to professional distress or internal organizational disruption if individuals are incorrectly linked to sensitive, failed, or controversial projects. Precautionarily, we assume a Moderate consequence of internal organizational/individual harm, with a Possible likelihood due to the lack of stated validation or human-in-the-loop verification in the outline.</p>
+<h3 id="3.5-Privacy-concerns">3.5 Privacy concerns<a class="anchor-link" href="#3.5-Privacy-concerns">¶</a></h3><p>The project plans to ingest highly sensitive unstructured data, specifically mentioning email archives and internal wikis. Email archives inherently contain personal, private, and sensitive communications. Mapping these relationships without explicit, granular privacy-preserving constraints makes the risk of exposing private or sensitive personal data Likely to occur, with a Major consequence to internal trust and privacy.</p>
+<p><em>Divergence: Assessor A rated the consequence as Major, while Assessor B rated it as Moderate. The higher tier (Major) stands, reflecting the significant risk to internal trust and privacy from large-scale misuse or exposure of private data in email archives.</em></p>
+<h3 id="3.6-Security-concerns-%E2%80%94-data-aspects">3.6 Security concerns — data aspects<a class="anchor-link" href="#3.6-Security-concerns-%E2%80%94-data-aspects">¶</a></h3><p>The outline notes that the data sensitivity is likely high given the internal nature of the content (including policy documents and project reports). Ingesting this into a centralized knowledge graph without defined security classification boundaries presents a Major consequence if sensitive or classified data is exposed to unauthorized internal users. The likelihood is Likely because the system is designed to connect siloed data, which naturally bypasses existing silo-based access controls unless strictly managed.</p>
+<p><em>Divergence: Assessor A rated the likelihood as Likely, while Assessor B rated it as Possible. The higher tier (Likely) stands, reflecting the inherent risk that connecting siloed data will bypass existing access controls unless strictly managed.</em></p>
+<h3 id="3.7-Security-concerns-%E2%80%94-system-aspects">3.7 Security concerns — system aspects<a class="anchor-link" href="#3.7-Security-concerns-%E2%80%94-system-aspects">¶</a></h3><p>The outline does not specify the sourcing or technical architecture of the AI system. Precautionarily, we must assume that system vulnerabilities or data leakage through the AI model (such as unauthorized data inference or prompt injection if a LLM is used) could lead to a Moderate security compromise. The likelihood is Possible given the lack of technical constraints in the outline.</p>
+<h3 id="3.8-Reputation-or-public-confidence">3.8 Reputation or public confidence<a class="anchor-link" href="#3.8-Reputation-or-public-confidence">¶</a></h3><p>Mining internal employee emails and communications using AI can trigger significant internal and external reputational concerns regarding surveillance and data governance. If made public, any leak of sensitive internal communications or policy drafts mapped by the AI could lead to a Moderate impact on public confidence and questions about oversight. The likelihood is Possible given the high sensitivity of the data sources.</p>
+<h2 id="4.-Threshold-assessment-outcome">4. Threshold assessment outcome<a class="anchor-link" href="#4.-Threshold-assessment-outcome">¶</a></h2><h3 id="4.1-Assessing-officer-recommendation">4.1 Assessing officer recommendation<a class="anchor-link" href="#4.1-Assessing-officer-recommendation">¶</a></h3><p>The proposed Departmental Knowledge Graph aims to ingest highly sensitive internal unstructured data, explicitly including email archives, meeting minutes, and project reports. While the primary users are internal staff, the ingestion of communications and unstructured text presents significant risks regarding privacy, data security, and potential exposure of sensitive information.</p>
+<p>A cautious approach is recommended, focusing on robust data governance, clear access control frameworks, and validation of AI-extracted relationships to prevent misinformation, bias, or unauthorized data exposure. Particular attention must be paid to ensuring that sensitive or restricted information is not inappropriately exposed or linked across different security domains within the department. Detailed technical and privacy safeguards must be established before proceeding with implementation.</p>
+<p>A full assessment is <strong>required</strong>.</p>
+<p>Overall inherent risk is <strong>High</strong> — refer to an internal governance body (§12.5).</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=c0507143"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Full-assessment-%E2%80%94-sections-5%E2%80%9312">Full assessment — sections 5–12<a class="anchor-link" href="#Full-assessment-%E2%80%94-sections-5%E2%80%9312">¶</a></h1><h2 id="5.1-%C2%B7-Defining-fairness">5.1 · Defining fairness<a class="anchor-link" href="#5.1-%C2%B7-Defining-fairness">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p class="gap-note">Gap — The outline and threshold assessment do not state if a clear definition of fairness has been established for this use case.</p>
+<h2 id="5.2-%C2%B7-Measuring-fairness">5.2 · Measuring fairness<a class="anchor-link" href="#5.2-%C2%B7-Measuring-fairness">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p class="gap-note">Gap — There is no information in the outline or threshold assessment regarding qualitative or quantitative measures for fairness.</p>
+<h2 id="6.1-%C2%B7-Data-suitability">6.1 · Data suitability<a class="anchor-link" href="#6.1-%C2%B7-Data-suitability">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>Yes. The chosen data—consisting of internal departmental documents, meeting minutes, project reports, wikis, and email archives—is inherently suitable because it directly represents the internal knowledge, policies, and project history that the Departmental Knowledge Graph is designed to map. However, to ensure the data is suitable and reliable for AI processing, the department must apply the National AI Centre's Data Quality Checklist. This includes verifying accuracy by ensuring data correctly reflects real entities (Data Quality Checklist, p.1), completeness by confirming all required fields and documents are present (Data Quality Checklist, p.1), consistency across different systems (Data Quality Checklist, p.1), timeliness by understanding delays in data availability (Data Quality Checklist, p.2), and uniqueness by identifying duplicate records to avoid skewing results (Data Quality Checklist, p.2). Additionally, the department must address data coverage and bias to ensure the ingested documents cover all expected scenarios and groups, and establish traceability (lineage) to prove which data sources influenced specific AI-extracted relationships (Data Quality Checklist, p.3).</p>
+<p class="citations">Sources: [Data Quality Checklist, p.1]; [Data Quality Checklist, p.2]; [Data Quality Checklist, p.3]</p>
+<h2 id="6.2-%C2%B7-Indigenous-data">6.2 · Indigenous data<a class="anchor-link" href="#6.2-%C2%B7-Indigenous-data">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>No. The outline does not state whether the ingested departmental documents and communications contain Indigenous data, and the user chose not to clarify this. Consequently, the department has not yet ensured that the AI use case is consistent with the Framework for Governance of Indigenous Data. If the system does ingest data relating to Aboriginal and Torres Strait Islander people, communities, or policies, the department must partner with Aboriginal and Torres Strait Islander people at all stages of the data lifecycle to reflect their priorities, build organizational and cultural change to support their inclusion in data governance, and embed co-design in data collection, use, and governance activities (DDGS, p.13). Additionally, potential risks to Indigenous cultural and intellectual property must be managed as part of the department's AI incident and risk management processes (AI Use Policy v2.0, p.20).</p>
+<p class="citations">Sources: [DDGS, p.13]; [AI Use Policy v2.0, p.20]</p>
+<h2 id="6.3-%C2%B7-Suitability-of-procured-AI-system">6.3 · Suitability of procured AI system<a class="anchor-link" href="#6.3-%C2%B7-Suitability-of-procured-AI-system">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p class="gap-note">Gap — The outline does not specify whether the AI system is being procured or developed in-house, and the checkpoint question regarding this was left unanswered.</p>
+<h2 id="6.4-%C2%B7-Testing">6.4 · Testing<a class="anchor-link" href="#6.4-%C2%B7-Testing">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p class="gap-note">Gap — No details regarding testing, validation, or reliability evaluation are provided in the outline, and the checkpoint question was left unanswered.</p>
+<h2 id="6.5-%C2%B7-Pilot">6.5 · Pilot<a class="anchor-link" href="#6.5-%C2%B7-Pilot">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p class="gap-note">Gap — The outline does not state whether a pilot has been conducted or is planned, and the checkpoint question was left unanswered.</p>
+<h2 id="6.6-%C2%B7-Monitoring">6.6 · Monitoring<a class="anchor-link" href="#6.6-%C2%B7-Monitoring">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p class="gap-note">Gap — No performance monitoring, evaluation, or drift detection plans are specified in the outline, and the checkpoint question was left unanswered.</p>
+<h2 id="6.7-%C2%B7-Preparedness-to-intervene-or-disengage">6.7 · Preparedness to intervene or disengage<a class="anchor-link" href="#6.7-%C2%B7-Preparedness-to-intervene-or-disengage">¶</a></h2><p class="attribution">Assessed by: IT Security specialist</p>
+<p>No. The current project outline does not indicate that processes for human intervention or safe disengagement have been established. To ensure reliability and safety, the department should implement human-in-the-loop controls and rollback capabilities. Specifically, the AI system should be configured to flag risky actions or sensitive relationship extractions for human approval prior to execution (ISM, p.120; OWASP LLM Top 10, p.9). Furthermore, the department should prepare for automated rollbacks and human-in-the-loop failsafes to quickly revert the system to a last known good state if the model introduces errors or is compromised (Deploying AI Securely, p.6). Finally, new failure states and procedures for bypassing or disengaging the AI system must be integrated into the department's existing incident response and business continuity plans (AI in OT Principles, p.20).</p>
+<p class="citations">Sources: [ISM, p.120]; [OWASP LLM Top 10, p.9]; [Deploying AI Securely, p.6]; [AI in OT Principles, p.20]</p>
+<h2 id="6.8-%C2%B7-Training-of-AI-system-operators">6.8 · Training of AI system operators<a class="anchor-link" href="#6.8-%C2%B7-Training-of-AI-system-operators">¶</a></h2><p class="attribution">Assessed by: Solution Architect (sections)</p>
+<p class="gap-note">Gap — The outline does not specify any training or skill-assurance processes for operators, and the checkpoint question was left unanswered.</p>
+<h2 id="7.1-%C2%B7-Minimise-and-protect-personal-information">7.1 · Minimise and protect personal information<a class="anchor-link" href="#7.1-%C2%B7-Minimise-and-protect-personal-information">¶</a></h2><p class="attribution">Assessed by: Privacy specialist</p>
+<p>No. Based on the current project outline, we are not satisfied that the collection, use, or disclosure of personal information complies with the Australian Privacy Principles (APPs). The proposed Departmental Knowledge Graph plans to ingest unstructured communications, including email archives and internal wikis, which contain personal and potentially sensitive information. Under APP 3, collecting personal information for AI training or processing is not considered 'reasonably necessary' if the objective can be achieved using de-identified data or other data minimisation techniques (OAIC AI Training Checklist, p.2). Furthermore, using existing internal communications for a secondary AI-related purpose (extracting nodes and edges) may violate APP 6, as it is unlikely to align with the primary purpose of collection or the reasonable expectations of the individuals (OAIC AI Training Top 5, p.1). Sensitive information, which is highly likely to be present in email archives, generally requires express consent for collection under APP 3.3 (APP Guidelines, p.91). To achieve compliance, the project must implement robust data minimisation, de-identification, and consent frameworks before proceeding.</p>
+<p class="citations">Sources: [OAIC AI Training Checklist, p.2]; [OAIC AI Training Top 5, p.1]; [APP Guidelines, p.91]</p>
+<h2 id="7.2-%C2%B7-Privacy-threshold-and/or-impact-assessment">7.2 · Privacy threshold and/or impact assessment<a class="anchor-link" href="#7.2-%C2%B7-Privacy-threshold-and/or-impact-assessment">¶</a></h2><p class="attribution">Assessed by: Privacy specialist</p>
+<p class="gap-note">Gap — The project outline does not specify the document management system or repository where the privacy threshold assessment or privacy impact assessment are stored, and the user chose not to answer the checkpoint question.</p>
+<h2 id="7.3-%C2%B7-Security-risks">7.3 · Security risks<a class="anchor-link" href="#7.3-%C2%B7-Security-risks">¶</a></h2><p class="attribution">Assessed by: IT Security specialist</p>
+<p>No. The current project outline does not specify the operational security measures in place for the AI system. To address security risks arising from the operation of the AI, the following measures should be implemented:</p>
+<ol>
+<li><p><strong>Data Sanitization and Validation:</strong> Since the system ingests highly sensitive unstructured data (such as email archives), the department should apply robust validation and sanitization protocols for all input data to reduce the risk of malicious input or prompt injection (Deploying AI Securely, p.7). Additionally, the department should implement robust data validation pipelines for knowledge sources and regularly audit the integrity of the knowledge base to prevent data poisoning (OWASP LLM Top 10, p.34).</p>
+</li>
+<li><p><strong>Access Control and Least Privilege:</strong> Apply strict least privilege principles to limit the AI system's access to data repositories (OWASP LLM Top 10, p.9). Implement fine-grained access controls and permission-aware vector and embedding stores to prevent unauthorized access between different classes of users or different groups (OWASP LLM Top 10, p.34).</p>
+</li>
+<li><p><strong>Continuous Monitoring and Logging:</strong> Implement continuous monitoring of model behavior and perform continuous scans of AI models and their hosting environments to identify possible tampering (Deploying AI Securely, p.6). Configure comprehensive logging of all AI decisions, inputs, and outputs to track anomalies and support compliance and forensic analysis (AI in OT Principles, p.19).</p>
+</li>
+<li><p><strong>Supply Chain and Asset Security:</strong> Store all forms of code, configurations, and model artifacts in a version control system with proper access controls, and thoroughly inspect any imported pre-trained models in a secure development zone prior to deployment (Deploying AI Securely, p.6).</p>
+</li>
+</ol>
+<p class="citations">Sources: [Deploying AI Securely, p.7]; [OWASP LLM Top 10, p.34]; [OWASP LLM Top 10, p.9]; [Deploying AI Securely, p.6]; [AI in OT Principles, p.19]</p>
+<h2 id="8.1-%C2%B7-Consultation">8.1 · Consultation<a class="anchor-link" href="#8.1-%C2%B7-Consultation">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p class="gap-note">Gap — The outline does not confirm whether the identified stakeholders have been consulted, and the checkpoint question was unanswered.</p>
+<h2 id="8.2-%C2%B7-Public-visibility">8.2 · Public visibility<a class="anchor-link" href="#8.2-%C2%B7-Public-visibility">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p class="gap-note">Gap — It is not specified whether any information about this internal knowledge graph will be made publicly available.</p>
+<h2 id="8.3-%C2%B7-Maintain-appropriate-documentation-and-records">8.3 · Maintain appropriate documentation and records<a class="anchor-link" href="#8.3-%C2%B7-Maintain-appropriate-documentation-and-records">¶</a></h2><p class="attribution">Assessed by: Data Governance specialist</p>
+<p>No. The outline does not state whether processes have been established to maintain appropriate documentation and records throughout the lifecycle of the Departmental Knowledge Graph, and the user chose not to clarify this. To comply with the Archives Act 1983, all AI-generated content and related records created or received by the department constitute Commonwealth records and must be actively managed to retain their authenticity, reliability, integrity, and usability (NAA AI Records Guidance, §General principles for managing records generated by AI). The department must establish processes to capture AI-generated outputs (such as the extracted nodes, edges, and relationship maps) and associated metadata into an approved records management system, as the AI system itself is unlikely to have adequate recordkeeping functionality (NAA AI Records Guidance, §General principles for managing records generated by AI). Furthermore, the department must document and retain records of the system's design, development, testing, configuration, and operational specifications (including details of the AI model, rules framework, and training datasets), as well as policies and procedures governing its correct usage (NAA AI Records Guidance, §Records supporting development and implementation of AI systems; §Example: AI technologies incorporated into a regulatory compliance assessment business system).</p>
+<p class="citations">Sources: [NAA AI Records Guidance, §General principles for managing records generated by AI]; [NAA AI Records Guidance, §Records supporting development and implementation of AI systems]; [NAA AI Records Guidance, §Example: AI technologies incorporated into a regulatory compliance assessment business system]</p>
+<h2 id="8.4-%C2%B7-Disclosing-AI-interactions-and-outputs">8.4 · Disclosing AI interactions and outputs<a class="anchor-link" href="#8.4-%C2%B7-Disclosing-AI-interactions-and-outputs">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p class="gap-note">Gap — The outline does not detail the user interface, disclosure of AI interactions, or availability of non-AI alternatives.</p>
+<h2 id="8.5-%C2%B7-Offer-appropriate-explanations">8.5 · Offer appropriate explanations<a class="anchor-link" href="#8.5-%C2%B7-Offer-appropriate-explanations">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p class="gap-note">Gap — There is no information on whether the system will offer explanations of the factors leading to AI-extracted relationships.</p>
+<h2 id="9.1-%C2%B7-Notification-of-AI-affecting-rights">9.1 · Notification of AI affecting rights<a class="anchor-link" href="#9.1-%C2%B7-Notification-of-AI-affecting-rights">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Not applicable. The Departmental Knowledge Graph is an internal tool designed for knowledge management, information discovery, and policy research by departmental staff and policy researchers. It is not designed or used to make or materially influence administrative decisions that have a legal or significant effect on individuals, groups, organisations, or communities. As such, notification requirements under administrative law for AI-influenced decisions do not apply to this use case.</p>
+<h2 id="9.2-%C2%B7-Challenging-administrative-actions-influenced-by-AI">9.2 · Challenging administrative actions influenced by AI<a class="anchor-link" href="#9.2-%C2%B7-Challenging-administrative-actions-influenced-by-AI">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Not applicable. As discussed in section 9.1, the AI system is an internal information discovery tool and does not make or materially influence administrative decisions with legal or significant effects. Therefore, a process to challenge administrative actions under administrative law is not applicable to this use case.</p>
+<h2 id="10.1-%C2%B7-Incorporating-diversity">10.1 · Incorporating diversity<a class="anchor-link" href="#10.1-%C2%B7-Incorporating-diversity">¶</a></h2><p class="attribution">Assessed by: Ethics &amp; Fairness specialist</p>
+<p class="gap-note">Gap — The project team composition and incorporation of diversity throughout the lifecycle are not detailed in the outline.</p>
+<h2 id="10.2-%C2%B7-Human-rights-obligations">10.2 · Human rights obligations<a class="anchor-link" href="#10.2-%C2%B7-Human-rights-obligations">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>No. The current project outline does not indicate that any consultation with an appropriate source of advice (such as legal counsel or human rights specialists) has been undertaken, nor has a formal assessment been conducted to ensure alignment with human rights obligations. Given that the system will ingest highly sensitive unstructured data, including email archives and meeting minutes, which may contain personal or sensitive information, there is a risk of violating privacy rights or perpetuating biases. A formal human rights alignment review or consultation is required before proceeding.</p>
+<p class="citations">Sources: [HTI State of AI Governance, p.34]; [ADM Better Practice Guide, p.8]</p>
+<h2 id="11.1-%C2%B7-Ensuring-accountability-during-the-lifecycle-of-the-AI-system">11.1 · Ensuring accountability during the lifecycle of the AI system<a class="anchor-link" href="#11.1-%C2%B7-Ensuring-accountability-during-the-lifecycle-of-the-AI-system">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>No. While the outline identifies IT/data governance teams and the leadership team as stakeholders, it does not establish specific mechanisms or designate roles (such as an Accountable Official or Accountable Use Case Owner) to ensure responsibility and accountability throughout the AI system's lifecycle as required by the Policy for the responsible use of AI in government. Under this policy, agencies must designate an accountable official and an accountable use case owner to maintain oversight and manage risks.</p>
+<p class="citations">Sources: [AI Use Policy v2.0, p.11]</p>
+<h2 id="12.1-%C2%B7-Alignment-with-relevant-legal-frameworks">12.1 · Alignment with relevant legal frameworks<a class="anchor-link" href="#12.1-%C2%B7-Alignment-with-relevant-legal-frameworks">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>No. The current project documentation does not identify or document any agency-specific legislation or regulatory instruments relevant to this AI use case. Because the system ingests internal communications, emails, and policy documents, it is critical to identify and document relevant legal frameworks, including the Privacy Act 1988 (Cth), the Archives Act 1983 (Cth), and any agency-specific enabling legislation that governs the handling and disclosure of departmental information.</p>
+<p class="citations">Sources: [ADM Better Practice Guide, p.28]; [HTI State of AI Governance, p.38]</p>
+<h2 id="12.2-%C2%B7-Legal-advice">12.2 · Legal advice<a class="anchor-link" href="#12.2-%C2%B7-Legal-advice">¶</a></h2><p class="attribution">Assessed by: Legal &amp; Administrative Law specialist</p>
+<p>Yes. Given the high inherent risks identified in the threshold assessment—particularly around privacy (3.5) and data security (3.6) due to the ingestion of sensitive unstructured data like email archives—the need for legal advice has been clearly identified (12.2.1). Legal advice is required to ensure compliance with the Privacy Act 1988 (Cth), confidentiality obligations, and public sector record-keeping requirements. Regarding 12.2.2, as the project is currently in the conceptual/assessment phase, no formal legal advice has been obtained yet, and therefore no storage location (such as a document management system or case file) has been established. Once obtained, any legal advice will be stored in the department's official records management system in accordance with standard information security protocols.</p>
+<p class="citations">Sources: [New Machinery of Government, p.58]; [ADM Better Practice Guide, p.29]</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=075aeaa9"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Residual-risk-%E2%80%94-12.3-and-12.4">Residual risk — 12.3 and 12.4<a class="anchor-link" href="#Residual-risk-%E2%80%94-12.3-and-12.4">¶</a></h1><h2 id="12.3-Residual-risk-summary">12.3 Residual risk summary<a class="anchor-link" href="#12.3-Residual-risk-summary">¶</a></h2><table class="risk-table">
+<thead><tr><th>Area</th><th>Consequence</th><th>Likelihood</th><th>Residual rating</th></tr></thead><tbody>
+<tr><td>3.1</td><td>Moderate</td><td>Possible</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.2</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.3</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.4</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.5</td><td>Moderate</td><td>Possible</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.6</td><td>Moderate</td><td>Unlikely</td><td class="chip chip-medium">Medium</td></tr>
+<tr><td>3.7</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+<tr><td>3.8</td><td>Minor</td><td>Unlikely</td><td class="chip chip-low">Low</td></tr>
+</tbody></table>
+<p class="overall">12.4 Overall residual risk rating (highest-wins): <span class="chip chip-medium">Medium</span></p>
+<p class="human-action">12.5 — Internal governance body review is a human action where the agency's governance policy requires it.</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=a23acd8a"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Implementation-Plan">Appendix — Implementation Plan<a class="anchor-link" href="#Appendix-%E2%80%94-Implementation-Plan">¶</a></h1><p>The implementation of the Departmental Knowledge Graph requires a phased approach that prioritises legal compliance, privacy, and strict access controls before any data ingestion occurs. The architecture relies on a secure, permission-aware data pipeline to ensure that the highly sensitive nature of internal communications (e.g., emails, meeting minutes) is respected at every layer.</p>
+<p><strong>Sequencing:</strong></p>
+<ol>
+<li><strong>Governance &amp; Legal (Pre-development):</strong> Appoint accountable roles, obtain formal legal advice, and conduct human rights and Indigenous data assessments.</li>
+<li><strong>Data Preparation &amp; Privacy (Pre-ingestion):</strong> Implement data minimisation, de-identification pipelines, and apply the National AI Centre's Data Quality Checklist.</li>
+<li><strong>Secure Architecture &amp; Development:</strong> Deploy models in a secure zone, implement input sanitisation, and build a permission-aware vector/graph database.</li>
+<li><strong>Operational Controls (Deployment):</strong> Establish Human-in-the-Loop (HITL) review queues for sensitive relationships, integrate AI outputs into official recordkeeping, and enable continuous monitoring.</li>
+</ol>
+<p><strong>Architecture at a glance:</strong></p>
+<div class="jp-Mermaid"><pre class="mermaid">
+graph TD
+  A[Raw Internal Data] --&gt; B[Sanitisation &amp; De-identification Pipeline]
+  B --&gt; C[Secure NLP Model Extraction]
+  C --&gt; D{HITL Review Queue}
+  D -- Approved --&gt; E[(Permission-Aware Graph/Vector Store)]
+  D -- Rejected --&gt; F[Discard &amp; Log]
+  E --&gt; G[End User Query via RBAC]
+  E --&gt; H[Official Records Management System]
+</pre></div><h2 id="Implementation-steps">Implementation steps<a class="anchor-link" href="#Implementation-steps">¶</a></h2><h3 id="1.-Establish-AI-governance,-legal,-and-human-rights-foundations">1. Establish AI governance, legal, and human rights foundations<a class="anchor-link" href="#1.-Establish-AI-governance,-legal,-and-human-rights-foundations">¶</a></h3><p>Before technical development begins, formalise the governance structure.</p>
+<ol>
+<li>Designate an Accountable Official and an Accountable Use Case Owner for the Knowledge Graph.</li>
+<li>Document all relevant legal frameworks, specifically the Privacy Act 1988 (Cth) and Archives Act 1983 (Cth).</li>
+<li>Obtain formal legal advice regarding the ingestion of internal communications and store this advice in the department's official records management system.</li>
+<li>Conduct a formal human rights alignment review to assess risks of bias or privacy violations stemming from unstructured data ingestion.</li>
+</ol>
+<p><em>Answers: [Legal &amp; Administrative Law specialist, §11.1] — Designate an accountable official and an accountable use case owner.; [Legal &amp; Administrative Law specialist, §12.1] — Identify and document relevant legal frameworks including the Privacy Act and Archives Act.; [Legal &amp; Administrative Law specialist, §12.2] — Obtain legal advice regarding compliance and store it in the official records management system.; [Legal &amp; Administrative Law specialist, §10.2] — Conduct a formal human rights alignment review or consultation.</em></p>
+<h3 id="2.-Implement-privacy-preserving-data-minimisation-and-de-identification">2. Implement privacy-preserving data minimisation and de-identification<a class="anchor-link" href="#2.-Implement-privacy-preserving-data-minimisation-and-de-identification">¶</a></h3><p>To comply with APP 3 and APP 6, raw email archives and wikis cannot be ingested verbatim if they contain unnecessary personal information.</p>
+<ul>
+<li>Build a pre-processing pipeline that strips out highly sensitive personal identifiers (e.g., using Named Entity Recognition to mask personal phone numbers, health data, or non-work-related personal chatter in emails) before the data reaches the relationship-extraction model.</li>
+<li>Establish a consent framework or explicit internal policy notice for employees regarding the secondary use of their communications for AI processing.</li>
+</ul>
+<p><em>Answers: [Privacy specialist, §7.1] — Implement robust data minimisation, de-identification, and consent frameworks to comply with APP 3 and APP 6.</em></p>
+<h3 id="3.-Execute-data-quality-and-Indigenous-data-assessments">3. Execute data quality and Indigenous data assessments<a class="anchor-link" href="#3.-Execute-data-quality-and-Indigenous-data-assessments">¶</a></h3><p>Run the source datasets through the National AI Centre's Data Quality Checklist.</p>
+<ul>
+<li><strong>Scripting/Tooling:</strong> Implement automated checks for data completeness, uniqueness (deduplication of email threads), and lineage (tagging every extracted node with its exact source document ID).</li>
+<li><strong>Indigenous Data:</strong> Audit the data sources for content relating to Aboriginal and Torres Strait Islander people or policies. If found, pause ingestion to partner with Indigenous representatives for co-design and to manage Indigenous Cultural and Intellectual Property (ICIP) risks.</li>
+</ul>
+<p><em>Answers: [Data Governance specialist, §6.1] — Apply the National AI Centre's Data Quality Checklist (accuracy, completeness, consistency, timeliness, uniqueness, coverage, bias, traceability).; [Data Governance specialist, §6.2] — Assess for Indigenous data and embed co-design and ICIP risk management if present.</em></p>
+<h3 id="4.-Secure-the-AI-supply-chain-and-model-infrastructure">4. Secure the AI supply chain and model infrastructure<a class="anchor-link" href="#4.-Secure-the-AI-supply-chain-and-model-infrastructure">¶</a></h3><p>Ensure the NLP models used for entity and relationship extraction are secure.</p>
+<ul>
+<li>Store all code, configurations, and model weights in a strict version control system with branch protection.</li>
+<li>If using pre-trained open-source NLP models (e.g., for NER or relationship extraction), download and inspect them in an isolated, secure development zone to scan for malware or tampering before deploying to the production environment.</li>
+</ul>
+<p><em>Answers: [IT Security specialist, §7.3] — Store artifacts in version control and inspect imported pre-trained models in a secure development zone.</em></p>
+<h3 id="5.-Build-a-permission-aware-data-pipeline-and-vector-store">5. Build a permission-aware data pipeline and vector store<a class="anchor-link" href="#5.-Build-a-permission-aware-data-pipeline-and-vector-store">¶</a></h3><p>Because the system connects siloed data, the database must enforce existing access boundaries.</p>
+<ul>
+<li><strong>Sanitisation:</strong> Apply input validation to all unstructured text to prevent prompt injection or data poisoning.</li>
+<li><strong>Access Control:</strong> Use a permission-aware graph or vector database. Every extracted edge/node must inherit the Access Control List (ACL) of its source document.</li>
+</ul>
+<p><em>Example configuration logic:</em></p>
+<div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">"node_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"project_alpha"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"extracted_from"</span><span class="p">:</span><span class="w"> </span><span class="s2">"doc_773"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"required_clearance"</span><span class="p">:</span><span class="w"> </span><span class="s2">"level_2"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"allowed_groups"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"policy_team_a"</span><span class="p">,</span><span class="w"> </span><span class="s2">"exec_leadership"</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+<p>Queries to the graph must append the current user's group memberships to filter out nodes/edges they are not authorised to see.</p>
+<p><em>Answers: [IT Security specialist, §7.3] — Apply robust validation/sanitisation protocols and implement permission-aware vector and embedding stores.</em></p>
+<h3 id="6.-Implement-Human-in-the-Loop-(HITL)-and-automated-rollback">6. Implement Human-in-the-Loop (HITL) and automated rollback<a class="anchor-link" href="#6.-Implement-Human-in-the-Loop-(HITL)-and-automated-rollback">¶</a></h3><p>Do not allow the AI to autonomously publish sensitive relationships to the live graph.</p>
+<ul>
+<li><strong>HITL Queue:</strong> Configure the NLP pipeline with a confidence threshold and a sensitivity classifier. If a relationship involves sensitive personnel matters or low-confidence extractions, route it to a human data steward for approval.</li>
+<li><strong>Rollback:</strong> Implement automated snapshotting of the graph database state. Create a one-click rollback script to revert the graph to the last known good state if data poisoning or systemic extraction errors are detected.</li>
+</ul>
+<p><em>Answers: [IT Security specialist, §6.7] — Configure the AI to flag risky actions/sensitive relationships for human approval and prepare automated rollbacks.</em></p>
+<h3 id="7.-Establish-Commonwealth-recordkeeping-for-AI-outputs-and-system-design">7. Establish Commonwealth recordkeeping for AI outputs and system design<a class="anchor-link" href="#7.-Establish-Commonwealth-recordkeeping-for-AI-outputs-and-system-design">¶</a></h3><p>Treat the AI system's outputs and configurations as official Commonwealth records.</p>
+<ul>
+<li>Configure an automated export job that captures AI-generated nodes, edges, relationship maps, and their metadata, and ingests them into the department's approved records management system (e.g., Content Manager/TRIM).</li>
+<li>Document and retain all records of the system's design, model architecture, rules framework, training datasets, and usage policies in the same records system.</li>
+</ul>
+<p><em>Answers: [Data Governance specialist, §8.3] — Capture AI-generated outputs/metadata into an approved records management system and retain records of system design and configuration.</em></p>
+<h3 id="8.-Configure-continuous-monitoring,-logging,-and-incident-response">8. Configure continuous monitoring, logging, and incident response<a class="anchor-link" href="#8.-Configure-continuous-monitoring,-logging,-and-incident-response">¶</a></h3><p>Ensure the system's ongoing operation is secure and auditable.</p>
+<ul>
+<li><strong>Logging:</strong> Log all AI inputs (source text chunks), outputs (extracted entities), and end-user queries. Forward these logs to the department's SIEM for anomaly detection.</li>
+<li><strong>Incident Response:</strong> Update the department's Business Continuity Plan (BCP) and Incident Response plan to include specific procedures for bypassing or safely disengaging the Knowledge Graph if it is compromised or begins hallucinating relationships.</li>
+</ul>
+<p><em>Answers: [IT Security specialist, §7.3] — Implement continuous monitoring of model behavior and comprehensive logging of all AI decisions, inputs, and outputs.; [IT Security specialist, §6.7] — Integrate new failure states and procedures for bypassing/disengaging the AI into incident response and BCP.</em></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=27e01dd9"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Recommended-next-steps">Appendix — Recommended next steps<a class="anchor-link" href="#Appendix-%E2%80%94-Recommended-next-steps">¶</a></h1><p>Where the assessment could not be completed from the available evidence, the point is recorded here as a concrete next step for the project team — not a failure of the assessment.</p>
+<ul>
+<li><strong>§5.1</strong> <em>(Ethics &amp; Fairness specialist)</em>: The outline and threshold assessment do not state if a clear definition of fairness has been established for this use case.</li>
+<li><strong>§5.2</strong> <em>(Ethics &amp; Fairness specialist)</em>: There is no information in the outline or threshold assessment regarding qualitative or quantitative measures for fairness.</li>
+<li><strong>§6.3</strong> <em>(Solution Architect (sections))</em>: The outline does not specify whether the AI system is being procured or developed in-house, and the checkpoint question regarding this was left unanswered.</li>
+<li><strong>§6.4</strong> <em>(Solution Architect (sections))</em>: No details regarding testing, validation, or reliability evaluation are provided in the outline, and the checkpoint question was left unanswered.</li>
+<li><strong>§6.5</strong> <em>(Solution Architect (sections))</em>: The outline does not state whether a pilot has been conducted or is planned, and the checkpoint question was left unanswered.</li>
+<li><strong>§6.6</strong> <em>(Solution Architect (sections))</em>: No performance monitoring, evaluation, or drift detection plans are specified in the outline, and the checkpoint question was left unanswered.</li>
+<li><strong>§6.8</strong> <em>(Solution Architect (sections))</em>: The outline does not specify any training or skill-assurance processes for operators, and the checkpoint question was left unanswered.</li>
+<li><strong>§7.2</strong> <em>(Privacy specialist)</em>: The project outline does not specify the document management system or repository where the privacy threshold assessment or privacy impact assessment are stored, and the user chose not to answer the checkpoint question.</li>
+<li><strong>§8.1</strong> <em>(Ethics &amp; Fairness specialist)</em>: The outline does not confirm whether the identified stakeholders have been consulted, and the checkpoint question was unanswered.</li>
+<li><strong>§8.2</strong> <em>(Ethics &amp; Fairness specialist)</em>: It is not specified whether any information about this internal knowledge graph will be made publicly available.</li>
+<li><strong>§8.4</strong> <em>(Ethics &amp; Fairness specialist)</em>: The outline does not detail the user interface, disclosure of AI interactions, or availability of non-AI alternatives.</li>
+<li><strong>§8.5</strong> <em>(Ethics &amp; Fairness specialist)</em>: There is no information on whether the system will offer explanations of the factors leading to AI-extracted relationships.</li>
+<li><strong>§10.1</strong> <em>(Ethics &amp; Fairness specialist)</em>: The project team composition and incorporation of diversity throughout the lifecycle are not detailed in the outline.</li>
+<li><strong>Unanswered checkpoint question</strong> (it_security-1): Have any specific human-in-the-loop validation processes or automated rollback mechanisms been planned for the entity extraction and relationship mapping?</li>
+<li><strong>Unanswered checkpoint question</strong> (it_security-2): What specific security controls (e.g., model scanners, data sanitization, or access controls) are planned to protect the knowledge graph from data poisoning or unauthorized data inference?</li>
+<li><strong>Unanswered checkpoint question</strong> (privacy-1): Where are the completed Privacy Threshold Assessment (PTA) and/or Privacy Impact Assessment (PIA) stored for this project (e.g., specific document management system, case file, or repository)?</li>
+<li><strong>Unanswered checkpoint question</strong> (ethics-1): Has the department established a clear definition and measurement framework for fairness in the context of AI-driven entity extraction from internal communications?</li>
+<li><strong>Unanswered checkpoint question</strong> (ethics-2): Have the primary users (departmental staff and policy researchers) and IT/data governance teams been consulted regarding the design and deployment of the knowledge graph?</li>
+<li><strong>Unanswered checkpoint question</strong> (ethics-3): Will the system's interface disclose when relationships are AI-generated, provide explanations for those links, and offer a non-AI search alternative?</li>
+<li><strong>Unanswered checkpoint question</strong> (legal-1): Has the department consulted with its internal legal team or the Attorney-General's Department regarding the privacy and secrecy implications of ingesting employee email archives into an AI-powered knowledge graph?</li>
+<li><strong>Unanswered checkpoint question</strong> (legal-2): Are there any specific agency-enabling statutes or secrecy provisions that restrict the sharing or cross-referencing of the internal documents and communications planned for ingestion?</li>
+<li><strong>Unanswered checkpoint question</strong> (legal-3): Has a Privacy Impact Assessment (PIA) been scheduled or completed for the Departmental Knowledge Graph project?</li>
+<li><strong>Unanswered checkpoint question</strong> (data_governance-1): Does the ingested unstructured data (e.g., policy documents, meeting minutes, email archives) contain Indigenous data or information relating to Aboriginal and Torres Strait Islander people?</li>
+<li><strong>Unanswered checkpoint question</strong> (data_governance-2): Have any recordkeeping processes or metadata standards been defined for capturing the AI-extracted entities, relationships, and system configuration into the department's approved records management system?</li>
+<li><strong>Unanswered checkpoint question</strong> (solution_architect-1): Is the AI model or system being procured from an external vendor, or is it being developed in-house?</li>
+<li><strong>Unanswered checkpoint question</strong> (solution_architect-2): What plans, if any, have been established for testing, piloting, and continuously monitoring the AI system's performance and reliability?</li>
+<li><strong>Unanswered checkpoint question</strong> (solution_architect-3): What training processes or programs will be implemented to ensure operators and users are sufficiently skilled?</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=84fe4f43"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Appendix-%E2%80%94-Provenance">Appendix — Provenance<a class="anchor-link" href="#Appendix-%E2%80%94-Provenance">¶</a></h1><div class="provenance">
+<p>Run id: <code>WT-CNSF-FW</code></p>
+<p>Created: <code>2026-07-30T04:05:35Z</code></p>
+<p>Generated: <code>2026-08-03T23:45:38Z</code></p>
+<p>Models and prompts per role:</p><ul>
+<li><code>architect</code>: gemini-3.1-pro-preview (prompt v1)</li>
+<li><code>reviewer</code>: gemini-3.1-pro-preview (prompt v1)</li>
+<li><code>specialist</code>: gemini-3.5-flash (prompt v1)</li>
+<li><code>threshold_generalist</code>: gemini-3.5-flash (prompt v1)</li>
+<li><code>threshold_reconciler</code>: gemini-3.1-pro-preview (prompt v1)</li>
+</ul>
+<p>Corpus manifest versions:</p><ul>
+<li><code>it_security</code>: 2026-07-15T14:44:12Z (13 documents)</li>
+<li><code>privacy</code>: 2026-07-15T14:44:22Z (8 documents)</li>
+<li><code>ethics</code>: 2026-07-15T14:44:36Z (17 documents)</li>
+<li><code>legal</code>: 2026-07-15T14:44:49Z (11 documents)</li>
+<li><code>data_governance</code>: 2026-07-15T14:44:53Z (5 documents)</li>
+<li><code>solution_architect</code>: 2026-07-15T14:44:54Z (56 documents)</li>
+</ul>
+<p class="attestation">The submitting officer did NOT confirm that these inputs contain no sensitive, classified, or personal information, appropriate for this public, world-readable repository.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered" id="cell-id=0d695de3"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="References">References<a class="anchor-link" href="#References">¶</a></h1><div class="references">
+<p class="reference"><strong>APP Guidelines</strong> — Australian Privacy Principles Guidelines (consolidated; Chapter 3 updated) — Office of the Australian Information Commissioner — consolidated <a href="https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines">https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines</a></p>
+<p class="reference"><strong>ADM Better Practice Guide</strong> — Automated Decision-Making Better Practice Guide — Commonwealth Ombudsman — March 2025 <a href="https://www.ombudsman.gov.au/__data/assets/pdf_file/0025/317437/Automated-Decision-Making-Better-Practice-Guide-March-2025.pdf">https://www.ombudsman.gov.au/__data/assets/pdf_file/0025/317437/Automated-Decision-Making-Better-Practice-Guide-March-2025.pdf</a></p>
+<p class="reference"><strong>DDGS</strong> — Data and Digital Government Strategy — Digital Transformation Agency and Department of Finance — v1.0 (December 2023) <a href="https://www.dataanddigital.gov.au/strategy">https://www.dataanddigital.gov.au/strategy</a></p>
+<p class="reference"><strong>Deploying AI Securely</strong> — Deploying AI Systems Securely: Best Practices for Deploying Secure and Resilient AI Systems — US National Security Agency (with CISA, FBI, ASD ACSC and partners) — 2024 <a href="https://www.cyber.gov.au/about-us/view-all-content/publications/deploying-ai-systems-securely">https://www.cyber.gov.au/about-us/view-all-content/publications/deploying-ai-systems-securely</a></p>
+<p class="reference"><strong>NAA AI Records Guidance</strong> — Information management for records created using Artificial Intelligence (AI) technologies — National Archives of Australia — January 2025 <a href="https://www.naa.gov.au/information-management/information-management-basics/artificial-intelligence">https://www.naa.gov.au/information-management/information-management-basics/artificial-intelligence</a></p>
+<p class="reference"><strong>ISM</strong> — Information security manual — Australian Signals Directorate — June 2026 <a href="https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism">https://www.cyber.gov.au/resources-business-and-government/essential-cyber-security/ism</a></p>
+<p class="reference"><strong>OWASP LLM Top 10</strong> — OWASP Top 10 for Large Language Model Applications — OWASP Foundation — 2025 <a href="https://genai.owasp.org/llm-top-10/">https://genai.owasp.org/llm-top-10/</a></p>
+<p class="reference"><strong>AI Use Policy v2.0</strong> — Policy for the responsible use of AI in government — Digital Transformation Agency — 2.0 <a href="https://www.dta.gov.au/policies-and-guidance/policy-responsible-use-ai-government">https://www.dta.gov.au/policies-and-guidance/policy-responsible-use-ai-government</a></p>
+<p class="reference"><strong>AI in OT Principles</strong> — Principles for the secure integration of artificial intelligence in operational technology — Australian Signals Directorate (with CISA and partners) — 2025 <a href="https://www.cyber.gov.au/about-us/view-all-content/publications">https://www.cyber.gov.au/about-us/view-all-content/publications</a></p>
+<p class="reference"><strong>OAIC AI Training Checklist</strong> — Privacy considerations checklist: training a generative AI model — Office of the Australian Information Commissioner — 2024 <a href="https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models">https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models</a></p>
+<p class="reference"><strong>Data Quality Checklist</strong> — Strengthen data quality: data quality checklist — National AI Centre — 2026 <a href="https://www.ai.gov.au/planning-ai/strengthen-data-quality">https://www.ai.gov.au/planning-ai/strengthen-data-quality</a></p>
+<p class="reference"><strong>New Machinery of Government</strong> — The new machinery of government: using machine technology in administrative decision-making (front section) — NSW Ombudsman — November 2021 <a href="https://www.ombo.nsw.gov.au/news-and-publications/publications/reports/the-new-machinery-of-government-using-machine-technology-in-administrative-decision-making">https://www.ombo.nsw.gov.au/news-and-publications/publications/reports/the-new-machinery-of-government-using-machine-technology-in-administrative-decision-making</a></p>
+<p class="reference"><strong>HTI State of AI Governance</strong> — The State of AI Governance in Australia — Human Technology Institute, University of Technology Sydney — 31 May 2023 <a href="https://www.uts.edu.au/human-technology-institute/projects/state-ai-governance-australia">https://www.uts.edu.au/human-technology-institute/projects/state-ai-governance-australia</a></p>
+<p class="reference"><strong>OAIC AI Training Top 5</strong> — Top 5 takeaways: privacy considerations when training a generative AI model — Office of the Australian Information Commissioner — 2024 <a href="https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models">https://www.oaic.gov.au/privacy/privacy-guidance-for-organisations-and-government-agencies/guidance-on-privacy-and-developing-and-training-generative-ai-models</a></p>
+</div>
+</div>
+</div>
+</div>
+
+</main>
+<div class="running-footer" role="contentinfo">Draft for SME review — not an approval, not legal advice.</div>
+</body>
+</html>

@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-08-03T23:45:37Z",
+  "updated_at": "2026-08-03T23:45:39Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -19,7 +19,7 @@
     "full.checkpoint": "pending",
     "full.architect": "complete",
     "full.reviewer": "complete",
-    "full.assembly": "active"
+    "full.assembly": "complete"
   },
   "log": [
     {
@@ -7405,9 +7405,23 @@
       "agent": "full.assembly",
       "type": "stage_started",
       "detail": "Assembly started"
+    },
+    {
+      "id": "evt_000723",
+      "ts": "2026-08-03T23:45:38Z",
+      "agent": "full.assembly",
+      "type": "drafting",
+      "detail": "Assembling the notebook and the report."
+    },
+    {
+      "id": "evt_000724",
+      "ts": "2026-08-03T23:45:39Z",
+      "agent": "full.assembly",
+      "type": "stage_complete",
+      "detail": "Assembly complete"
     }
   ],
-  "log_cursor": 722,
+  "log_cursor": 724,
   "questions": null,
   "failure": null,
   "expected_ranges": {
