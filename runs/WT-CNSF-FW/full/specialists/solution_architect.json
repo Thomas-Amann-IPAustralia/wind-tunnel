@@ -3,52 +3,29 @@
   "sections": {},
   "citations": {},
   "questions": {
-    "why": "The use-case outline lacks critical technical implementation, testing, piloting, monitoring, and training details required to complete Section 6.",
-    "items": [
-      {
-        "question_id": "solution_architect-1",
-        "text": "Is the AI model or system being procured from an external vendor, or is it being developed in-house?",
-        "options": [
-          "Procured",
-          "In-house development",
-          "Hybrid / Undecided"
-        ],
-        "allow_free_text": true
-      },
-      {
-        "question_id": "solution_architect-2",
-        "text": "What plans, if any, have been established for testing, piloting, and continuously monitoring the AI system's performance and reliability?",
-        "options": null,
-        "allow_free_text": true
-      },
-      {
-        "question_id": "solution_architect-3",
-        "text": "What training processes or programs will be implemented to ensure operators and users are sufficiently skilled?",
-        "options": null,
-        "allow_free_text": true
-      }
-    ]
+    "why": "",
+    "items": []
   },
   "gaps": [
     {
       "section": "6.3",
-      "reason": "The outline does not specify whether the AI system or model is being procured or developed in-house, making it impossible to assess procurement suitability."
+      "reason": "The outline does not specify whether the AI system is being procured or developed in-house, and the checkpoint question regarding this was left unanswered."
     },
     {
       "section": "6.4",
-      "reason": "The outline does not contain details regarding the testing, validation, or reliability evaluation of the AI system."
+      "reason": "No details regarding testing, validation, or reliability evaluation are provided in the outline, and the checkpoint question was left unanswered."
     },
     {
       "section": "6.5",
-      "reason": "The outline does not state whether a pilot has been conducted or is planned prior to deployment."
+      "reason": "The outline does not state whether a pilot has been conducted or is planned, and the checkpoint question was left unanswered."
     },
     {
       "section": "6.6",
-      "reason": "The outline does not provide information on performance monitoring, evaluation plans, or drift detection for the AI system."
+      "reason": "No performance monitoring, evaluation, or drift detection plans are specified in the outline, and the checkpoint question was left unanswered."
     },
     {
       "section": "6.8",
-      "reason": "The outline does not specify any training, education, or skill-assurance processes for the operators of the AI system."
+      "reason": "The outline does not specify any training or skill-assurance processes for operators, and the checkpoint question was left unanswered."
     }
   ],
   "provenance": {

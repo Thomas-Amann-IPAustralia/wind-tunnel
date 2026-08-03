@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-08-03T23:42:52Z",
+  "updated_at": "2026-08-03T23:43:04Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -15,7 +15,7 @@
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
     "full.specialist.data_governance": "complete",
-    "full.specialist.solution_architect": "active",
+    "full.specialist.solution_architect": "complete",
     "full.checkpoint": "pending",
     "full.architect": "pending",
     "full.reviewer": "pending",
@@ -7321,9 +7321,16 @@
         "doc": "AI Technical Standard",
         "locator": "DTA-Tech-Standards!r139"
       }
+    },
+    {
+      "id": "evt_000711",
+      "ts": "2026-08-03T23:43:04Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "stage_complete",
+      "detail": "Solution Architect (sections) complete"
     }
   ],
-  "log_cursor": 710,
+  "log_cursor": 711,
   "questions": null,
   "failure": null,
   "expected_ranges": {
