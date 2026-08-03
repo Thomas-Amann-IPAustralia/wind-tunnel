@@ -6,76 +6,49 @@
     "10.2": "No. The current project outline does not indicate that any consultation with an appropriate source of advice (such as legal counsel or human rights specialists) has been undertaken, nor has a formal assessment been conducted to ensure alignment with human rights obligations. Given that the system will ingest highly sensitive unstructured data, including email archives and meeting minutes, which may contain personal or sensitive information, there is a risk of violating privacy rights or perpetuating biases. A formal human rights alignment review or consultation is required before proceeding.",
     "11.1": "No. While the outline identifies IT/data governance teams and the leadership team as stakeholders, it does not establish specific mechanisms or designate roles (such as an Accountable Official or Accountable Use Case Owner) to ensure responsibility and accountability throughout the AI system's lifecycle as required by the Policy for the responsible use of AI in government. Under this policy, agencies must designate an accountable official and an accountable use case owner to maintain oversight and manage risks.",
     "12.1": "No. The current project documentation does not identify or document any agency-specific legislation or regulatory instruments relevant to this AI use case. Because the system ingests internal communications, emails, and policy documents, it is critical to identify and document relevant legal frameworks, including the Privacy Act 1988 (Cth), the Archives Act 1983 (Cth), and any agency-specific enabling legislation that governs the handling and disclosure of departmental information.",
-    "12.2": "Yes. Given the high inherent risks identified in the threshold assessment—particularly around privacy (3.5) and data security (3.6) due to the ingestion of sensitive unstructured data like email archives—the need for legal advice has been clearly identified (12.2.1). Legal advice is required to ensure compliance with the Privacy Act 1988 (Cth), confidentiality obligations, and public sector record-keeping requirements.\n\nRegarding 12.2.2, as the project is currently in the conceptual/assessment phase, no formal legal advice has been obtained yet, and therefore no storage location (such as a document management system or case file) has been established. Once obtained, any legal advice will be stored in the department's official records management system in accordance with standard information security protocols."
+    "12.2": "Yes. Given the high inherent risks identified in the threshold assessment—particularly around privacy (3.5) and data security (3.6) due to the ingestion of sensitive unstructured data like email archives—the need for legal advice has been clearly identified (12.2.1). Legal advice is required to ensure compliance with the Privacy Act 1988 (Cth), confidentiality obligations, and public sector record-keeping requirements. Regarding 12.2.2, as the project is currently in the conceptual/assessment phase, no formal legal advice has been obtained yet, and therefore no storage location (such as a document management system or case file) has been established. Once obtained, any legal advice will be stored in the department's official records management system in accordance with standard information security protocols."
   },
   "citations": {
-    "9.1": [
-      {
-        "short_name": "ADM Better Practice Guide",
-        "locator": "p. 10"
-      }
-    ],
-    "9.2": [
-      {
-        "short_name": "ADM Better Practice Guide",
-        "locator": "p. 10"
-      }
-    ],
     "10.2": [
       {
         "short_name": "HTI State of AI Governance",
-        "locator": "p. 34"
+        "locator": "p.34"
       },
       {
         "short_name": "ADM Better Practice Guide",
-        "locator": "p. 8"
+        "locator": "p.8"
       }
     ],
     "11.1": [
       {
         "short_name": "AI Use Policy v2.0",
-        "locator": "p. 11"
+        "locator": "p.11"
       }
     ],
     "12.1": [
       {
         "short_name": "ADM Better Practice Guide",
-        "locator": "p. 28"
+        "locator": "p.28"
       },
       {
         "short_name": "HTI State of AI Governance",
-        "locator": "p. 38"
+        "locator": "p.38"
       }
     ],
     "12.2": [
       {
+        "short_name": "New Machinery of Government",
+        "locator": "p.58"
+      },
+      {
         "short_name": "ADM Better Practice Guide",
-        "locator": "p. 13"
+        "locator": "p.29"
       }
     ]
   },
   "questions": {
-    "why": "To clarify the legal and compliance steps already taken or planned for the ingestion of sensitive internal communications.",
-    "items": [
-      {
-        "question_id": "legal-1",
-        "text": "Has the department consulted with its internal legal team or the Attorney-General's Department regarding the privacy and secrecy implications of ingesting employee email archives into an AI-powered knowledge graph?",
-        "options": [],
-        "allow_free_text": true
-      },
-      {
-        "question_id": "legal-2",
-        "text": "Are there any specific agency-enabling statutes or secrecy provisions that restrict the sharing or cross-referencing of the internal documents and communications planned for ingestion?",
-        "options": [],
-        "allow_free_text": true
-      },
-      {
-        "question_id": "legal-3",
-        "text": "Has a Privacy Impact Assessment (PIA) been scheduled or completed for the Departmental Knowledge Graph project?",
-        "options": [],
-        "allow_free_text": true
-      }
-    ]
+    "why": "",
+    "items": []
   },
   "gaps": [],
   "provenance": {

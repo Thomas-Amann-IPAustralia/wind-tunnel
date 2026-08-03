@@ -4,7 +4,7 @@
   "run_code": "WT-CNSF-FW",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-08-03T23:40:34Z",
+  "updated_at": "2026-08-03T23:40:43Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -13,7 +13,7 @@
     "full.specialist.it_security": "complete",
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
-    "full.specialist.legal": "active",
+    "full.specialist.legal": "complete",
     "full.specialist.data_governance": "active",
     "full.specialist.solution_architect": "active",
     "full.checkpoint": "pending",
@@ -6933,9 +6933,16 @@
       "agent": "full.specialist.it_security",
       "type": "stage_complete",
       "detail": "IT Security specialist complete"
+    },
+    {
+      "id": "evt_000675",
+      "ts": "2026-08-03T23:40:43Z",
+      "agent": "full.specialist.legal",
+      "type": "stage_complete",
+      "detail": "Legal & Administrative Law specialist complete"
     }
   ],
-  "log_cursor": 674,
+  "log_cursor": 675,
   "questions": null,
   "failure": null,
   "expected_ranges": {
