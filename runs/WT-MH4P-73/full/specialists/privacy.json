@@ -1,0 +1,54 @@
+{
+  "specialist": "privacy",
+  "sections": {
+    "7.1": "No. Currently, the 'Data' section of the project outline is not completed and contains placeholders. Without details on what data the Agentic Data Synthesis Tool touches, we cannot be satisfied that the collection, use, or disclosure of personal information complies with the Australian Privacy Principles (APPs). Specifically, we cannot assess compliance with APP 3 regarding whether the collection of personal or sensitive information is reasonably necessary or directly related to the agency's functions (APP Guidelines, p.91), APP 6 regarding whether secondary use or disclosure of personal information by autonomous agents is within reasonable expectations (OAIC AI Training Top 5, p.1; OAIC AI Selection Checklist, p.2), or APP 11 regarding security measures to protect personal information from misuse, interference, or loss (OAIC AI Selection Checklist, p.2)."
+  },
+  "citations": {
+    "7.1": [
+      {
+        "short_name": "APP Guidelines",
+        "locator": "p.91"
+      },
+      {
+        "short_name": "OAIC AI Training Top 5",
+        "locator": "p.1"
+      },
+      {
+        "short_name": "OAIC AI Selection Checklist",
+        "locator": "p.2"
+      }
+    ]
+  },
+  "questions": {
+    "why": "The assessment requires details on the storage location of privacy documents and the nature of personal data being processed.",
+    "items": [
+      {
+        "question_id": "privacy-1",
+        "text": "Where are the privacy threshold assessment and/or privacy impact assessment for this project stored?",
+        "options": null,
+        "allow_free_text": true
+      },
+      {
+        "question_id": "privacy-2",
+        "text": "Will the Agentic Data Synthesis Tool ingest, process, or store any personal or sensitive information?",
+        "options": [
+          "Yes, personal information only",
+          "Yes, personal and sensitive information",
+          "No personal or sensitive information",
+          "Unsure"
+        ],
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [
+    {
+      "section": "7.2",
+      "reason": "The project outline does not specify where the privacy threshold assessment or privacy impact assessment are stored."
+    }
+  ],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
