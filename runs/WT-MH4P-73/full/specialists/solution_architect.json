@@ -1,0 +1,76 @@
+{
+  "specialist": "solution_architect",
+  "sections": {
+    "6.3": "Not applicable. The current project outline does not specify whether the Agentic Data Synthesis Tool will be procured from a third-party vendor or developed entirely in-house. Furthermore, details regarding the selection of specific AI models or agentic technologies are not yet defined (Agentic AI Addendum, p.25; AI Suitability Assessment, §(document start)). A formal AI suitability assessment should be conducted once procurement or development pathways are clarified to ensure the selected model adds value and aligns with the operational context.",
+    "6.4": "No. As the project is currently in the conceptual stage with significant outline placeholders (such as 'Data' and 'Happy path'), no testing has been conducted. Before deployment, the agency must establish a robust testing framework. This must include testing individual agents for robustness against unexpected inputs, evaluating agent-tool, agent-environment, and agent-memory interactions (Agentic AI Addendum, p.27-28), and conducting Responsible AI (RAI) acceptance testing to verify that ethical and safety requirements are met (RAI Acceptance Testing, §(document start)). System-level simulation should also be considered to assess behaviors and prevent unintended consequences before real-world deployment (System-Level RAI Simulation, §(document start)).",
+    "6.6": "No. The current outline does not specify a monitoring plan. To ensure reliability and safety, a comprehensive monitoring plan must be established prior to deployment. In accordance with agentic AI standards, this plan must continuously monitor individual agents and their environment, tracking goal drift, tool usage, memory management, and inter-agent conflicts (Agentic AI Addendum, p.31). Additionally, the agency should implement a centralized 'control tower' for system oversight (Agentic AI Addendum, p.31) and deploy a continuous RAI validator to monitor and validate agent outcomes against ethical and safety requirements at runtime (Continuous RAI Validator, §(document start)).",
+    "6.8": "No. The outline identifies policy analysts and data officers as primary users, but does not specify any training process or capability-building program. To comply with government standards, the agency must establish regular training programs to keep staff updated on the latest tools, methodologies, ethical guidelines, and regulatory requirements (AI Technical Standard, DTA-Tech-Standards!r8). This should include specialized AI ethics training tailored to their roles, and could leverage interactive workshops, simulations, or computing sandpit environments to provide hands-on experience with complex agentic workflows (AI Technical Standard, DTA-Tech-Standards!r8)."
+  },
+  "citations": {
+    "6.3": [
+      {
+        "short_name": "Agentic AI Addendum",
+        "locator": "p.25"
+      },
+      {
+        "short_name": "AI Suitability Assessment",
+        "locator": "§(document start)"
+      }
+    ],
+    "6.4": [
+      {
+        "short_name": "Agentic AI Addendum",
+        "locator": "p.27-28"
+      },
+      {
+        "short_name": "RAI Acceptance Testing",
+        "locator": "§(document start)"
+      },
+      {
+        "short_name": "System-Level RAI Simulation",
+        "locator": "§(document start)"
+      }
+    ],
+    "6.6": [
+      {
+        "short_name": "Agentic AI Addendum",
+        "locator": "p.31"
+      },
+      {
+        "short_name": "Continuous RAI Validator",
+        "locator": "§(document start)"
+      }
+    ],
+    "6.8": [
+      {
+        "short_name": "AI Technical Standard",
+        "locator": "DTA-Tech-Standards!r8"
+      }
+    ]
+  },
+  "questions": {
+    "why": "The outline does not specify whether a pilot is planned, which is necessary to complete the assessment of section 6.5.",
+    "items": [
+      {
+        "question_id": "solution_architect-1",
+        "text": "Do you plan to conduct a pilot or limited trial of the Agentic Data Synthesis Tool before full deployment?",
+        "options": [
+          "Yes, a pilot is planned",
+          "No, we will deploy directly to production",
+          "Under consideration / Undecided"
+        ],
+        "allow_free_text": true
+      }
+    ]
+  },
+  "gaps": [
+    {
+      "section": "6.5",
+      "reason": "The outline does not state whether a pilot is planned or has been conducted for this use case."
+    }
+  ],
+  "provenance": {
+    "model": "gemini-3.5-flash",
+    "prompt_version": "v1"
+  }
+}
