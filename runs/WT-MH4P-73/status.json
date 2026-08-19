@@ -4,7 +4,7 @@
   "run_code": "WT-MH4P-73",
   "phase": "full",
   "overall_state": "running",
-  "updated_at": "2026-08-19T05:46:43Z",
+  "updated_at": "2026-08-19T05:46:52Z",
   "nodes": {
     "threshold.generalist_a": "complete",
     "threshold.generalist_b": "complete",
@@ -14,7 +14,7 @@
     "full.specialist.privacy": "complete",
     "full.specialist.ethics": "complete",
     "full.specialist.legal": "complete",
-    "full.specialist.data_governance": "active",
+    "full.specialist.data_governance": "complete",
     "full.specialist.solution_architect": "active",
     "full.checkpoint": "pending",
     "full.architect": "pending",
@@ -2056,9 +2056,71 @@
       "agent": "full.specialist.legal",
       "type": "stage_complete",
       "detail": "Legal & Administrative Law specialist complete"
+    },
+    {
+      "id": "evt_000198",
+      "ts": "2026-08-19T05:46:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading RAI Acceptance Testing",
+      "ref": {
+        "doc": "RAI Acceptance Testing",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000199",
+      "ts": "2026-08-19T05:46:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading System-Level RAI Simulation",
+      "ref": {
+        "doc": "System-Level RAI Simulation",
+        "locator": "§(document start)"
+      }
+    },
+    {
+      "id": "evt_000200",
+      "ts": "2026-08-19T05:46:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.27"
+      }
+    },
+    {
+      "id": "evt_000201",
+      "ts": "2026-08-19T05:46:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.28"
+      }
+    },
+    {
+      "id": "evt_000202",
+      "ts": "2026-08-19T05:46:44Z",
+      "agent": "full.specialist.solution_architect",
+      "type": "retrieval",
+      "detail": "reading Agentic AI Addendum",
+      "ref": {
+        "doc": "Agentic AI Addendum",
+        "locator": "p.29"
+      }
+    },
+    {
+      "id": "evt_000203",
+      "ts": "2026-08-19T05:46:52Z",
+      "agent": "full.specialist.data_governance",
+      "type": "stage_complete",
+      "detail": "Data Governance specialist complete"
     }
   ],
-  "log_cursor": 197,
+  "log_cursor": 203,
   "questions": null,
   "failure": null,
   "expected_ranges": {
