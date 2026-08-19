@@ -2,13 +2,14 @@
   "schema_version": 1,
   "run_id": "WT-MH4P-73",
   "created_at": "2026-08-19T05:42:40Z",
-  "updated_at": "2026-08-19T05:45:30Z",
-  "stage": "FULL_DRAFTING",
-  "stage_status": "in_progress",
+  "updated_at": "2026-08-19T05:47:04Z",
+  "stage": "FULL_CHECKPOINT",
+  "stage_status": "awaiting_user",
   "phase": "full",
   "checkpoints": {
     "THRESHOLD_DRAFTING": "f95d9e4709605db77baa18e0e48b38f0c5e59446",
-    "THRESHOLD_RECONCILING": "b84b41ce662b2eaa4b00b3107398d322578639b0"
+    "THRESHOLD_RECONCILING": "b84b41ce662b2eaa4b00b3107398d322578639b0",
+    "FULL_DRAFTING": "eca8736517c012da1ed270506a74b5eec1cb1a8e"
   },
   "revisions": {
     "poc": 0,
