@@ -7,28 +7,28 @@
 -->
 ---
 schema_version: 1
-run_id: "WT-MH4P-73"            # set at run creation (§3)
-title: ""             # short project title; the interviewer sets this early
-summary: ""           # the concept in one sentence
+run_id: "WT-MH4P-73"
+title: "Agentic Data Synthesis Tool"
+summary: "An AI-driven analysis platform that uses autonomous agents to process large datasets and generate actionable policy insights."
 created_at: "2026-08-19T05:42:40Z"
-updated_at: "2026-08-19T05:42:40Z"
-resolved: []          # section ids populated so far; maintained by the backend only
+updated_at: "2026-08-19T05:43:45Z"
+resolved: ["problem", "solution", "users_stakeholders"]
 ---
 
 <!-- section: problem -->
 ## 1. Problem
 
-*What problem is this solving, on its own terms? No solution talk yet.*
+Public sector teams are currently overwhelmed by the volume and complexity of data, making it difficult to extract actionable insights or identify patterns in a timely manner.
 
 <!-- section: solution -->
 ## 2. Proposed solution
 
-*What gets built, in plain words — and where the AI actually sits in it.*
+An agentic AI system that ingests large datasets, performs iterative analysis based on specific queries, and synthesizes findings into structured reports or recommendations.
 
 <!-- section: users_stakeholders -->
 ## 3. Users and stakeholders
 
-*Who uses it, and who is affected by it without ever touching it.*
+Primary users are policy analysts and data officers; stakeholders include department heads who rely on these insights for decision-making and the public who are affected by the resulting policies.
 
 <!-- section: data -->
 ## 4. Data
